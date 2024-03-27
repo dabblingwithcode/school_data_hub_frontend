@@ -182,5 +182,15 @@ List<Pupil> pupilsWithBirthdayInTheLastSevenDays() {
       }
     }
   }
+  int currentYear = DateTime.now().year;
+  pupilsWithBirthdayInTheLastSevenDays.sort((a, b) {
+    int aDayOfYear = DateTime(currentYear, a.birthday!.month, a.birthday!.day)
+        .difference(DateTime(currentYear, 1, 1))
+        .inDays;
+    int bDayOfYear = DateTime(currentYear, b.birthday!.month, b.birthday!.day)
+        .difference(DateTime(currentYear, 1, 1))
+        .inDays;
+    return bDayOfYear.compareTo(aDayOfYear);
+  });
   return pupilsWithBirthdayInTheLastSevenDays;
 }

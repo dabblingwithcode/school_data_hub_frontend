@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
@@ -16,8 +17,10 @@ class BirthdaysView extends WatchingWidget {
     final List<Pupil> pupils = pupilsWithBirthdayInTheLastSevenDays();
     return Scaffold(
         appBar: AppBar(
+          centerTitle: true,
+          automaticallyImplyLeading: false,
           backgroundColor: backgroundColor,
-          title: const Text('Geburtstage'),
+          title: const Text('Geburtstage', style: appBarTextStyle),
         ),
         body: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Expanded(
@@ -60,27 +63,33 @@ class BirthdaysView extends WatchingWidget {
                                     listedPupil.lastName!,
                                     style: const TextStyle(),
                                   ),
-                                  const Gap(20),
+                                  const Gap(10),
                                   Text(
                                     listedPupil.group!,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: groupColor),
                                   ),
-                                  const Gap(20),
+                                  const Gap(10),
                                   Text(
                                     listedPupil.schoolyear!,
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: schoolyearColor),
                                   ),
-                                  const Gap(20),
-                                  Text(
-                                    listedPupil.birthday!.formatForUser(),
-                                  )
                                 ],
                               ),
                             ),
+                            const Gap(5),
+                            Row(
+                              children: [
+                                Text(
+                                  listedPupil.birthday!.formatForUser(),
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            )
                           ],
                         );
                       }),
