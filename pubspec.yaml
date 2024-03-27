@@ -1,0 +1,69 @@
+name: schuldaten_hub
+description: A new Flutter project.
+publish_to: 'none'
+version: 0.2.6
+
+environment:
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  camera_windows: ^0.2.1+9
+  cached_network_image: ^3.3.1
+  carousel_slider: ^4.2.1
+  collection: ^1.17.1
+  connectivity_plus: ^6.0.1
+  crop_image: ^1.0.12
+  cupertino_icons: ^1.0.6
+  dio: ^5.3.3
+  encrypt: ^5.0.3
+  file_picker: ^6.1.1
+  flutter:
+    sdk: flutter
+  flutter_cache_manager: ^3.3.1
+  flutter_dotenv: ^5.1.0
+  flutter_launcher_icons: ^0.13.1
+  flutter_localizations:
+    sdk: flutter
+  flutter_secure_storage: ^9.0.0
+  freezed: ^2.4.7
+  freezed_annotation: ^2.4.1
+  functional_widget_annotation: ^0.10.0
+  gap: ^3.0.1
+  icon_decoration: ^2.0.2
+  image_picker: ^1.0.4
+  intl: ^0.18.0
+  json_annotation: ^4.8.1
+  jwt_decoder: ^2.0.1
+  mobile_scanner: ^3.5.5
+  package_info_plus: ^4.2.0
+  path_provider: ^2.1.1
+  pdf: ^3.10.7
+  qr_flutter: ^4.1.0
+  settings_ui: ^2.0.2
+  top_snackbar_flutter: ^3.1.0
+  watch_it: ^1.4.0
+  widget_zoom: ^0.0.2
+  window_manager: ^0.3.8
+  image_picker_platform_interface: ^2.9.3
+  camera: ^0.10.5+9
+
+dev_dependencies:
+  flutter_test: 
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  functional_widget: ^0.10.2
+  msix: ^3.16.6
+  build_runner: ^2.4.6
+  json_serializable: ^6.7.1
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+msix_config:
+  display_name: Schuldaten Hub
+  publisher_display_name: Medien-Sandkasten
+  identity_name: de.medien-sandkasten.schuldaten-hub
+  msix_version: 1.0.0.1
+  logo_path: V:\schuldaten_hub_logo.png
+  capabilities: internetClient
