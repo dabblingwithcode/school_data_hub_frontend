@@ -9,8 +9,8 @@ import 'package:schuldaten_hub/features/competence/views/competence_list_view/wi
 
 Widget competenceListViewBottomNavBar(
     BuildContext context, List<Competence> competences) {
-  return bottomNavBarLayout(
-    BottomAppBar(
+  return BottomNavBarLayout(
+    bottomNavBar: BottomAppBar(
       padding: const EdgeInsets.all(10),
       shape: null,
       color: backgroundColor,

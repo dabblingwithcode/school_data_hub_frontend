@@ -7,8 +7,8 @@ import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/special_info_view/widgets/special_info_reset_filter_button.dart';
 
 Widget specialInfoViewBottomNavBar(BuildContext context, bool filtersOn) {
-  return bottomNavBarLayout(
-    BottomAppBar(
+  return BottomNavBarLayout(
+    bottomNavBar: BottomAppBar(
       padding: const EdgeInsets.all(10),
       shape: null,
       color: backgroundColor,

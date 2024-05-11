@@ -87,7 +87,7 @@ class AvatarWithBadges extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  pupil.group!,
+                  pupil.group,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 15,
@@ -111,7 +111,7 @@ class AvatarWithBadges extends StatelessWidget {
               ),
               child: Center(
                 child: Text(
-                  pupil.schoolyear!,
+                  pupil.schoolyear,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 15,

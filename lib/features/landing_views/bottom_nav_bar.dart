@@ -80,8 +80,8 @@ class BottomNavigation extends WatchingWidget {
         ],
         onPageChanged: (index) => manager.setBottomNavPage(index),
       ),
-      bottomNavigationBar: bottomNavBarLayout(
-        BottomNavigationBar(
+      bottomNavigationBar: BottomNavBarLayout(
+        bottomNavBar: BottomNavigationBar(
           iconSize: 28,
           onTap: (index) {
             manager.setBottomNavPage(index);

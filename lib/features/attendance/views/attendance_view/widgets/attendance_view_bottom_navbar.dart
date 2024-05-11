@@ -11,8 +11,8 @@ import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
 
 Widget attendanceViewBottomNavBar(
     BuildContext context, bool filtersOn, DateTime thisDate) {
-  return bottomNavBarLayout(
-    BottomAppBar(
+  return BottomNavBarLayout(
+    bottomNavBar: BottomAppBar(
       padding: const EdgeInsets.all(10),
       shape: null,
       color: backgroundColor,

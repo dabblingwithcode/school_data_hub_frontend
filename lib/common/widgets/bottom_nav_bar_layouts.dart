@@ -3,7 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 
-Widget bottomNavBarLayout(Widget bottomNavBar) => Theme(
+class BottomNavBarLayout extends StatelessWidget {
+  final Widget bottomNavBar;
+  const BottomNavBarLayout({required this.bottomNavBar, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
       data: ThemeData(canvasColor: backgroundColor),
       child: Padding(
         padding: Platform.isWindows
@@ -23,8 +29,16 @@ Widget bottomNavBarLayout(Widget bottomNavBar) => Theme(
         ),
       ),
     );
+  }
+}
 
-Widget bottomNavBarProfiLeLayout(Widget bottomNavBar) => Theme(
+class BottomNavBarProfileLayout extends StatelessWidget {
+  final Widget bottomNavBar;
+  const BottomNavBarProfileLayout({required this.bottomNavBar, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
       data: ThemeData(canvasColor: backgroundColor),
       child: Padding(
         padding: Platform.isWindows
@@ -46,8 +60,18 @@ Widget bottomNavBarProfiLeLayout(Widget bottomNavBar) => Theme(
         ),
       ),
     );
+  }
+}
 
-Widget bottomNavBarMobile(Widget bottomNavBar) => Theme(
+class BottomNavBarMobile extends StatelessWidget {
+  final Widget bottomNavBar;
+  const BottomNavBarMobile({required this.bottomNavBar, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Theme(
       data: ThemeData(canvasColor: backgroundColor),
       child: bottomNavBar,
     );
+  }
+}

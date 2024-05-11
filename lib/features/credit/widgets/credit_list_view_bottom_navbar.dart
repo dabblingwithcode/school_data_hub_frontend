@@ -9,8 +9,8 @@ import 'package:schuldaten_hub/features/credit/widgets/credit_filter_bottom_shee
 import '../../pupil/services/pupil_filter_manager.dart';
 
 Widget creditListViewBottomNavBar(BuildContext context, bool filtersOn) {
-  return bottomNavBarLayout(
-    BottomAppBar(
+  return BottomNavBarLayout(
+    bottomNavBar: BottomAppBar(
       padding: const EdgeInsets.all(10),
       shape: null,
       color: backgroundColor,
