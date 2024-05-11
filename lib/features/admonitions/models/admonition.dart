@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'admonition.g.dart';
 
 @JsonSerializable()
-class Admonition with _$Admonition {
+class Admonition  {
   @JsonKey(name: 'admonition_id')
   final String admonitionId;
   @JsonKey(name: 'admonition_type')

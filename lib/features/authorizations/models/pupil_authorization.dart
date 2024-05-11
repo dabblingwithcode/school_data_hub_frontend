@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'pupil_authorization.g.dart';
 
 @JsonSerializable()
-class PupilAuthorization with _$PupilAuthorization {
+class PupilAuthorization {
   final String? comment;
   @JsonKey(name: 'created_by')
   final String? createdBy;
