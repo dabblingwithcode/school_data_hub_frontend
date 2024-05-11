@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'pupil_workbook.g.dart';
 
 @JsonSerializable()
-class PupilWorkbook with _$PupilWorkbook {
+class PupilWorkbook {
   @JsonKey(name: 'created_at')
   final DateTime createdAt;
   @JsonKey(name: 'created_by')

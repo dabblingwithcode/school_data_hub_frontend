@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'pupil_base.g.dart';
 
 @JsonSerializable()
-class PupilBase with _$PupilBase {
+class PupilBase {
   @JsonKey(name: "id")
   final int id;
   @JsonKey(name: "name")
@@ -53,7 +53,7 @@ abstract class PupilBaseList with _$PupilBaseList {
   factory PupilBaseList.fromJson(
     Map<String, dynamic> json,
   ) =>
-      _$PupilBaseListFromJson(this);
+      _$PupilBaseListFromJson(json);
 
   PupilBaseList({required this.pupilBaseList});
 }

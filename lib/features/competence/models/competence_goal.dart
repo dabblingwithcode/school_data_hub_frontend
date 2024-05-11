@@ -36,5 +36,5 @@ class CompetenceGoal with _$CompetenceGoal {
       required this.strategies});
 
   factory CompetenceGoal.fromJson(Map<String, dynamic> json) =>
-      _$CompetenceGoalFromJson(this);
+      _$CompetenceGoalFromJson(json);
 }

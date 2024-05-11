@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 //- 3. add this funtion getRoomIds(List<MatrixRoom> rooms) {return rooms.map((room) => room.id).toList();}
 //- 4. in _$MatrixUserImpl ->  comment out // 'authCredential': instance.authCredential,
 @JsonSerializable()
-class MatrixUser with _$MatrixUser {
+class MatrixUser {
   final String? id;
   final bool? active;
   final String? authType;
@@ -21,7 +21,7 @@ class MatrixUser with _$MatrixUser {
   final String? authCredential;
 
   factory MatrixUser.fromJson(Map<String, dynamic> json) {
-    var user = _$MatrixUserFromJson(this);
+    var user = _$MatrixUserFromJson(json);
     if (user.matrixRooms != null) {
       /// eliminate duplicates
       user = user.copyWith(matrixRooms: user.matrixRooms!.toSet().toList());

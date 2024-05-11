@@ -43,5 +43,5 @@ class Admonition with _$Admonition {
       required this.admonishedPupilId});
 
   factory Admonition.fromJson(Map<String, dynamic> json) =>
-      _$AdmonitionFromJson(this);
+      _$AdmonitionFromJson(json);
 }

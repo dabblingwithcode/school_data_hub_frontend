@@ -23,5 +23,5 @@ class Competence with _$Competence {
       required this.indicators});
 
   factory Competence.fromJson(Map<String, dynamic> json) =>
-      _$CompetenceFromJson(this);
+      _$CompetenceFromJson(json);
 }

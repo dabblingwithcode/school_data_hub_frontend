@@ -22,7 +22,7 @@ class PupilGoal with _$PupilGoal {
   final String? strategies;
 
   factory PupilGoal.fromJson(Map<String, dynamic> json) =>
-      _$PupilGoalFromJson(this);
+      _$PupilGoalFromJson(json);
 
   PupilGoal(
       {required this.achieved,

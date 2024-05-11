@@ -15,7 +15,7 @@ class Book with _$Book {
   final String readingLevel;
   final String title;
 
-  factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(this);
+  factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
 
   Book(
       {required this.author,

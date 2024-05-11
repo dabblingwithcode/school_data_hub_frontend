@@ -22,5 +22,5 @@ class Workbook {
   final String? imageUrl;
 
   factory Workbook.fromJson(Map<String, dynamic> json) =>
-      _$WorkbookFromJson(this);
+      _$WorkbookFromJson(json);
 }

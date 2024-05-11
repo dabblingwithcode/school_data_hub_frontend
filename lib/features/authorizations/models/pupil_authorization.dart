@@ -18,7 +18,7 @@ class PupilAuthorization with _$PupilAuthorization {
   final bool? status;
 
   factory PupilAuthorization.fromJson(Map<String, dynamic> json) =>
-      _$PupilAuthorizationFromJson(this);
+      _$PupilAuthorizationFromJson(json);
 
   PupilAuthorization(
       {required this.comment,

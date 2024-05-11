@@ -15,7 +15,7 @@ import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 part 'pupil.g.dart';
 
 @JsonSerializable()
-class Pupil with _$Pupil {
+class Pupil {
   final String? firstName;
   final String? lastName;
   final String? group;

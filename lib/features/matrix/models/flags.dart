@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
-class Flags with _$Flags {
+class Flags {
   final bool? allowCustomUserDisplayNames;
   final bool? allowCustomUserAvatars;
   final bool? allowCustomPassthroughUserPasswords;

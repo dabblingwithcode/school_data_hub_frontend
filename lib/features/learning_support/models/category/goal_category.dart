@@ -12,7 +12,7 @@ class GoalCategory with _$GoalCategory {
   final int? parentCategory;
 
   factory GoalCategory.fromJson(Map<String, dynamic> json) =>
-      _$GoalCategoryFromJson(this);
+      _$GoalCategoryFromJson(json);
 
   GoalCategory(
       {required this.categoryId,

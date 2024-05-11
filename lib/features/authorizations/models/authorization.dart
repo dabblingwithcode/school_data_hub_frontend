@@ -15,7 +15,7 @@ class Authorization {
   final String? createdBy;
 
   factory Authorization.fromJson(Map<String, dynamic> json) =>
-      _$AuthorizationFromJson(this);
+      _$AuthorizationFromJson(json);
 
   Authorization(
       {required this.authorizationDescription,

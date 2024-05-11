@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'school_list.g.dart';
 
 @JsonSerializable()
-class SchoolList with _$SchoolList {
+class SchoolList {
   @JsonKey(name: 'created_by')
   final String createdBy;
   @JsonKey(name: 'list_description')

@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
-class MatrixRoom with _$MatrixRoom {
+class MatrixRoom {
   factory MatrixRoom.fromPolicyId(String policyId) {
     // Extract id from the string
     final parts = policyId.split(":");
@@ -36,7 +36,7 @@ class RoomAdmin with _$RoomAdmin {
   final int powerLevel;
 
   factory RoomAdmin.fromJson(Map<String, dynamic> json) =>
-      _$RoomAdminFromJson(this);
+      _$RoomAdminFromJson(json);
 
   RoomAdmin({required this.id, required this.powerLevel});
 }

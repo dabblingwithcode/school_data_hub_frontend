@@ -18,5 +18,5 @@ class GoalCheck with _$GoalCheck {
       required this.id});
 
   factory GoalCheck.fromJson(Map<String, dynamic> json) =>
-      _$GoalCheckFromJson(this);
+      _$GoalCheckFromJson(json);
 }

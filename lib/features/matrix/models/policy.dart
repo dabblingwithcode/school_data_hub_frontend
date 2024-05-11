@@ -12,7 +12,7 @@ import 'matrix_user.dart';
 //- 3. add this funtion getRoomIds(List<MatrixRoom> rooms) {return rooms.map((room) => room.id).toList();}
 
 @JsonSerializable()
-class Policy with _$Policy {
+class Policy {
   final int? schemaVersion;
   final dynamic identificationStamp;
   final Flags? flags;
@@ -22,7 +22,7 @@ class Policy with _$Policy {
   @JsonKey(name: 'users')
   final List<MatrixUser>? matrixUsers;
 
-  factory Policy.fromJson(Map<String, dynamic> json) => _$PolicyFromJson(this);
+  factory Policy.fromJson(Map<String, dynamic> json) => _$PolicyFromJson(json);
 
   Policy(
       {required this.schemaVersion,

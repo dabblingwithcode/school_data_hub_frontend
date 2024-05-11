@@ -36,5 +36,5 @@ class MissedClass with _$MissedClass {
       required this.writtenExcuse});
 
   factory MissedClass.fromJson(Map<String, dynamic> json) =>
-      _$MissedClassFromJson(this);
+      _$MissedClassFromJson(json);
 }

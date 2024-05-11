@@ -7,7 +7,7 @@ class Schoolday {
   final DateTime schoolday;
 
   factory Schoolday.fromJson(Map<String, dynamic> json) =>
-      _$SchooldayFromJson(this);
+      _$SchooldayFromJson(json);
 
   Schoolday({required this.schoolday});
 }

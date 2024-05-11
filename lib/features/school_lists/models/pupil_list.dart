@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'pupil_list.g.dart';
 
 @JsonSerializable()
-class PupilList with _$PupilList {
+class PupilList {
   @JsonKey(name: 'origin_list')
   final String originList;
   @JsonKey(name: 'pupil_list_comment')

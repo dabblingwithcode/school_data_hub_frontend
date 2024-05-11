@@ -28,5 +28,5 @@ class PupilBook with _$PupilBook {
       this.state});
 
   factory PupilBook.fromJson(Map<String, dynamic> json) =>
-      _$PupilBookFromJson(this);
+      _$PupilBookFromJson(json);
 }

@@ -3,7 +3,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'credit_history_log.g.dart';
 
 @JsonSerializable()
-class CreditHistoryLog with _$CreditHistoryLog {
+class CreditHistoryLog {
   @JsonKey(name: "created_at")
   final DateTime createdAt;
   @JsonKey(name: "created_by")
