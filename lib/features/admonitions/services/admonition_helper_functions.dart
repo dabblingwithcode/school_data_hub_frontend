@@ -1,6 +1,6 @@
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/admonitions/models/admonition.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 class SchoolEventHelper {
   static int? admonitionSum(PupilProxy pupil) {

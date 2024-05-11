@@ -4,7 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/features/pupil/models/credit_history_log.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/credit/widgets/dialogues/change_credit_dialog.dart';
 
 List<Widget> pupilCreditContentList(PupilProxy pupil, BuildContext context) {

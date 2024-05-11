@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/cont
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/widgets/matrix_user_list_card.dart';
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/widgets/matrix_user_list_searchbar.dart';
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/widgets/matrix_users_list_view_bottom_navbar.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 import 'package:watch_it/watch_it.dart';
 

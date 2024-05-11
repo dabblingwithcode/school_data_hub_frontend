@@ -16,7 +16,7 @@ import 'package:schuldaten_hub/features/authorizations/models/authorization.dart
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/controller/authorization_pupils_controller.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 List<Widget> pupilAuthorizationsContentList(PupilProxy pupil) {
   final authorizationLocator = locator<AuthorizationManager>();

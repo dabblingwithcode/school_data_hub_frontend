@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_view/select_pupils_list_view.dart';
 
 import 'package:watch_it/watch_it.dart';
-import '../../../models/pupil.dart';
 
 class SelectPupilList extends WatchingStatefulWidget {
   final List<int>? selectablePupils;

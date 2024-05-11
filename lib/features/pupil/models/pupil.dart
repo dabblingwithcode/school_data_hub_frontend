@@ -15,7 +15,7 @@ import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 part 'pupil.g.dart';
 
 @JsonSerializable()
-class PupilProxy {
+class Pupil {
   @JsonKey(name: 'avatar_url')
   final String? avatarUrl;
   @JsonKey(name: 'communication_pupil')
@@ -68,10 +68,9 @@ class PupilProxy {
   @JsonKey(name: "competence_goals")
   final List<CompetenceGoal>? competenceGoals;
 
-  factory PupilProxy.fromJson(Map<String, dynamic> json) =>
-      _$PupilFromJson(json);
+  factory Pupil.fromJson(Map<String, dynamic> json) => _$PupilFromJson(json);
 
-  PupilProxy(
+  Pupil(
       {required this.avatarUrl,
       required this.communicationPupil,
       required this.communicationTutor1,

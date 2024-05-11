@@ -22,8 +22,8 @@ import 'package:schuldaten_hub/features/admonitions/services/admonition_manager.
 import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_reason_chips.dart';
 import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_type_icon.dart';
 import 'package:schuldaten_hub/features/admonitions/views/new_admonition_view/new_admonition_view.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 List<Widget> pupilAdmonitionsContentList(
   PupilProxy pupil,

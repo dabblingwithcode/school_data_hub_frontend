@@ -20,7 +20,7 @@ import 'package:schuldaten_hub/features/learning_support/views/learning_support_
 import 'package:schuldaten_hub/features/learning_support/views/pupil_profile_learning_support_content.dart';
 import 'package:schuldaten_hub/features/ogs/controller/ogs_list_controller.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/pupil_ogs_content_list.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_infos_content_list.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_language_content_list.dart';

@@ -15,7 +15,7 @@ import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/learning_support/models/category/goal_category.dart';
 import 'package:schuldaten_hub/features/learning_support/models/goal/pupil_goal.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
 import '../models/category/pupil_category_status.dart';

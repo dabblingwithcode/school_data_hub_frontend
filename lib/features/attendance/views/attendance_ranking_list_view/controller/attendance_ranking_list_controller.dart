@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/attendance_ranking_list_view.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceRankingList extends WatchingStatefulWidget {

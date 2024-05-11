@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_badges.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 List<Widget> pupilAttendanceContentList(PupilProxy pupil, context) {
   List<MissedClass> missedClasses = List.from(pupil.pupilMissedClasses!);

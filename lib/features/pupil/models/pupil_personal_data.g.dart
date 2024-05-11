@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'pupil_data_schild.dart';
+part of 'pupil_personal_data.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PupilPersonalData _$PupilDataFromSchildFromJson(Map<String, dynamic> json) =>
+PupilPersonalData _$PupilPersonalDataFromJson(Map<String, dynamic> json) =>
     PupilPersonalData(
       id: json['id'] as int,
       name: json['name'] as String,
@@ -24,7 +24,7 @@ PupilPersonalData _$PupilDataFromSchildFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['migrationSupportEnds'] as String),
     );
 
-Map<String, dynamic> _$PupilDataFromSchildToJson(PupilPersonalData instance) =>
+Map<String, dynamic> _$PupilPersonalDataToJson(PupilPersonalData instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,

@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/credit/credit_list_view.dart';
 import 'package:watch_it/watch_it.dart';
-
-import '../../pupil/models/pupil.dart';
 
 class CreditList extends WatchingStatefulWidget {
   const CreditList({Key? key}) : super(key: key);

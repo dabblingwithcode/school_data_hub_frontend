@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/features/learning_support/views/selectable_category_tree_view/selectable_category_tree_view.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 class SelectableCategoryTree extends StatefulWidget {
   final PupilProxy pupil;

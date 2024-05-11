@@ -7,7 +7,8 @@ import 'package:schuldaten_hub/features/admonitions/services/admonition_helper_f
 import 'package:schuldaten_hub/features/attendance/services/attendance_filters.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/learning_support/services/learning_support_filters.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
 class PupilFilterManager {

@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/common/utils/scanner.dart';
 import 'package:schuldaten_hub/features/competence/models/competence_goal.dart';
 import 'package:schuldaten_hub/features/learning/views/widgets/pupil_competence_tree.dart';
 import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
 import 'package:schuldaten_hub/features/workbooks/views/workbook_list_view/widgets/pupil_workbook_card.dart';

@@ -6,7 +6,7 @@ part of 'pupil.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PupilProxy _$PupilProxyFromJson(Map<String, dynamic> json) => PupilProxy(
+Pupil _$PupilFromJson(Map<String, dynamic> json) => Pupil(
       avatarUrl: json['avatar_url'] as String?,
       communicationPupil: json['communication_pupil'] as String?,
       communicationTutor1: json['communication_tutor1'] as String?,
@@ -58,8 +58,7 @@ PupilProxy _$PupilProxyFromJson(Map<String, dynamic> json) => PupilProxy(
           ?.map((e) => CompetenceCheck.fromJson(e as Map<String, dynamic>))
           .toList();
 
-Map<String, dynamic> _$PupilProxyToJson(PupilProxy instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$PupilToJson(Pupil instance) => <String, dynamic>{
       'avatar_url': instance.avatarUrl,
       'communication_pupil': instance.communicationPupil,
       'communication_tutor1': instance.communicationTutor1,

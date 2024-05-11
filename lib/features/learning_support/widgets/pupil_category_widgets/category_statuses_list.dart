@@ -11,7 +11,7 @@ import 'package:schuldaten_hub/features/learning_support/services/goal_manager.d
 import 'package:schuldaten_hub/features/learning_support/services/learning_support_helper_functions.dart';
 import 'package:schuldaten_hub/features/learning_support/views/new_category_item_view/controller/new_category_item_controller.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/pupil_category_widgets/category_tree_ancestors_names.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 List<Widget> pupilCategoryStatusesList(PupilProxy pupil, BuildContext context) {
   if (pupil.pupilCategoryStatuses != null) {

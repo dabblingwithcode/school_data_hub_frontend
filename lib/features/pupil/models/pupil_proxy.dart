@@ -8,27 +8,27 @@ import 'package:schuldaten_hub/features/competence/models/competence_goal.dart';
 import 'package:schuldaten_hub/features/learning_support/models/category/pupil_category_status.dart';
 import 'package:schuldaten_hub/features/learning_support/models/goal/pupil_goal.dart';
 import 'package:schuldaten_hub/features/pupil/models/credit_history_log.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_data_schild.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 
 class PupilProxy with ChangeNotifier {
   PupilProxy _pupil;
-  PupilDataFromSchild _pupilDataFromSchild;
+  PupilPersonalData _pupilDataFromSchild;
 
   void updatePupil(PupilProxy pupil) {
     _pupil = pupil;
     notifyListeners();
   }
 
-  void updateDataFromSchild(PupilDataFromSchild pupilDataFromSchild) {
+  void updateDataFromSchild(PupilPersonalData pupilDataFromSchild) {
     _pupilDataFromSchild = pupilDataFromSchild;
     notifyListeners();
   }
 
   PupilProxy(
       {required PupilProxy pupil,
-      required PupilDataFromSchild pupilDataFromSchild})
+      required PupilPersonalData pupilDataFromSchild})
       : _pupil = pupil,
         _pupilDataFromSchild = pupilDataFromSchild;
 

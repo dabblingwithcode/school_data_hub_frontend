@@ -2,7 +2,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'pupil_data_schild.g.dart';
+part 'pupil_personal_data.g.dart';
 
 @JsonSerializable()
 class PupilPersonalData {
@@ -32,7 +32,7 @@ class PupilPersonalData {
   final DateTime pupilSince;
 
   factory PupilPersonalData.fromJson(Map<String, dynamic> json) =>
-      _$PupilDataFromSchildFromJson(json);
+      _$PupilPersonalDataFromJson(json);
 
   PupilPersonalData({
     required this.id,
