@@ -2,24 +2,24 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'competence_goal.freezed.dart';
-part 'competence_goal.g.dart';
 
 @JsonSerializable()
-class CompetenceGoal with _$CompetenceGoal {
-  factory CompetenceGoal({
-    @JsonKey(name: 'competence_id') required int competenceId,
-    @JsonKey(name: 'competence_goal_id') required String competenceGoalId,
-    @JsonKey(name: 'created_at') required DateTime createdAt,
-    @JsonKey(name: 'created_by') required String createdBy,
-    @JsonKey(name: 'pupil_id') required int pupilId,
-    @JsonKey(name: 'description') required String description,
-    @JsonKey(name: 'strategies') required String strategies,
-    int? achieved,
-    @JsonKey(name: 'achieved_at') DateTime? achievedAt,
-    @JsonKey(name: 'modified_by') String? modifiedBy,
-  }) = _CompetenceGoal;
+class CompetenceGoal with _$CompetenceGoal{
+ 
+    @JsonKey(name: 'competence_id') final int competenceId;
+    @JsonKey(name: 'competence_goal_id') final String competenceGoalId;
+    @JsonKey(name: 'created_at') final DateTime createdAt;
+    @JsonKey(name: 'created_by') final String createdBy;
+    @JsonKey(name: 'pupil_id') final int pupilId;
+    @JsonKey(name: 'description') final String description;
+    @JsonKey(name: 'strategies') final String strategies;
+    int? achieved;
+    @JsonKey(name: 'achieved_at') DateTime? achievedAt;
+    @JsonKey(name: 'modified_by') String? modifiedBy;
 
-  factory CompetenceGoal.fromJson(Map<String, dynamic> json) =>
-      _$CompetenceGoalFromJson(json);
+  CompetenceGoal({required this.competenceId, required this.competenceGoalId, required this.createdAt, required this.createdBy, required this.pupilId, required this.description, required this.strategies});
+
+  factory CompetenceGoal.fromJson(Map<String; dynamic> json) =>
+      _$CompetenceGoalFromJson(this);
+
 }

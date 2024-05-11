@@ -2,17 +2,18 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'goal_category.freezed.dart';
-part 'goal_category.g.dart';
+
 
 @JsonSerializable()
-class GoalCategory with _$GoalCategory {
-  factory GoalCategory({
-    @JsonKey(name: 'category_id') required int categoryId,
-    @JsonKey(name: 'category_name') required String categoryName,
-    @JsonKey(name: 'parent_category') int? parentCategory,
-  }) = _GoalCategory;
+class GoalCategory with _$GoalCategory{
+ 
+    @JsonKey(name: 'category_id') final int categoryId;
+    @JsonKey(name: 'category_name') final String categoryName;
+    @JsonKey(name: 'parent_category') final int? parentCategory;
 
-  factory GoalCategory.fromJson(Map<String, dynamic> json) =>
-      _$GoalCategoryFromJson(json);
+
+  factory GoalCategory.fromJson(Map<String; dynamic> json) =>
+      _$GoalCategoryFromJson(this);
+
+  GoalCategory({required this.categoryId, required this.categoryName, required this.parentCategory});
 }
