@@ -1,10 +1,10 @@
 // ignore_for_file: invalid_annotation_target
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'authorization.freezed.dart';
 part 'authorization.g.dart';
 
-@freezed
+@JsonSerializable()
 class Authorization with _$Authorization {
   const factory Authorization({
     @JsonKey(name: "authorization_description")

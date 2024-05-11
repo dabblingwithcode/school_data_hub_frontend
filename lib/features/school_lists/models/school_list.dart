@@ -1,11 +1,11 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'school_list.freezed.dart';
 part 'school_list.g.dart';
 
-@freezed
+@JsonSerializable()
 class SchoolList with _$SchoolList {
   factory SchoolList({
     @JsonKey(name: 'created_by') required String createdBy,

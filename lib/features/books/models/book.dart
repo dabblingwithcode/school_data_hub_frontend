@@ -1,11 +1,11 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'book.freezed.dart';
 part 'book.g.dart';
 
-@freezed
+@JsonSerializable()
 class Book with _$Book {
   factory Book({
     required String author,

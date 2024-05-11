@@ -1,11 +1,11 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'admonition.freezed.dart';
 part 'admonition.g.dart';
 
-@freezed
+@JsonSerializable()
 class Admonition with _$Admonition {
   factory Admonition({
     @JsonKey(name: 'admonition_id') required String admonitionId,

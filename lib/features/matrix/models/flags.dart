@@ -1,9 +1,9 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'flags.freezed.dart';
 part 'flags.g.dart';
 
-@freezed
+@JsonSerializable()
 class Flags with _$Flags {
   factory Flags({
     bool? allowCustomUserDisplayNames,

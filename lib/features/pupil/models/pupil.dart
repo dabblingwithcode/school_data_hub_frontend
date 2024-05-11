@@ -1,5 +1,5 @@
 // ignore_for_file: invalid_annotation_target
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 import 'package:schuldaten_hub/features/competence/models/competence_check.dart';
 import 'package:schuldaten_hub/features/competence/models/competence_goal.dart';
@@ -16,7 +16,7 @@ import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 part 'pupil.freezed.dart';
 part 'pupil.g.dart';
 
-@freezed
+@JsonSerializable()
 class Pupil with _$Pupil {
   factory Pupil({
     String? firstName,

@@ -1,11 +1,11 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'pupil_base.freezed.dart';
 part 'pupil_base.g.dart';
 
-@freezed
+@JsonSerializable()
 class PupilBase with _$PupilBase {
   const factory PupilBase({
     @JsonKey(name: "id") required int id,
@@ -26,7 +26,7 @@ class PupilBase with _$PupilBase {
       _$PupilBaseFromJson(json);
 }
 
-@freezed
+@JsonSerializable()
 abstract class PupilBaseList with _$PupilBaseList {
   const factory PupilBaseList({
     required List<PupilBase> pupilBaseList,

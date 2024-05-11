@@ -1,11 +1,11 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'competence_goal.freezed.dart';
 part 'competence_goal.g.dart';
 
-@freezed
+@JsonSerializable()
 class CompetenceGoal with _$CompetenceGoal {
   factory CompetenceGoal({
     @JsonKey(name: 'competence_id') required int competenceId,

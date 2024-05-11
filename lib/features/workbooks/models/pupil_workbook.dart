@@ -1,11 +1,11 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'pupil_workbook.freezed.dart';
 part 'pupil_workbook.g.dart';
 
-@freezed
+@JsonSerializable()
 class PupilWorkbook with _$PupilWorkbook {
   factory PupilWorkbook({
     @JsonKey(name: 'created_at') required DateTime createdAt,

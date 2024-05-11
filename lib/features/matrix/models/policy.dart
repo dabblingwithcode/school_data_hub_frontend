@@ -1,6 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 
 import 'flags.dart';
@@ -14,7 +14,7 @@ part 'policy.g.dart';
 //- 2. in _$$PolicyImplToJson -> 'managedRoomIds': getRoomIds(instance.matrixRooms!),
 //- 3. add this funtion getRoomIds(List<MatrixRoom> rooms) {return rooms.map((room) => room.id).toList();}
 
-@freezed
+@JsonSerializable()
 class Policy with _$Policy {
   factory Policy({
     int? schemaVersion,

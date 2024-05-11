@@ -1,11 +1,11 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'competence_check.freezed.dart';
 part 'competence_check.g.dart';
 
-@freezed
+@JsonSerializable()
 class CompetenceCheck with _$CompetenceCheck {
   factory CompetenceCheck({
     @JsonKey(name: 'check_id') required String checkId,
@@ -25,7 +25,7 @@ class CompetenceCheck with _$CompetenceCheck {
       _$CompetenceCheckFromJson(json);
 }
 
-@freezed
+@JsonSerializable()
 class CompetenceCheckFile with _$CompetenceCheckFile {
   const factory CompetenceCheckFile({
     @JsonKey(name: "check_id") required String checkId,

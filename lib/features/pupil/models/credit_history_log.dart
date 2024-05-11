@@ -1,10 +1,10 @@
 // ignore_for_file: invalid_annotation_target
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'credit_history_log.freezed.dart';
 part 'credit_history_log.g.dart';
 
-@freezed
+@JsonSerializable()
 class CreditHistoryLog with _$CreditHistoryLog {
   const factory CreditHistoryLog({
     @JsonKey(name: "created_at") required DateTime createdAt,

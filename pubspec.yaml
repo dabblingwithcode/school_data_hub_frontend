@@ -25,8 +25,6 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_secure_storage: ^9.0.0
-  freezed: ^2.4.7
-  freezed_annotation: ^2.4.1
   functional_widget_annotation: ^0.10.0
   gap: ^3.0.1
   icon_decoration: ^2.0.2

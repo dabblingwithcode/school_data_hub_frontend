@@ -1,11 +1,11 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'pupil_category_status.freezed.dart';
 part 'pupil_category_status.g.dart';
 
-@freezed
+@JsonSerializable()
 class PupilCategoryStatus with _$PupilCategoryStatus {
   factory PupilCategoryStatus({
     required String comment,

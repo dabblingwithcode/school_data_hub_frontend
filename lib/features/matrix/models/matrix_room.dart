@@ -1,9 +1,9 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
 part 'matrix_room.freezed.dart';
 part 'matrix_room.g.dart';
 
-@freezed
+@JsonSerializable()
 class MatrixRoom with _$MatrixRoom {
   factory MatrixRoom.fromPolicyId(String policyId) {
     // Extract id from the string
@@ -29,7 +29,7 @@ class MatrixRoom with _$MatrixRoom {
   const MatrixRoom._();
 }
 
-@freezed
+@JsonSerializable()
 class RoomAdmin with _$RoomAdmin {
   factory RoomAdmin({required String id, required int powerLevel}) = _RoomAdmin;
 

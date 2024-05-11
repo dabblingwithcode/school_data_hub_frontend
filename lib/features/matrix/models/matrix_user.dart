@@ -1,4 +1,4 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 
 part 'matrix_user.freezed.dart';
@@ -9,7 +9,7 @@ part 'matrix_user.g.dart';
 //- 2. in _$$MatrixUserImplToJson -> 'joinedRoomIds': getRoomIds(instance.matrixRooms!),
 //- 3. add this funtion getRoomIds(List<MatrixRoom> rooms) {return rooms.map((room) => room.id).toList();}
 //- 4. in _$MatrixUserImpl ->  comment out // 'authCredential': instance.authCredential,
-@freezed
+@JsonSerializable()
 class MatrixUser with _$MatrixUser {
   factory MatrixUser({
     String? id,
