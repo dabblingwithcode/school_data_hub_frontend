@@ -1,12 +1,13 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'pupil_base.dart';
+part of 'pupil_data_schild.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-PupilBase _$PupilBaseFromJson(Map<String, dynamic> json) => PupilBase(
+PupilDataFromSchild _$PupilDataFromSchildFromJson(Map<String, dynamic> json) =>
+    PupilDataFromSchild(
       id: json['id'] as int,
       name: json['name'] as String,
       lastName: json['lastName'] as String,
@@ -17,13 +18,15 @@ PupilBase _$PupilBaseFromJson(Map<String, dynamic> json) => PupilBase(
       family: json['family'] as String?,
       birthday: DateTime.parse(json['birthday'] as String),
       pupilSince: DateTime.parse(json['pupilSince'] as String),
-    )
-      ..specialNeeds = json['specialNeeds'] as String?
-      ..migrationSupportEnds = json['migrationSupportEnds'] == null
+      specialNeeds: json['specialNeeds'] as String?,
+      migrationSupportEnds: json['migrationSupportEnds'] == null
           ? null
-          : DateTime.parse(json['migrationSupportEnds'] as String);
+          : DateTime.parse(json['migrationSupportEnds'] as String),
+    );
 
-Map<String, dynamic> _$PupilBaseToJson(PupilBase instance) => <String, dynamic>{
+Map<String, dynamic> _$PupilDataFromSchildToJson(
+        PupilDataFromSchild instance) =>
+    <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'lastName': instance.lastName,
@@ -41,7 +44,7 @@ Map<String, dynamic> _$PupilBaseToJson(PupilBase instance) => <String, dynamic>{
 PupilBaseList _$PupilBaseListFromJson(Map<String, dynamic> json) =>
     PupilBaseList(
       pupilBaseList: (json['pupilBaseList'] as List<dynamic>)
-          .map((e) => PupilBase.fromJson(e as Map<String, dynamic>))
+          .map((e) => PupilDataFromSchild.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

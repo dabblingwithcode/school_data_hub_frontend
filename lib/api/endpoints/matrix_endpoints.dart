@@ -1,4 +1,4 @@
-class EndpointsCorporal {
+class MatrixEndpoints {
   //- PUT POLICY
 // curl -XPUT --data @h:/Hermannschule/corporal-policy.json -H "Authorization: Bearer rsAqf0baGCzMLRVMgTEXW60kxlnWkvu1A0FGiVJdPTUtuePP23WxkCFoADZx0xky5qTIeCvIGv3LpoZU5PeWqczgoJPZd2CUDfVloggVYkmWJE2pHnINSYRfH71ENIu9" https://post.hermannschule.de/_matrix/corporal/policy
 

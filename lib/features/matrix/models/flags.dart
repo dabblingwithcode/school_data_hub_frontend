@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+part 'flags.g.dart';
 
 @JsonSerializable()
 class Flags {

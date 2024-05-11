@@ -1,10 +1,11 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:json_annotation/json_annotation.dart';
-part 'pupil_base.g.dart';
+
+part 'pupil_data_schild.g.dart';
 
 @JsonSerializable()
-class PupilBase {
+class PupilDataFromSchild {
   @JsonKey(name: "id")
   final int id;
   @JsonKey(name: "name")
@@ -16,7 +17,7 @@ class PupilBase {
   @JsonKey(name: "schoolyear")
   final String schoolyear;
   @JsonKey(name: "specialNeeds")
-  String? specialNeeds;
+  final String? specialNeeds;
   @JsonKey(name: "gender")
   final String gender;
   @JsonKey(name: "language")
@@ -26,29 +27,32 @@ class PupilBase {
   @JsonKey(name: "birthday")
   final DateTime birthday;
   @JsonKey(name: "migrationSupportEnds")
-  DateTime? migrationSupportEnds;
+  final DateTime? migrationSupportEnds;
   @JsonKey(name: "pupilSince")
   final DateTime pupilSince;
 
-  factory PupilBase.fromJson(Map<String, dynamic> json) =>
-      _$PupilBaseFromJson(json);
+  factory PupilDataFromSchild.fromJson(Map<String, dynamic> json) =>
+      _$PupilDataFromSchildFromJson(json);
 
-  PupilBase(
-      {required this.id,
-      required this.name,
-      required this.lastName,
-      required this.group,
-      required this.schoolyear,
-      required this.gender,
-      required this.language,
-      required this.family,
-      required this.birthday,
-      required this.pupilSince});
+  PupilDataFromSchild({
+    required this.id,
+    required this.name,
+    required this.lastName,
+    required this.group,
+    required this.schoolyear,
+    required this.gender,
+    required this.language,
+    required this.family,
+    required this.birthday,
+    required this.pupilSince,
+    required this.specialNeeds,
+    required this.migrationSupportEnds,
+  });
 }
 
 @JsonSerializable()
-abstract class PupilBaseList with _$PupilBaseList {
-  final List<PupilBase> pupilBaseList;
+class PupilBaseList {
+  final List<PupilDataFromSchild> pupilBaseList;
 
   factory PupilBaseList.fromJson(
     Map<String, dynamic> json,

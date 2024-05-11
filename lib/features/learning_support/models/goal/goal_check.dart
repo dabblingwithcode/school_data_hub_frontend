@@ -1,9 +1,10 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:json_annotation/json_annotation.dart';
+part 'goal_check.g.dart';
 
 @JsonSerializable()
-class GoalCheck with _$GoalCheck {
+class GoalCheck {
   final String comment;
   @JsonKey(name: 'created_at')
   final DateTime createdAt;

@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:json_annotation/json_annotation.dart';
+part 'pupil_book.g.dart';
 
 @JsonSerializable()
 class PupilBook {
@@ -19,13 +20,13 @@ class PupilBook {
   final String state;
 
   PupilBook(
-      {this.bookId,
-      this.lentAt,
-      this.lentBy,
-      this.pupilId,
+      {required this.bookId,
+      required this.lentAt,
+      required this.lentBy,
+      required this.pupilId,
       this.receivedBy,
       this.returnedAt,
-      this.state});
+      required this.state});
 
   factory PupilBook.fromJson(Map<String, dynamic> json) =>
       _$PupilBookFromJson(json);

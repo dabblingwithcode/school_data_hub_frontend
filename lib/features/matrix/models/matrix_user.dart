@@ -1,6 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 
+part 'matrix_user.g.dart';
+
 //- After running build_runner, in matrix_user.g.dart you must do these modifications:
 //- 1. in _$MatrixUserImpl ->  matrixRooms: (json['joinedRoomIds'] as List<dynamic>).map((e) => MatrixRoom(id: e)).toList(),
 //- 2. in _$$MatrixUserImplToJson -> 'joinedRoomIds': getRoomIds(instance.matrixRooms!),
@@ -9,34 +11,42 @@ import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 @JsonSerializable()
 class MatrixUser {
   final String? id;
-  final bool? active;
-  final String? authType;
+  // we don't use this fields
+  // final bool? active;
+  // final String? authType;
   final String? displayName;
-  final String? avatarUri;
-  @JsonKey(name: 'joinedRoomIds')
-  final List<MatrixRoom>? matrixRooms;
-  final dynamic forbidRoomCreation;
-  final dynamic forbidEncryptedRoomCreation;
-  final dynamic forbidUnencryptedRoomCreation;
-  final String? authCredential;
+  // final String? avatarUri;
+  List<String> joinedRoomIds;
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  List<MatrixRoom> matrixRooms = [];
+  // final bool forbidRoomCreation;
+  // final bool forbidEncryptedRoomCreation;
+  // final bool forbidUnencryptedRoomCreation;
+  // final String? authCredential;
 
   factory MatrixUser.fromJson(Map<String, dynamic> json) {
     var user = _$MatrixUserFromJson(json);
-    if (user.matrixRooms != null) {
+    if (user.joinedRoomIds.isNotEmpty) {
       /// eliminate duplicates
-      user = user.copyWith(matrixRooms: user.matrixRooms!.toSet().toList());
+      user.joinedRoomIds = user.joinedRoomIds.toSet().toList();
     }
     return user;
   }
 
+  void joinRoom(MatrixRoom room) {
+    matrixRooms.add(room);
+    joinedRoomIds.add(room.id);
+  }
+
   MatrixUser(
       {required this.id,
-      required this.active,
-      required this.authType,
+      // required this.active,
+      // required this.authType,
       required this.displayName,
-      required this.avatarUri,
-      required this.forbidRoomCreation,
-      required this.forbidEncryptedRoomCreation,
-      required this.forbidUnencryptedRoomCreation,
-      required this.authCredential});
+      // required this.avatarUri,
+      // required this.forbidRoomCreation,
+      // required this.forbidEncryptedRoomCreation,
+      // required this.forbidUnencryptedRoomCreation,
+      // required this.authCredential,
+      this.joinedRoomIds = const []});
 }

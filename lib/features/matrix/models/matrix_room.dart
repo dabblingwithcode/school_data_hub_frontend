@@ -1,6 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
+part 'matrix_room.g.dart';
 
-@JsonSerializable()
 class MatrixRoom {
   factory MatrixRoom.fromPolicyId(String policyId) {
     // Extract id from the string
@@ -14,13 +14,10 @@ class MatrixRoom {
         roomAdmins: null);
   }
   final String id;
-  final String? name;
-  final int? powerLevelReactions;
-  final int? eventsDefault;
-  final List<RoomAdmin>? roomAdmins; // Optional name field
-
-  factory MatrixRoom.fromJson(Map<String, dynamic> json) =>
-      _$MatrixRoomFromJson(json);
+  String? name;
+  int? powerLevelReactions;
+  int? eventsDefault;
+  List<RoomAdmin>? roomAdmins; // Optional name field
 
   MatrixRoom(
       {required this.id,
@@ -31,7 +28,7 @@ class MatrixRoom {
 }
 
 @JsonSerializable()
-class RoomAdmin with _$RoomAdmin {
+class RoomAdmin {
   final String id;
   final int powerLevel;
 

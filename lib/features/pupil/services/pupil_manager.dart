@@ -16,7 +16,7 @@ import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_base.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data_schild.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
@@ -69,7 +69,7 @@ class PupilManager {
     // and a list to manipulate the matched pupils
     // and outdated pupilbase that did not get a response later
     List<Pupil> matchedPupils = [];
-    List<PupilBase> outdatedPupilbase = [];
+    List<PupilDataFromSchild> outdatedPupilbase = [];
     // request
     try {
       final response = await client.post(EndpointsPupil.getPupils, data: data);
@@ -79,7 +79,7 @@ class PupilManager {
           (response.data as List).map((e) => Pupil.fromJson(e)).toList();
 
       // now we match them with the pupilbase and add the id key values
-      for (PupilBase pupilBaseElement in pupilbase) {
+      for (PupilDataFromSchild pupilBaseElement in pupilbase) {
         if (fetchedPupilsWithoutBase
             .where((element) => element.internalId == pupilBaseElement.id)
             .isNotEmpty) {
@@ -103,7 +103,7 @@ class PupilManager {
         locator<PupilBaseManager>().deletePupilBaseElements(outdatedPupilbase);
         // debug print the internal_id of every element of the outdated pupilbase in one string
         String deletedPupils = '';
-        for (PupilBase element in outdatedPupilbase) {
+        for (PupilDataFromSchild element in outdatedPupilbase) {
           deletedPupils += '${element.id}, ';
         }
         locator<SnackBarManager>().showSnackBar(SnackBarType.warning,
@@ -252,9 +252,9 @@ class PupilManager {
     // the response comes as a json - let's make a pupil
     final Pupil responsePupil = Pupil.fromJson(pupilResponse);
     // we need to patch the values from the pupilbase - let's find a match
-    final List<PupilBase> pupilBaseList =
+    final List<PupilDataFromSchild> pupilBaseList =
         locator<PupilBaseManager>().pupilbase.value;
-    final PupilBase pupilbase = pupilBaseList
+    final PupilDataFromSchild pupilbase = pupilBaseList
         .where((element) => element.id == responsePupil.internalId)
         .first;
     // now let's patch

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_base.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data_schild.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
 Pupil findPupilById(int pupilId) {
@@ -55,7 +55,7 @@ Pupil pupilCopiedWith(Pupil namedPupil, Pupil updatedPupil) {
   return pupil;
 }
 
-Pupil patchPupilWithPupilbaseData(PupilBase pupilbase, Pupil pupil) {
+Pupil patchPupilWithPupilbaseData(PupilDataFromSchild pupilbase, Pupil pupil) {
   return pupil.copyWith(
     firstName: pupilbase.name,
     lastName: pupilbase.lastName,

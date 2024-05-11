@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'package:listenable_collections/listenable_collections.dart';
 import 'package:schuldaten_hub/api/dio/dio_client.dart';
 import 'package:schuldaten_hub/api/endpoints/matrix_endpoints.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
@@ -43,22 +44,22 @@ class MatrixCredentials {
 }
 
 class MatrixPolicyManager {
-  ValueListenable<Policy> get matrixPolicy => _matrixPolicy;
+  ValueListenable<Policy?> get matrixPolicy => _matrixPolicy;
   ValueListenable<bool> get pendingChanges => _pendingChanges;
   ValueListenable<List<MatrixUser>> get matrixUsers => _matrixUsers;
   ValueListenable<List<MatrixRoom>> get matrixRooms => _matrixRooms;
-  ValueListenable<String> get matrixUrl => _matrixUrl;
+  String get matrixUrl => _matrixUrl;
   ValueListenable<String> get matrixToken => _matrixToken;
-  ValueListenable<String> get matrixAdmin => _matrixAdmin;
+  ValueListenable<String> get matrixAdmin => _matrixAdminId;
   ValueListenable<String> get policyToken => _policyToken;
 
-  final _matrixAdmin = ValueNotifier<String>('');
-  final _matrixPolicy = ValueNotifier<Policy>(Policy());
+  final _matrixAdminId = ValueNotifier<String>('');
+  final _matrixPolicy = ValueNotifier<Policy?>(null);
   final _pendingChanges = ValueNotifier<bool>(false);
   final _matrixToken = ValueNotifier<String>('');
-  final _matrixUsers = ValueNotifier<List<MatrixUser>>(<MatrixUser>[]);
-  final _matrixRooms = ValueNotifier<List<MatrixRoom>>(<MatrixRoom>[]);
-  final _matrixUrl = ValueNotifier<String>('');
+  final _matrixUsers = ListNotifier<MatrixUser>();
+  final _matrixRooms = ListNotifier<MatrixRoom>();
+  late final String _matrixUrl;
   final _policyToken = ValueNotifier<String>('');
   MatrixPolicyManager() {
     debug.warning('MatrixPolicyManager initializing! | ${StackTrace.current}');
@@ -74,7 +75,7 @@ class MatrixPolicyManager {
           }
           final MatrixCredentials credentials =
               MatrixCredentials.fromJson(jsonDecode(matrixStoredValues));
-          _matrixUrl.value = credentials.url;
+          _matrixUrl = credentials.url;
           _matrixToken.value = credentials.matrixToken;
           _policyToken.value = credentials.policyToken;
           await fetchMatrixPolicy();
@@ -98,7 +99,7 @@ class MatrixPolicyManager {
       {required String url,
       required String policyToken,
       required String matrixToken}) async {
-    _matrixUrl.value = url;
+    _matrixUrl = url;
     _policyToken.value = policyToken;
     _matrixToken.value = matrixToken;
     secureStorageWrite(
@@ -112,7 +113,7 @@ class MatrixPolicyManager {
   //- SETUP MATRIX CLIENT
   DioClient matrixClient(String token) {
     locator<ApiManager>().setCustomDioClientOptions(
-        _matrixUrl.value, 'Authorization', 'Bearer $token', false);
+        _matrixUrl, 'Authorization', 'Bearer $token', false);
     return locator<ApiManager>().dioClient.value;
   }
 
@@ -121,31 +122,22 @@ class MatrixPolicyManager {
     final client = matrixClient(_policyToken.value);
 
     final response = await client.get(
-      '${_matrixUrl.value}_matrix/corporal/policy',
+      '${_matrixUrl}_matrix/corporal/policy',
     );
     debug.success('Response: ${response.data}');
 
     if (response.statusCode == 200) {
       final Policy policy = Policy.fromJson(response.data['policy']);
       List<MatrixRoom> rooms = [];
-      locator<ApiManager>().setCustomDioClientOptions(_matrixUrl.value,
-          'Authorization', 'Bearer ${_matrixToken.value}', false);
+      locator<ApiManager>().setCustomDioClientOptions(
+          _matrixUrl, 'Authorization', 'Bearer ${_matrixToken.value}', false);
 
-      for (MatrixRoom room in policy.matrixRooms ?? []) {
-        MatrixRoom namedRoom = await fetchAdditionalRoomInfos(room);
+      for (String roomId in policy.managedRoomIds) {
+        MatrixRoom namedRoom = await _fetchAdditionalRoomInfos(roomId);
         rooms.add(namedRoom);
       }
-      Policy newPolicy = Policy(
-        schemaVersion: policy.schemaVersion,
-        identificationStamp: policy.identificationStamp,
-        flags: policy.flags,
-        hooks: policy.hooks,
-        matrixRooms: rooms.toSet().toList(),
-        matrixUsers: List<MatrixUser>.from(policy.matrixUsers ?? []),
-      );
-      _matrixPolicy.value = newPolicy;
-      _matrixUsers.value = newPolicy.matrixUsers ?? [];
-      _matrixRooms.value = newPolicy.matrixRooms ?? [];
+      _matrixRooms.addAll(rooms);
+      _matrixPolicy.value = policy;
 
       debug.success('Fetched Matrix policy! | ${StackTrace.current}');
     }
@@ -169,29 +161,24 @@ class MatrixPolicyManager {
     });
 
     final Response response =
-        await client.post(EndpointsCorporal.createRoom, data: data);
+        await client.post(MatrixEndpoints.createRoom, data: data);
     if (response.statusCode == 200) {
       // extract the value of "room_id" out of the response
       final String roomId = jsonDecode(response.data)['room_id'];
-      addManagedRoom(roomId, name);
+      final room = await _fetchAdditionalRoomInfos(roomId);
+      addManagedRoom(room);
     }
     locator.get<ApiManager>().setDefaultDioClientOptions();
   }
 
-  addManagedRoom(String id, String name) {
-    final MatrixRoom newRoom = MatrixRoom(id: id, name: name);
-    final List<MatrixRoom> updatedList = List.from(_matrixRooms.value)
-      ..add(newRoom);
-    _matrixRooms.value = updatedList;
-    final List<MatrixUser> matrixUsers = List.from(_matrixUsers.value);
-    final int matrixAdminIndex =
-        matrixUsers.indexWhere((element) => element.id == _matrixAdmin.value);
-    if (matrixAdminIndex != -1) {
-      matrixUsers[matrixAdminIndex] = matrixUsers[matrixAdminIndex].copyWith(
-        matrixRooms: [...matrixUsers[matrixAdminIndex].matrixRooms!, newRoom],
-      );
-    }
-    _matrixUsers.value = matrixUsers;
+  void addManagedRoom(MatrixRoom newRoom) {
+    _matrixRooms.add(newRoom);
+
+    final admin = _matrixUsers.value
+        .firstWhere((element) => element.id == _matrixAdminId.value);
+
+    admin.joinRoom(newRoom);
+
     _pendingChanges.value = true;
   }
 
@@ -226,27 +213,27 @@ class MatrixPolicyManager {
       "redact": 50,
       "state_default": 50,
       if (adminPowerLevels != null) "users": adminPowerLevels,
-      if (adminPowerLevels == null) "users": {_matrixAdmin.value: 100},
+      if (adminPowerLevels == null) "users": {_matrixAdminId.value: 100},
       "users_default": 0
     });
 
     final response = await client.put(
-        '${_matrixUrl.value}${EndpointsCorporal().putRoomPowerLevels(roomId)}',
+        '$_matrixUrl${MatrixEndpoints().putRoomPowerLevels(roomId)}',
         data: data);
     debug.success('Response: ${response.data}');
     locator.get<ApiManager>().setDefaultDioClientOptions();
   }
 
-  Future<MatrixRoom> fetchAdditionalRoomInfos(MatrixRoom room) async {
+  Future<MatrixRoom> _fetchAdditionalRoomInfos(String roomId) async {
     final client = locator<ApiManager>().dioClient.value;
-    String name = room.name ?? '';
-    int powerLevelReactions = 0;
-    int eventsDefault = 0;
-    List<RoomAdmin> roomAdmins = [];
+    late String name;
+    late int powerLevelReactions;
+    late int eventsDefault;
+    late List<RoomAdmin> roomAdmins;
 
     // First API call
     final responseRoomSPowerLevels = await client.get(
-      '${_matrixUrl.value}${EndpointsCorporal().fetchRoomPowerLevels(room.id)}',
+      '${_matrixUrl}${MatrixEndpoints().fetchRoomPowerLevels(roomId)}',
     );
 
     if (responseRoomSPowerLevels.statusCode == 200) {
@@ -266,14 +253,15 @@ class MatrixPolicyManager {
 
     // Second API call
     final responseRoomName = await client.get(
-      '${_matrixUrl.value}${EndpointsCorporal().fetchRoomName(room.id)}',
+      '$_matrixUrl${MatrixEndpoints().fetchRoomName(roomId)}',
     );
 
     if (responseRoomName.statusCode == 200) {
-      name = responseRoomName.data['name'] ?? name;
+      name = responseRoomName.data['name'] ?? 'No Room Name';
     }
 
-    MatrixRoom roomWithAdditionalInfos = room.copyWith(
+    MatrixRoom roomWithAdditionalInfos = MatrixRoom(
+      id: roomId,
       name: name,
       powerLevelReactions: powerLevelReactions,
       eventsDefault: eventsDefault,
@@ -284,11 +272,11 @@ class MatrixPolicyManager {
   }
   //- USER REPOSITORY
 
-  Future createNewMatrixUser(String userId, String displayName) async {
+  Future createNewMatrixUser(String matrixId, String displayName) async {
     final client = matrixClient(_matrixToken.value);
     final password = generatePassword();
     final data = jsonEncode({
-      "user_id": userId,
+      "user_id": matrixId,
       "password": password,
       "admin": false,
       "displayname": displayName,
@@ -297,18 +285,16 @@ class MatrixPolicyManager {
     });
 
     final Response response = await client.put(
-      EndpointsCorporal().createMatrixUser(userId),
+      MatrixEndpoints().createMatrixUser(matrixId),
       data: data,
     );
     if (response.statusCode == 201 || response.statusCode == 200) {
       final MatrixUser newUser = MatrixUser(
-        id: userId,
+        id: matrixId,
         displayName: displayName,
       );
-      final List<MatrixUser> updatedList = List.from(_matrixUsers.value)
-        ..add(newUser);
-      _matrixUsers.value = updatedList;
-      await printMatrixCredentials(_matrixUrl.value, newUser, password);
+      _matrixUsers.add(newUser);
+      await printMatrixCredentials(_matrixUrl, newUser, password);
     }
     locator.get<ApiManager>().setDefaultDioClientOptions();
     _pendingChanges.value = true;
@@ -321,30 +307,21 @@ class MatrixPolicyManager {
       "erase": true,
     });
     final Response response = await client
-        .delete(EndpointsCorporal().deleteMatrixUser(userId), data: data);
+        .delete(MatrixEndpoints().deleteMatrixUser(userId), data: data);
+
     if (response.statusCode == 200) {
-      final List<MatrixUser> updatedList = List.from(_matrixUsers.value)
-        ..removeWhere((element) => element.id == userId);
-      _matrixUsers.value = updatedList;
+      _matrixUsers.removeWhere((user) => user.id == userId);
     }
     _pendingChanges.value = true;
     locator.get<ApiManager>().setDefaultDioClientOptions();
   }
 
   Future addMatrixUserToRooms(String matrixUserId, List<String> roomIds) async {
-    List<MatrixRoom> rooms = roomsFromRoomIds(roomIds);
-    List<MatrixUser> matrixUsers = List.from(_matrixUsers.value);
-    int matrixUserIndex =
-        matrixUsers.indexWhere((element) => element.id == matrixUserId);
-    if (matrixUserIndex != -1) {
-      // add rooms to the user, avoid duplicates
-      List<MatrixRoom> updatedRooms =
-          List<MatrixRoom>.from(matrixUsers[matrixUserIndex].matrixRooms ?? [])
-            ..addAll(rooms);
-      matrixUsers[matrixUserIndex] = matrixUsers[matrixUserIndex]
-          .copyWith(matrixRooms: updatedRooms.toSet().toList());
-      _matrixUsers.value = matrixUsers;
-      _pendingChanges.value = true;
+    final user =
+        _matrixUsers.value.firstWhere((element) => element.id == matrixUserId);
+    for (String roomId in roomIds) {
+      user.joinRoom(MatrixRoom.fromPolicyId(roomId));
     }
+    _pendingChanges.value = true;
   }
 }
