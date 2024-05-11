@@ -3,7 +3,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
-class GoalCategory with _$GoalCategory {
+class GoalCategory {
   @JsonKey(name: 'category_id')
   final int categoryId;
   @JsonKey(name: 'category_name')

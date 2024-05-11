@@ -3,7 +3,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
-class MissedClass with _$MissedClass {
+class MissedClass {
   final String? contacted;
   @JsonKey(name: 'created_by')
   final String createdBy;

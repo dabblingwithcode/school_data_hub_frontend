@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'competence_check.g.dart';
 
 @JsonSerializable()
-class CompetenceCheck with _$CompetenceCheck {
+class CompetenceCheck {
   @JsonKey(name: 'check_id')
   final String checkId;
   final String comment;

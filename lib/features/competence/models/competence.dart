@@ -3,7 +3,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
-class Competence with _$Competence {
+class Competence {
   @JsonKey(name: 'competence_id')
   final int competenceId;
   @JsonKey(name: "competence_level")

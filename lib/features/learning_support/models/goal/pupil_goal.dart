@@ -4,7 +4,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:schuldaten_hub/features/learning_support/models/goal/goal_check.dart';
 
 @JsonSerializable()
-class PupilGoal with _$PupilGoal {
+class PupilGoal {
   final int? achieved;
   @JsonKey(name: 'achieved_at')
   final DateTime? achievedAt;

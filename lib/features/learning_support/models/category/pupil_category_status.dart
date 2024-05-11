@@ -3,7 +3,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
-class PupilCategoryStatus with _$PupilCategoryStatus {
+class PupilCategoryStatus {
   final String comment;
   @JsonKey(name: 'file_url')
   final String? fileUrl;

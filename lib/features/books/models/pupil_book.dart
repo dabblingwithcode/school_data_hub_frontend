@@ -3,7 +3,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
-class PupilBook with _$PupilBook {
+class PupilBook {
   @JsonKey(name: 'book_id')
   final String bookId;
   @JsonKey(name: 'lent_at')
