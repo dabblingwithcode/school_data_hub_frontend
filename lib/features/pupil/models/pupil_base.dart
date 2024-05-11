@@ -1,6 +1,7 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:json_annotation/json_annotation.dart';
+part 'pupil_base.g.dart';
 
 @JsonSerializable()
 class PupilBase with _$PupilBase {

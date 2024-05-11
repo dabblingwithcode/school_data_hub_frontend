@@ -5,18 +5,33 @@ import 'package:schuldaten_hub/features/learning_support/models/goal/goal_check.
 
 @JsonSerializable()
 class PupilGoal with _$PupilGoal {
-  factory PupilGoal({
-    int? achieved,
-    @JsonKey(name: 'achieved_at') DateTime? achievedAt,
-    @JsonKey(name: 'created_at') required DateTime createdAt,
-    @JsonKey(name: 'created_by') required String createdBy,
-    String? description,
-    @JsonKey(name: 'goal_category_id') required int goalCategoryId,
-    @JsonKey(name: 'goal_checks') List<GoalCheck>? goalChecks,
-    @JsonKey(name: 'goal_id') required String goalId,
-    String? strategies,
-  }) = _PupilGoal;
+  final int? achieved;
+  @JsonKey(name: 'achieved_at')
+  final DateTime? achievedAt;
+  @JsonKey(name: 'created_at')
+  final DateTime createdAt;
+  @JsonKey(name: 'created_by')
+  final String createdBy;
+  final String? description;
+  @JsonKey(name: 'goal_category_id')
+  final int goalCategoryId;
+  @JsonKey(name: 'goal_checks')
+  final List<GoalCheck>? goalChecks;
+  @JsonKey(name: 'goal_id')
+  final String goalId;
+  final String? strategies;
 
   factory PupilGoal.fromJson(Map<String, dynamic> json) =>
-      _$PupilGoalFromJson(json);
+      _$PupilGoalFromJson(this);
+
+  PupilGoal(
+      {required this.achieved,
+      required this.achievedAt,
+      required this.createdAt,
+      required this.createdBy,
+      required this.description,
+      required this.goalCategoryId,
+      required this.goalChecks,
+      required this.goalId,
+      required this.strategies});
 }

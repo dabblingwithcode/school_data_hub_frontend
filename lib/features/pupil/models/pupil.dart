@@ -12,6 +12,8 @@ import 'package:schuldaten_hub/features/pupil/models/credit_history_log.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 
+part 'pupil.g.dart';
+
 @JsonSerializable()
 class Pupil with _$Pupil {
   final String? firstName;

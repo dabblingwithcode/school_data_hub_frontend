@@ -1,5 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:json_annotation/json_annotation.dart';
+part 'credit_history_log.g.dart';
 
 @JsonSerializable()
 class CreditHistoryLog with _$CreditHistoryLog {
