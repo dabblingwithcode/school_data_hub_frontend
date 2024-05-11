@@ -3,9 +3,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:schuldaten_hub/features/learning_support/models/goal/goal_check.dart';
 
-part 'pupil_goal.freezed.dart';
-part 'pupil_goal.g.dart';
-
 @JsonSerializable()
 class PupilGoal with _$PupilGoal {
   factory PupilGoal({

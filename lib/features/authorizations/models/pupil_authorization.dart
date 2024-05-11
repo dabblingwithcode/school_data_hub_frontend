@@ -2,8 +2,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'pupil_authorization.freezed.dart';
-part 'pupil_authorization.g.dart';
 
 @JsonSerializable()
 class PupilAuthorization with _$PupilAuthorization {

@@ -2,8 +2,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'missed_class.freezed.dart';
-part 'missed_class.g.dart';
+
 
 @JsonSerializable()
 class MissedClass with _$MissedClass {

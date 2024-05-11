@@ -2,8 +2,7 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'admonition.freezed.dart';
-part 'admonition.g.dart';
+
 
 @JsonSerializable()
 class Admonition with _$Admonition {
