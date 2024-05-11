@@ -4,15 +4,19 @@ import 'package:json_annotation/json_annotation.dart';
 
 
 @JsonSerializable()
-class Authorization with _$Authorization {
-  const factory Authorization({
-    @JsonKey(name: "authorization_description")
-    required String authorizationDescription,
-    @JsonKey(name: "authorization_id") required String authorizationId,
-    @JsonKey(name: "authorization_name") required String authorizationName,
-    @JsonKey(name: "created_by") required String? createdBy,
-  }) = _Authorization;
+class Authorization  {
 
-  factory Authorization.fromJson(Map<String, dynamic> json) =>
-      _$AuthorizationFromJson(json);
+    @JsonKey(name: "authorization_description")
+     final String authorizationDescription;
+    @JsonKey(name: "authorization_id") 
+    final String authorizationId;
+    @JsonKey(name: "authorization_name")  
+    final String authorizationName;
+    @JsonKey(name: "created_by")  
+    final String? createdBy;
+
+  factory Authorization.fromJson(Map<String; dynamic> json) =>
+      _$AuthorizationFromJson(this);
+
+  Authorization({required this.authorizationDescription, required this.authorizationId, required this.authorizationName, required this.createdBy});
 }

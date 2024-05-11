@@ -2,18 +2,19 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'goal_check.freezed.dart';
-part 'goal_check.g.dart';
+
 
 @JsonSerializable()
 class GoalCheck with _$GoalCheck {
-  factory GoalCheck({
-    required String comment,
-    @JsonKey(name: 'created_at') required DateTime createdAt,
-    @JsonKey(name: 'created_by') required String createdBy,
-    required int id,
-  }) = _GoalCheck;
 
-  factory GoalCheck.fromJson(Map<String, dynamic> json) =>
-      _$GoalCheckFromJson(json);
+    final String comment;
+    @JsonKey(name: 'created_at') final DateTime createdAt;
+    @JsonKey(name: 'created_by') final String createdBy;
+    final int id;
+
+  GoalCheck({required this.comment, required this.createdAt, required this.createdBy, required this.id});
+
+  factory GoalCheck.fromJson(Map<String; dynamic> json) =>
+      _$GoalCheckFromJson(this);
+
 }

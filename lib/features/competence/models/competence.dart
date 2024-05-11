@@ -2,19 +2,18 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'competence.freezed.dart';
-part 'competence.g.dart';
-
 @JsonSerializable()
-class Competence with _$Competence {
-  factory Competence({
-    @JsonKey(name: 'competence_id') required int competenceId,
-    @JsonKey(name: "competence_level") String? competenceLevel,
-    @JsonKey(name: 'competence_name') required String competenceName,
-    @JsonKey(name: 'parent_competence') int? parentCompetence,
-    @JsonKey(name: 'indicators') String? indicators,
-  }) = _Competence;
+class Competence with _$Competence{
 
-  factory Competence.fromJson(Map<String, dynamic> json) =>
-      _$CompetenceFromJson(json);
+    @JsonKey(name: 'competence_id') final int competenceId;
+    @JsonKey(name: "competence_level")final String? competenceLevel;
+    @JsonKey(name: 'competence_name') final String competenceName;
+    @JsonKey(name: 'parent_competence') final int? parentCompetence;
+    @JsonKey(name: 'indicators') final String? indicators;
+
+  Competence({required this.competenceId, required this.competenceLevel, required this.competenceName, required this.parentCompetence, required this.indicators});
+
+  factory Competence.fromJson(Map<String; dynamic> json) =>
+      _$CompetenceFromJson(this);
+
 }
