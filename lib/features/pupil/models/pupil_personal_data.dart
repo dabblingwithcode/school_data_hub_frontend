@@ -34,6 +34,8 @@ class PupilPersonalData {
   factory PupilPersonalData.fromJson(Map<String, dynamic> json) =>
       _$PupilPersonalDataFromJson(json);
 
+  Map<String, dynamic> toJson() => _$PupilPersonalDataToJson(this);
+
   PupilPersonalData({
     required this.id,
     required this.name,
@@ -48,16 +50,4 @@ class PupilPersonalData {
     required this.specialNeeds,
     required this.migrationSupportEnds,
   });
-}
-
-@JsonSerializable()
-class PupilBaseList {
-  final List<PupilPersonalData> pupilBaseList;
-
-  factory PupilBaseList.fromJson(
-    Map<String, dynamic> json,
-  ) =>
-      _$PupilBaseListFromJson(json);
-
-  PupilBaseList({required this.pupilBaseList});
 }

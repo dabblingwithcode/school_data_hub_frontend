@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/widgets/attendance_ranking_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
+import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
 
 Widget attendanceRankingListViewBottomNavBar(
     BuildContext context, bool filtersOn) {
@@ -45,7 +45,7 @@ Widget attendanceRankingListViewBottomNavBar(
                   size: 30,
                 ),
                 onPressed: () {
-                  locator<PupilBaseManager>().scanNewPupilBase(context);
+                  locator<PupilPersonalDataManager>().scanNewPupilBase(context);
                 },
               ),
               const Gap(30),

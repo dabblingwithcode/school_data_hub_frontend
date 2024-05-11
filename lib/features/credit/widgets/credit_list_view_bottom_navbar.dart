@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
+import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
 import 'package:schuldaten_hub/features/credit/widgets/credit_filter_bottom_sheet.dart';
 
 import '../../pupil/services/pupil_filter_manager.dart';
@@ -39,7 +39,7 @@ Widget creditListViewBottomNavBar(BuildContext context, bool filtersOn) {
                   size: 30,
                 ),
                 onPressed: () {
-                  locator<PupilBaseManager>().scanNewPupilBase(context);
+                  locator<PupilPersonalDataManager>().scanNewPupilBase(context);
                 },
               ),
               const Gap(30),

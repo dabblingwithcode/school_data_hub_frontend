@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
 PupilProxy findPupilById(int pupilId) {
@@ -36,40 +35,6 @@ List<int> restOfPupils(List<int> pupilIds) {
     }
   }
   return restOfPupils;
-}
-
-PupilProxy pupilCopiedWith(PupilProxy namedPupil, PupilProxy updatedPupil) {
-  final PupilProxy pupil = updatedPupil.copyWith(
-    firstName: namedPupil.firstName,
-    lastName: namedPupil.lastName,
-    group: namedPupil.group,
-    schoolyear: namedPupil.schoolyear,
-    specialNeeds: namedPupil.specialNeeds,
-    gender: namedPupil.gender,
-    language: namedPupil.language,
-    family: namedPupil.family,
-    birthday: namedPupil.birthday,
-    migrationSupportEnds: namedPupil.migrationSupportEnds,
-    pupilSince: namedPupil.pupilSince,
-  );
-  return pupil;
-}
-
-PupilProxy patchPupilWithPupilbaseData(
-    PupilDataFromSchild pupilbase, PupilProxy pupil) {
-  return pupil.copyWith(
-    firstName: pupilbase.name,
-    lastName: pupilbase.lastName,
-    group: pupilbase.group,
-    schoolyear: pupilbase.schoolyear,
-    specialNeeds: pupilbase.specialNeeds,
-    gender: pupilbase.gender,
-    language: pupilbase.language,
-    family: pupilbase.family,
-    birthday: pupilbase.birthday,
-    migrationSupportEnds: pupilbase.migrationSupportEnds,
-    pupilSince: pupilbase.pupilSince,
-  );
 }
 
 String preschoolRevisionPredicate(int value) {

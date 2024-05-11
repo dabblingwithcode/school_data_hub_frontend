@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
 import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
+import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
 
 Widget admonitionListViewBottomNavBar(BuildContext context, bool filtersOn) {
   return bottomNavBarLayout(
@@ -39,7 +39,7 @@ Widget admonitionListViewBottomNavBar(BuildContext context, bool filtersOn) {
                   size: 30,
                 ),
                 onPressed: () {
-                  locator<PupilBaseManager>().scanNewPupilBase(context);
+                  locator<PupilPersonalDataManager>().scanNewPupilBase(context);
                 },
               ),
               const Gap(30),

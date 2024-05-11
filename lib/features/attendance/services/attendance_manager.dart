@@ -15,7 +15,7 @@ import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
+import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
 
 import '../../../api/services/api_manager.dart';
 import '../../../common/services/locator.dart';
@@ -108,7 +108,7 @@ class AttendanceManager {
     final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     final List<int> pupilBaseIds =
-        locator<PupilBaseManager>().availablePupilIds.value;
+        locator<PupilPersonalDataManager>().availablePupilIds;
     // pupils gone home during class for whatever reason
     //are marked as returned with a time stamp
     //* Case create a new missed class

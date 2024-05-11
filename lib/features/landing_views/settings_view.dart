@@ -17,7 +17,7 @@ import 'package:schuldaten_hub/common/widgets/qr_views.dart';
 import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_helper_functions.dart';
 import 'package:schuldaten_hub/features/matrix/views/set_matrix_environment_values_view.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
+import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_view/controller/select_pupils_list_controller.dart';
 import 'package:schuldaten_hub/features/statistics/birthdays_view.dart';
 import 'package:schuldaten_hub/features/statistics/statistics_view/controller/statistics.dart';
@@ -157,7 +157,7 @@ class SettingsView extends WatchingWidget {
                           'Lokale ID-Schlüssel löschen',
                           'Lokale ID-Schlüssel löschen?');
                       if (confirm == true && context.mounted) {
-                        locator.get<PupilBaseManager>().deleteData();
+                        locator.get<PupilPersonalDataManager>().deleteData();
                         locator<SnackBarManager>().showSnackBar(
                             SnackBarType.success, 'ID-Schlüssel gelöscht');
                       }
@@ -365,15 +365,16 @@ class SettingsView extends WatchingWidget {
                         final List<int> pupilIds =
                             await Navigator.of(context).push(MaterialPageRoute(
                           builder: (ctx) => SelectPupilList(
-                              locator<PupilBaseManager>()
+                              locator<PupilPersonalDataManager>()
                                   .availablePupilIds
                                   .value),
                         ));
                         if (pupilIds.isEmpty) {
                           return;
                         }
-                        final String qr = await locator<PupilBaseManager>()
-                            .generatePupilBaseQrData(pupilIds);
+                        final String qr =
+                            await locator<PupilPersonalDataManager>()
+                                .generatePupilBaseQrData(pupilIds);
 
                         if (context.mounted) {
                           await showQrCode(qr, context);
@@ -385,7 +386,7 @@ class SettingsView extends WatchingWidget {
                           const Text('Alle vorhandenen Gruppen-QR-Ids zeigen'),
                       onPressed: (context) async {
                         final Map<String, String> qrData =
-                            await locator<PupilBaseManager>()
+                            await locator<PupilPersonalDataManager>()
                                 .generateAllPupilBaseQrData(12);
 
                         if (context.mounted) {
@@ -398,7 +399,7 @@ class SettingsView extends WatchingWidget {
                           'Alle vorhandenen Gruppen-QR-Ids zeigen (autoplay)'),
                       onPressed: (context) async {
                         final Map<String, String> qrData =
-                            await locator<PupilBaseManager>()
+                            await locator<PupilPersonalDataManager>()
                                 .generateAllPupilBaseQrData(8);
 
                         if (context.mounted) {

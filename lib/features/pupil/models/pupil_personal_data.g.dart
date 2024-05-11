@@ -39,15 +39,3 @@ Map<String, dynamic> _$PupilPersonalDataToJson(PupilPersonalData instance) =>
       'migrationSupportEnds': instance.migrationSupportEnds?.toIso8601String(),
       'pupilSince': instance.pupilSince.toIso8601String(),
     };
-
-PupilBaseList _$PupilBaseListFromJson(Map<String, dynamic> json) =>
-    PupilBaseList(
-      pupilBaseList: (json['pupilBaseList'] as List<dynamic>)
-          .map((e) => PupilPersonalData.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-
-Map<String, dynamic> _$PupilBaseListToJson(PupilBaseList instance) =>
-    <String, dynamic>{
-      'pupilBaseList': instance.pupilBaseList,
-    };

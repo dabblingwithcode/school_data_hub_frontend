@@ -78,7 +78,7 @@ class AuthorizationManager {
     }
     final List<PupilProxy> responsePupils = (List<PupilProxy>.from(
         (response.data as List).map((e) => PupilProxy.fromJson(e))));
-    locator<PupilManager>().updateListOfPupilsInRepository(responsePupils);
+    locator<PupilManager>().updatePupilsRepository(responsePupils);
     fetchAuthorizations();
     snackBarManager.showSnackBar(SnackBarType.success, 'Einwilligung erstellt');
     snackBarManager.isRunningValue(false);
@@ -127,7 +127,7 @@ class AuthorizationManager {
     }
     final List<PupilProxy> responsePupils = (List<PupilProxy>.from(
         (response.data as List).map((e) => PupilProxy.fromJson(e))));
-    locator<PupilManager>().updateListOfPupilsInRepository(responsePupils);
+    locator<PupilManager>().updatePupilsRepository(responsePupils);
     snackBarManager.showSnackBar(
         SnackBarType.success, 'Einwilligungen erstellt');
   }

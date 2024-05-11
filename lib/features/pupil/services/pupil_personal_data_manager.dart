@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
 
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -17,23 +19,24 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
-class PupilBaseManager {
-  ValueListenable<List<PupilPersonalData>> get pupilbase => _pupilbase;
-  ValueListenable<List<int>> get availablePupilIds => _availablePupilIds;
+class PupilPersonalDataManager {
+  final Map<int, PupilPersonalData> _pupilPersonalData = {};
+  List<int> get availablePupilIds => _pupilPersonalData.keys.toList();
 
-  ValueListenable<bool> get isRunning => _isRunning;
+  PupilPersonalData? getPersonalData(int pupilId) {
+    return _pupilPersonalData[pupilId];
+  }
 
-  final _pupilbase = ValueNotifier<List<PupilPersonalData>>([]);
-  final _availablePupilIds = ValueNotifier<List<int>>([]);
+  // wird nirgends verwendet
+  // ValueListenable<bool> get isRunning => _isRunning;
+  // final _isRunning = ValueNotifier<bool>(false);
 
-  final _isRunning = ValueNotifier<bool>(false);
-  PupilBaseManager();
-
-  Future<PupilBaseManager> init() async {
+  Future<PupilPersonalDataManager> init() async {
     await getStoredPupilBase();
     return this;
   }
@@ -41,33 +44,32 @@ class PupilBaseManager {
   Future deleteData() async {
     locator<SnackBarManager>().isRunningValue(true);
     await secureStorageDelete('pupilBase');
-    _pupilbase.value = [];
+    _pupilPersonalData.clear();
     locator<PupilManager>().deletePupils();
     locator<PupilFilterManager>().deleteFilteredPupils();
-    _availablePupilIds.value = [];
     locator<SnackBarManager>().isRunningValue(false);
   }
 
   Future getStoredPupilBase() async {
     debug.warning('Getting the stored pupilbase');
-    List<PupilPersonalData> storedPupilBase = [];
-    bool pupilBaseExists = await secureStorage.containsKey(key: 'pupilBase');
-    if (pupilBaseExists == true) {
+    List<PupilPersonalData> storedPersonalDataEntries = [];
+    bool pupilPersonalDataExists =
+        await secureStorage.containsKey(key: 'pupilBase');
+    if (pupilPersonalDataExists == true) {
       debug.warning('There is a pupilbase');
-      List<int> pupilIds = [];
+
       String? storedString = await secureStorageRead('pupilBase');
-      storedPupilBase = (json.decode(storedString!) as List)
+      storedPersonalDataEntries = (json.decode(storedString!) as List)
           .map((i) => PupilPersonalData.fromJson(i))
           .toList();
-      _pupilbase.value = storedPupilBase;
-      // let's fill _availablePupilIds too
-      for (PupilPersonalData pupil in storedPupilBase) {
-        pupilIds.add(pupil.id);
+      for (PupilPersonalData pupil in storedPersonalDataEntries) {
+        _pupilPersonalData[pupil.id] = pupil;
       }
-      _availablePupilIds.value = pupilIds;
+
       //- This would be great place for SIGNAL READY!!!
+      // TODO not necessary
       debug.info(
-          'Pupilbase loaded - Length is ${_pupilbase.value.length} | ${StackTrace.current}');
+          'Pupilbase loaded - Length is ${_pupilPersonalData.length} | ${StackTrace.current}');
       return;
     } else {
       debug.info('No pupilBase in storage! | ${StackTrace.current}');
@@ -75,7 +77,7 @@ class PupilBaseManager {
     }
   }
 
-  scanNewPupilBase(BuildContext context) async {
+  Future<void> scanNewPupilBase(BuildContext context) async {
     final String? scanResult = await scanner(context, 'Scanning Pupilbase');
     if (scanResult != null) {
       addNewPupilBase(scanResult);
@@ -86,9 +88,12 @@ class PupilBaseManager {
     }
   }
 
-  setNewPupilBase(List<PupilPersonalData> pupilBase) async {
-    _pupilbase.value = pupilBase;
-    await secureStorageWrite('pupilBase', jsonEncode(pupilBase));
+  setNewPupilBase(List<PupilPersonalData> personalDataList) async {
+    _pupilPersonalData.clear();
+    for (PupilPersonalData pupil in personalDataList) {
+      _pupilPersonalData[pupil.id] = pupil;
+    }
+    await secureStorageWrite('pupilBase', jsonEncode(personalDataList));
   }
 
   void addNewPupilBase(String scanResult) async {
@@ -100,11 +105,10 @@ class PupilBaseManager {
       // If the string is imported in windows, it's not encrypted
       decryptedResult = scanResult;
     }
-    List<PupilPersonalData> oldPupilbase = _pupilbase.value;
     // The pupils in the string are separated by a '\n' - let's split them apart
     List<String> splittedPupilBase = decryptedResult!.split('\n');
     // The properties are separated by commas, let's build the pupilbase objects with them
-    List<PupilPersonalData> scannedPupilBase = [];
+    final oldLenght = _pupilPersonalData.length;
     for (String data in splittedPupilBase) {
       if (data != '') {
         List splittedData = data.split(',');
@@ -113,7 +117,7 @@ class PupilBaseManager {
             : splittedData[4] == '04'
                 ? 'S4'
                 : splittedData[4];
-        scannedPupilBase.add(PupilPersonalData(
+        final newPersonalData = PupilPersonalData(
           id: int.parse(splittedData[0]),
           name: splittedData[1],
           lastName: splittedData[2],
@@ -130,36 +134,24 @@ class PupilBaseManager {
               ? null
               : DateTime.tryParse(splittedData[11])!,
           pupilSince: DateTime.tryParse(splittedData[12])!,
-        ));
+        );
+        // TODO: do we really only want to add new entries and not update existing ones?
+        if (!_pupilPersonalData.containsKey(newPersonalData.id)) {
+          _pupilPersonalData[newPersonalData.id] = newPersonalData;
+        }
       }
     }
     debug.info('Pupilbase processed');
-    // Now we need to combine it with the stored pupilbase -
-    // old elements not present in the new pupilbase are added
-    List<PupilPersonalData> newPupilBase =
-        List<PupilPersonalData>.from(scannedPupilBase);
-    for (PupilPersonalData oldPupil in oldPupilbase) {
-      if (newPupilBase.where((element) => element.id == oldPupil.id).isEmpty) {
-        newPupilBase.add(oldPupil);
-      }
-    }
-    _pupilbase.value = newPupilBase;
-    // we have a new pupilbase - let's update _availablePupilIds too
-    List<int> availablePupils = [];
-    for (PupilPersonalData pupil in _pupilbase.value) {
-      availablePupils.add(pupil.id);
-    }
-    _availablePupilIds.value = availablePupils;
-    await secureStorageWrite('pupilBase', jsonEncode(_pupilbase.value));
+    await secureStorageWrite(
+        'pupilBase', jsonEncode(_pupilPersonalData.values));
     debug.success(
-        'Pupilbase extended: ${oldPupilbase.length} pupils before, now ${_pupilbase.value.length} | ${StackTrace.current}');
+        'Pupilbase extended: $oldLenght pupils before, now ${_pupilPersonalData.length} | ${StackTrace.current}');
     await locator<PupilManager>().fetchAllPupils();
 
     locator<BottomNavManager>().setBottomNavPage(0);
   }
 
   void importPupilsFromTxt(String scanResult) async {
-    List<PupilPersonalData> oldPupilbase = _pupilbase.value;
     // The pupils in the string are separated by a line break - let's split them out
     List splittedPupilBase = scanResult.split('\n');
     // The properties are separated by commas, let's build the pupilbase objects with them
@@ -213,27 +205,18 @@ class PupilBaseManager {
       data: formData,
     );
     debug.warning('RESPONSE is ${response.data}');
+    // TODO
     //locator<PupilManager>().patchPupilFromResponse(pupilResponse: response.data);
     // we got now the updated data, let's substitute the old pupilbase
     textFile.delete();
-    _pupilbase.value = scannedPupilBase;
-    // old elements not present in the new pupilbase are added
-    List<PupilPersonalData> newPupilBase =
-        List<PupilPersonalData>.from(scannedPupilBase);
-    for (PupilPersonalData oldPupil in oldPupilbase) {
-      if (newPupilBase.where((element) => element.id == oldPupil.id).isEmpty) {
-        newPupilBase.add(oldPupil);
+    for (PupilPersonalData element in scannedPupilBase) {
+      if (!_pupilPersonalData.containsKey(element.id)) {
+        _pupilPersonalData[element.id] = element;
       }
     }
-    _pupilbase.value = newPupilBase;
-    // we have a new pupilbase - let's update _availablePupilIds too
-    List<int> availablePupils = [];
-    for (PupilPersonalData pupil in _pupilbase.value) {
-      availablePupils.add(pupil.id);
-    }
-    _availablePupilIds.value = availablePupils;
 
-    await secureStorageWrite('pupilBase', jsonEncode(_pupilbase.value));
+    await secureStorageWrite(
+        'pupilBase', jsonEncode(_pupilPersonalData.values.toList()));
     await locator<PupilManager>().fetchAllPupils();
     locator<PupilFilterManager>().refreshFilteredPupils();
     locator<BottomNavManager>().setBottomNavPage(0);
@@ -242,8 +225,9 @@ class PupilBaseManager {
   Future<String> generatePupilBaseQrData(List<int> pupilIds) async {
     String qrString = '';
     for (int pupilId in pupilIds) {
-      PupilPersonalData pupilbase =
-          _pupilbase.value.where((element) => element.id == pupilId).single;
+      PupilPersonalData pupilbase = _pupilPersonalData.values
+          .where((element) => element.id == pupilId)
+          .single;
       final migrationSupportEnds = pupilbase.migrationSupportEnds != null
           ? pupilbase.migrationSupportEnds!.formatForJson()
           : '';
@@ -258,17 +242,19 @@ class PupilBaseManager {
   }
 
   Future<Map<String, String>> generateAllPupilBaseQrData(int qrsize) async {
-    final List<PupilPersonalData> pupilBase = _pupilbase.value;
+    final List<PupilPersonalData> pupilBase =
+        _pupilPersonalData.values.toList();
     // First we group the pupils by their group in a map
-    Map<String, List<PupilPersonalData>> groupedPupils = {};
+    Map<String, List<PupilPersonalData>> groupedPupils =
+        pupilBase.groupListsBy((element) => element.group);
 
-    for (var pupil in pupilBase) {
-      if (groupedPupils.containsKey(pupil.group)) {
-        groupedPupils[pupil.group]!.add(pupil);
-      } else {
-        groupedPupils[pupil.group] = [pupil];
-      }
-    }
+    // for (var pupil in pupilBase) {
+    //   if (groupedPupils.containsKey(pupil.group)) {
+    //     groupedPupils[pupil.group]!.add(pupil);
+    //   } else {
+    //     groupedPupils[pupil.group] = [pupil];
+    //   }
+    // }
     final Map<String, String> finalGroupedList = {};
 
     // Now we iterate over the groupedPupils and generate maps with smaller lists with no more than 12 items and add to the group name the subgroup number
@@ -309,16 +295,17 @@ class PupilBaseManager {
     return sortedQrGroupLists;
   }
 
-  void deletePupilBaseElements(List<PupilPersonalData> toBeDeletedPupilBase) {
+  Future<void> deletePupilBaseElements(
+      List<PupilPersonalData> toBeDeletedPupilBase) async {
     locator<SnackBarManager>().isRunningValue(true);
-    List<PupilPersonalData> modifiedPupilBaseList = List.from(_pupilbase.value);
-    modifiedPupilBaseList.removeWhere((pupilBase) =>
-        toBeDeletedPupilBase.any((element) => element.id == pupilBase.id));
-    _pupilbase.value = modifiedPupilBaseList;
-    secureStorageWrite('pupilBase', jsonEncode(_pupilbase.value));
+    for (PupilPersonalData pupilBase in toBeDeletedPupilBase) {
+      _pupilPersonalData.remove(pupilBase.id);
+    }
+    await secureStorageWrite(
+        'pupilBase', jsonEncode(_pupilPersonalData.values.toList()));
     locator<SnackBarManager>().isRunningValue(false);
     debug.info(
-        'Pupilbase reduced: deleted ${toBeDeletedPupilBase.length} pupils not present in the database, now ${_pupilbase.value.length} | ${StackTrace.current}');
+        'Pupilbase reduced: deleted ${toBeDeletedPupilBase.length} pupils not present in the database, now ${_pupilPersonalData.length} | ${StackTrace.current}');
   }
 
   importPupilBaseWithWindows() async {

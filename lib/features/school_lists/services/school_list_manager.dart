@@ -149,7 +149,7 @@ class SchoolListManager {
     }
     final List<PupilProxy> responsePupils =
         (response.data as List).map((e) => PupilProxy.fromJson(e)).toList();
-    locator<PupilManager>().updateListOfPupilsInRepository(responsePupils);
+    locator<PupilManager>().updatePupilsRepository(responsePupils);
 
     // final SchoolList modifiedSchoolList = SchoolList.fromJson(response.data);
     // List<SchoolList> updatedSchoolLists = List.from(_schoolLists.value);
@@ -174,7 +174,7 @@ class SchoolListManager {
     }
     final List<PupilProxy> responsePupils =
         (response.data as List).map((e) => PupilProxy.fromJson(e)).toList();
-    locator<PupilManager>().updateListOfPupilsInRepository(responsePupils);
+    locator<PupilManager>().updatePupilsRepository(responsePupils);
     // final SchoolList modifiedSchoolList = SchoolList.fromJson(response.data);
     // List<SchoolList> updatedSchoolLists = List.from(_schoolLists.value);
     // final index = updatedSchoolLists

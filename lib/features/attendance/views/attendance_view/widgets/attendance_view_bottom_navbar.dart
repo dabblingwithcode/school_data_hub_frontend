@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/widgets/date_picker.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
+import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
 
 Widget attendanceViewBottomNavBar(
     BuildContext context, bool filtersOn, DateTime thisDate) {
@@ -39,7 +39,7 @@ Widget attendanceViewBottomNavBar(
                 size: 30,
               ),
               onPressed: () {
-                locator<PupilBaseManager>().scanNewPupilBase(context);
+                locator<PupilPersonalDataManager>().scanNewPupilBase(context);
               },
             ),
             const Gap(30),

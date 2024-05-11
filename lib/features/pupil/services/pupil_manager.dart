@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
@@ -15,10 +16,12 @@ import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
+import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
 
 class PupilManager {
   ValueListenable<List<PupilProxy>> get pupils => _pupils;
@@ -37,7 +40,7 @@ class PupilManager {
   //- Fetch all available pupils from the backend
   Future fetchAllPupils() async {
     final pupilsToFetch =
-        locator.get<PupilBaseManager>().availablePupilIds.value;
+        locator.get<PupilPersonalDataManager>().availablePupilIds;
     if (pupilsToFetch.isEmpty) {
       return;
     }
@@ -50,70 +53,81 @@ class PupilManager {
     List<int> pupilIds = [];
     for (PupilProxy pupil in pupils) {
       pupilIds.add(pupil.internalId);
-      await fetchPupilsById(pupilIds);
     }
+    await fetchPupilsById(pupilIds);
   }
 
   //-Fetch pupils with the given ids from the backend
   Future fetchPupilsById(List<int> pupilIds) async {
     locator<SnackBarManager>().isRunningValue(true);
     // we request the data posting a json with the id list - let's build that
-    final data = jsonEncode({"pupils": pupilIds});
-    // we'll need the pupilbase to parse the response - let's prepare it
-    final pupilbase = locator.get<PupilBaseManager>().pupilbase.value;
+    final pupilIdList = jsonEncode({"pupils": pupilIds});
     // and a list to manipulate the matched pupils
-    // and outdated pupilbase that did not get a response later
-    List<PupilProxy> matchedPupils = [];
-    List<PupilDataFromSchild> outdatedPupilbase = [];
+    List<PupilProxy> mergedPupils = [];
+    List<PupilPersonalData> outdatedPupilPersonalData = [];
     // request
     try {
-      final response = await client.post(EndpointsPupil.getPupils, data: data);
+      final response =
+          await client.post(EndpointsPupil.getPupils, data: pupilIdList);
       debug.info('PupilProxy request sent!');
       // we have the response - let's build unidentified Pupils with it
-      final fetchedPupilsWithoutBase =
-          (response.data as List).map((e) => PupilProxy.fromJson(e)).toList();
+      final fetchedPupils =
+          (response.data as List).map((e) => Pupil.fromJson(e)).toList();
 
-      // now we match them with the pupilbase and add the id key values
-      for (PupilDataFromSchild pupilBaseElement in pupilbase) {
-        if (fetchedPupilsWithoutBase
-            .where((element) => element.internalId == pupilBaseElement.id)
-            .isNotEmpty) {
-          PupilProxy pupilMatch = fetchedPupilsWithoutBase
-              .where((element) => element.internalId == pupilBaseElement.id)
-              .single;
-          PupilProxy namedPupil =
-              patchPupilWithPupilbaseData(pupilBaseElement, pupilMatch);
-          matchedPupils.add(namedPupil);
+      // now we match them with their personal data
+      final personalDataManager = locator.get<PupilPersonalDataManager>();
+      for (Pupil fetchedPupil in fetchedPupils) {
+        final proxyInRepository = _pupils.value.firstWhereOrNull(
+            (element) => element.internalId == fetchedPupil.internalId);
+
+        if (proxyInRepository != null) {
+          proxyInRepository.updatePupil(fetchedPupil);
+          continue;
+        }
+        final personalData =
+            personalDataManager.getPersonalData(fetchedPupil.internalId);
+        if (personalData != null) {
+          _pupils.value.add(PupilProxy(
+              pupil: fetchedPupil, pupilDataFromSchild: personalData));
         } else {
+          /// TODO ich glaube, das mein code oben genau das macht was er soll,
+          /// allerdings passter der rest nicht dazu.
+
           // if the pupilbase element was sent and didn't get a response from the server,
           // this means it is outdated -
           // let's remove those
-          if (pupilIds.contains(pupilBaseElement.id)) {
-            outdatedPupilbase.add(pupilBaseElement);
-          }
+
+          // if (pupilIds.contains(pupilPersonalData.id)) {
+          //   outdatedPupilPersonalData.add(pupilPersonalData);
+          // }
+
+          // wenn dann müsste hier behandelt werden, dass wir ein pupil in der liste haben,
+          // für den es kein personaldata gibt.
         }
       }
       // now check if the pupilbase was modified - if so, store the modified base
-      if (outdatedPupilbase.isNotEmpty) {
-        locator<PupilBaseManager>().deletePupilBaseElements(outdatedPupilbase);
+      if (outdatedPupilPersonalData.isNotEmpty) {
+        locator<PupilPersonalDataManager>()
+            .deletePupilBaseElements(outdatedPupilPersonalData);
         // debug print the internal_id of every element of the outdated pupilbase in one string
         String deletedPupils = '';
-        for (PupilDataFromSchild element in outdatedPupilbase) {
+        for (PupilPersonalData element in outdatedPupilPersonalData) {
           deletedPupils += '${element.id}, ';
         }
         locator<SnackBarManager>().showSnackBar(SnackBarType.warning,
             '$deletedPupils had no match and have been deleted from the pupilbase!');
       }
 
-      updateListOfPupilsInRepository(matchedPupils);
+      sortPupilsByName();
+      // TODO trigger rebuild
 
       // let's update the filtered pupils too
       // handle errors...
-      if (matchedPupils.isEmpty) {
+      if (mergedPupils.isEmpty) {
         debug.info('PUPILS FETCHED: No matches! | ${StackTrace.current}');
       } else {
         locator<SnackBarManager>().showSnackBar(SnackBarType.success,
-            'PUPILS FETCHED: There are ${matchedPupils.length} matches! | ${StackTrace.current}');
+            'PUPILS FETCHED: There are ${mergedPupils.length} matches! | ${StackTrace.current}');
       }
       if (locator.isReadySync<PupilFilterManager>()) {
         //locator<PupilFilterManager>().refreshFilteredPupils();
@@ -145,43 +159,38 @@ class PupilManager {
   }
 
   //- update pupil in repository
-  updatePupilInRepository(PupilProxy pupil) {
-    List<PupilProxy> pupils = List.from(_pupils.value);
-    int index =
-        pupils.indexWhere((element) => element.internalId == pupil.internalId);
-    pupils[index] = pupilCopiedWith(pupils[index], pupil);
-    _pupils.value = pupils;
-    locator<PupilFilterManager>().cloneToFilteredPupil(pupil);
-  }
+  // updatePupilInRepository(PupilProxy pupil) {
+  //   List<PupilProxy> pupils = List.from(_pupils.value);
+  //   int index =
+  //       pupils.indexWhere((element) => element.internalId == pupil.internalId);
+  //   pupils[index] = pupilCopiedWith(pupils[index], pupil);
+  //   _pupils.value = pupils;
+  //   locator<PupilFilterManager>().cloneToFilteredPupil(pupil);
+  // }
 
   //- update list of pupils in repository
-  Future updateListOfPupilsInRepository(List<PupilProxy> pupils) async {
-    locator<SnackBarManager>().isRunningValue(true);
-    List<PupilProxy> repositoryPupils = List.from(_pupils.value);
-    for (PupilProxy pupil in pupils) {
-      int match = repositoryPupils
-          .indexWhere((element) => element.internalId == pupil.internalId);
-      if (match != -1) {
-        repositoryPupils[match] =
-            pupilCopiedWith(repositoryPupils[match], pupil);
-      } else {
-        repositoryPupils.add(pupil);
-      }
-    }
+  // void updatePupilsRepository(List<PupilProxy> pupils)  {
+  //   List<PupilProxy> repositoryPupils = List.from(_pupils.value);
+  //   for (Pupil pupil in pupils) {
+  //     int match = repositoryPupils
+  //         .indexWhere((element) => element.internalId == pupil.internalId);
+  //     if (match != -1) {
+  //       repositoryPupils[match] =
+  //           pupilCopiedWith(repositoryPupils[match], pupil);
+  //     } else {
+  //       repositoryPupils.add(pupil);
+  //     }
+  //   }
 
-    sortPupilsByName(repositoryPupils);
+  //   sortPupilsByName(repositoryPupils);
 
-    await locator.isReady<PupilFilterManager>();
+  //   locator<PupilFilterManager>().rebuildFilteredPupils();
 
-    locator<PupilFilterManager>().rebuildFilteredPupils();
+  //   locator<SnackBarManager>().isRunningValue(false);
+  // }
 
-    locator<SnackBarManager>().isRunningValue(false);
-  }
-
-  sortPupilsByName(List<PupilProxy> pupils) {
-    pupils.sort((a, b) => a.firstName!.compareTo(b.firstName!));
-    _pupils.value = pupils;
-    return;
+  sortPupilsByName() {
+    _pupils.value.sort((a, b) => a.firstName.compareTo(b.firstName));
   }
 
   patchPupilsWithMissedClasses(List<MissedClass> missedClasses) {
@@ -243,34 +252,35 @@ class PupilManager {
     }
   }
 
-  patchPupilFromResponse(Map<String, dynamic> pupilResponse) {
+  void patchPupilFromResponse(Map<String, dynamic> pupilResponse) {
     // the response comes as a json - let's make a pupil
-    final PupilProxy responsePupil = PupilProxy.fromJson(pupilResponse);
-    // we need to patch the values from the pupilbase - let's find a match
-    final List<PupilDataFromSchild> pupilBaseList =
-        locator<PupilBaseManager>().pupilbase.value;
-    final PupilDataFromSchild pupilbase = pupilBaseList
-        .where((element) => element.id == responsePupil.internalId)
-        .first;
-    // now let's patch
-    PupilProxy namedPupil =
-        patchPupilWithPupilbaseData(pupilbase, responsePupil);
-    // we create a list to manipulate it
-    List<PupilProxy> pupils = List.from(_pupils.value);
-    // let's find the pupil by index from the response
-    int index = pupils.indexWhere(
-        (element) => element.internalId == responsePupil.internalId);
-    pupils[index] = namedPupil;
+    final Pupil responsePupil = Pupil.fromJson(pupilResponse);
+    // TODO possibly change internally to map
+    _pupils.value
+        .firstWhere((element) => element.internalId == responsePupil.internalId)
+        .updatePupil(responsePupil);
 
-    // write the new value in the manager
-    _pupils.value = pupils;
-    // Because we use the filtered pupils in the presentation layer,
-    // we need to update the filtered list too, ideally without
-    // altering the filter state
-    locator<PupilFilterManager>().cloneToFilteredPupil(namedPupil);
+    // final personalData = locator<PupilPersonalDataManager>()
+    //     .getPersonalData(responsePupil.internalId);
+    // // now let's patch
+    // PupilProxy namedPupil =
+    //     patchPupilWithPupilbaseData(pupilbase, responsePupil);
+    // // we create a list to manipulate it
+    // List<PupilProxy> pupils = List.from(_pupils.value);
+    // // let's find the pupil by index from the response
+    // int index = pupils.indexWhere(
+    //     (element) => element.internalId == responsePupil.internalId);
+    // pupils[index] = namedPupil;
+
+    // // write the new value in the manager
+    // _pupils.value = pupils;
+    // // Because we use the filtered pupils in the presentation layer,
+    // // we need to update the filtered list too, ideally without
+    // // altering the filter state
+    // locator<PupilFilterManager>().cloneToFilteredPupil(namedPupil);
   }
 
-  postAvatarImage(
+  Future<void> postAvatarImage(
     File imageFile,
     PupilProxy pupil,
   ) async {
@@ -300,16 +310,17 @@ class PupilManager {
     final cacheManager = DefaultCacheManager();
     final cacheKey = pupil.internalId;
 
+    // TODO: what is this for?
     final fileInfo = await cacheManager.getFileFromCache(cacheKey.toString());
     if (fileInfo != null && await fileInfo.file.exists()) {
       await fileInfo.file.delete();
       // File is already cached, use it directly
       //cacheManager.emptyCache();
     }
-    await patchPupilFromResponse(pupilResponse);
+    patchPupilFromResponse(pupilResponse);
   }
 
-  deleteAvatarImage(int pupilId, String cacheKey) async {
+  Future<void> deleteAvatarImage(int pupilId, String cacheKey) async {
     // send request
     final Response response = await client.delete(
       EndpointsPupil().deletePupilAvatar(pupilId),
@@ -326,8 +337,7 @@ class PupilManager {
     final cacheManager = DefaultCacheManager();
     await cacheManager.removeFile(cacheKey);
     // and update the repository
-    final PupilProxy pupil = (findPupilById(pupilId)).copyWith(avatarUrl: null);
-    updatePupilInRepository(pupil);
+    findPupilById(pupilId).clearAvtar();
   }
 
   Future<void> patchPupil(int pupilId, String jsonKey, var value) async {
@@ -359,7 +369,7 @@ class PupilManager {
         final List<PupilProxy> responsePupils = (siblingsResponse.data as List)
             .map((e) => PupilProxy.fromJson(e))
             .toList();
-        locator<PupilManager>().updateListOfPupilsInRepository(responsePupils);
+        updatePupilsRepository(responsePupils);
         locator<SnackBarManager>().showSnackBar(
             SnackBarType.success, 'Geschwister erfolgreich gepatcht!');
         locator<SnackBarManager>().isRunningValue(false);
@@ -379,7 +389,7 @@ class PupilManager {
       return;
     }
     // let's patch the pupil with the response
-    await patchPupilFromResponse(pupilResponse);
+    patchPupilFromResponse(pupilResponse);
     locator<SnackBarManager>()
         .showSnackBar(SnackBarType.success, 'Schüler erfolgreich gepatcht!');
     locator<SnackBarManager>().isRunningValue(false);

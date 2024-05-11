@@ -16,7 +16,7 @@ import 'package:schuldaten_hub/features/learning_support/services/goal_manager.d
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
+import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_filter_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
@@ -56,9 +56,9 @@ void registerBaseManagers() {
     return sessionManager;
   }, dependsOn: [EnvManager, ConnectionManager]);
 
-  locator.registerSingletonAsync<PupilBaseManager>(() async {
+  locator.registerSingletonAsync<PupilPersonalDataManager>(() async {
     debug.info('Registering PupilBaseManager');
-    final pupilBaseManager = PupilBaseManager();
+    final pupilBaseManager = PupilPersonalDataManager();
     await pupilBaseManager.init();
     debug.info('PupilBaseManager initialized');
     return pupilBaseManager;
@@ -144,7 +144,12 @@ Future registerDependentManagers(String token) async {
     await pupilManager.init();
     debug.info('PupilManager initialized');
     return pupilManager;
-  }, dependsOn: [EnvManager, ApiManager, SessionManager, PupilBaseManager]);
+  }, dependsOn: [
+    EnvManager,
+    ApiManager,
+    SessionManager,
+    PupilPersonalDataManager
+  ]);
 
   locator.registerSingletonWithDependencies<PupilFilterManager>(
     () => PupilFilterManager(),
