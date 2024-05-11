@@ -22,12 +22,12 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
 class PupilBaseManager {
-  ValueListenable<List<PupilDataFromSchild>> get pupilbase => _pupilbase;
+  ValueListenable<List<PupilPersonalData>> get pupilbase => _pupilbase;
   ValueListenable<List<int>> get availablePupilIds => _availablePupilIds;
 
   ValueListenable<bool> get isRunning => _isRunning;
 
-  final _pupilbase = ValueNotifier<List<PupilDataFromSchild>>([]);
+  final _pupilbase = ValueNotifier<List<PupilPersonalData>>([]);
   final _availablePupilIds = ValueNotifier<List<int>>([]);
 
   final _isRunning = ValueNotifier<bool>(false);
@@ -50,18 +50,18 @@ class PupilBaseManager {
 
   Future getStoredPupilBase() async {
     debug.warning('Getting the stored pupilbase');
-    List<PupilDataFromSchild> storedPupilBase = [];
+    List<PupilPersonalData> storedPupilBase = [];
     bool pupilBaseExists = await secureStorage.containsKey(key: 'pupilBase');
     if (pupilBaseExists == true) {
       debug.warning('There is a pupilbase');
       List<int> pupilIds = [];
       String? storedString = await secureStorageRead('pupilBase');
       storedPupilBase = (json.decode(storedString!) as List)
-          .map((i) => PupilDataFromSchild.fromJson(i))
+          .map((i) => PupilPersonalData.fromJson(i))
           .toList();
       _pupilbase.value = storedPupilBase;
       // let's fill _availablePupilIds too
-      for (PupilDataFromSchild pupil in storedPupilBase) {
+      for (PupilPersonalData pupil in storedPupilBase) {
         pupilIds.add(pupil.id);
       }
       _availablePupilIds.value = pupilIds;
@@ -86,7 +86,7 @@ class PupilBaseManager {
     }
   }
 
-  setNewPupilBase(List<PupilDataFromSchild> pupilBase) async {
+  setNewPupilBase(List<PupilPersonalData> pupilBase) async {
     _pupilbase.value = pupilBase;
     await secureStorageWrite('pupilBase', jsonEncode(pupilBase));
   }
@@ -100,11 +100,11 @@ class PupilBaseManager {
       // If the string is imported in windows, it's not encrypted
       decryptedResult = scanResult;
     }
-    List<PupilDataFromSchild> oldPupilbase = _pupilbase.value;
+    List<PupilPersonalData> oldPupilbase = _pupilbase.value;
     // The pupils in the string are separated by a '\n' - let's split them apart
     List<String> splittedPupilBase = decryptedResult!.split('\n');
     // The properties are separated by commas, let's build the pupilbase objects with them
-    List<PupilDataFromSchild> scannedPupilBase = [];
+    List<PupilPersonalData> scannedPupilBase = [];
     for (String data in splittedPupilBase) {
       if (data != '') {
         List splittedData = data.split(',');
@@ -113,7 +113,7 @@ class PupilBaseManager {
             : splittedData[4] == '04'
                 ? 'S4'
                 : splittedData[4];
-        scannedPupilBase.add(PupilDataFromSchild(
+        scannedPupilBase.add(PupilPersonalData(
           id: int.parse(splittedData[0]),
           name: splittedData[1],
           lastName: splittedData[2],
@@ -136,9 +136,9 @@ class PupilBaseManager {
     debug.info('Pupilbase processed');
     // Now we need to combine it with the stored pupilbase -
     // old elements not present in the new pupilbase are added
-    List<PupilDataFromSchild> newPupilBase =
-        List<PupilDataFromSchild>.from(scannedPupilBase);
-    for (PupilDataFromSchild oldPupil in oldPupilbase) {
+    List<PupilPersonalData> newPupilBase =
+        List<PupilPersonalData>.from(scannedPupilBase);
+    for (PupilPersonalData oldPupil in oldPupilbase) {
       if (newPupilBase.where((element) => element.id == oldPupil.id).isEmpty) {
         newPupilBase.add(oldPupil);
       }
@@ -146,7 +146,7 @@ class PupilBaseManager {
     _pupilbase.value = newPupilBase;
     // we have a new pupilbase - let's update _availablePupilIds too
     List<int> availablePupils = [];
-    for (PupilDataFromSchild pupil in _pupilbase.value) {
+    for (PupilPersonalData pupil in _pupilbase.value) {
       availablePupils.add(pupil.id);
     }
     _availablePupilIds.value = availablePupils;
@@ -159,12 +159,12 @@ class PupilBaseManager {
   }
 
   void importPupilsFromTxt(String scanResult) async {
-    List<PupilDataFromSchild> oldPupilbase = _pupilbase.value;
+    List<PupilPersonalData> oldPupilbase = _pupilbase.value;
     // The pupils in the string are separated by a line break - let's split them out
     List splittedPupilBase = scanResult.split('\n');
     // The properties are separated by commas, let's build the pupilbase objects with them
     String updatedPupils = '';
-    List<PupilDataFromSchild> scannedPupilBase = [];
+    List<PupilPersonalData> scannedPupilBase = [];
     for (String data in splittedPupilBase) {
       if (data != '') {
         List splittedData = data.split(',');
@@ -173,7 +173,7 @@ class PupilBaseManager {
             : splittedData[4] == '04'
                 ? 'S4'
                 : splittedData[4];
-        scannedPupilBase.add(PupilDataFromSchild(
+        scannedPupilBase.add(PupilPersonalData(
           id: int.parse(splittedData[0]),
           name: splittedData[1],
           lastName: splittedData[2],
@@ -218,9 +218,9 @@ class PupilBaseManager {
     textFile.delete();
     _pupilbase.value = scannedPupilBase;
     // old elements not present in the new pupilbase are added
-    List<PupilDataFromSchild> newPupilBase =
-        List<PupilDataFromSchild>.from(scannedPupilBase);
-    for (PupilDataFromSchild oldPupil in oldPupilbase) {
+    List<PupilPersonalData> newPupilBase =
+        List<PupilPersonalData>.from(scannedPupilBase);
+    for (PupilPersonalData oldPupil in oldPupilbase) {
       if (newPupilBase.where((element) => element.id == oldPupil.id).isEmpty) {
         newPupilBase.add(oldPupil);
       }
@@ -228,7 +228,7 @@ class PupilBaseManager {
     _pupilbase.value = newPupilBase;
     // we have a new pupilbase - let's update _availablePupilIds too
     List<int> availablePupils = [];
-    for (PupilDataFromSchild pupil in _pupilbase.value) {
+    for (PupilPersonalData pupil in _pupilbase.value) {
       availablePupils.add(pupil.id);
     }
     _availablePupilIds.value = availablePupils;
@@ -242,7 +242,7 @@ class PupilBaseManager {
   Future<String> generatePupilBaseQrData(List<int> pupilIds) async {
     String qrString = '';
     for (int pupilId in pupilIds) {
-      PupilDataFromSchild pupilbase =
+      PupilPersonalData pupilbase =
           _pupilbase.value.where((element) => element.id == pupilId).single;
       final migrationSupportEnds = pupilbase.migrationSupportEnds != null
           ? pupilbase.migrationSupportEnds!.formatForJson()
@@ -258,9 +258,9 @@ class PupilBaseManager {
   }
 
   Future<Map<String, String>> generateAllPupilBaseQrData(int qrsize) async {
-    final List<PupilDataFromSchild> pupilBase = _pupilbase.value;
+    final List<PupilPersonalData> pupilBase = _pupilbase.value;
     // First we group the pupils by their group in a map
-    Map<String, List<PupilDataFromSchild>> groupedPupils = {};
+    Map<String, List<PupilPersonalData>> groupedPupils = {};
 
     for (var pupil in pupilBase) {
       if (groupedPupils.containsKey(pupil.group)) {
@@ -273,11 +273,11 @@ class PupilBaseManager {
 
     // Now we iterate over the groupedPupils and generate maps with smaller lists with no more than 12 items and add to the group name the subgroup number
     for (String groupName in groupedPupils.keys) {
-      final List<PupilDataFromSchild> group = groupedPupils[groupName]!;
+      final List<PupilPersonalData> group = groupedPupils[groupName]!;
       int numSubgroups = (group.length / qrsize).ceil();
 
       for (int i = 0; i < numSubgroups; i++) {
-        List<PupilDataFromSchild> smallerGroup = [];
+        List<PupilPersonalData> smallerGroup = [];
         int start = i * qrsize;
         int end = (i + 1) * qrsize;
         if (end > group.length) {
@@ -285,7 +285,7 @@ class PupilBaseManager {
         }
         smallerGroup.addAll(group.sublist(start, end));
         String qrString = '';
-        for (PupilDataFromSchild pupilbase in smallerGroup) {
+        for (PupilPersonalData pupilbase in smallerGroup) {
           final migrationSupportEnds = pupilbase.migrationSupportEnds != null
               ? pupilbase.migrationSupportEnds!.formatForJson()
               : '';
@@ -309,10 +309,9 @@ class PupilBaseManager {
     return sortedQrGroupLists;
   }
 
-  void deletePupilBaseElements(List<PupilDataFromSchild> toBeDeletedPupilBase) {
+  void deletePupilBaseElements(List<PupilPersonalData> toBeDeletedPupilBase) {
     locator<SnackBarManager>().isRunningValue(true);
-    List<PupilDataFromSchild> modifiedPupilBaseList =
-        List.from(_pupilbase.value);
+    List<PupilPersonalData> modifiedPupilBaseList = List.from(_pupilbase.value);
     modifiedPupilBaseList.removeWhere((pupilBase) =>
         toBeDeletedPupilBase.any((element) => element.id == pupilBase.id));
     _pupilbase.value = modifiedPupilBaseList;

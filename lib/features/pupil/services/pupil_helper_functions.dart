@@ -39,36 +39,34 @@ List<int> restOfPupils(List<int> pupilIds) {
 }
 
 Pupil pupilCopiedWith(Pupil namedPupil, Pupil updatedPupil) {
-  final Pupil pupil = updatedPupil.copyWith(
-    firstName: namedPupil.firstName,
-    lastName: namedPupil.lastName,
-    group: namedPupil.group,
-    schoolyear: namedPupil.schoolyear,
-    specialNeeds: namedPupil.specialNeeds,
-    gender: namedPupil.gender,
-    language: namedPupil.language,
-    family: namedPupil.family,
-    birthday: namedPupil.birthday,
-    migrationSupportEnds: namedPupil.migrationSupportEnds,
-    pupilSince: namedPupil.pupilSince,
-  );
-  return pupil;
+  updatedPupil.firstName = namedPupil.firstName;
+  updatedPupil.lastName = namedPupil.lastName;
+  updatedPupil.group = namedPupil.group;
+  updatedPupil.schoolyear = namedPupil.schoolyear;
+  updatedPupil.specialNeeds = namedPupil.specialNeeds;
+  updatedPupil.gender = namedPupil.gender;
+  updatedPupil.language = namedPupil.language;
+  updatedPupil.family = namedPupil.family;
+  updatedPupil.birthday = namedPupil.birthday;
+  updatedPupil.migrationSupportEnds = namedPupil.migrationSupportEnds;
+  updatedPupil.pupilSince = namedPupil.pupilSince;
+  return updatedPupil;
 }
 
-Pupil patchPupilWithPupilbaseData(PupilDataFromSchild pupilbase, Pupil pupil) {
-  return pupil.copyWith(
-    firstName: pupilbase.name,
-    lastName: pupilbase.lastName,
-    group: pupilbase.group,
-    schoolyear: pupilbase.schoolyear,
-    specialNeeds: pupilbase.specialNeeds,
-    gender: pupilbase.gender,
-    language: pupilbase.language,
-    family: pupilbase.family,
-    birthday: pupilbase.birthday,
-    migrationSupportEnds: pupilbase.migrationSupportEnds,
-    pupilSince: pupilbase.pupilSince,
-  );
+Pupil patchPupilWithPupilPersonalData(
+    PupilPersonalData pupilPersonalData, Pupil pupil) {
+  pupil.firstName = pupilPersonalData.name;
+  pupil.lastName = pupilPersonalData.lastName;
+  pupil.group = pupilPersonalData.group;
+  pupil.schoolyear = pupilPersonalData.schoolyear;
+  pupil.specialNeeds = pupilPersonalData.specialNeeds;
+  pupil.gender = pupilPersonalData.gender;
+  pupil.language = pupilPersonalData.language;
+  pupil.family = pupilPersonalData.family;
+  pupil.birthday = pupilPersonalData.birthday;
+  pupil.migrationSupportEnds = pupilPersonalData.migrationSupportEnds;
+  pupil.pupilSince = pupilPersonalData.pupilSince;
+  return pupil;
 }
 
 String preschoolRevisionPredicate(int value) {

@@ -16,68 +16,68 @@ part 'pupil.g.dart';
 
 @JsonSerializable()
 class Pupil {
-  final String? firstName;
-  final String? lastName;
-  final String? group;
-  final String? schoolyear;
-  final String? specialNeeds;
-  final String? gender;
-  final String? language;
-  final String? family;
-  final DateTime? birthday;
-  final DateTime? migrationSupportEnds;
-  final DateTime? pupilSince;
+  String? firstName;
+  String? lastName;
+  String? group;
+  String? schoolyear;
+  String? specialNeeds;
+  String? gender;
+  String? language;
+  String? family;
+  DateTime? birthday;
+  DateTime? migrationSupportEnds;
+  DateTime? pupilSince;
   @JsonKey(name: 'avatar_url')
-  final String? avatarUrl;
+  String? avatarUrl;
   @JsonKey(name: 'communication_pupil')
-  final String? communicationPupil;
+  String? communicationPupil;
   @JsonKey(name: 'communication_tutor1')
-  final String? communicationTutor1;
+  String? communicationTutor1;
   @JsonKey(name: 'communication_tutor2')
-  final String? communicationTutor2;
+  String? communicationTutor2;
   @JsonKey(name: 'contact')
-  final String? contact;
+  String? contact;
   @JsonKey(name: 'parents_contact')
-  final String? parentsContact;
-  final int credit;
+  String? parentsContact;
+  int credit;
   @JsonKey(name: 'credit_earned')
-  final int creditEarned;
+  int creditEarned;
   @JsonKey(name: 'five_years')
-  final String? fiveYears;
+  String? fiveYears;
   @JsonKey(name: 'individual_development_plan')
-  final int individualDevelopmentPlan;
+  int individualDevelopmentPlan;
   @JsonKey(name: 'internal_id')
-  final int internalId;
-  final bool ogs;
+  int internalId;
+  bool ogs;
   @JsonKey(name: 'ogs_info')
-  final String? ogsInfo;
+  String? ogsInfo;
   @JsonKey(name: 'pick_up_time')
-  final String? pickUpTime;
+  String? pickUpTime;
   @JsonKey(name: 'preschool_revision')
   int? preschoolRevision;
   @JsonKey(name: 'special_information')
-  final String? specialInformation;
+  String? specialInformation;
   @JsonKey(name: 'competence_checks')
   List<CompetenceCheck>? competenceChecks;
   @JsonKey(name: 'pupil_category_statuses')
-  final List<PupilCategoryStatus>? pupilCategoryStatuses;
+  List<PupilCategoryStatus>? pupilCategoryStatuses;
   @JsonKey(name: 'pupil_admonitions')
-  final List<Admonition>? pupilAdmonitions;
+  List<Admonition>? pupilAdmonitions;
   @JsonKey(name: 'pupil_books')
-  final List<PupilBook>? pupilBooks;
+  List<PupilBook>? pupilBooks;
   @JsonKey(name: 'pupil_lists')
-  final List<PupilList>? pupilLists;
+  List<PupilList>? pupilLists;
   @JsonKey(name: 'pupil_goals')
-  final List<PupilGoal>? pupilGoals;
+  List<PupilGoal>? pupilGoals;
   @JsonKey(name: 'pupil_missed_classes')
-  final List<MissedClass>? pupilMissedClasses;
+  List<MissedClass>? pupilMissedClasses;
   @JsonKey(name: 'pupil_workbooks')
-  final List<PupilWorkbook>? pupilWorkbooks;
-  final List<PupilAuthorization>? authorizations;
+  List<PupilWorkbook>? pupilWorkbooks;
+  List<PupilAuthorization>? authorizations;
   @JsonKey(name: "credit_history_logs")
-  final List<CreditHistoryLog>? creditHistoryLogs;
+  List<CreditHistoryLog>? creditHistoryLogs;
   @JsonKey(name: "competence_goals")
-  final List<CompetenceGoal>? competenceGoals;
+  List<CompetenceGoal>? competenceGoals;
 
   factory Pupil.fromJson(Map<String, dynamic> json) => _$PupilFromJson(json);
 

@@ -151,10 +151,9 @@ class WorkbookManager {
             ...pupil.pupilWorkbooks!
           ];
           updatedPupilWorkbooks.remove(pupilWorkbook);
-          Pupil updatedPupil =
-              pupil.copyWith(pupilWorkbooks: updatedPupilWorkbooks);
+          pupil.pupilWorkbooks = updatedPupilWorkbooks;
 
-          locator<PupilManager>().updatePupilInRepository(updatedPupil);
+          locator<PupilManager>().updatePupilInRepository(pupil);
         }
       }
     }

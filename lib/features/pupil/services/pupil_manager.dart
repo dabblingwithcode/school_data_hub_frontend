@@ -69,7 +69,7 @@ class PupilManager {
     // and a list to manipulate the matched pupils
     // and outdated pupilbase that did not get a response later
     List<Pupil> matchedPupils = [];
-    List<PupilDataFromSchild> outdatedPupilbase = [];
+    List<PupilPersonalData> outdatedPupilbase = [];
     // request
     try {
       final response = await client.post(EndpointsPupil.getPupils, data: data);
@@ -79,7 +79,7 @@ class PupilManager {
           (response.data as List).map((e) => Pupil.fromJson(e)).toList();
 
       // now we match them with the pupilbase and add the id key values
-      for (PupilDataFromSchild pupilBaseElement in pupilbase) {
+      for (PupilPersonalData pupilBaseElement in pupilbase) {
         if (fetchedPupilsWithoutBase
             .where((element) => element.internalId == pupilBaseElement.id)
             .isNotEmpty) {
@@ -87,7 +87,7 @@ class PupilManager {
               .where((element) => element.internalId == pupilBaseElement.id)
               .single;
           Pupil namedPupil =
-              patchPupilWithPupilbaseData(pupilBaseElement, pupilMatch);
+              patchPupilWithPupilPersonalData(pupilBaseElement, pupilMatch);
           matchedPupils.add(namedPupil);
         } else {
           // if the pupilbase element was sent and didn't get a response from the server,
@@ -103,7 +103,7 @@ class PupilManager {
         locator<PupilBaseManager>().deletePupilBaseElements(outdatedPupilbase);
         // debug print the internal_id of every element of the outdated pupilbase in one string
         String deletedPupils = '';
-        for (PupilDataFromSchild element in outdatedPupilbase) {
+        for (PupilPersonalData element in outdatedPupilbase) {
           deletedPupils += '${element.id}, ';
         }
         locator<SnackBarManager>().showSnackBar(SnackBarType.warning,
@@ -192,49 +192,51 @@ class PupilManager {
   patchPupilsWithMissedClasses(List<MissedClass> missedClasses) {
     final List<Pupil> pupils = List.from(_pupils.value);
     final DateTime schoolday = missedClasses[0].missedDay;
+
     for (MissedClass missedClass in missedClasses) {
+      // find the pupil by the missed class id
       int missedPupil = pupils.indexWhere(
           (element) => element.internalId == missedClass.missedPupilId);
+      // if the pupil is not found, log an error and continue with the next missed class
       if (missedPupil == -1) {
         debug.error('${missedClass.missedPupilId} not found');
         continue;
       }
+      // find the missed class from the response in the pupil's missed classes
       int missedClassIndex = pupils[missedPupil]
           .pupilMissedClasses!
           .indexWhere((element) => element.missedDay == missedClass.missedDay);
-      //debugger();
+      // if the missed class is not found, add it to the pupil's missed classes
       if (missedClassIndex == -1) {
-        pupils[missedPupil] = pupils[missedPupil].copyWith(
-          pupilMissedClasses: [
-            ...pupils[missedPupil].pupilMissedClasses!,
-            missedClass,
-          ],
-        );
+        pupils[missedPupil].pupilMissedClasses!.add(missedClass);
       } else {
+        // if the missed class is found, update it
         List<MissedClass> updatedMissedClasses =
             List.from(pupils[missedPupil].pupilMissedClasses!);
         updatedMissedClasses[missedClassIndex] = missedClass;
-        pupils[missedPupil] = pupils[missedPupil].copyWith(
-          pupilMissedClasses: updatedMissedClasses,
-        );
+        pupils[missedPupil].pupilMissedClasses![missedClassIndex] =
+            updatedMissedClasses[missedClassIndex];
       }
     }
-    for (Pupil pupil in pupils) {
-      if (pupil.pupilMissedClasses != null) {
-        int missedClassIndex = pupil.pupilMissedClasses!
-            .indexWhere((element) => element.missedDay == schoolday);
-        if (missedClassIndex != -1 &&
-            !missedClasses.any((element) =>
-                element.missedDay == schoolday &&
-                element.missedPupilId == pupil.internalId)) {
-          List<MissedClass> updatedMissedClasses =
-              List.from(pupil.pupilMissedClasses!);
-          updatedMissedClasses.removeAt(missedClassIndex);
-          pupils[pupils.indexOf(pupil)] = pupils[pupils.indexOf(pupil)]
-              .copyWith(pupilMissedClasses: updatedMissedClasses);
-        }
-      }
-    }
+    // update the pupils in the repository
+    // for (Pupil pupil in pupils) {
+    //   // find the missed class in the missed classes
+    //   if (pupil.pupilMissedClasses != null) {
+    //     int missedClassIndex = pupil.pupilMissedClasses!
+    //         .indexWhere((element) => element.missedDay == schoolday);
+    //     if (missedClassIndex != -1 &&
+    //         !missedClasses.any((element) =>
+    //             element.missedDay == schoolday &&
+    //             element.missedPupilId == pupil.internalId)) {
+    //       List<MissedClass> updatedMissedClasses =
+    //           List.from(pupil.pupilMissedClasses!);
+    //       updatedMissedClasses.removeAt(missedClassIndex);
+    //       pupils[pupils.indexOf(pupil)] = pupils[pupils.indexOf(pupil)]
+    //           .copyWith(pupilMissedClasses: updatedMissedClasses);
+    //     }
+    //   }
+    // }
+
     _pupils.value = pupils;
     locator<PupilFilterManager>().filterPupils();
   }
@@ -252,13 +254,14 @@ class PupilManager {
     // the response comes as a json - let's make a pupil
     final Pupil responsePupil = Pupil.fromJson(pupilResponse);
     // we need to patch the values from the pupilbase - let's find a match
-    final List<PupilDataFromSchild> pupilBaseList =
+    final List<PupilPersonalData> pupilBaseList =
         locator<PupilBaseManager>().pupilbase.value;
-    final PupilDataFromSchild pupilbase = pupilBaseList
+    final PupilPersonalData pupilbase = pupilBaseList
         .where((element) => element.id == responsePupil.internalId)
         .first;
     // now let's patch
-    Pupil namedPupil = patchPupilWithPupilbaseData(pupilbase, responsePupil);
+    Pupil namedPupil =
+        patchPupilWithPupilPersonalData(pupilbase, responsePupil);
     // we create a list to manipulate it
     List<Pupil> pupils = List.from(_pupils.value);
     // let's find the pupil by index from the response
@@ -330,7 +333,10 @@ class PupilManager {
     final cacheManager = DefaultCacheManager();
     await cacheManager.removeFile(cacheKey);
     // and update the repository
-    final Pupil pupil = (findPupilById(pupilId)).copyWith(avatarUrl: null);
+
+    Pupil pupil = findPupilById(pupilId);
+    pupil.avatarUrl = null;
+
     updatePupilInRepository(pupil);
   }
 

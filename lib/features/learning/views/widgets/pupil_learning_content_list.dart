@@ -75,8 +75,9 @@ List<Widget> pupilLearningContentList(Pupil pupil, BuildContext context) {
                 child: Card(
                   child: Column(
                     children: [
-                      pupilWorkbookCard(
-                          context, pupilWorkbooks[index], pupil.internalId),
+                      PupiWorkbookCard(
+                          pupilWorkbook: pupilWorkbooks[index],
+                          pupilId: pupil.internalId),
                     ],
                   ),
                 ),
