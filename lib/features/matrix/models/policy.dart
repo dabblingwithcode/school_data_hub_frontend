@@ -13,14 +13,22 @@ import 'matrix_user.dart';
 
 @JsonSerializable()
 class Policy with _$Policy {
-  factory Policy({
-    int? schemaVersion,
-    dynamic identificationStamp,
-    Flags? flags,
-    dynamic hooks,
-    @JsonKey(name: 'managedRoomIds') List<MatrixRoom>? matrixRooms,
-    @JsonKey(name: 'users') List<MatrixUser>? matrixUsers,
-  }) = _Policy;
+  final int? schemaVersion;
+  final dynamic identificationStamp;
+  final Flags? flags;
+  final dynamic hooks;
+  @JsonKey(name: 'managedRoomIds')
+  final List<MatrixRoom>? matrixRooms;
+  @JsonKey(name: 'users')
+  final List<MatrixUser>? matrixUsers;
 
-  factory Policy.fromJson(Map<String, dynamic> json) => _$PolicyFromJson(json);
+  factory Policy.fromJson(Map<String, dynamic> json) => _$PolicyFromJson(this);
+
+  Policy(
+      {required this.schemaVersion,
+      required this.identificationStamp,
+      required this.flags,
+      required this.hooks,
+      required this.matrixRooms,
+      required this.matrixUsers});
 }

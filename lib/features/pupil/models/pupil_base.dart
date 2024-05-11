@@ -4,32 +4,55 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class PupilBase with _$PupilBase {
-  const factory PupilBase({
-    @JsonKey(name: "id") required int id,
-    @JsonKey(name: "name") required String name,
-    @JsonKey(name: "lastName") required String lastName,
-    @JsonKey(name: "group") required String group,
-    @JsonKey(name: "schoolyear") required String schoolyear,
-    @JsonKey(name: "specialNeeds") String? specialNeeds,
-    @JsonKey(name: "gender") required String gender,
-    @JsonKey(name: "language") required String language,
-    @JsonKey(name: "family") String? family,
-    @JsonKey(name: "birthday") required DateTime birthday,
-    @JsonKey(name: "migrationSupportEnds") DateTime? migrationSupportEnds,
-    @JsonKey(name: "pupilSince") required DateTime pupilSince,
-  }) = _PupilBase;
+  @JsonKey(name: "id")
+  final int id;
+  @JsonKey(name: "name")
+  final String name;
+  @JsonKey(name: "lastName")
+  final String lastName;
+  @JsonKey(name: "group")
+  final String group;
+  @JsonKey(name: "schoolyear")
+  final String schoolyear;
+  @JsonKey(name: "specialNeeds")
+  String? specialNeeds;
+  @JsonKey(name: "gender")
+  final String gender;
+  @JsonKey(name: "language")
+  final String language;
+  @JsonKey(name: "family")
+  final String? family;
+  @JsonKey(name: "birthday")
+  final DateTime birthday;
+  @JsonKey(name: "migrationSupportEnds")
+  DateTime? migrationSupportEnds;
+  @JsonKey(name: "pupilSince")
+  final DateTime pupilSince;
 
   factory PupilBase.fromJson(Map<String, dynamic> json) =>
       _$PupilBaseFromJson(json);
+
+  PupilBase(
+      {required this.id,
+      required this.name,
+      required this.lastName,
+      required this.group,
+      required this.schoolyear,
+      required this.gender,
+      required this.language,
+      required this.family,
+      required this.birthday,
+      required this.pupilSince});
 }
 
 @JsonSerializable()
 abstract class PupilBaseList with _$PupilBaseList {
-  const factory PupilBaseList({
-    required List<PupilBase> pupilBaseList,
-  }) = _PupilBaseList;
+  final List<PupilBase> pupilBaseList;
+
   factory PupilBaseList.fromJson(
     Map<String, dynamic> json,
   ) =>
-      _$PupilBaseListFromJson(json);
+      _$PupilBaseListFromJson(this);
+
+  PupilBaseList({required this.pupilBaseList});
 }

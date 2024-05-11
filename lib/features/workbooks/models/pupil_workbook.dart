@@ -4,14 +4,23 @@ import 'package:json_annotation/json_annotation.dart';
 
 @JsonSerializable()
 class PupilWorkbook with _$PupilWorkbook {
-  factory PupilWorkbook({
-    @JsonKey(name: 'created_at') required DateTime createdAt,
-    @JsonKey(name: 'created_by') required String createdBy,
-    String? state,
-    @JsonKey(name: 'workbook_isbn') required int workbookIsbn,
-    @JsonKey(name: 'finished_at') DateTime? finishedAt,
-  }) = _PupilWorkbook;
+  @JsonKey(name: 'created_at')
+  final DateTime createdAt;
+  @JsonKey(name: 'created_by')
+  final String createdBy;
+  final String? state;
+  @JsonKey(name: 'workbook_isbn')
+  final int workbookIsbn;
+  @JsonKey(name: 'finished_at')
+  final DateTime? finishedAt;
 
   factory PupilWorkbook.fromJson(Map<String, dynamic> json) =>
       _$PupilWorkbookFromJson(json);
+
+  PupilWorkbook(
+      {required this.createdAt,
+      required this.createdBy,
+      required this.state,
+      required this.workbookIsbn,
+      required this.finishedAt});
 }

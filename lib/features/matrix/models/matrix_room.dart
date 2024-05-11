@@ -13,25 +13,32 @@ class MatrixRoom with _$MatrixRoom {
         eventsDefault: null,
         roomAdmins: null);
   }
-  factory MatrixRoom({
-    required String id,
-    String? name,
-    int? powerLevelReactions,
-    int? eventsDefault,
-    List<RoomAdmin>? roomAdmins, // Optional name field
-  }) = _MatrixRoom;
+  final String id;
+  final String? name;
+  final int? powerLevelReactions;
+  final int? eventsDefault;
+  final List<RoomAdmin>? roomAdmins; // Optional name field
 
   factory MatrixRoom.fromJson(Map<String, dynamic> json) =>
       _$MatrixRoomFromJson(json);
-  const MatrixRoom._();
+
+  MatrixRoom(
+      {required this.id,
+      required this.name,
+      required this.powerLevelReactions,
+      required this.eventsDefault,
+      required this.roomAdmins});
 }
 
 @JsonSerializable()
 class RoomAdmin with _$RoomAdmin {
-  factory RoomAdmin({required String id, required int powerLevel}) = _RoomAdmin;
+  final String id;
+  final int powerLevel;
 
   factory RoomAdmin.fromJson(Map<String, dynamic> json) =>
-      _$RoomAdminFromJson(json);
+      _$RoomAdminFromJson(this);
+
+  RoomAdmin({required this.id, required this.powerLevel});
 }
 
 // from json method

@@ -2,20 +2,28 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'school_list.freezed.dart';
-part 'school_list.g.dart';
-
 @JsonSerializable()
 class SchoolList with _$SchoolList {
-  factory SchoolList({
-    @JsonKey(name: 'created_by') required String createdBy,
-    @JsonKey(name: 'list_description') required String listDescription,
-    @JsonKey(name: 'list_id') required String listId,
-    @JsonKey(name: 'list_name') required String listName,
-    @JsonKey(name: 'authorized_users') String? authorizedUsers,
-    required String visibility,
-  }) = _SchoolList;
+  @JsonKey(name: 'created_by')
+  final String createdBy;
+  @JsonKey(name: 'list_description')
+  final String listDescription;
+  @JsonKey(name: 'list_id')
+  final String listId;
+  @JsonKey(name: 'list_name')
+  final String listName;
+  @JsonKey(name: 'authorized_users')
+  String? authorizedUsers;
+  final String visibility;
 
   factory SchoolList.fromJson(Map<String, dynamic> json) =>
       _$SchoolListFromJson(json);
+
+  SchoolList(
+      {required this.createdBy,
+      required this.listDescription,
+      required this.listId,
+      required this.listName,
+      required this.authorizedUsers,
+      required this.visibility});
 }

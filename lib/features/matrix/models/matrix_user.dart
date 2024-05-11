@@ -8,27 +8,35 @@ import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 //- 4. in _$MatrixUserImpl ->  comment out // 'authCredential': instance.authCredential,
 @JsonSerializable()
 class MatrixUser with _$MatrixUser {
-  factory MatrixUser({
-    String? id,
-    bool? active,
-    String? authType,
-    String? displayName,
-    String? avatarUri,
-    // ignore: invalid_annotation_target
-    @JsonKey(name: 'joinedRoomIds') List<MatrixRoom>? matrixRooms,
-    dynamic forbidRoomCreation,
-    dynamic forbidEncryptedRoomCreation,
-    dynamic forbidUnencryptedRoomCreation,
-    String? authCredential,
-  }) = _MatrixUser;
+  final String? id;
+  final bool? active;
+  final String? authType;
+  final String? displayName;
+  final String? avatarUri;
+  @JsonKey(name: 'joinedRoomIds')
+  final List<MatrixRoom>? matrixRooms;
+  final dynamic forbidRoomCreation;
+  final dynamic forbidEncryptedRoomCreation;
+  final dynamic forbidUnencryptedRoomCreation;
+  final String? authCredential;
 
   factory MatrixUser.fromJson(Map<String, dynamic> json) {
-    var user = _$MatrixUserFromJson(json);
+    var user = _$MatrixUserFromJson(this);
     if (user.matrixRooms != null) {
+      /// eliminate duplicates
       user = user.copyWith(matrixRooms: user.matrixRooms!.toSet().toList());
     }
     return user;
   }
-  // factory MatrixUser.fromJson(Map<String, dynamic> json) =>
-  //     _$MatrixUserFromJson(json);
+
+  MatrixUser(
+      {required this.id,
+      required this.active,
+      required this.authType,
+      required this.displayName,
+      required this.avatarUri,
+      required this.forbidRoomCreation,
+      required this.forbidEncryptedRoomCreation,
+      required this.forbidUnencryptedRoomCreation,
+      required this.authCredential});
 }

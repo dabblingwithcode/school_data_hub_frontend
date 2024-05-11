@@ -2,18 +2,23 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'pupil_list.freezed.dart';
-part 'pupil_list.g.dart';
-
 @JsonSerializable()
 class PupilList with _$PupilList {
-  factory PupilList({
-    @JsonKey(name: 'origin_list') required String originList,
-    @JsonKey(name: 'pupil_list_comment') String? pupilListComment,
-    @JsonKey(name: 'pupil_list_entry_by') String? pupilListEntryBy,
-    @JsonKey(name: 'pupil_list_status') bool? pupilListStatus,
-  }) = _PupilList;
+  @JsonKey(name: 'origin_list')
+  final String originList;
+  @JsonKey(name: 'pupil_list_comment')
+  final String? pupilListComment;
+  @JsonKey(name: 'pupil_list_entry_by')
+  final String? pupilListEntryBy;
+  @JsonKey(name: 'pupil_list_status')
+  final bool? pupilListStatus;
 
   factory PupilList.fromJson(Map<String, dynamic> json) =>
       _$PupilListFromJson(json);
+
+  PupilList(
+      {required this.originList,
+      required this.pupilListComment,
+      required this.pupilListEntryBy,
+      required this.pupilListStatus});
 }
