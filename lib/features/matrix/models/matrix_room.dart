@@ -1,8 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'matrix_room.freezed.dart';
-part 'matrix_room.g.dart';
-
 @JsonSerializable()
 class MatrixRoom with _$MatrixRoom {
   factory MatrixRoom.fromPolicyId(String policyId) {

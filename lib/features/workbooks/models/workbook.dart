@@ -1,9 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:json_annotation/json_annotation.dart';
 
-part 'workbook.freezed.dart';
-part 'workbook.g.dart';
-
 @JsonSerializable()
 class Workbook with _$Workbook {
   factory Workbook({

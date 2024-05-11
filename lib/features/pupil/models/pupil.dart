@@ -13,9 +13,6 @@ import 'package:schuldaten_hub/features/pupil/models/credit_history_log.dart';
 import 'package:schuldaten_hub/features/admonitions/models/admonition.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 
-part 'pupil.freezed.dart';
-part 'pupil.g.dart';
-
 @JsonSerializable()
 class Pupil with _$Pupil {
   factory Pupil({

@@ -2,9 +2,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'pupil_base.freezed.dart';
-part 'pupil_base.g.dart';
-
 @JsonSerializable()
 class PupilBase with _$PupilBase {
   const factory PupilBase({

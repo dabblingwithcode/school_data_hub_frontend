@@ -1,9 +1,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 
-part 'matrix_user.freezed.dart';
-part 'matrix_user.g.dart';
-
 //- After running build_runner, in matrix_user.g.dart you must do these modifications:
 //- 1. in _$MatrixUserImpl ->  matrixRooms: (json['joinedRoomIds'] as List<dynamic>).map((e) => MatrixRoom(id: e)).toList(),
 //- 2. in _$$MatrixUserImplToJson -> 'joinedRoomIds': getRoomIds(instance.matrixRooms!),

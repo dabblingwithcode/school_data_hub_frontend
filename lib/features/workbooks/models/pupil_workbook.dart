@@ -2,9 +2,6 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'pupil_workbook.freezed.dart';
-part 'pupil_workbook.g.dart';
-
 @JsonSerializable()
 class PupilWorkbook with _$PupilWorkbook {
   factory PupilWorkbook({

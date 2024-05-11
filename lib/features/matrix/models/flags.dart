@@ -1,8 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'flags.freezed.dart';
-part 'flags.g.dart';
-
 @JsonSerializable()
 class Flags with _$Flags {
   factory Flags({

@@ -6,9 +6,6 @@ import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 import 'flags.dart';
 import 'matrix_user.dart';
 
-part 'policy.freezed.dart';
-part 'policy.g.dart';
-
 //- After running build_runner, in policy.g.dart you must do these modifications:
 //- 1. in _$$PolicyImplFromJson ->  matrixRooms: (json['managedRoomIds'] as List<dynamic>).map((e) => MatrixRoom(id: e)).toList(),
 //- 2. in _$$PolicyImplToJson -> 'managedRoomIds': getRoomIds(instance.matrixRooms!),
