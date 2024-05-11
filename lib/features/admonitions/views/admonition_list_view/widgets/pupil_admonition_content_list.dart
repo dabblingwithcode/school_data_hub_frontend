@@ -241,10 +241,13 @@ List<Widget> pupilAdmonitionsContentList(
                                   child: filteredAdmonitions[index]
                                               .processedFileUrl !=
                                           null
-                                      ? documentImage(
-                                          '${locator<EnvManager>().env.value.serverUrl}${EndpointsAdmonition().getAdmonitionFile(filteredAdmonitions[index].admonitionId)}',
-                                          filteredAdmonitions[index].fileUrl,
-                                          70)
+                                      ? DocumentImage(
+                                          documentTag:
+                                              '${locator<EnvManager>().env.value.serverUrl}${EndpointsAdmonition().getAdmonitionFile(filteredAdmonitions[index].admonitionId)}',
+                                          documentUrl:
+                                              filteredAdmonitions[index]
+                                                  .fileUrl,
+                                          size: 70)
                                       : SizedBox(
                                           height: 70,
                                           child: ClipRRect(
@@ -297,10 +300,12 @@ List<Widget> pupilAdmonitionsContentList(
                                 },
                                 child: filteredAdmonitions[index].fileUrl !=
                                         null
-                                    ? documentImage(
-                                        '${locator<EnvManager>().env.value.serverUrl}${EndpointsAdmonition().getAdmonitionFile(filteredAdmonitions[index].admonitionId)}',
-                                        filteredAdmonitions[index].fileUrl,
-                                        70)
+                                    ? DocumentImage(
+                                        documentTag:
+                                            '${locator<EnvManager>().env.value.serverUrl}${EndpointsAdmonition().getAdmonitionFile(filteredAdmonitions[index].admonitionId)}',
+                                        documentUrl:
+                                            filteredAdmonitions[index].fileUrl,
+                                        size: 70)
                                     : SizedBox(
                                         height: 70,
                                         child: ClipRRect(
