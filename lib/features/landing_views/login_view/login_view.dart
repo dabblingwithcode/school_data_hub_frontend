@@ -4,8 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
+import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';
@@ -19,7 +22,7 @@ class LoginView extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     registerHandler(
-      select: (SessionManager x) => x.operationReport,
+      select: (SnackBarManager x) => x.snackBar,
       handler: (context, value, cancel) =>
           snackbar(context, value.type, value.message),
     );
@@ -135,10 +138,35 @@ class LoginView extends WatchingWidget {
                               style: actionButtonStyle,
                               onPressed: () async {
                                 // locator<EnvManager>().deleteEnv();
-                                await controller.textFieldCredentials(context);
+                                await controller.loginWithTextCredentials();
                               },
                               child: const Text(
                                 "EINLOGGEN",
+                                style: TextStyle(
+                                    fontSize: 17.0,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(10.0),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            //margin: const EdgeInsets.only(bottom: 16),
+                            width: double.infinity,
+                            child: ElevatedButton(
+                              style: actionButtonStyle,
+                              onPressed: () async {
+                                await confirmationDialog(
+                                    context,
+                                    "Schulschlüssel löschen?",
+                                    "Sind Sie sicher, dass Sie die Schuldaten löschen möchten?");
+                                locator<EnvManager>().deleteEnv();
+                              },
+                              child: const Text(
+                                "SCHULSCHLÜSSEL LÖSCHEN",
                                 style: TextStyle(
                                     fontSize: 17.0,
                                     fontWeight: FontWeight.bold,

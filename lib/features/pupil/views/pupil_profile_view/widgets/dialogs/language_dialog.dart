@@ -21,7 +21,7 @@ Future<void> languageDialog(
 
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
-            insetPadding: EdgeInsets.symmetric(horizontal: 20),
+            insetPadding: const EdgeInsets.symmetric(horizontal: 20),
             content: SizedBox(
                 width: 700,
                 child: Column(

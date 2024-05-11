@@ -1,5 +1,9 @@
 // ignore_for_file: constant_identifier_names
 
+enum SearchType { pupil, room, matrixUser, list, authorization, workbook }
+
+enum SnackBarType { success, error, warning, info }
+
 enum CompetenceFilter { E1, E2, S3, S4 }
 
 Map<CompetenceFilter, bool> initialCompetenceFilterValues = {

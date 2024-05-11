@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/widgets/snackbars.dart';
+import 'package:watch_it/watch_it.dart';
 
-class LoadingPage extends StatefulWidget {
+class LoadingPage extends WatchingStatefulWidget {
   const LoadingPage({Key? key}) : super(key: key);
 
   @override
@@ -12,6 +15,13 @@ class LoadingPage extends StatefulWidget {
 class LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
+    final SnackBarData snackBarData =
+        watchValue((SnackBarManager x) => x.snackBar);
+    // registerHandler(
+    //     select: (SnackBarManager x) => x.snackBar,
+    //     handler: (context, value, cancel) {
+    //       snackbar(context, value.type, value.message);
+    //     });
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -19,7 +29,7 @@ class LoadingPageState extends State<LoadingPage> {
         decoration: const BoxDecoration(
           color: backgroundColor,
         ),
-        child: const Center(
+        child: Center(
           child: SizedBox(
             height: 500,
             width: 600,
@@ -27,14 +37,14 @@ class LoadingPageState extends State<LoadingPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                SizedBox(
+                const SizedBox(
                   height: 300,
                   width: 300,
                   child: Image(
                     image: AssetImage('assets/foreground.png'),
                   ),
                 ),
-                Text(
+                const Text(
                   "Schuldaten Hub",
                   style: TextStyle(
                     color: Colors.white,
@@ -42,14 +52,14 @@ class LoadingPageState extends State<LoadingPage> {
                     fontSize: 30,
                   ),
                 ),
-                Spacer(),
-                Text('Daten werden geladen...',
-                    style: TextStyle(
+                const Spacer(),
+                Text(snackBarData.message,
+                    style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,
                         fontWeight: FontWeight.bold)),
-                Gap(30),
-                CircularProgressIndicator(
+                const Gap(30),
+                const CircularProgressIndicator(
                   color: Colors.white,
                 )
               ],

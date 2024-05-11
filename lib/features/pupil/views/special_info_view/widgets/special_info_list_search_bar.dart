@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
@@ -44,7 +45,10 @@ Widget specialInfoListSearchBar(BuildContext context, List<Pupil> pupils,
           child: Row(
             children: [
               Expanded(
-                  child: searchTextField('Schüler/in suchen', controller,
+                  child: searchTextField(
+                      SearchType.pupil,
+                      'Schüler/in suchen',
+                      controller,
                       locator<PupilFilterManager>().refreshFilteredPupils)),
               specialInfoResetFilterButton(context, filtersOn),
             ],

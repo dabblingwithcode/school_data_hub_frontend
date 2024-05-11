@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/credit/credit_list_view.dart';
@@ -21,32 +20,6 @@ class CreditListController extends State<CreditList> {
   bool isSearchMode = false;
   bool isSearching = false;
   FocusNode focusNode = FocusNode();
-  @override
-  void initState() {
-    locator<PupilFilterManager>().refreshFilteredPupils();
-    super.initState();
-  }
-
-  void cancelSearch({bool unfocus = true}) {
-    setState(() {
-      searchController.clear();
-      isSearchMode = false;
-      locator<PupilFilterManager>().setSearchText('');
-      filteredPupils = List.from(pupils!);
-      isSearching = false;
-    });
-
-    if (unfocus) FocusManager.instance.primaryFocus?.unfocus();
-  }
-
-  void onSearchEnter(String text) {
-    if (text.isEmpty) {
-      cancelSearch(unfocus: false);
-      return;
-    }
-    isSearchMode = true;
-    locator<PupilFilterManager>().setSearchText(text);
-  }
 
   //- Values for the search bar
   int totalFluidCredit(List<Pupil> pupils) {

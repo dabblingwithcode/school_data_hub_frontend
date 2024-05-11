@@ -13,11 +13,11 @@ _$PolicyImpl _$$PolicyImplFromJson(Map<String, dynamic> json) => _$PolicyImpl(
           ? null
           : Flags.fromJson(json['flags'] as Map<String, dynamic>),
       hooks: json['hooks'],
-      managedRoomIds: (json['managedRoomIds'] as List<dynamic>?)
-          ?.map((e) => e as String)
+      matrixRooms: (json['managedRoomIds'] as List<dynamic>)
+          .map((e) => MatrixRoom(id: e))
           .toList(),
-      users: (json['users'] as List<dynamic>?)
-          ?.map((e) => User.fromJson(e as Map<String, dynamic>))
+      matrixUsers: (json['users'] as List<dynamic>?)
+          ?.map((e) => MatrixUser.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
@@ -27,6 +27,6 @@ Map<String, dynamic> _$$PolicyImplToJson(_$PolicyImpl instance) =>
       'identificationStamp': instance.identificationStamp,
       'flags': instance.flags,
       'hooks': instance.hooks,
-      'managedRoomIds': instance.managedRoomIds,
-      'users': instance.users,
+      'managedRoomIds': getRoomIds(instance.matrixRooms!),
+      'users': instance.matrixUsers,
     };

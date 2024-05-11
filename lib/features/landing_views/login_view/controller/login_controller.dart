@@ -1,15 +1,14 @@
 import 'dart:convert';
-
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/features/landing_views/loading_page.dart';
 import 'package:schuldaten_hub/features/landing_views/login_view/login_view.dart';
 import 'package:watch_it/watch_it.dart';
@@ -22,7 +21,6 @@ class Login extends WatchingStatefulWidget {
 }
 
 class LoginController extends State<Login> {
-  //final Env env = locator<EnvManager>().env.value;
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -30,13 +28,14 @@ class LoginController extends State<Login> {
     final String? scanResponse = await scanner(context, 'Zugangscode scannen');
     if (scanResponse != null) {
       final loginData = await json.decode(scanResponse);
-      final username = loginData['username'];
-      final password = loginData['password'];
-      attemptLogin(username, password, context);
+      final String username = loginData['username'];
+      final String password = loginData['password'];
+
+      attemptLogin(username: username, password: password);
     } else {
-      if (context.mounted) {
-        snackbarWarning(context, 'Scanvorgang abgebrochen');
-      }
+      locator<SnackBarManager>()
+          .showSnackBar(SnackBarType.warning, 'Scanvorgang abgebrochen');
+
       return;
     }
   }
@@ -45,36 +44,24 @@ class LoginController extends State<Login> {
     final String? scanResponse = await scanner(context, 'Schul-Id scannen');
     if (scanResponse != null) {
       locator<EnvManager>().setEnv(scanResponse);
-      if (context.mounted) {
-        snackbarSuccess(context, 'Schul-Id erfolgreich importiert!');
-      }
+      locator<SnackBarManager>().showSnackBar(
+          SnackBarType.success, 'Schul-Id erfolgreich importiert!');
       return;
     } else {
-      if (context.mounted) {
-        snackbarWarning(context, 'Scanvorgang abgebrochen');
-      }
+      locator<SnackBarManager>()
+          .showSnackBar(SnackBarType.warning, 'Scanvorgang abgebrochen');
       return;
     }
   }
 
-  textFieldCredentials(BuildContext context) {
-    String username = usernameController.text;
-    String password = passwordController.text;
-    attemptLogin(username, password, context);
+  loginWithTextCredentials() {
+    final String username = usernameController.text;
+    final String password = passwordController.text;
+    attemptLogin(username: username, password: password);
   }
 
-  attemptLogin(String username, String password, BuildContext context) async {
-    bool isAuthenticated =
-        await locator<SessionManager>().attemptLogin(username, password);
-    if (isAuthenticated == true) {
-      if (context.mounted) {
-        snackbarSuccess(context, 'Login erfolgreich!');
-      }
-    } else {
-      if (context.mounted) {
-        snackbarWarning(context, 'Login fehlgeschlagen!');
-      }
-    }
+  attemptLogin({required String username, required String password}) async {
+    await locator<SessionManager>().attemptLogin(username, password);
   }
 
   importEnvFromTxt() async {

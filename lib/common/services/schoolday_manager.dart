@@ -4,7 +4,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
 import 'package:schuldaten_hub/api/endpoints.dart';
-import 'package:schuldaten_hub/common/models/manager_report.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/models/schoolday_models/schoolday.dart';
@@ -18,7 +20,7 @@ class SchooldayManager {
   ValueListenable<DateTime> get thisDate => _thisDate;
   ValueListenable<DateTime> get startDate => _startDate;
   ValueListenable<DateTime> get endDate => _endDate;
-  ValueListenable<Report> get operationReport => _operationReport;
+
   ValueListenable<bool> get isRunning => _isRunning;
 
   final _schooldays = ValueNotifier<List<Schoolday>>([]);
@@ -26,7 +28,7 @@ class SchooldayManager {
   final _thisDate = ValueNotifier<DateTime>(DateTime.now());
   final _startDate = ValueNotifier<DateTime>(DateTime.now());
   final _endDate = ValueNotifier<DateTime>(DateTime.now());
-  final _operationReport = ValueNotifier<Report>(Report(null, null));
+
   final _isRunning = ValueNotifier<bool>(false);
 
   SchooldayManager();
@@ -40,13 +42,14 @@ class SchooldayManager {
   }
 
   Future getSchooldays() async {
-    _isRunning.value = true;
+    locator<SnackBarManager>().isRunningValue(true);
     try {
       final response = await client.get(EndpointsSchoolday.getSchooldays);
       final schooldays =
           (response.data as List).map((e) => Schoolday.fromJson(e)).toList();
-      debug.success(
-          'SchooldayRepository fetched ${schooldays.length} schooldays! | ${StackTrace.current}');
+      locator<SnackBarManager>().showSnackBar(
+          SnackBarType.success, '${schooldays.length} Schultage geladen!');
+
       _schooldays.value = schooldays;
       setAvailableDates();
     } on DioException catch (e) {
@@ -56,11 +59,11 @@ class SchooldayManager {
 
       rethrow;
     }
-    _isRunning.value = false;
+    locator<SnackBarManager>().isRunningValue(false);
   }
 
   setAvailableDates() {
-    _isRunning.value = true;
+    locator<SnackBarManager>().isRunningValue(true);
     List<DateTime> processedAvailableDates = [];
     for (Schoolday day in _schooldays.value) {
       DateTime validDate = day.schoolday;
@@ -71,7 +74,7 @@ class SchooldayManager {
         '${_availableDates.value.length} selectableDates | ${StackTrace.current}');
 
     getThisDate();
-    // _isRunning.value = false;
+    // locator<SnackBarManager>().isRunningValue(false);
   }
 
   getThisDate() {

@@ -61,23 +61,26 @@ class _CropAvatarState extends State<CropAvatarView> {
         bottomNavigationBar: _buildButtons(),
       );
 
-  Widget _buildButtons() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.rotate_90_degrees_ccw_outlined),
-            onPressed: _rotateLeft,
-          ),
-          IconButton(
-            icon: const Icon(Icons.rotate_90_degrees_cw_outlined),
-            onPressed: _rotateRight,
-          ),
-          TextButton(
-            onPressed: _finished,
-            child: const Text('Done'),
-          ),
-        ],
+  Widget _buildButtons() => SizedBox(
+        height: 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.rotate_90_degrees_ccw_outlined),
+              onPressed: _rotateLeft,
+            ),
+            IconButton(
+              icon: const Icon(Icons.rotate_90_degrees_cw_outlined),
+              onPressed: _rotateRight,
+            ),
+            TextButton(
+              onPressed: _finished,
+              child: const Text('Fertig'),
+            ),
+          ],
+        ),
       );
 
   // Future<void> _aspectRatios() async {

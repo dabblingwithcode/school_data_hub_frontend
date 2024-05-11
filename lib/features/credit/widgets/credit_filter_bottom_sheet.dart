@@ -29,24 +29,7 @@ class CreditFilterBottomSheet extends WatchingWidget {
           constraints: const BoxConstraints(maxWidth: 800),
           child: Column(
             children: [
-              Row(
-                children: [
-                  const Text(
-                    'Filter',
-                    style: title,
-                  ),
-                  const Spacer(),
-                  IconButton.filled(
-                      iconSize: 35,
-                      color: Colors.amber,
-                      onPressed: () {
-                        locator<PupilFilterManager>().resetFilters();
-
-                        //Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.restart_alt_rounded)),
-                ],
-              ),
+              filterHeading(),
               standardFilters(activeFilters),
               const Row(
                 children: [
@@ -62,6 +45,9 @@ class CreditFilterBottomSheet extends WatchingWidget {
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   FilterChip(
+                    padding: filterChipPadding,
+                    labelPadding: filterChipLabelPadding,
+                    shape: filterChipShape,
                     selectedColor: filterChipSelectedColor,
                     checkmarkColor: filterChipSelectedCheckColor,
                     backgroundColor: filterChipUnselectedColor,
@@ -78,6 +64,9 @@ class CreditFilterBottomSheet extends WatchingWidget {
                     },
                   ),
                   FilterChip(
+                    padding: filterChipPadding,
+                    labelPadding: filterChipLabelPadding,
+                    shape: filterChipShape,
                     selectedColor: filterChipSelectedColor,
                     checkmarkColor: filterChipSelectedCheckColor,
                     backgroundColor: filterChipUnselectedColor,
@@ -95,6 +84,9 @@ class CreditFilterBottomSheet extends WatchingWidget {
                     },
                   ),
                   FilterChip(
+                    padding: filterChipPadding,
+                    labelPadding: filterChipLabelPadding,
+                    shape: filterChipShape,
                     selectedColor: filterChipSelectedColor,
                     checkmarkColor: filterChipSelectedCheckColor,
                     backgroundColor: filterChipUnselectedColor,

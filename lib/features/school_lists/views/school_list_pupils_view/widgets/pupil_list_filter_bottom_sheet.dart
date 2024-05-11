@@ -26,23 +26,7 @@ class PupilListFilterBottomSheet extends WatchingWidget {
       padding: const EdgeInsets.only(left: 20.0, right: 20, top: 8),
       child: Column(
         children: [
-          Row(
-            children: [
-              const Text(
-                'Filter',
-                style: title,
-              ),
-              const Spacer(),
-              IconButton.filled(
-                  iconSize: 35,
-                  color: Colors.amber,
-                  onPressed: () {
-                    locator<PupilFilterManager>().resetFilters();
-                    //Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.restart_alt_rounded)),
-            ],
-          ),
+          filterHeading(),
           standardFilters(activeFilters),
           const Row(
             children: [
@@ -58,6 +42,9 @@ class PupilListFilterBottomSheet extends WatchingWidget {
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
               FilterChip(
+                padding: filterChipPadding,
+                labelPadding: filterChipLabelPadding,
+                shape: filterChipShape,
                 selectedColor: filterChipSelectedColor,
                 checkmarkColor: filterChipSelectedCheckColor,
                 backgroundColor: filterChipUnselectedColor,
@@ -81,6 +68,9 @@ class PupilListFilterBottomSheet extends WatchingWidget {
                 },
               ),
               FilterChip(
+                padding: filterChipPadding,
+                labelPadding: filterChipLabelPadding,
+                shape: filterChipShape,
                 selectedColor: filterChipSelectedColor,
                 checkmarkColor: filterChipSelectedCheckColor,
                 backgroundColor: filterChipUnselectedColor,
@@ -104,6 +94,9 @@ class PupilListFilterBottomSheet extends WatchingWidget {
                 },
               ),
               FilterChip(
+                padding: filterChipPadding,
+                labelPadding: filterChipLabelPadding,
+                shape: filterChipShape,
                 selectedColor: filterChipSelectedColor,
                 checkmarkColor: filterChipSelectedCheckColor,
                 backgroundColor: filterChipUnselectedColor,
@@ -127,6 +120,9 @@ class PupilListFilterBottomSheet extends WatchingWidget {
                 },
               ),
               FilterChip(
+                padding: filterChipPadding,
+                labelPadding: filterChipLabelPadding,
+                shape: filterChipShape,
                 selectedColor: filterChipSelectedColor,
                 checkmarkColor: filterChipSelectedCheckColor,
                 backgroundColor: filterChipUnselectedColor,

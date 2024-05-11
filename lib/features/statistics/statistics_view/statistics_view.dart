@@ -23,9 +23,9 @@ class StatisticsView extends StatelessWidget {
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.bar_chart_rounded),
+            Icon(Icons.bar_chart_rounded, size: 25, color: Colors.white),
             Gap(10),
-            Text('Statistik'),
+            Text('Statistik', style: appBarTextStyle),
           ],
         ),
       ),

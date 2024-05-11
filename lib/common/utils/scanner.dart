@@ -1,14 +1,17 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 
 Future<String?> scanner(BuildContext context, String overlayText) async {
   if (Platform.isWindows) {
-    snackbarError(context, 'Scannen mit Windows ist zur Zeit nicht möglich.');
+    locator<SnackBarManager>().showSnackBar(
+        SnackBarType.error, 'Scannen mit Windows ist zur Zeit nicht möglich.');
+
     return null;
   }
   final controller = MobileScannerController(

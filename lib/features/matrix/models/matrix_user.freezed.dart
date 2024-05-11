@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'user.dart';
+part of 'matrix_user.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,18 +14,19 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-User _$UserFromJson(Map<String, dynamic> json) {
-  return _User.fromJson(json);
+MatrixUser _$MatrixUserFromJson(Map<String, dynamic> json) {
+  return _MatrixUser.fromJson(json);
 }
 
 /// @nodoc
-mixin _$User {
+mixin _$MatrixUser {
   String? get id => throw _privateConstructorUsedError;
   bool? get active => throw _privateConstructorUsedError;
   String? get authType => throw _privateConstructorUsedError;
   String? get displayName => throw _privateConstructorUsedError;
   String? get avatarUri => throw _privateConstructorUsedError;
-  List<String>? get joinedRoomIds => throw _privateConstructorUsedError;
+  @JsonKey(name: 'joinedRoomIds')
+  List<MatrixRoom>? get matrixRooms => throw _privateConstructorUsedError;
   dynamic get forbidRoomCreation => throw _privateConstructorUsedError;
   dynamic get forbidEncryptedRoomCreation => throw _privateConstructorUsedError;
   dynamic get forbidUnencryptedRoomCreation =>
@@ -34,13 +35,15 @@ mixin _$User {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $UserCopyWith<User> get copyWith => throw _privateConstructorUsedError;
+  $MatrixUserCopyWith<MatrixUser> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserCopyWith<$Res> {
-  factory $UserCopyWith(User value, $Res Function(User) then) =
-      _$UserCopyWithImpl<$Res, User>;
+abstract class $MatrixUserCopyWith<$Res> {
+  factory $MatrixUserCopyWith(
+          MatrixUser value, $Res Function(MatrixUser) then) =
+      _$MatrixUserCopyWithImpl<$Res, MatrixUser>;
   @useResult
   $Res call(
       {String? id,
@@ -48,7 +51,7 @@ abstract class $UserCopyWith<$Res> {
       String? authType,
       String? displayName,
       String? avatarUri,
-      List<String>? joinedRoomIds,
+      @JsonKey(name: 'joinedRoomIds') List<MatrixRoom>? matrixRooms,
       dynamic forbidRoomCreation,
       dynamic forbidEncryptedRoomCreation,
       dynamic forbidUnencryptedRoomCreation,
@@ -56,9 +59,9 @@ abstract class $UserCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserCopyWithImpl<$Res, $Val extends User>
-    implements $UserCopyWith<$Res> {
-  _$UserCopyWithImpl(this._value, this._then);
+class _$MatrixUserCopyWithImpl<$Res, $Val extends MatrixUser>
+    implements $MatrixUserCopyWith<$Res> {
+  _$MatrixUserCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -73,7 +76,7 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
     Object? authType = freezed,
     Object? displayName = freezed,
     Object? avatarUri = freezed,
-    Object? joinedRoomIds = freezed,
+    Object? matrixRooms = freezed,
     Object? forbidRoomCreation = freezed,
     Object? forbidEncryptedRoomCreation = freezed,
     Object? forbidUnencryptedRoomCreation = freezed,
@@ -100,10 +103,10 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
           ? _value.avatarUri
           : avatarUri // ignore: cast_nullable_to_non_nullable
               as String?,
-      joinedRoomIds: freezed == joinedRoomIds
-          ? _value.joinedRoomIds
-          : joinedRoomIds // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+      matrixRooms: freezed == matrixRooms
+          ? _value.matrixRooms
+          : matrixRooms // ignore: cast_nullable_to_non_nullable
+              as List<MatrixRoom>?,
       forbidRoomCreation: freezed == forbidRoomCreation
           ? _value.forbidRoomCreation
           : forbidRoomCreation // ignore: cast_nullable_to_non_nullable
@@ -125,10 +128,11 @@ class _$UserCopyWithImpl<$Res, $Val extends User>
 }
 
 /// @nodoc
-abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
-  factory _$$UserImplCopyWith(
-          _$UserImpl value, $Res Function(_$UserImpl) then) =
-      __$$UserImplCopyWithImpl<$Res>;
+abstract class _$$MatrixUserImplCopyWith<$Res>
+    implements $MatrixUserCopyWith<$Res> {
+  factory _$$MatrixUserImplCopyWith(
+          _$MatrixUserImpl value, $Res Function(_$MatrixUserImpl) then) =
+      __$$MatrixUserImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -137,7 +141,7 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
       String? authType,
       String? displayName,
       String? avatarUri,
-      List<String>? joinedRoomIds,
+      @JsonKey(name: 'joinedRoomIds') List<MatrixRoom>? matrixRooms,
       dynamic forbidRoomCreation,
       dynamic forbidEncryptedRoomCreation,
       dynamic forbidUnencryptedRoomCreation,
@@ -145,10 +149,11 @@ abstract class _$$UserImplCopyWith<$Res> implements $UserCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$UserImplCopyWithImpl<$Res>
-    extends _$UserCopyWithImpl<$Res, _$UserImpl>
-    implements _$$UserImplCopyWith<$Res> {
-  __$$UserImplCopyWithImpl(_$UserImpl _value, $Res Function(_$UserImpl) _then)
+class __$$MatrixUserImplCopyWithImpl<$Res>
+    extends _$MatrixUserCopyWithImpl<$Res, _$MatrixUserImpl>
+    implements _$$MatrixUserImplCopyWith<$Res> {
+  __$$MatrixUserImplCopyWithImpl(
+      _$MatrixUserImpl _value, $Res Function(_$MatrixUserImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -159,13 +164,13 @@ class __$$UserImplCopyWithImpl<$Res>
     Object? authType = freezed,
     Object? displayName = freezed,
     Object? avatarUri = freezed,
-    Object? joinedRoomIds = freezed,
+    Object? matrixRooms = freezed,
     Object? forbidRoomCreation = freezed,
     Object? forbidEncryptedRoomCreation = freezed,
     Object? forbidUnencryptedRoomCreation = freezed,
     Object? authCredential = freezed,
   }) {
-    return _then(_$UserImpl(
+    return _then(_$MatrixUserImpl(
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -186,10 +191,10 @@ class __$$UserImplCopyWithImpl<$Res>
           ? _value.avatarUri
           : avatarUri // ignore: cast_nullable_to_non_nullable
               as String?,
-      joinedRoomIds: freezed == joinedRoomIds
-          ? _value._joinedRoomIds
-          : joinedRoomIds // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+      matrixRooms: freezed == matrixRooms
+          ? _value._matrixRooms
+          : matrixRooms // ignore: cast_nullable_to_non_nullable
+              as List<MatrixRoom>?,
       forbidRoomCreation: freezed == forbidRoomCreation
           ? _value.forbidRoomCreation
           : forbidRoomCreation // ignore: cast_nullable_to_non_nullable
@@ -212,22 +217,22 @@ class __$$UserImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UserImpl implements _User {
-  _$UserImpl(
+class _$MatrixUserImpl implements _MatrixUser {
+  _$MatrixUserImpl(
       {this.id,
       this.active,
       this.authType,
       this.displayName,
       this.avatarUri,
-      final List<String>? joinedRoomIds,
+      @JsonKey(name: 'joinedRoomIds') final List<MatrixRoom>? matrixRooms,
       this.forbidRoomCreation,
       this.forbidEncryptedRoomCreation,
       this.forbidUnencryptedRoomCreation,
       this.authCredential})
-      : _joinedRoomIds = joinedRoomIds;
+      : _matrixRooms = matrixRooms;
 
-  factory _$UserImpl.fromJson(Map<String, dynamic> json) =>
-      _$$UserImplFromJson(json);
+  factory _$MatrixUserImpl.fromJson(Map<String, dynamic> json) =>
+      _$$MatrixUserImplFromJson(json);
 
   @override
   final String? id;
@@ -239,12 +244,13 @@ class _$UserImpl implements _User {
   final String? displayName;
   @override
   final String? avatarUri;
-  final List<String>? _joinedRoomIds;
+  final List<MatrixRoom>? _matrixRooms;
   @override
-  List<String>? get joinedRoomIds {
-    final value = _joinedRoomIds;
+  @JsonKey(name: 'joinedRoomIds')
+  List<MatrixRoom>? get matrixRooms {
+    final value = _matrixRooms;
     if (value == null) return null;
-    if (_joinedRoomIds is EqualUnmodifiableListView) return _joinedRoomIds;
+    if (_matrixRooms is EqualUnmodifiableListView) return _matrixRooms;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
@@ -260,14 +266,14 @@ class _$UserImpl implements _User {
 
   @override
   String toString() {
-    return 'User(id: $id, active: $active, authType: $authType, displayName: $displayName, avatarUri: $avatarUri, joinedRoomIds: $joinedRoomIds, forbidRoomCreation: $forbidRoomCreation, forbidEncryptedRoomCreation: $forbidEncryptedRoomCreation, forbidUnencryptedRoomCreation: $forbidUnencryptedRoomCreation, authCredential: $authCredential)';
+    return 'MatrixUser(id: $id, active: $active, authType: $authType, displayName: $displayName, avatarUri: $avatarUri, matrixRooms: $matrixRooms, forbidRoomCreation: $forbidRoomCreation, forbidEncryptedRoomCreation: $forbidEncryptedRoomCreation, forbidUnencryptedRoomCreation: $forbidUnencryptedRoomCreation, authCredential: $authCredential)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$UserImpl &&
+            other is _$MatrixUserImpl &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.active, active) || other.active == active) &&
             (identical(other.authType, authType) ||
@@ -277,7 +283,7 @@ class _$UserImpl implements _User {
             (identical(other.avatarUri, avatarUri) ||
                 other.avatarUri == avatarUri) &&
             const DeepCollectionEquality()
-                .equals(other._joinedRoomIds, _joinedRoomIds) &&
+                .equals(other._matrixRooms, _matrixRooms) &&
             const DeepCollectionEquality()
                 .equals(other.forbidRoomCreation, forbidRoomCreation) &&
             const DeepCollectionEquality().equals(
@@ -299,7 +305,7 @@ class _$UserImpl implements _User {
       authType,
       displayName,
       avatarUri,
-      const DeepCollectionEquality().hash(_joinedRoomIds),
+      const DeepCollectionEquality().hash(_matrixRooms),
       const DeepCollectionEquality().hash(forbidRoomCreation),
       const DeepCollectionEquality().hash(forbidEncryptedRoomCreation),
       const DeepCollectionEquality().hash(forbidUnencryptedRoomCreation),
@@ -308,31 +314,32 @@ class _$UserImpl implements _User {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UserImplCopyWith<_$UserImpl> get copyWith =>
-      __$$UserImplCopyWithImpl<_$UserImpl>(this, _$identity);
+  _$$MatrixUserImplCopyWith<_$MatrixUserImpl> get copyWith =>
+      __$$MatrixUserImplCopyWithImpl<_$MatrixUserImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$UserImplToJson(
+    return _$$MatrixUserImplToJson(
       this,
     );
   }
 }
 
-abstract class _User implements User {
-  factory _User(
+abstract class _MatrixUser implements MatrixUser {
+  factory _MatrixUser(
       {final String? id,
       final bool? active,
       final String? authType,
       final String? displayName,
       final String? avatarUri,
-      final List<String>? joinedRoomIds,
+      @JsonKey(name: 'joinedRoomIds') final List<MatrixRoom>? matrixRooms,
       final dynamic forbidRoomCreation,
       final dynamic forbidEncryptedRoomCreation,
       final dynamic forbidUnencryptedRoomCreation,
-      final String? authCredential}) = _$UserImpl;
+      final String? authCredential}) = _$MatrixUserImpl;
 
-  factory _User.fromJson(Map<String, dynamic> json) = _$UserImpl.fromJson;
+  factory _MatrixUser.fromJson(Map<String, dynamic> json) =
+      _$MatrixUserImpl.fromJson;
 
   @override
   String? get id;
@@ -345,7 +352,8 @@ abstract class _User implements User {
   @override
   String? get avatarUri;
   @override
-  List<String>? get joinedRoomIds;
+  @JsonKey(name: 'joinedRoomIds')
+  List<MatrixRoom>? get matrixRooms;
   @override
   dynamic get forbidRoomCreation;
   @override
@@ -356,6 +364,6 @@ abstract class _User implements User {
   String? get authCredential;
   @override
   @JsonKey(ignore: true)
-  _$$UserImplCopyWith<_$UserImpl> get copyWith =>
+  _$$MatrixUserImplCopyWith<_$MatrixUserImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

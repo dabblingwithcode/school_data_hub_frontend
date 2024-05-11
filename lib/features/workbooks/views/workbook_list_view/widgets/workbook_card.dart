@@ -9,9 +9,7 @@ import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/information_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/document_image.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/common/widgets/upload_image.dart';
-
 import 'package:schuldaten_hub/features/workbooks/models/workbook.dart';
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
 import 'package:schuldaten_hub/features/workbooks/views/new_workbook_view/new_workbook_view.dart';
@@ -45,10 +43,6 @@ Widget workbookCard(
                 'Arbeitsheft "${workbook.name}" wirklich löschen? ACHTUNG: Alle Arbeitshefte dieser Art werden ebenfalls gelöscht!');
             if (result == true) {
               await locator<WorkbookManager>().deleteWorkbook(workbook.isbn);
-              if (context.mounted) {
-                snackbarSuccess(
-                    context, 'Das Arbeitsheft wurde aus dem Katalog gelöscht!');
-              }
             }
           },
           child: Padding(
@@ -66,10 +60,6 @@ Widget workbookCard(
                         if (file == null) return;
                         await locator<WorkbookManager>()
                             .postWorkbookFile(file, workbook.isbn);
-                        if (context.mounted) {
-                          snackbarSuccess(
-                              context, 'Das Arbeitsheft wurde geändert!');
-                        }
                       },
                       onLongPress: (workbook.imageUrl == null)
                           ? () {}
@@ -86,10 +76,6 @@ Widget workbookCard(
                               //   authorizationId,
                               //   pupilAuthorization.fileUrl!,
                               // );
-                              if (context.mounted) {
-                                snackbarSuccess(
-                                    context, 'Das Arbeitsheft wurde geändert!');
-                              }
                             },
                       child: workbook.imageUrl != null
                           ? documentImage(
@@ -162,19 +148,52 @@ Widget workbookCard(
                           ],
                         ),
                         const Gap(5),
-                        Text(workbook.subject!,
-                            overflow: TextOverflow.fade,
-                            style: const TextStyle(
-                              fontSize: 14,
-                            )),
+                        Row(
+                          children: [
+                            const Text('Kompetenzbereich(e):'),
+                            const Gap(10),
+                            Text(
+                              workbook.subject!,
+                              overflow: TextOverflow.fade,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
                         const Gap(5),
-                        Text(
-                          workbook.level!,
-                          maxLines: 2,
-                          overflow: TextOverflow.fade,
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
+                        Row(
+                          children: [
+                            const Text('Kompetenzstufe:'),
+                            const Gap(10),
+                            Text(
+                              workbook.level!,
+                              overflow: TextOverflow.fade,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Gap(5),
+                        Row(
+                          children: [
+                            const Text('Bestand:'),
+                            const Gap(10),
+                            Text(
+                              workbook.amount.toString(),
+                              overflow: TextOverflow.fade,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
                         const Gap(10),
                       ],

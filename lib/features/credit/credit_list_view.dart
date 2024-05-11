@@ -38,7 +38,11 @@ class CreditListView extends WatchingWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.credit_card, size: 25),
+            const Icon(
+              Icons.credit_card,
+              size: 25,
+              color: Colors.white,
+            ),
             const Gap(10),
             Text(
               'Guthaben: $userCredit',

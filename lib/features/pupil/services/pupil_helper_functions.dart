@@ -153,13 +153,14 @@ List<Pupil> pupilsWithBirthdayInTheLastSevenDays() {
   final DateTime now = DateTime.now();
 
   List<Pupil> pupilsWithBirthdayInTheLastSevenDays = [];
+  final int currentDay = now.day;
+  final int currentMonth = now.month;
+
   for (Pupil pupil in pupils) {
     if (pupil.birthday != null) {
       // Extract day and month from birthday and current date
       final int pupilBirthDay = pupil.birthday!.day;
       final int pupilBirthMonth = pupil.birthday!.month;
-      final int currentDay = now.day;
-      final int currentMonth = now.month;
 
       // Check if birthday falls within the last seven days (including today)
       final bool isBirthdayTodayOrInLastSevenDays = (currentMonth ==

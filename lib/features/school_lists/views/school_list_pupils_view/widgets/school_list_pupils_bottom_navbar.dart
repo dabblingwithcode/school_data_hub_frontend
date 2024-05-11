@@ -67,7 +67,11 @@ BottomAppBar schoolListPupilsBottomNavBar(
                 tooltip: 'Liste teilen',
                 onPressed: () async {
                   final String? visibility = await shortTextfieldDialog(
-                      context, 'Liste teilen mit...', 'Kürzel eintragen!');
+                      context: context,
+                      title: 'Liste teilen mit...',
+                      labelText: 'Kürzel eingeben',
+                      hintText: 'Kürzel eingeben',
+                      obscureText: false);
                   if (visibility != null) {
                     locator<SchoolListManager>()
                         .patchSchoolList(listId, null, null, visibility);

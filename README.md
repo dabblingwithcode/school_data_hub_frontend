@@ -78,6 +78,10 @@ Pupils have the right to get learning support according to their individual need
 
 - Filters are incredibly useful when dealing with lists. There are general filters (like class, schoolyear) and specific filters for the different views implemented, as well as different ordering of the list elements according to different criteria depending on the view.
 
+#### Matrix: User accounts and room management with Matrix Corporal
+
+- If you configure a synapse server to work with Matrix Corporal https://github.com/devture/matrix-corporal , you can now easily administer accounts and room membership, including per user power levels in the rooms.
+
 ### Roadmap
 
 The export of reports in a printable format (pdf) is crucial for us and because of that on top of the list.
@@ -105,7 +109,7 @@ There are also a couple of models in the backend that are not implemented in the
 
 - pdf export feature: individual development plan report. **Priority: high**
 - implement competence feature, competence report for a school semester and pdf export. **Priority: high**
-- UI to CRUD schooldays **Priority: high**
+- UI to CRUD schooldays using https://pub.dev/packages/calendar_date_picker2 and https://pub.dev/packages/table_calendar **Priority: high**
 - workbook feature **Priority: medium**
 - book feature (library lending system) **Priority: medium**
 - generate qr stickers as shortcuts for documenting features **Priority: low**

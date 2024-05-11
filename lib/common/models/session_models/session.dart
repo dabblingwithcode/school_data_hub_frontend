@@ -1,18 +1,22 @@
 class Session {
   Session({
     this.username,
+    this.publicId,
     this.jwt,
     this.isAdmin,
     this.role,
     this.credit,
+    this.timeUnits,
   });
 
   Session copyWith({
     String? username,
+    String? publicId,
     String? jwt,
     bool? isAdmin,
     String? role,
     int? credit,
+    int? timeUnits,
   }) =>
       Session(
         username: username ?? this.username,
@@ -39,10 +43,12 @@ class Session {
       };
 
   final String? username;
+  final String? publicId;
   final String? jwt;
   final bool? isAdmin;
   final String? role;
   final int? credit;
+  final int? timeUnits;
 
   bool get isAuthenticated => username != null && jwt != null;
 }

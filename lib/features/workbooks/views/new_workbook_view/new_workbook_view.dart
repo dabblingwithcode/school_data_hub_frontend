@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
-
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
 
 class NewWorkbookView extends StatefulWidget {
@@ -22,46 +22,44 @@ class NewWorkbookView extends StatefulWidget {
 }
 
 class NewWorkbookViewState extends State<NewWorkbookView> {
-  final TextEditingController textField1Controller = TextEditingController();
-  final TextEditingController textField2Controller = TextEditingController();
-  final TextEditingController textField3Controller = TextEditingController();
-  final TextEditingController textField4Controller = TextEditingController();
+  final TextEditingController nameTextFieldController = TextEditingController();
+  final TextEditingController isbnTextFieldController = TextEditingController();
+  final TextEditingController subjectTextFieldController =
+      TextEditingController();
+  final TextEditingController level = TextEditingController();
+  final TextEditingController amountTextFieldController =
+      TextEditingController();
 
   Set<int> pupilIds = {};
   void postNewWorkbook() async {
-    String workbookName = textField1Controller.text;
-    int workbookIsbn = int.parse(textField2Controller.text);
-    String workbookSubject = textField3Controller.text;
-    String workbookLevel = textField4Controller.text;
+    String workbookName = nameTextFieldController.text;
+    int workbookIsbn = int.parse(isbnTextFieldController.text);
+    String workbookSubject = subjectTextFieldController.text;
+    String workbookLevel = level.text;
+    int amount = int.parse(amountTextFieldController.text);
 
     await locator<WorkbookManager>().postWorkbook(
-        workbookName, workbookIsbn, workbookSubject, workbookLevel);
-    if (context.mounted) {
-      snackbarSuccess(context, 'Neues Arbeitsheft erstellt!');
-    }
+        workbookName, workbookIsbn, workbookSubject, workbookLevel, amount);
   }
 
   void patchWorkbook() async {
-    String workbookName = textField1Controller.text;
-    int workbookIsbn = int.parse(textField2Controller.text);
-    String workbookSubject = textField3Controller.text;
-    String workbookLevel = textField4Controller.text;
+    String workbookName = nameTextFieldController.text;
+    int workbookIsbn = int.parse(isbnTextFieldController.text);
+    String workbookSubject = subjectTextFieldController.text;
+    String workbookLevel = level.text;
 
     await locator<WorkbookManager>().patchWorkbook(
         workbookName, workbookIsbn, workbookSubject, workbookLevel);
-    if (context.mounted) {
-      snackbarSuccess(context, 'Arbeitsheft geändert!');
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    textField1Controller.text = widget.wbName ?? '';
-    if (textField2Controller.text == '') {
-      textField2Controller.text = widget.wbIsbn?.toString() ?? '';
+    nameTextFieldController.text = widget.wbName ?? '';
+    if (isbnTextFieldController.text == '') {
+      isbnTextFieldController.text = widget.wbIsbn?.toString() ?? '';
     }
-    textField3Controller.text = widget.wbSubject ?? '';
-    textField4Controller.text = widget.wbLevel ?? '';
+    subjectTextFieldController.text = widget.wbSubject ?? '';
+    level.text = widget.wbLevel ?? '';
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -92,7 +90,7 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
                         color: Colors.black, fontWeight: FontWeight.bold),
                     minLines: 2,
                     maxLines: 2,
-                    controller: textField1Controller,
+                    controller: nameTextFieldController,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(10),
                       border: OutlineInputBorder(
@@ -113,7 +111,7 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
                         color: Colors.black, fontWeight: FontWeight.bold),
                     minLines: 1,
                     maxLines: 1,
-                    controller: textField2Controller,
+                    controller: isbnTextFieldController,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(10),
                       border: OutlineInputBorder(
@@ -134,7 +132,7 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
                         color: Colors.black, fontWeight: FontWeight.bold),
                     minLines: 1,
                     maxLines: 1,
-                    controller: textField3Controller,
+                    controller: subjectTextFieldController,
                     decoration: const InputDecoration(
                       contentPadding: EdgeInsets.all(10),
                       border: OutlineInputBorder(
@@ -153,7 +151,7 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
                   TextField(
                     minLines: 1,
                     maxLines: 1,
-                    controller: textField4Controller,
+                    controller: level,
                     style: const TextStyle(
                         color: Colors.black, fontWeight: FontWeight.bold),
                     decoration: const InputDecoration(
@@ -170,6 +168,27 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
                       labelText: 'Kompetenzstufe',
                     ),
                   ),
+                  const Gap(20),
+                  TextField(
+                    style: const TextStyle(
+                        color: Colors.black, fontWeight: FontWeight.bold),
+                    minLines: 1,
+                    maxLines: 1,
+                    controller: amountTextFieldController,
+                    decoration: const InputDecoration(
+                      contentPadding: EdgeInsets.all(10),
+                      border: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: backgroundColor, width: 2),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: backgroundColor, width: 2),
+                      ),
+                      labelStyle: TextStyle(color: backgroundColor),
+                      labelText: 'Bestand',
+                    ),
+                  ),
                   const Gap(30),
                   ElevatedButton(
                     style: actionButtonStyle,
@@ -183,14 +202,14 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
                       if (locator<WorkbookManager>().workbooks.value.any(
                           (element) =>
                               element.isbn == int.parse(scannedIsbn))) {
-                        if (context.mounted) {
-                          snackbarError(
-                              context, 'Dieses Arbeitsheft gibt es schon!');
-                        }
+                        locator<SnackBarManager>().showSnackBar(
+                            SnackBarType.error,
+                            'Dieses Arbeitsheft gibt es schon!');
+
                         return;
                       }
                       setState(() {
-                        textField2Controller.text = scannedIsbn;
+                        isbnTextFieldController.text = scannedIsbn;
                       });
                     },
                     child: const Text(
@@ -211,9 +230,11 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
                         if (locator<WorkbookManager>().workbooks.value.any(
                             (element) =>
                                 element.isbn ==
-                                int.parse(textField2Controller.text))) {
-                          snackbarError(
-                              context, 'Dieses Arbeitsheft gibt es schon!');
+                                int.parse(isbnTextFieldController.text))) {
+                          locator<SnackBarManager>().showSnackBar(
+                              SnackBarType.error,
+                              'Dieses Arbeitsheft gibt es schon!');
+
                           return;
                         }
                         postNewWorkbook();
@@ -249,10 +270,11 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the tree
-    textField1Controller.dispose();
-    textField2Controller.dispose();
-    textField3Controller.dispose();
-    textField4Controller.dispose();
+    nameTextFieldController.dispose();
+    isbnTextFieldController.dispose();
+    subjectTextFieldController.dispose();
+    level.dispose();
+    amountTextFieldController.dispose();
     super.dispose();
   }
 }

@@ -12,6 +12,7 @@ class SchoolList with _$SchoolList {
     @JsonKey(name: 'list_description') required String listDescription,
     @JsonKey(name: 'list_id') required String listId,
     @JsonKey(name: 'list_name') required String listName,
+    @JsonKey(name: 'authorized_users') String? authorizedUsers,
     required String visibility,
   }) = _SchoolList;
 

@@ -8,7 +8,9 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 
 import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
 import 'package:schuldaten_hub/api/endpoints.dart';
-import 'package:schuldaten_hub/common/models/manager_report.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
@@ -25,10 +27,10 @@ import 'package:schuldaten_hub/common/services/session_manager.dart';
 
 class PupilManager {
   ValueListenable<List<Pupil>> get pupils => _pupils;
-  ValueListenable<Report> get operationReport => _operationReport;
+
   ValueListenable<bool> get isRunning => _isRunning;
   final _pupils = ValueNotifier<List<Pupil>>([]);
-  final _operationReport = ValueNotifier<Report>(Report(null, null));
+
   final _isRunning = ValueNotifier<bool>(false);
   final client = locator.get<ApiManager>().dioClient.value;
   PupilManager();
@@ -59,7 +61,7 @@ class PupilManager {
 
   //-Fetch pupils with the given ids from the backend
   Future fetchPupilsById(List<int> pupilIds) async {
-    _isRunning.value = true;
+    locator<SnackBarManager>().isRunningValue(true);
     // we request the data posting a json with the id list - let's build that
     final data = jsonEncode({"pupils": pupilIds});
     // we'll need the pupilbase to parse the response - let's prepare it
@@ -75,8 +77,6 @@ class PupilManager {
       // we have the response - let's build unidentified Pupils with it
       final fetchedPupilsWithoutBase =
           (response.data as List).map((e) => Pupil.fromJson(e)).toList();
-      debug.success(
-          'PupilManager fetched ${fetchedPupilsWithoutBase.length} pupils! | ${StackTrace.current}');
 
       // now we match them with the pupilbase and add the id key values
       for (PupilBase pupilBaseElement in pupilbase) {
@@ -106,8 +106,8 @@ class PupilManager {
         for (PupilBase element in outdatedPupilbase) {
           deletedPupils += '${element.id}, ';
         }
-        debug.warning(
-            '$deletedPupils had no match and have been deleted from the pupilbase! | ${StackTrace.current}');
+        locator<SnackBarManager>().showSnackBar(SnackBarType.warning,
+            '$deletedPupils had no match and have been deleted from the pupilbase!');
       }
 
       updateListOfPupilsInRepository(matchedPupils);
@@ -117,7 +117,7 @@ class PupilManager {
       if (matchedPupils.isEmpty) {
         debug.info('PUPILS FETCHED: No matches! | ${StackTrace.current}');
       } else {
-        debug.success(
+        locator<SnackBarManager>().showSnackBar(SnackBarType.success,
             'PUPILS FETCHED: There are ${matchedPupils.length} matches! | ${StackTrace.current}');
       }
       if (locator.isReadySync<PupilFilterManager>()) {
@@ -125,7 +125,7 @@ class PupilManager {
         locator<PupilFilterManager>().rebuildFilteredPupils();
       }
 
-      _isRunning.value = false;
+      locator<SnackBarManager>().isRunningValue(false);
 
       // //! This one gives an error
       // final pupilFilterManager = locator<PupilFilterManager>();
@@ -161,13 +161,14 @@ class PupilManager {
 
   //- update list of pupils in repository
   Future updateListOfPupilsInRepository(List<Pupil> pupils) async {
-    _isRunning.value = true;
+    locator<SnackBarManager>().isRunningValue(true);
     List<Pupil> repositoryPupils = List.from(_pupils.value);
     for (Pupil pupil in pupils) {
       int match = repositoryPupils
           .indexWhere((element) => element.internalId == pupil.internalId);
       if (match != -1) {
-        repositoryPupils[match] = pupil;
+        repositoryPupils[match] =
+            pupilCopiedWith(repositoryPupils[match], pupil);
       } else {
         repositoryPupils.add(pupil);
       }
@@ -177,9 +178,9 @@ class PupilManager {
 
     await locator.isReady<PupilFilterManager>();
 
-    locator<PupilFilterManager>().refreshFilteredPupils();
+    locator<PupilFilterManager>().rebuildFilteredPupils();
 
-    _isRunning.value = false;
+    locator<SnackBarManager>().isRunningValue(false);
   }
 
   sortPupilsByName(List<Pupil> pupils) {
@@ -296,8 +297,19 @@ class PupilManager {
     if (response.statusCode != 200) {
       debug.warning('Something went wrong with the multipart request');
     }
+
     // Success! We have a pupil response - let's patch the pupil with the data
+
     final Map<String, dynamic> pupilResponse = response.data;
+    final cacheManager = DefaultCacheManager();
+    final cacheKey = pupil.internalId;
+
+    final fileInfo = await cacheManager.getFileFromCache(cacheKey.toString());
+    if (fileInfo != null && await fileInfo.file.exists()) {
+      await fileInfo.file.delete();
+      // File is already cached, use it directly
+      //cacheManager.emptyCache();
+    }
     await patchPupilFromResponse(pupilResponse);
   }
 
@@ -323,6 +335,40 @@ class PupilManager {
   }
 
   Future<void> patchPupil(int pupilId, String jsonKey, var value) async {
+    locator<SnackBarManager>().isRunningValue(true);
+    //- if the value is relevant to siblings, check for siblings first and handle it if true
+
+    if (jsonKey == 'communication_tutor1' ||
+        jsonKey == 'communication_tutor2' ||
+        jsonKey == 'parents_contact') {
+      final Pupil pupil = findPupilById(pupilId);
+      if (pupil.family != null) {
+        // create list with ids of all pupils with the same family value
+        final List<int> pupilIdsWithSameFamily = _pupils.value
+            .where((p) => p.family == pupil.family)
+            .map((p) => p.internalId)
+            .toList();
+
+        final siblingsPatchData =
+            jsonEncode({jsonKey: value, 'pupils': pupilIdsWithSameFamily});
+        final Response siblingsResponse = await client
+            .patch(EndpointsPupil.patchSiblings, data: siblingsPatchData);
+        if (siblingsResponse.statusCode != 200) {
+          locator<SnackBarManager>().showSnackBar(
+              SnackBarType.warning, 'Fehler beim Patchen der Geschwister!');
+          locator<SnackBarManager>().isRunningValue(false);
+          return;
+        }
+        // let's update the siblings
+        final List<Pupil> responsePupils = (siblingsResponse.data as List)
+            .map((e) => Pupil.fromJson(e))
+            .toList();
+        locator<PupilManager>().updateListOfPupilsInRepository(responsePupils);
+        locator<SnackBarManager>().showSnackBar(
+            SnackBarType.success, 'Geschwister erfolgreich gepatcht!');
+        locator<SnackBarManager>().isRunningValue(false);
+      }
+    }
     // prepare the data for the request
     final data = jsonEncode({jsonKey: value});
     final Response response =
@@ -331,11 +377,16 @@ class PupilManager {
     final Map<String, dynamic> pupilResponse = response.data;
     // handle errors
     if (response.statusCode != 200) {
-      _operationReport.value = Report('warning', response.data);
+      locator<SnackBarManager>().showSnackBar(
+          SnackBarType.warning, 'Fehler beim Patchen des Schülers!');
+      locator<SnackBarManager>().isRunningValue(false);
       return;
     }
     // let's patch the pupil with the response
     await patchPupilFromResponse(pupilResponse);
+    locator<SnackBarManager>()
+        .showSnackBar(SnackBarType.success, 'Schüler erfolgreich gepatcht!');
+    locator<SnackBarManager>().isRunningValue(false);
     return;
   }
 }

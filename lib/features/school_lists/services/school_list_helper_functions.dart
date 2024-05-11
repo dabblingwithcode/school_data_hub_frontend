@@ -14,7 +14,7 @@ String listOwner(String listId) {
 String listOwners(SchoolList schoolList) {
   String owners = '';
   if (schoolList.visibility == 'public') {
-    return 'Hermannschule';
+    return 'HER';
   }
   if (schoolList.visibility == 'private') {
     return '';

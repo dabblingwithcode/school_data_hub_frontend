@@ -1,17 +1,23 @@
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/search_textfield_manager.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
+import 'package:schuldaten_hub/common/utils/secure_storage.dart';
 import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
 import 'package:schuldaten_hub/features/admonitions/services/admonition_manager.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
+import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filters_manager.dart';
 import 'package:schuldaten_hub/features/competence/services/competence_filter_manager.dart';
 import 'package:schuldaten_hub/features/competence/services/competence_manager.dart';
 import 'package:schuldaten_hub/api/services/connection_manager.dart';
+import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
 import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
 import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
+import 'package:schuldaten_hub/features/school_lists/services/school_list_filter_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
@@ -57,6 +63,7 @@ void registerBaseManagers() {
     debug.info('PupilBaseManager initialized');
     return pupilBaseManager;
   });
+  locator.registerSingleton<SnackBarManager>(SnackBarManager());
   locator.registerSingleton<BottomNavManager>(BottomNavManager());
   locator.registerSingleton<SearchManager>(SearchManager());
 }
@@ -98,7 +105,10 @@ Future registerDependentManagers(String token) async {
     debug.info('SchoolListManager initialized');
     return schoolListManager;
   }, dependsOn: [SessionManager, ApiManager]);
-
+  locator.registerSingletonWithDependencies<SchoolListFilterManager>(
+    () => SchoolListFilterManager(),
+    dependsOn: [SchoolListManager],
+  );
   locator.registerSingletonAsync<CompetenceManager>(() async {
     debug.info('Registering CompetenceManager');
     final competenceManager = CompetenceManager();
@@ -146,6 +156,27 @@ Future registerDependentManagers(String token) async {
     () => AdmonitionFilterManager(),
     dependsOn: [PupilManager, PupilFilterManager],
   );
+  if (await secureStorageContains('matrix')) {
+    await registerMatrixPolicyManager();
+  }
+}
+
+Future<bool> registerMatrixPolicyManager() async {
+  locator.registerSingletonAsync<MatrixPolicyManager>(() async {
+    debug.info('Registering MatrixPolicyManager');
+    final policyManager = MatrixPolicyManager();
+    await policyManager.init();
+    debug.info('MatrixPolicyManager initialized');
+    locator<SnackBarManager>().showSnackBar(
+        SnackBarType.success, 'Matrix-Räumeverwaltung initialisiert');
+    return policyManager;
+  }, dependsOn: [SessionManager, PupilManager, PupilFilterManager]);
+
+  locator.registerSingletonWithDependencies<MatrixPolicyFilterManager>(
+    () => MatrixPolicyFilterManager(),
+    dependsOn: [MatrixPolicyManager],
+  );
+  return true;
 }
 
 Future unregisterDependentManagers() async {
@@ -158,8 +189,14 @@ Future unregisterDependentManagers() async {
   locator.unregister<CompetenceFilterManager>();
   locator.unregister<CompetenceManager>();
   locator.unregister<SchoolListManager>();
+  locator.unregister<SchoolListFilterManager>();
   locator.unregister<AuthorizationManager>();
   locator.unregister<AttendanceManager>();
   locator.unregister<AdmonitionManager>();
   locator.unregister<AdmonitionFilterManager>();
+
+  if (locator.isRegistered<MatrixPolicyManager>()) {
+    locator.unregister<MatrixPolicyManager>();
+    locator.unregister<MatrixPolicyFilterManager>();
+  }
 }

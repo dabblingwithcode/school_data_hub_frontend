@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_badges.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
 List<Widget> pupilAttendanceContentList(Pupil pupil, context) {
   List<MissedClass> missedClasses = List.from(pupil.pupilMissedClasses!);
@@ -41,9 +42,9 @@ List<Widget> pupilAttendanceContentList(Pupil pupil, context) {
                 if (confirm != true) return;
                 await locator<AttendanceManager>().deleteMissedClass(
                     pupil.internalId, missedClasses[index].missedDay);
-                if (context.mounted) {
-                  snackbarSuccess(context, 'Fehlzeit gelöscht!');
-                }
+
+                locator<SnackBarManager>()
+                    .showSnackBar(SnackBarType.success, 'Fehlzeit gelöscht!');
               },
               child: Column(
                 children: [

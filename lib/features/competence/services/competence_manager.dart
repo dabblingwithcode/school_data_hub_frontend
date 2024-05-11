@@ -5,6 +5,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
 import 'package:schuldaten_hub/api/endpoints.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/competence/models/competence.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
@@ -18,6 +20,7 @@ class CompetenceManager {
   final _competences = ValueNotifier<List<Competence>>([]);
   final _isRunning = ValueNotifier<bool>(false);
   final client = locator.get<ApiManager>().dioClient.value;
+  final snackBarManager = locator<SnackBarManager>();
   CompetenceManager() {
     debug.warning('CompetenceManager initialized');
   }
@@ -27,7 +30,7 @@ class CompetenceManager {
   }
 
   Future firstFetchCompetences() async {
-    _isRunning.value = true;
+    snackBarManager.isRunningValue(true);
     try {
       final response = await client.get(EndpointsCompetence().fetchCompetences);
       final competences =
@@ -36,18 +39,20 @@ class CompetenceManager {
           'Fetched ${competences.length} competences! | ${StackTrace.current}');
       _competences.value = competences;
     } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e);
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
-
+      snackBarManager.isRunningValue(false);
       rethrow;
     }
-    _isRunning.value = false;
+    snackBarManager.showSnackBar(SnackBarType.success, 'Kompetenzen geladen');
+    snackBarManager.isRunningValue(false);
     return;
   }
 
   Future fetchCompetences() async {
-    _isRunning.value = true;
+    snackBarManager.isRunningValue(true);
     try {
       final response = await client.get(EndpointsCompetence().fetchCompetences);
       final competences =
@@ -58,19 +63,21 @@ class CompetenceManager {
       locator<CompetenceFilterManager>()
           .refreshFilteredCompetences(competences);
     } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e);
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
-
+      snackBarManager.isRunningValue(false);
       rethrow;
     }
-    _isRunning.value = false;
+    snackBarManager.showSnackBar(SnackBarType.success, 'Kompetenzen geladen');
+    snackBarManager.isRunningValue(false);
     return;
   }
 
   Future postNewCompetence(int? parentCompetence, String competenceName,
       String? competenceLevel, String? indicators) async {
-    _isRunning.value = true;
+    snackBarManager.isRunningValue(true);
     final data = jsonEncode({
       "parent_competence": parentCompetence,
       "competence_name": competenceName,
@@ -87,28 +94,32 @@ class CompetenceManager {
       _competences.value = [..._competences.value, ...newCompetences];
       locator<CompetenceFilterManager>()
           .refreshFilteredCompetences(_competences.value);
+      snackBarManager.showSnackBar(SnackBarType.success, 'Kompetenz erstellt');
+      snackBarManager.isRunningValue(false);
+      return;
     } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e);
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
+      snackBarManager.isRunningValue(false);
       rethrow;
     }
-    _isRunning.value = false;
-    return;
   }
 
   Future patchCompetence(int competenceId, String competenceName,
       String? competenceLevel, String? indicators) async {
-    _isRunning.value = true;
+    snackBarManager.isRunningValue(true);
     final data = jsonEncode({
       "competence_name": competenceName,
       "competence_level": competenceLevel,
       "indicators": indicators
     });
     try {
-      final response = await client.patch(
+      final Response response = await client.patch(
           EndpointsCompetence().patchCompetence(competenceId),
           data: data);
+
       final patchedCompetence = Competence.fromJson(response.data);
       final List<Competence> competences = List.from(_competences.value);
       final index = competences
@@ -118,13 +129,14 @@ class CompetenceManager {
       locator<CompetenceFilterManager>()
           .refreshFilteredCompetences(_competences.value);
     } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e);
+      final errorMessage = DioExceptions.fromDioError(e).message;
+      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
-
+      snackBarManager.isRunningValue(false);
       rethrow;
     }
-    _isRunning.value = false;
+    snackBarManager.isRunningValue(false);
     return;
   }
 

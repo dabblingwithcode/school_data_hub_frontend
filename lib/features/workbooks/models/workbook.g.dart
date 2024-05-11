@@ -12,6 +12,7 @@ _$WorkbookImpl _$$WorkbookImplFromJson(Map<String, dynamic> json) =>
       name: json['name'] as String?,
       subject: json['subject'] as String?,
       level: json['level'] as String?,
+      amount: json['amount'] as int,
       imageUrl: json['image_url'] as String?,
     );
 
@@ -21,5 +22,6 @@ Map<String, dynamic> _$$WorkbookImplToJson(_$WorkbookImpl instance) =>
       'name': instance.name,
       'subject': instance.subject,
       'level': instance.level,
+      'amount': instance.amount,
       'image_url': instance.imageUrl,
     };

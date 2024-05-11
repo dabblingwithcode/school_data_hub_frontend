@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:watch_it/watch_it.dart';
 
 import 'package:schuldaten_hub/common/constants/colors.dart';
@@ -93,6 +94,7 @@ class WorkbookListView extends WatchingWidget {
                           children: [
                             Expanded(
                               child: searchTextField(
+                                  SearchType.workbook,
                                   'Arbeitsheft suchen',
                                   controller,
                                   locator<WorkbookManager>().getWorkbooks),

@@ -48,13 +48,14 @@ class WorkbookManager {
   }
 
   Future postWorkbook(
-      String name, int isbn, String subject, String level) async {
+      String name, int isbn, String subject, String level, int amount) async {
     final data = jsonEncode({
       "name": name,
       "isbn": isbn,
       "subject": subject,
       "level": level,
-      "image_url": null
+      "image_url": null,
+      "amount": amount
     });
     final Response response = await client.post(
       EndpointsWorkbook.postWorkbook,

@@ -90,6 +90,6 @@ class PupilProfileController extends State<PupilProfile> {
         statusBarColor: backgroundColor,
       ),
     );
-    return PupilDetailsView(this);
+    return PupilProfileView(this);
   }
 }

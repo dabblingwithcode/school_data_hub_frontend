@@ -29,12 +29,14 @@ Widget pupilProfileHeadWidget(
                 position: position,
                 items: [
                   PopupMenuItem(
-                    child: const Text('Foto ersetzen'),
+                    child: pupil.avatarUrl == null
+                        ? const Text('Foto hochladen')
+                        : const Text('Foto ersetzen'),
                     onTap: () => setAvatar(context, pupil),
                   ),
                   if (pupil.avatarUrl != null)
                     PopupMenuItem(
-                      child: const Text('Bild löschen'),
+                      child: const Text('Foto löschen'),
                       onTap: () async {
                         await controller.deleteAvatar();
                       },

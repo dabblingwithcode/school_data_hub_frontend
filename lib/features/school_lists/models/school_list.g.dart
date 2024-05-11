@@ -12,6 +12,7 @@ _$SchoolListImpl _$$SchoolListImplFromJson(Map<String, dynamic> json) =>
       listDescription: json['list_description'] as String,
       listId: json['list_id'] as String,
       listName: json['list_name'] as String,
+      authorizedUsers: json['authorized_users'] as String?,
       visibility: json['visibility'] as String,
     );
 
@@ -21,5 +22,6 @@ Map<String, dynamic> _$$SchoolListImplToJson(_$SchoolListImpl instance) =>
       'list_description': instance.listDescription,
       'list_id': instance.listId,
       'list_name': instance.listName,
+      'authorized_users': instance.authorizedUsers,
       'visibility': instance.visibility,
     };

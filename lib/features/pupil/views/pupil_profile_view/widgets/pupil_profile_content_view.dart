@@ -33,8 +33,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
   return SingleChildScrollView(
     child: Column(
       children: <Widget>[
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            0) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 0)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -65,10 +64,8 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
                 ...pupilInfosContentList(pupil, context)
               ]),
             ),
-          )
-        ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            1) ...<Widget>[
+          ),
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 1)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -102,7 +99,6 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
                   ]),
             ),
           ),
-        ],
         if (locator<BottomNavManager>().pupilProfileNavState.value ==
             2) ...<Widget>[
           Card(
@@ -149,8 +145,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
             ),
           ),
         ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            3) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 3)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -187,9 +182,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            4) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 4)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -224,7 +217,6 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
         if (locator<BottomNavManager>().pupilProfileNavState.value ==
             5) ...<Widget>[
           Card(
@@ -262,8 +254,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
             ),
           ),
         ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            6) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 6)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -298,9 +289,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            7) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 7)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -335,9 +324,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            8) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 8)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -386,9 +373,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            9) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 9)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -418,7 +403,6 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
         const Gap(20),
       ],
     ),

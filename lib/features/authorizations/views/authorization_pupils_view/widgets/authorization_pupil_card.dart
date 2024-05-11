@@ -4,23 +4,21 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/api/endpoints.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/document_image.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/common/widgets/upload_image.dart';
-
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
-import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
-
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
-
 import 'package:watch_it/watch_it.dart';
 
 class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
@@ -174,10 +172,9 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                         await locator<AuthorizationManager>()
                             .postAuthorizationFile(
                                 file, pupil.internalId, authorizationId);
-                        if (context.mounted) {
-                          snackbarSuccess(
-                              context, 'Die Einwilligung wurde geändert!');
-                        }
+                        locator<SnackBarManager>().showSnackBar(
+                            SnackBarType.success,
+                            'Die Einwilligung wurde geändert!');
                       },
                       onLongPress: (pupilAuthorization.fileUrl == null)
                           ? () {}
@@ -194,10 +191,9 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                                 authorizationId,
                                 pupilAuthorization.fileUrl!,
                               );
-                              if (context.mounted) {
-                                snackbarSuccess(context,
-                                    'Die Einwilligung wurde geändert!');
-                              }
+                              locator<SnackBarManager>().showSnackBar(
+                                  SnackBarType.success,
+                                  'Die Einwilligung wurde geändert!');
                             },
                       child: pupilAuthorization.fileUrl != null
                           ? documentImage(

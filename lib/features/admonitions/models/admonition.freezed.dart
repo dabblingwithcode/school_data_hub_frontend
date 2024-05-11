@@ -36,6 +36,8 @@ mixin _$Admonition {
   DateTime? get processedAt => throw _privateConstructorUsedError;
   @JsonKey(name: 'file_url')
   String? get fileUrl => throw _privateConstructorUsedError;
+  @JsonKey(name: 'processed_file_url')
+  String? get processedFileUrl => throw _privateConstructorUsedError;
   @JsonKey(name: 'admonished_day')
   DateTime get admonishedDay => throw _privateConstructorUsedError;
   @JsonKey(name: 'admonished_pupil_id')
@@ -62,6 +64,7 @@ abstract class $AdmonitionCopyWith<$Res> {
       @JsonKey(name: 'processed_by') String? processedBy,
       @JsonKey(name: 'processed_at') DateTime? processedAt,
       @JsonKey(name: 'file_url') String? fileUrl,
+      @JsonKey(name: 'processed_file_url') String? processedFileUrl,
       @JsonKey(name: 'admonished_day') DateTime admonishedDay,
       @JsonKey(name: 'admonished_pupil_id') int admonishedPupilId});
 }
@@ -87,6 +90,7 @@ class _$AdmonitionCopyWithImpl<$Res, $Val extends Admonition>
     Object? processedBy = freezed,
     Object? processedAt = freezed,
     Object? fileUrl = freezed,
+    Object? processedFileUrl = freezed,
     Object? admonishedDay = null,
     Object? admonishedPupilId = null,
   }) {
@@ -123,6 +127,10 @@ class _$AdmonitionCopyWithImpl<$Res, $Val extends Admonition>
           ? _value.fileUrl
           : fileUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      processedFileUrl: freezed == processedFileUrl
+          ? _value.processedFileUrl
+          : processedFileUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       admonishedDay: null == admonishedDay
           ? _value.admonishedDay
           : admonishedDay // ignore: cast_nullable_to_non_nullable
@@ -152,6 +160,7 @@ abstract class _$$AdmonitionImplCopyWith<$Res>
       @JsonKey(name: 'processed_by') String? processedBy,
       @JsonKey(name: 'processed_at') DateTime? processedAt,
       @JsonKey(name: 'file_url') String? fileUrl,
+      @JsonKey(name: 'processed_file_url') String? processedFileUrl,
       @JsonKey(name: 'admonished_day') DateTime admonishedDay,
       @JsonKey(name: 'admonished_pupil_id') int admonishedPupilId});
 }
@@ -175,6 +184,7 @@ class __$$AdmonitionImplCopyWithImpl<$Res>
     Object? processedBy = freezed,
     Object? processedAt = freezed,
     Object? fileUrl = freezed,
+    Object? processedFileUrl = freezed,
     Object? admonishedDay = null,
     Object? admonishedPupilId = null,
   }) {
@@ -211,6 +221,10 @@ class __$$AdmonitionImplCopyWithImpl<$Res>
           ? _value.fileUrl
           : fileUrl // ignore: cast_nullable_to_non_nullable
               as String?,
+      processedFileUrl: freezed == processedFileUrl
+          ? _value.processedFileUrl
+          : processedFileUrl // ignore: cast_nullable_to_non_nullable
+              as String?,
       admonishedDay: null == admonishedDay
           ? _value.admonishedDay
           : admonishedDay // ignore: cast_nullable_to_non_nullable
@@ -235,6 +249,7 @@ class _$AdmonitionImpl implements _Admonition {
       @JsonKey(name: 'processed_by') this.processedBy,
       @JsonKey(name: 'processed_at') this.processedAt,
       @JsonKey(name: 'file_url') this.fileUrl,
+      @JsonKey(name: 'processed_file_url') this.processedFileUrl,
       @JsonKey(name: 'admonished_day') required this.admonishedDay,
       @JsonKey(name: 'admonished_pupil_id') required this.admonishedPupilId});
 
@@ -266,6 +281,9 @@ class _$AdmonitionImpl implements _Admonition {
   @JsonKey(name: 'file_url')
   final String? fileUrl;
   @override
+  @JsonKey(name: 'processed_file_url')
+  final String? processedFileUrl;
+  @override
   @JsonKey(name: 'admonished_day')
   final DateTime admonishedDay;
   @override
@@ -274,7 +292,7 @@ class _$AdmonitionImpl implements _Admonition {
 
   @override
   String toString() {
-    return 'Admonition(admonitionId: $admonitionId, admonitionType: $admonitionType, admonitionReason: $admonitionReason, admonishingUser: $admonishingUser, processed: $processed, processedBy: $processedBy, processedAt: $processedAt, fileUrl: $fileUrl, admonishedDay: $admonishedDay, admonishedPupilId: $admonishedPupilId)';
+    return 'Admonition(admonitionId: $admonitionId, admonitionType: $admonitionType, admonitionReason: $admonitionReason, admonishingUser: $admonishingUser, processed: $processed, processedBy: $processedBy, processedAt: $processedAt, fileUrl: $fileUrl, processedFileUrl: $processedFileUrl, admonishedDay: $admonishedDay, admonishedPupilId: $admonishedPupilId)';
   }
 
   @override
@@ -297,6 +315,8 @@ class _$AdmonitionImpl implements _Admonition {
             (identical(other.processedAt, processedAt) ||
                 other.processedAt == processedAt) &&
             (identical(other.fileUrl, fileUrl) || other.fileUrl == fileUrl) &&
+            (identical(other.processedFileUrl, processedFileUrl) ||
+                other.processedFileUrl == processedFileUrl) &&
             (identical(other.admonishedDay, admonishedDay) ||
                 other.admonishedDay == admonishedDay) &&
             (identical(other.admonishedPupilId, admonishedPupilId) ||
@@ -315,6 +335,7 @@ class _$AdmonitionImpl implements _Admonition {
       processedBy,
       processedAt,
       fileUrl,
+      processedFileUrl,
       admonishedDay,
       admonishedPupilId);
 
@@ -343,6 +364,7 @@ abstract class _Admonition implements Admonition {
       @JsonKey(name: 'processed_by') final String? processedBy,
       @JsonKey(name: 'processed_at') final DateTime? processedAt,
       @JsonKey(name: 'file_url') final String? fileUrl,
+      @JsonKey(name: 'processed_file_url') final String? processedFileUrl,
       @JsonKey(name: 'admonished_day') required final DateTime admonishedDay,
       @JsonKey(name: 'admonished_pupil_id')
       required final int admonishedPupilId}) = _$AdmonitionImpl;
@@ -374,6 +396,9 @@ abstract class _Admonition implements Admonition {
   @override
   @JsonKey(name: 'file_url')
   String? get fileUrl;
+  @override
+  @JsonKey(name: 'processed_file_url')
+  String? get processedFileUrl;
   @override
   @JsonKey(name: 'admonished_day')
   DateTime get admonishedDay;

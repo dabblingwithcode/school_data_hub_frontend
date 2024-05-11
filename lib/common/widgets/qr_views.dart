@@ -9,7 +9,9 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 
 showQrCarousel(
     Map<String, String> qrMap, bool autoPlay, BuildContext context) async {
@@ -149,11 +151,10 @@ void saveQrCode(String qr, BuildContext context, GlobalKey qrKey) async {
   }
   ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
   Uint8List pngBytes = byteData!.buffer.asUint8List();
-  File imgFile = File(filePath);
+  File imgFile = File(Platform.isWindows ? '$filePath.png' : filePath);
   await imgFile.writeAsBytes(pngBytes);
 
   // Show a success message
-  if (context.mounted) {
-    snackbarSuccess(context, 'QR-Code gespeichert');
-  }
+  locator<SnackBarManager>()
+      .showSnackBar(SnackBarType.success, ' QR-Code gespeichert');
 }

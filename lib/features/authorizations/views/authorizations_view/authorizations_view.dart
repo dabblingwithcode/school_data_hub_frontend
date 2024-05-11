@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
@@ -91,6 +92,7 @@ class AuthorizationsView extends WatchingWidget {
                           children: [
                             Expanded(
                               child: searchTextField(
+                                  SearchType.authorization,
                                   'Liste suchen',
                                   controller,
                                   locator<AuthorizationManager>()

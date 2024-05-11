@@ -7,13 +7,11 @@ import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
 import 'package:schuldaten_hub/common/widgets/list_tile.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/controller/learning_support_list_controller.dart';
+import 'package:schuldaten_hub/features/learning_support/widgets/dialogs/individual_development_plan_dialog.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_goal_list.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_goals_batches.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
-import 'package:schuldaten_hub/features/learning_support/widgets/dialogs/individual_development_plan_dialog.dart';
 import 'package:watch_it/watch_it.dart';
 
 class LearningSupportCard extends WatchingStatefulWidget {
@@ -30,9 +28,7 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
       CustomExpansionTileController();
   @override
   Widget build(BuildContext context) {
-    Pupil pupil = watchValue((PupilFilterManager x) => x.filteredPupils)
-        .where((element) => element.internalId == widget.passedPupil.internalId)
-        .first;
+    Pupil pupil = widget.passedPupil;
 
     return Card(
       color: Colors.white,
@@ -102,7 +98,7 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
                       ],
                     ),
                     const Gap(15),
-                    if (pupil.pupilGoals!.isNotEmpty)
+                    if (pupil.pupilCategoryStatuses!.isNotEmpty)
                       InkWell(
                         onTap: () {
                           _tileController.isExpanded
@@ -112,7 +108,7 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
                         child: Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            ...learningSupportGoalsBatches(pupil),
+                            ...learningSupportCategoryStatusBatches(pupil),
                           ],
                         ),
                       ),

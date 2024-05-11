@@ -1,5 +1,6 @@
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
+import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
 
 int missedclassSum(Pupil pupil) {
   // count the number of missed classes - avoid null when missedClasses is empty
@@ -59,4 +60,82 @@ bool schooldayIsToday(DateTime schoolday) {
     return true;
   }
   return false;
+}
+
+int? findMissedClassIndex(Pupil pupil, DateTime date) {
+  final int? foundMissedClassIndex = pupil.pupilMissedClasses
+      ?.indexWhere((datematch) => (datematch.missedDay.isSameDate(date)));
+  if (foundMissedClassIndex == null) {
+    return null;
+  }
+  return foundMissedClassIndex;
+}
+
+//-VALUES
+setMissedTypeValue(int pupilId, DateTime date) {
+  final Pupil pupil = findPupilById(pupilId);
+  final int? missedClass = findMissedClassIndex(pupil, date);
+  if (missedClass == -1 || missedClass == null) {
+    return 'none';
+  }
+  final dropdownvalue = pupil.pupilMissedClasses![missedClass].missedType;
+  return dropdownvalue;
+}
+
+String setContactedValue(int pupilId, DateTime date) {
+  final Pupil pupil = findPupilById(pupilId);
+  final int? missedClass = findMissedClassIndex(pupil, date);
+  if (missedClass == -1) {
+    return '0';
+  } else {
+    final contactedIndex = pupil.pupilMissedClasses![missedClass!].contacted;
+
+    return contactedIndex!;
+  }
+}
+
+String? setCreatedModifiedValue(int pupilId, DateTime date) {
+  final Pupil pupil = findPupilById(pupilId);
+  final int? missedClass = findMissedClassIndex(pupil, date);
+  if (missedClass == -1 || missedClass == null) {
+    return null;
+  }
+  final String createdBy = pupil.pupilMissedClasses![missedClass].createdBy;
+  final String? modifiedBy = pupil.pupilMissedClasses![missedClass].modifiedBy;
+
+  if (modifiedBy != null) {
+    return modifiedBy;
+  }
+  return createdBy;
+}
+
+bool setExcusedValue(int pupilId, DateTime date) {
+  final Pupil pupil = findPupilById(pupilId);
+  final int? missedClass = findMissedClassIndex(pupil, date);
+  if (missedClass == -1) {
+    return false;
+  }
+  final excusedValue = pupil.pupilMissedClasses![missedClass!].excused;
+  return excusedValue!;
+}
+
+bool? setReturnedValue(int pupilId, DateTime date) {
+  final Pupil pupil = findPupilById(pupilId);
+  final int? missedClass = findMissedClassIndex(pupil, date);
+
+  if (missedClass == -1) {
+    return false;
+  }
+  final returnedindex = pupil.pupilMissedClasses![missedClass!].returned;
+  return returnedindex;
+}
+
+String? setReturnedTime(int pupilId, DateTime date) {
+  final Pupil pupil = findPupilById(pupilId);
+  final int? missedClass = findMissedClassIndex(pupil, date);
+  if (missedClass == -1) {
+    return null;
+  }
+  final returnedTime = pupil.pupilMissedClasses![missedClass!].returnedAt;
+  return returnedTime;
 }

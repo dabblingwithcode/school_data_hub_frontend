@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/learning_support/models/goal/pupil_goal.dart';
+import 'package:schuldaten_hub/features/learning_support/models/category/pupil_category_status.dart';
 import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
-List<Widget> learningSupportGoalsBatches(Pupil pupil) {
+List<Widget> learningSupportCategoryStatusBatches(Pupil pupil) {
   List<Widget> widgetList = [];
-  List<PupilGoal> pupilGoals = pupil.pupilGoals!;
+  List<PupilCategoryStatus> pupilGoals = pupil.pupilCategoryStatuses!;
 
   Map<int, int> categoryCounts = {};
 

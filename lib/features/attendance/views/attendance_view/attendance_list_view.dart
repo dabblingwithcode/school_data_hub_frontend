@@ -46,7 +46,10 @@ class AttendanceListView extends WatchingWidget {
               const Gap(10),
               Text(
                 controller.thisDateAsString(context, thisDate),
-                style: const TextStyle(fontSize: 25, color: Colors.white),
+                style: const TextStyle(
+                    fontSize: 25,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
               ),
             ],
           ),

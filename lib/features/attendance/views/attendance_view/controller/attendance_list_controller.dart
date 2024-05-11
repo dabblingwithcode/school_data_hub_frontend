@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
@@ -10,9 +10,6 @@ import 'package:schuldaten_hub/common/widgets/date_picker.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/attendance_list_view.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceList extends WatchingStatefulWidget {
@@ -81,32 +78,6 @@ class AttendanceListController extends State<AttendanceList> {
     }
 
     return unexcusedPupils.length;
-  }
-
-  void cancelSearch({bool unfocus = true}) {
-    if (locator<PupilFilterManager>().filterState.value ==
-        initialFilterValues) {
-      locator<PupilFilterManager>().filtersOnSwitch(false);
-      locator<PupilFilterManager>().refreshFilteredPupils();
-    }
-    setState(() {
-      searchController.clear();
-      isSearchMode = false;
-      isSearching = false;
-    });
-    locator<PupilFilterManager>().setSearchText('');
-    if (unfocus) FocusManager.instance.primaryFocus?.unfocus();
-  }
-
-  void onSearchEnter(String text) {
-    locator<PupilFilterManager>().filtersOnSwitch(true);
-    if (text.isEmpty) {
-      cancelSearch(unfocus: false);
-      return;
-    }
-    isSearchMode = true;
-
-    locator<PupilFilterManager>().setSearchText(text);
   }
 
   @override

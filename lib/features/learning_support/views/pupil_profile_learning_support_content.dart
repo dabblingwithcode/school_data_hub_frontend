@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/features/learning_support/views/new_category_item_view/controller/new_category_item_controller.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_goal_list.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/pupil_category_widgets/category_statuses_list.dart';
@@ -89,12 +90,7 @@ List<Widget> pupilLearningSupportContentList(
     Padding(
       padding: const EdgeInsets.all(10.0),
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            backgroundColor: accentColor,
-            minimumSize: const Size.fromHeight(50)),
+        style: actionButtonStyle,
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(
               builder: (ctx) => NewCategoryItem(
@@ -106,7 +102,7 @@ List<Widget> pupilLearningSupportContentList(
         },
         child: const Text(
           "NEUER FÖRDERBEREICH",
-          style: TextStyle(fontSize: 17.0),
+          style: buttonTextStyle,
         ),
       ),
     ),

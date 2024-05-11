@@ -18,7 +18,8 @@ class AdmonitionFilterManager {
       ValueNotifier<Map<AdmonitionFilter, bool>>(initialAdmonitionFilterValues);
   final _admonitionsFiltersOn = ValueNotifier<bool>(false);
   final _filteredAdmonitionsCount = ValueNotifier<int>(
-      getAdmonitionCount(locator<PupilFilterManager>().filteredPupils.value));
+      SchoolEventHelper.getAdmonitionCount(
+          locator<PupilFilterManager>().filteredPupils.value));
   AdmonitionFilterManager() {
     debug.info('AdmonitionFilterManager says hello!');
   }
@@ -125,10 +126,12 @@ class AdmonitionFilterManager {
 
         filteredAdmonitions.add(admonition);
       }
+
+      // sort admonitions, latest first
+      filteredAdmonitions
+          .sort((a, b) => b.admonishedDay.compareTo(a.admonishedDay));
+      return filteredAdmonitions;
     }
-    // sort admonitions, latest first
-    filteredAdmonitions
-        .sort((a, b) => b.admonishedDay.compareTo(a.admonishedDay));
-    return filteredAdmonitions;
+    return [];
   }
 }

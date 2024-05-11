@@ -48,27 +48,7 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  const Text(
-                    'Filter',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 25,
-                    ),
-                  ),
-                  const Spacer(),
-                  IconButton.filled(
-                      iconSize: 35,
-                      color: Colors.amber,
-                      onPressed: () {
-                        locator<PupilFilterManager>().resetFilters();
-
-                        //Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.restart_alt_rounded)),
-                ],
-              ),
+              filterHeading(),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(children: [
@@ -87,6 +67,9 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         FilterChip(
+                          padding: filterChipPadding,
+                          labelPadding: filterChipLabelPadding,
+                          shape: filterChipShape,
                           selectedColor: filterChipSelectedColor,
                           checkmarkColor: filterChipSelectedCheckColor,
                           backgroundColor: filterChipUnselectedColor,
@@ -107,6 +90,9 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                           },
                         ),
                         FilterChip(
+                          padding: filterChipPadding,
+                          labelPadding: filterChipLabelPadding,
+                          shape: filterChipShape,
                           selectedColor: filterChipSelectedColor,
                           checkmarkColor: filterChipSelectedCheckColor,
                           backgroundColor: filterChipUnselectedColor,
@@ -124,6 +110,9 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                           },
                         ),
                         FilterChip(
+                          padding: filterChipPadding,
+                          labelPadding: filterChipLabelPadding,
+                          shape: filterChipShape,
                           selectedColor: filterChipSelectedColor,
                           checkmarkColor: filterChipSelectedCheckColor,
                           backgroundColor: filterChipUnselectedColor,
@@ -139,6 +128,9 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                           },
                         ),
                         FilterChip(
+                          padding: filterChipPadding,
+                          labelPadding: filterChipLabelPadding,
+                          shape: filterChipShape,
                           selectedColor: filterChipSelectedColor,
                           checkmarkColor: filterChipSelectedCheckColor,
                           backgroundColor: filterChipUnselectedColor,
@@ -160,6 +152,9 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                           },
                         ),
                         FilterChip(
+                          padding: filterChipPadding,
+                          labelPadding: filterChipLabelPadding,
+                          shape: filterChipShape,
                           selectedColor: filterChipSelectedColor,
                           checkmarkColor: filterChipSelectedCheckColor,
                           backgroundColor: filterChipUnselectedColor,
@@ -197,6 +192,9 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                       crossAxisAlignment: WrapCrossAlignment.center,
                       children: [
                         FilterChip(
+                          padding: filterChipPadding,
+                          labelPadding: filterChipLabelPadding,
+                          shape: filterChipShape,
                           selectedColor: filterChipSelectedColor,
                           checkmarkColor: filterChipSelectedCheckColor,
                           backgroundColor: filterChipUnselectedColor,
@@ -214,6 +212,9 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                           },
                         ),
                         FilterChip(
+                          padding: filterChipPadding,
+                          labelPadding: filterChipLabelPadding,
+                          shape: filterChipShape,
                           selectedColor: filterChipSelectedColor,
                           checkmarkColor: filterChipSelectedCheckColor,
                           backgroundColor: filterChipUnselectedColor,
@@ -231,6 +232,9 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                           },
                         ),
                         FilterChip(
+                          padding: filterChipPadding,
+                          labelPadding: filterChipLabelPadding,
+                          shape: filterChipShape,
                           selectedColor: filterChipSelectedColor,
                           checkmarkColor: filterChipSelectedCheckColor,
                           backgroundColor: filterChipUnselectedColor,

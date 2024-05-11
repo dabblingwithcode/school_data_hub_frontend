@@ -16,6 +16,7 @@ class Admonition with _$Admonition {
     @JsonKey(name: 'processed_by') String? processedBy,
     @JsonKey(name: 'processed_at') DateTime? processedAt,
     @JsonKey(name: 'file_url') String? fileUrl,
+    @JsonKey(name: 'processed_file_url') String? processedFileUrl,
     @JsonKey(name: 'admonished_day') required DateTime admonishedDay,
     @JsonKey(name: 'admonished_pupil_id') required int admonishedPupilId,
   }) = _Admonition;

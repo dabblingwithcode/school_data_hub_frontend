@@ -7,30 +7,29 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/api/endpoints.dart';
-import 'package:schuldaten_hub/common/models/manager_report.dart';
+import 'package:schuldaten_hub/api/services/api_manager.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
-
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
+import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_base.dart';
-import 'package:schuldaten_hub/api/services/api_manager.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
-import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 
 class PupilBaseManager {
   ValueListenable<List<PupilBase>> get pupilbase => _pupilbase;
   ValueListenable<List<int>> get availablePupilIds => _availablePupilIds;
-  ValueListenable<Report> get operationReport => _operationReport;
+
   ValueListenable<bool> get isRunning => _isRunning;
 
   final _pupilbase = ValueNotifier<List<PupilBase>>([]);
   final _availablePupilIds = ValueNotifier<List<int>>([]);
-  final _operationReport = ValueNotifier<Report>(Report(null, null));
+
   final _isRunning = ValueNotifier<bool>(false);
   PupilBaseManager();
 
@@ -40,21 +39,21 @@ class PupilBaseManager {
   }
 
   Future deleteData() async {
-    _isRunning.value = true;
+    locator<SnackBarManager>().isRunningValue(true);
     await secureStorageDelete('pupilBase');
     _pupilbase.value = [];
     locator<PupilManager>().deletePupils();
     locator<PupilFilterManager>().deleteFilteredPupils();
     _availablePupilIds.value = [];
-    _isRunning.value = false;
+    locator<SnackBarManager>().isRunningValue(false);
   }
 
   Future getStoredPupilBase() async {
-    debug.warning('GETPUPILBASE Getting the stored pupilbase');
+    debug.warning('Getting the stored pupilbase');
     List<PupilBase> storedPupilBase = [];
     bool pupilBaseExists = await secureStorage.containsKey(key: 'pupilBase');
     if (pupilBaseExists == true) {
-      debug.warning('GETPUPILBASE There is a pupilbase');
+      debug.warning('There is a pupilbase');
       List<int> pupilIds = [];
       String? storedString = await secureStorageRead('pupilBase');
       storedPupilBase = (json.decode(storedString!) as List)
@@ -68,23 +67,22 @@ class PupilBaseManager {
       _availablePupilIds.value = pupilIds;
       //- This would be great place for SIGNAL READY!!!
       debug.info(
-          'GETPUPILBASE Pupilbase loaded - Length is ${_pupilbase.value.length} | ${StackTrace.current}');
+          'Pupilbase loaded - Length is ${_pupilbase.value.length} | ${StackTrace.current}');
       return;
     } else {
-      debug.info(
-          'GETPUPILBASE No pupilBase in storage! | ${StackTrace.current}');
+      debug.info('No pupilBase in storage! | ${StackTrace.current}');
       return;
     }
   }
 
   scanNewPupilBase(BuildContext context) async {
-    final String? scanResult = await scanner(context, 'Kinder-Code scannen');
+    final String? scanResult = await scanner(context, 'Scanning Pupilbase');
     if (scanResult != null) {
       addNewPupilBase(scanResult);
     } else {
-      if (context.mounted) {
-        snackbarWarning(context, 'Scanvorgang abgebrochen');
-      }
+      locator<SnackBarManager>()
+          .showSnackBar(SnackBarType.warning, 'Scan abgebrochen');
+      return;
     }
   }
 
@@ -95,9 +93,11 @@ class PupilBaseManager {
 
   void addNewPupilBase(String scanResult) async {
     String? decryptedResult;
+
     if (!Platform.isWindows) {
       decryptedResult = await customEncrypter.decrypt(scanResult);
     } else {
+      // If the string is imported in windows, it's not encrypted
       decryptedResult = scanResult;
     }
     List<PupilBase> oldPupilbase = _pupilbase.value;
@@ -133,7 +133,7 @@ class PupilBaseManager {
         ));
       }
     }
-    debug.info('base verarbeitet');
+    debug.info('Pupilbase processed');
     // Now we need to combine it with the stored pupilbase -
     // old elements not present in the new pupilbase are added
     List<PupilBase> newPupilBase = List<PupilBase>.from(scannedPupilBase);
@@ -308,13 +308,13 @@ class PupilBaseManager {
   }
 
   void deletePupilBaseElements(List<PupilBase> toBeDeletedPupilBase) {
-    _isRunning.value = true;
+    locator<SnackBarManager>().isRunningValue(true);
     List<PupilBase> modifiedPupilBaseList = List.from(_pupilbase.value);
     modifiedPupilBaseList.removeWhere((pupilBase) =>
         toBeDeletedPupilBase.any((element) => element.id == pupilBase.id));
     _pupilbase.value = modifiedPupilBaseList;
     secureStorageWrite('pupilBase', jsonEncode(_pupilbase.value));
-    _isRunning.value = false;
+    locator<SnackBarManager>().isRunningValue(false);
     debug.info(
         'Pupilbase reduced: deleted ${toBeDeletedPupilBase.length} pupils not present in the database, now ${_pupilbase.value.length} | ${StackTrace.current}');
   }

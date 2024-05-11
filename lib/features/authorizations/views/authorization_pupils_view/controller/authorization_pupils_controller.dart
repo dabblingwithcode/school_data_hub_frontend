@@ -25,41 +25,12 @@ class AuthorizationPupils extends StatefulWidget {
 class AuthorizationPupilsController extends State<AuthorizationPupils> {
   FocusNode focusNode = FocusNode();
 
-  TextEditingController searchController = TextEditingController();
-  bool isSearchMode = false;
-  bool isSearching = false;
   final filterLocator = locator<PupilFilterManager>();
 
   @override
   void initState() {
     //locator<PupilFilterManager>().refreshFilteredPupils();
     super.initState();
-  }
-
-  void cancelSearch({bool unfocus = true}) {
-    if (locator<PupilFilterManager>().filterState.value ==
-        initialFilterValues) {
-      locator<PupilFilterManager>().filtersOnSwitch(false);
-      locator<PupilFilterManager>().refreshFilteredPupils();
-    }
-    setState(() {
-      searchController.clear();
-      isSearchMode = false;
-      isSearching = false;
-    });
-    locator<PupilFilterManager>().setSearchText('');
-    if (unfocus) FocusManager.instance.primaryFocus?.unfocus();
-  }
-
-  void onSearchEnter(String text) {
-    locator<PupilFilterManager>().filtersOnSwitch(true);
-    if (text.isEmpty) {
-      cancelSearch(unfocus: false);
-      return;
-    }
-    isSearchMode = true;
-
-    locator<PupilFilterManager>().setSearchText(text);
   }
 
   List<Pupil> addAuthorizationFiltersToFilteredPupils(List<Pupil> pupils) {

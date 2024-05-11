@@ -1,19 +1,20 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user.dart';
+part of 'matrix_user.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
+_$MatrixUserImpl _$$MatrixUserImplFromJson(Map<String, dynamic> json) =>
+    _$MatrixUserImpl(
       id: json['id'] as String?,
       active: json['active'] as bool?,
       authType: json['authType'] as String?,
       displayName: json['displayName'] as String?,
       avatarUri: json['avatarUri'] as String?,
-      joinedRoomIds: (json['joinedRoomIds'] as List<dynamic>?)
-          ?.map((e) => e as String)
+      matrixRooms: (json['joinedRoomIds'] as List<dynamic>)
+          .map((e) => MatrixRoom(id: e))
           .toList(),
       forbidRoomCreation: json['forbidRoomCreation'],
       forbidEncryptedRoomCreation: json['forbidEncryptedRoomCreation'],
@@ -21,16 +22,19 @@ _$UserImpl _$$UserImplFromJson(Map<String, dynamic> json) => _$UserImpl(
       authCredential: json['authCredential'] as String?,
     );
 
-Map<String, dynamic> _$$UserImplToJson(_$UserImpl instance) =>
+Map<String, dynamic> _$$MatrixUserImplToJson(_$MatrixUserImpl instance) =>
     <String, dynamic>{
       'id': instance.id,
       'active': instance.active,
       'authType': instance.authType,
       'displayName': instance.displayName,
       'avatarUri': instance.avatarUri,
-      'joinedRoomIds': instance.joinedRoomIds,
+      'joinedRoomIds': getRoomIds(instance.matrixRooms!),
       'forbidRoomCreation': instance.forbidRoomCreation,
       'forbidEncryptedRoomCreation': instance.forbidEncryptedRoomCreation,
       'forbidUnencryptedRoomCreation': instance.forbidUnencryptedRoomCreation,
-      'authCredential': instance.authCredential,
+      //'authCredential': instance.authCredential,
     };
+getRoomIds(List<MatrixRoom> rooms) {
+  return rooms.map((room) => room.id).toList();
+}

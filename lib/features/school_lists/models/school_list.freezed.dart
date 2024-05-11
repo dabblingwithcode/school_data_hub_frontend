@@ -28,6 +28,8 @@ mixin _$SchoolList {
   String get listId => throw _privateConstructorUsedError;
   @JsonKey(name: 'list_name')
   String get listName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'authorized_users')
+  String? get authorizedUsers => throw _privateConstructorUsedError;
   String get visibility => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,6 +49,7 @@ abstract class $SchoolListCopyWith<$Res> {
       @JsonKey(name: 'list_description') String listDescription,
       @JsonKey(name: 'list_id') String listId,
       @JsonKey(name: 'list_name') String listName,
+      @JsonKey(name: 'authorized_users') String? authorizedUsers,
       String visibility});
 }
 
@@ -67,6 +70,7 @@ class _$SchoolListCopyWithImpl<$Res, $Val extends SchoolList>
     Object? listDescription = null,
     Object? listId = null,
     Object? listName = null,
+    Object? authorizedUsers = freezed,
     Object? visibility = null,
   }) {
     return _then(_value.copyWith(
@@ -86,6 +90,10 @@ class _$SchoolListCopyWithImpl<$Res, $Val extends SchoolList>
           ? _value.listName
           : listName // ignore: cast_nullable_to_non_nullable
               as String,
+      authorizedUsers: freezed == authorizedUsers
+          ? _value.authorizedUsers
+          : authorizedUsers // ignore: cast_nullable_to_non_nullable
+              as String?,
       visibility: null == visibility
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
@@ -107,6 +115,7 @@ abstract class _$$SchoolListImplCopyWith<$Res>
       @JsonKey(name: 'list_description') String listDescription,
       @JsonKey(name: 'list_id') String listId,
       @JsonKey(name: 'list_name') String listName,
+      @JsonKey(name: 'authorized_users') String? authorizedUsers,
       String visibility});
 }
 
@@ -125,6 +134,7 @@ class __$$SchoolListImplCopyWithImpl<$Res>
     Object? listDescription = null,
     Object? listId = null,
     Object? listName = null,
+    Object? authorizedUsers = freezed,
     Object? visibility = null,
   }) {
     return _then(_$SchoolListImpl(
@@ -144,6 +154,10 @@ class __$$SchoolListImplCopyWithImpl<$Res>
           ? _value.listName
           : listName // ignore: cast_nullable_to_non_nullable
               as String,
+      authorizedUsers: freezed == authorizedUsers
+          ? _value.authorizedUsers
+          : authorizedUsers // ignore: cast_nullable_to_non_nullable
+              as String?,
       visibility: null == visibility
           ? _value.visibility
           : visibility // ignore: cast_nullable_to_non_nullable
@@ -160,6 +174,7 @@ class _$SchoolListImpl implements _SchoolList {
       @JsonKey(name: 'list_description') required this.listDescription,
       @JsonKey(name: 'list_id') required this.listId,
       @JsonKey(name: 'list_name') required this.listName,
+      @JsonKey(name: 'authorized_users') this.authorizedUsers,
       required this.visibility});
 
   factory _$SchoolListImpl.fromJson(Map<String, dynamic> json) =>
@@ -178,11 +193,14 @@ class _$SchoolListImpl implements _SchoolList {
   @JsonKey(name: 'list_name')
   final String listName;
   @override
+  @JsonKey(name: 'authorized_users')
+  final String? authorizedUsers;
+  @override
   final String visibility;
 
   @override
   String toString() {
-    return 'SchoolList(createdBy: $createdBy, listDescription: $listDescription, listId: $listId, listName: $listName, visibility: $visibility)';
+    return 'SchoolList(createdBy: $createdBy, listDescription: $listDescription, listId: $listId, listName: $listName, authorizedUsers: $authorizedUsers, visibility: $visibility)';
   }
 
   @override
@@ -197,14 +215,16 @@ class _$SchoolListImpl implements _SchoolList {
             (identical(other.listId, listId) || other.listId == listId) &&
             (identical(other.listName, listName) ||
                 other.listName == listName) &&
+            (identical(other.authorizedUsers, authorizedUsers) ||
+                other.authorizedUsers == authorizedUsers) &&
             (identical(other.visibility, visibility) ||
                 other.visibility == visibility));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, createdBy, listDescription, listId, listName, visibility);
+  int get hashCode => Object.hash(runtimeType, createdBy, listDescription,
+      listId, listName, authorizedUsers, visibility);
 
   @JsonKey(ignore: true)
   @override
@@ -226,6 +246,7 @@ abstract class _SchoolList implements SchoolList {
       @JsonKey(name: 'list_description') required final String listDescription,
       @JsonKey(name: 'list_id') required final String listId,
       @JsonKey(name: 'list_name') required final String listName,
+      @JsonKey(name: 'authorized_users') final String? authorizedUsers,
       required final String visibility}) = _$SchoolListImpl;
 
   factory _SchoolList.fromJson(Map<String, dynamic> json) =
@@ -243,6 +264,9 @@ abstract class _SchoolList implements SchoolList {
   @override
   @JsonKey(name: 'list_name')
   String get listName;
+  @override
+  @JsonKey(name: 'authorized_users')
+  String? get authorizedUsers;
   @override
   String get visibility;
   @override

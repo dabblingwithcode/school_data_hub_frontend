@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
@@ -62,9 +63,11 @@ class SchoolListPupilsController extends State<SchoolListPupils> {
     List<Pupil> filteredPupils = [];
     for (Pupil pupil in pupils) {
       bool toList = true;
-      final PupilList pupilList = pupil.pupilLists!.firstWhere(
+      final PupilList? pupilList = pupil.pupilLists!.firstWhereOrNull(
           (pupilList) => pupilList.originList == widget.schoolList.listId);
-
+      if (pupilList == null) {
+        continue;
+      }
       if (filterLocator.filterState.value[PupilFilter.schoolListYesResponse]! &&
           pupilList.pupilListStatus == true) {
         toList = true;

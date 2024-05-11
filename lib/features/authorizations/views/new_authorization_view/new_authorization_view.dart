@@ -35,8 +35,20 @@ class NewAuthorizationViewState extends State<NewAuthorizationView> {
     List<Pupil> pupilsFromIds = pupilsFromPupilIds(pupilIds.toList());
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
+        centerTitle: true,
         backgroundColor: backgroundColor,
-        title: const Text('Neue Einwilligung'),
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.fact_check_rounded, size: 25, color: Colors.white),
+            Gap(10),
+            Text(
+              'Neue Einwilligung',
+              style: appBarTextStyle,
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -175,7 +187,7 @@ class NewAuthorizationViewState extends State<NewAuthorizationView> {
                   },
                   child: const Text(
                     'KINDER AUSWÄHLEN',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: buttonTextStyle,
                   ),
                 ),
                 const Gap(15),
@@ -187,7 +199,7 @@ class NewAuthorizationViewState extends State<NewAuthorizationView> {
                   },
                   child: const Text(
                     'SENDEN',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: buttonTextStyle,
                   ),
                 ),
                 const Gap(15),
@@ -198,7 +210,7 @@ class NewAuthorizationViewState extends State<NewAuthorizationView> {
                   },
                   child: const Text(
                     'ABBRECHEN',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: buttonTextStyle,
                   ),
                 ),
               ],

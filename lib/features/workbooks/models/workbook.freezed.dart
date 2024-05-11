@@ -24,6 +24,7 @@ mixin _$Workbook {
   String? get name => throw _privateConstructorUsedError;
   String? get subject => throw _privateConstructorUsedError;
   String? get level => throw _privateConstructorUsedError;
+  int get amount => throw _privateConstructorUsedError;
   @JsonKey(name: 'image_url')
   String? get imageUrl => throw _privateConstructorUsedError;
 
@@ -43,6 +44,7 @@ abstract class $WorkbookCopyWith<$Res> {
       String? name,
       String? subject,
       String? level,
+      int amount,
       @JsonKey(name: 'image_url') String? imageUrl});
 }
 
@@ -63,6 +65,7 @@ class _$WorkbookCopyWithImpl<$Res, $Val extends Workbook>
     Object? name = freezed,
     Object? subject = freezed,
     Object? level = freezed,
+    Object? amount = null,
     Object? imageUrl = freezed,
   }) {
     return _then(_value.copyWith(
@@ -82,6 +85,10 @@ class _$WorkbookCopyWithImpl<$Res, $Val extends Workbook>
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
               as String?,
+      amount: null == amount
+          ? _value.amount
+          : amount // ignore: cast_nullable_to_non_nullable
+              as int,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -103,6 +110,7 @@ abstract class _$$WorkbookImplCopyWith<$Res>
       String? name,
       String? subject,
       String? level,
+      int amount,
       @JsonKey(name: 'image_url') String? imageUrl});
 }
 
@@ -121,6 +129,7 @@ class __$$WorkbookImplCopyWithImpl<$Res>
     Object? name = freezed,
     Object? subject = freezed,
     Object? level = freezed,
+    Object? amount = null,
     Object? imageUrl = freezed,
   }) {
     return _then(_$WorkbookImpl(
@@ -140,6 +149,10 @@ class __$$WorkbookImplCopyWithImpl<$Res>
           ? _value.level
           : level // ignore: cast_nullable_to_non_nullable
               as String?,
+      amount: null == amount
+          ? _value.amount
+          : amount // ignore: cast_nullable_to_non_nullable
+              as int,
       imageUrl: freezed == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -156,6 +169,7 @@ class _$WorkbookImpl implements _Workbook {
       this.name,
       this.subject,
       this.level,
+      required this.amount,
       @JsonKey(name: 'image_url') this.imageUrl});
 
   factory _$WorkbookImpl.fromJson(Map<String, dynamic> json) =>
@@ -170,12 +184,14 @@ class _$WorkbookImpl implements _Workbook {
   @override
   final String? level;
   @override
+  final int amount;
+  @override
   @JsonKey(name: 'image_url')
   final String? imageUrl;
 
   @override
   String toString() {
-    return 'Workbook(isbn: $isbn, name: $name, subject: $subject, level: $level, imageUrl: $imageUrl)';
+    return 'Workbook(isbn: $isbn, name: $name, subject: $subject, level: $level, amount: $amount, imageUrl: $imageUrl)';
   }
 
   @override
@@ -187,6 +203,7 @@ class _$WorkbookImpl implements _Workbook {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.subject, subject) || other.subject == subject) &&
             (identical(other.level, level) || other.level == level) &&
+            (identical(other.amount, amount) || other.amount == amount) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl));
   }
@@ -194,7 +211,7 @@ class _$WorkbookImpl implements _Workbook {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, isbn, name, subject, level, imageUrl);
+      Object.hash(runtimeType, isbn, name, subject, level, amount, imageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -216,6 +233,7 @@ abstract class _Workbook implements Workbook {
       final String? name,
       final String? subject,
       final String? level,
+      required final int amount,
       @JsonKey(name: 'image_url') final String? imageUrl}) = _$WorkbookImpl;
 
   factory _Workbook.fromJson(Map<String, dynamic> json) =
@@ -229,6 +247,8 @@ abstract class _Workbook implements Workbook {
   String? get subject;
   @override
   String? get level;
+  @override
+  int get amount;
   @override
   @JsonKey(name: 'image_url')
   String? get imageUrl;

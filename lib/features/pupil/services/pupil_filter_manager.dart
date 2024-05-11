@@ -1,16 +1,13 @@
 import 'package:flutter/foundation.dart';
-
 import 'package:schuldaten_hub/common/constants/enums.dart';
-import 'package:schuldaten_hub/common/models/manager_report.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/search_textfield_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_manager.dart';
+import 'package:schuldaten_hub/features/admonitions/services/admonition_helper_functions.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_filters.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/learning_support/services/learning_support_filters.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
-
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
 class PupilFilterManager {
@@ -19,7 +16,7 @@ class PupilFilterManager {
   ValueListenable<List<Pupil>> get filteredPupils => _filteredPupils;
   ValueListenable<Map<PupilFilter, bool>> get filterState => _filterState;
   ValueListenable<Map<PupilSortMode, bool>> get sortMode => _sortMode;
-  ValueListenable<Report> get operationReport => _operationReport;
+
   ValueListenable<bool> get isRunning => _isRunning;
 
   final _filtersOn = ValueNotifier<bool>(false);
@@ -30,7 +27,7 @@ class PupilFilterManager {
       ValueNotifier<Map<PupilFilter, bool>>(initialFilterValues);
   final _sortMode =
       ValueNotifier<Map<PupilSortMode, bool>>(initialSortModeValues);
-  final _operationReport = ValueNotifier<Report>(Report(null, null));
+
   final _isRunning = ValueNotifier<bool>(false);
 
   PupilFilterManager() {
@@ -74,20 +71,7 @@ class PupilFilterManager {
       }
     }
 
-    // // Add any pupils from pupils that are not in filteredPupils yet
-    // for (var pupil in pupils) {
-    //   if (!filteredPupils.any(
-    //       (filteredPupil) => filteredPupil.internalId == pupil.internalId)) {
-    //     filteredPupils.add(pupil);
-    //   }
-    //   // for (Pupil filteredPupil in filteredPupils) {
-    //   //   Pupil pupil = pupils
-    //   //       .where((pupil) => pupil.internalId == filteredPupil.internalId)
-    //   //       .single;
-    //   //   filteredPupil = pupil;
-    //   // }
     _filteredPupils.value = filteredPupils;
-    // }
   }
 
   cloneToFilteredPupil(Pupil pupil) {
@@ -241,7 +225,7 @@ class PupilFilterManager {
         toList = false;
       }
 
-      // Filter not ogs
+      //- Filter not ogs
       if (activeFilters[PupilFilter.notOgs]! &&
           pupil.ogs == false &&
           toList == true) {
@@ -281,7 +265,7 @@ class PupilFilterManager {
         toList = false;
       }
 
-      // Filter girls
+      //- Filter girls
       if (activeFilters[PupilFilter.justGirls]! &&
           pupil.gender == 'm' &&
           toList == true) {
@@ -345,9 +329,8 @@ class PupilFilterManager {
     }
     // Sort by admonitions
     if (sortMode[PupilSortMode.sortByAdmonitions] == true) {
-      filteredPupils.sort((a, b) => locator<AdmonitionManager>()
-          .admonitionSum(b)!
-          .compareTo(locator<AdmonitionManager>().admonitionSum(a)!));
+      filteredPupils.sort((a, b) => SchoolEventHelper.admonitionSum(b)!
+          .compareTo(SchoolEventHelper.admonitionSum(a)!));
     }
     // Sort by last admonition
     if (sortMode[PupilSortMode.sortByLastAdmonition] == true) {

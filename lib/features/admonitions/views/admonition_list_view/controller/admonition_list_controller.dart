@@ -39,50 +39,6 @@ class AdmonitionListController extends State<AdmonitionList> {
     await locator.get<PupilManager>().fetchPupilsById(pupilsToFetch);
   }
 
-  // void _search() async {
-  //   if (!isSearching) {
-  //     setState(() {
-  //       isSearching = true;
-  //     });
-  //   }
-
-  //   if (!isSearchMode) return;
-  //   setState(() {
-  //     isSearching = false;
-  //   });
-  // }
-
-  void cancelSearch({bool unfocus = true}) {
-    setState(() {
-      searchController.clear();
-      isSearchMode = false;
-      locator<PupilFilterManager>().setSearchText('');
-      filteredPupils = List.from(pupils!);
-      isSearching = false;
-    });
-
-    if (unfocus) FocusManager.instance.primaryFocus?.unfocus();
-  }
-
-  void onSearchEnter(String text) {
-    if (text.isEmpty) {
-      cancelSearch(unfocus: false);
-      return;
-    }
-    isSearchMode = true;
-    locator<PupilFilterManager>().setSearchText(text);
-    setState(() {
-      // final pupils = locator<PupilFilterManager>().filteredPupils.value;
-      // isSearchMode = true;
-      // filteredPupils = pupils
-      //     .where(
-      //       (user) =>
-      //           user.firstName!.toLowerCase().contains(text.toLowerCase()),
-      //     )
-      //     .toList();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return AdmonitionListView(this);

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/styles.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
@@ -40,7 +41,7 @@ class SelectPupilListView extends WatchingWidget {
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('Kind/Kinder auswählen'),
+            Text('Kind/Kinder auswählen', style: appBarTextStyle),
           ],
         ),
       ),

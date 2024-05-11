@@ -45,7 +45,10 @@ Widget ogsListSearchBar(BuildContext context, List<Pupil> pupils,
           child: Row(
             children: [
               Expanded(
-                  child: searchTextField('Schüler/in suchen', controller,
+                  child: searchTextField(
+                      SearchType.pupil,
+                      'Schüler/in suchen',
+                      controller,
                       locator<PupilFilterManager>().refreshFilteredPupils)),
               InkWell(
                 onTap: () => showOgsFilterBottomSheet(context),

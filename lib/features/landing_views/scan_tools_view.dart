@@ -4,10 +4,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -105,10 +106,10 @@ class QrToolsView extends WatchingWidget {
                                   .get<PupilBaseManager>()
                                   .addNewPupilBase(scanResult);
                             } else {
-                              if (context.mounted) {
-                                snackbarWarning(
-                                    context, 'Scanvorgang abgebrochen');
-                              }
+                              locator<SnackBarManager>().showSnackBar(
+                                  SnackBarType.warning,
+                                  'Scanvorgang abgebrochen');
+
                               return;
                             }
                           },

@@ -2,10 +2,13 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/landing_views/school_lists_view.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
+import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/features/landing_views/learn_list_view.dart';
 import 'package:schuldaten_hub/features/landing_views/pupil_lists_menu_view.dart';
 import 'package:schuldaten_hub/features/landing_views/scan_tools_view.dart';
+import 'package:schuldaten_hub/features/landing_views/school_lists_view.dart';
 import 'package:schuldaten_hub/features/landing_views/settings_view.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -49,6 +52,17 @@ class BottomNavigation extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
+    registerHandler(
+        select: (SnackBarManager x) => x.snackBar,
+        handler: (context, value, cancel) {
+          snackbar(context, value.type, value.message);
+        });
+    registerHandler(
+        select: (SnackBarManager x) => x.isRunning,
+        handler: (context, value, cancel) {
+          value ? showLoadingOverlay(context) : hideLoadingOverlay();
+        });
+
     final manager = locator<BottomNavManager>();
     final tab = watchValue((BottomNavManager x) => x.bottomNavState);
     final pageViewController =
@@ -66,9 +80,8 @@ class BottomNavigation extends WatchingWidget {
         ],
         onPageChanged: (index) => manager.setBottomNavPage(index),
       ),
-      bottomNavigationBar: Theme(
-        data: ThemeData(canvasColor: backgroundColor),
-        child: BottomNavigationBar(
+      bottomNavigationBar: bottomNavBarLayout(
+        BottomNavigationBar(
           iconSize: 28,
           onTap: (index) {
             manager.setBottomNavPage(index);
@@ -108,4 +121,30 @@ class BottomNavigation extends WatchingWidget {
       ),
     );
   }
+}
+
+OverlayEntry? overlayEntry;
+
+void showLoadingOverlay(BuildContext context) {
+  overlayEntry = OverlayEntry(
+    builder: (context) => Stack(
+      fit: StackFit.expand,
+      children: [
+        ModalBarrier(
+            dismissible: false,
+            color: Colors.black.withOpacity(0.3)), // Background color
+        const Center(
+            child: CircularProgressIndicator(
+          color: backgroundColor,
+        )), // Spinning wheel
+      ],
+    ),
+  );
+
+  Overlay.of(context).insert(overlayEntry!);
+}
+
+void hideLoadingOverlay() {
+  overlayEntry?.remove();
+  overlayEntry = null;
 }

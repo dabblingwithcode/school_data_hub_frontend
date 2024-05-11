@@ -10,10 +10,8 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/information_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/document_image.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/common/widgets/upload_image.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
-
 // ignore: unused_import
 import 'package:schuldaten_hub/features/workbooks/models/workbook.dart';
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
@@ -47,9 +45,6 @@ Widget pupilWorkbookCard(
         if (result == true) {
           locator<WorkbookManager>()
               .deletePupilWorkbook(pupilId, workbook.isbn);
-          if (context.mounted) {
-            snackbarSuccess(context, 'Das Arbeitsheft wurde gelöscht!');
-          }
         }
       },
       child: Padding(
@@ -67,10 +62,6 @@ Widget pupilWorkbookCard(
                     if (file == null) return;
                     await locator<WorkbookManager>()
                         .postWorkbookFile(file, workbook.isbn);
-                    if (context.mounted) {
-                      snackbarSuccess(
-                          context, 'Die Einwilligung wurde geändert!');
-                    }
                   },
                   onLongPress: (workbook.imageUrl == null)
                       ? () {}
@@ -87,10 +78,6 @@ Widget pupilWorkbookCard(
                           //   authorizationId,
                           //   pupilAuthorization.fileUrl!,
                           // );
-                          if (context.mounted) {
-                            snackbarSuccess(
-                                context, 'Die Einwilligung wurde geändert!');
-                          }
                         },
                   child: workbook.imageUrl != null
                       ? documentImage(

@@ -24,8 +24,10 @@ mixin _$Policy {
   dynamic get identificationStamp => throw _privateConstructorUsedError;
   Flags? get flags => throw _privateConstructorUsedError;
   dynamic get hooks => throw _privateConstructorUsedError;
-  List<String>? get managedRoomIds => throw _privateConstructorUsedError;
-  List<User>? get users => throw _privateConstructorUsedError;
+  @JsonKey(name: 'managedRoomIds')
+  List<MatrixRoom>? get matrixRooms => throw _privateConstructorUsedError;
+  @JsonKey(name: 'users')
+  List<MatrixUser>? get matrixUsers => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,8 +44,8 @@ abstract class $PolicyCopyWith<$Res> {
       dynamic identificationStamp,
       Flags? flags,
       dynamic hooks,
-      List<String>? managedRoomIds,
-      List<User>? users});
+      @JsonKey(name: 'managedRoomIds') List<MatrixRoom>? matrixRooms,
+      @JsonKey(name: 'users') List<MatrixUser>? matrixUsers});
 
   $FlagsCopyWith<$Res>? get flags;
 }
@@ -65,8 +67,8 @@ class _$PolicyCopyWithImpl<$Res, $Val extends Policy>
     Object? identificationStamp = freezed,
     Object? flags = freezed,
     Object? hooks = freezed,
-    Object? managedRoomIds = freezed,
-    Object? users = freezed,
+    Object? matrixRooms = freezed,
+    Object? matrixUsers = freezed,
   }) {
     return _then(_value.copyWith(
       schemaVersion: freezed == schemaVersion
@@ -85,14 +87,14 @@ class _$PolicyCopyWithImpl<$Res, $Val extends Policy>
           ? _value.hooks
           : hooks // ignore: cast_nullable_to_non_nullable
               as dynamic,
-      managedRoomIds: freezed == managedRoomIds
-          ? _value.managedRoomIds
-          : managedRoomIds // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      users: freezed == users
-          ? _value.users
-          : users // ignore: cast_nullable_to_non_nullable
-              as List<User>?,
+      matrixRooms: freezed == matrixRooms
+          ? _value.matrixRooms
+          : matrixRooms // ignore: cast_nullable_to_non_nullable
+              as List<MatrixRoom>?,
+      matrixUsers: freezed == matrixUsers
+          ? _value.matrixUsers
+          : matrixUsers // ignore: cast_nullable_to_non_nullable
+              as List<MatrixUser>?,
     ) as $Val);
   }
 
@@ -121,8 +123,8 @@ abstract class _$$PolicyImplCopyWith<$Res> implements $PolicyCopyWith<$Res> {
       dynamic identificationStamp,
       Flags? flags,
       dynamic hooks,
-      List<String>? managedRoomIds,
-      List<User>? users});
+      @JsonKey(name: 'managedRoomIds') List<MatrixRoom>? matrixRooms,
+      @JsonKey(name: 'users') List<MatrixUser>? matrixUsers});
 
   @override
   $FlagsCopyWith<$Res>? get flags;
@@ -143,8 +145,8 @@ class __$$PolicyImplCopyWithImpl<$Res>
     Object? identificationStamp = freezed,
     Object? flags = freezed,
     Object? hooks = freezed,
-    Object? managedRoomIds = freezed,
-    Object? users = freezed,
+    Object? matrixRooms = freezed,
+    Object? matrixUsers = freezed,
   }) {
     return _then(_$PolicyImpl(
       schemaVersion: freezed == schemaVersion
@@ -163,14 +165,14 @@ class __$$PolicyImplCopyWithImpl<$Res>
           ? _value.hooks
           : hooks // ignore: cast_nullable_to_non_nullable
               as dynamic,
-      managedRoomIds: freezed == managedRoomIds
-          ? _value._managedRoomIds
-          : managedRoomIds // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
-      users: freezed == users
-          ? _value._users
-          : users // ignore: cast_nullable_to_non_nullable
-              as List<User>?,
+      matrixRooms: freezed == matrixRooms
+          ? _value._matrixRooms
+          : matrixRooms // ignore: cast_nullable_to_non_nullable
+              as List<MatrixRoom>?,
+      matrixUsers: freezed == matrixUsers
+          ? _value._matrixUsers
+          : matrixUsers // ignore: cast_nullable_to_non_nullable
+              as List<MatrixUser>?,
     ));
   }
 }
@@ -183,10 +185,10 @@ class _$PolicyImpl implements _Policy {
       this.identificationStamp,
       this.flags,
       this.hooks,
-      final List<String>? managedRoomIds,
-      final List<User>? users})
-      : _managedRoomIds = managedRoomIds,
-        _users = users;
+      @JsonKey(name: 'managedRoomIds') final List<MatrixRoom>? matrixRooms,
+      @JsonKey(name: 'users') final List<MatrixUser>? matrixUsers})
+      : _matrixRooms = matrixRooms,
+        _matrixUsers = matrixUsers;
 
   factory _$PolicyImpl.fromJson(Map<String, dynamic> json) =>
       _$$PolicyImplFromJson(json);
@@ -199,29 +201,31 @@ class _$PolicyImpl implements _Policy {
   final Flags? flags;
   @override
   final dynamic hooks;
-  final List<String>? _managedRoomIds;
+  final List<MatrixRoom>? _matrixRooms;
   @override
-  List<String>? get managedRoomIds {
-    final value = _managedRoomIds;
+  @JsonKey(name: 'managedRoomIds')
+  List<MatrixRoom>? get matrixRooms {
+    final value = _matrixRooms;
     if (value == null) return null;
-    if (_managedRoomIds is EqualUnmodifiableListView) return _managedRoomIds;
+    if (_matrixRooms is EqualUnmodifiableListView) return _matrixRooms;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 
-  final List<User>? _users;
+  final List<MatrixUser>? _matrixUsers;
   @override
-  List<User>? get users {
-    final value = _users;
+  @JsonKey(name: 'users')
+  List<MatrixUser>? get matrixUsers {
+    final value = _matrixUsers;
     if (value == null) return null;
-    if (_users is EqualUnmodifiableListView) return _users;
+    if (_matrixUsers is EqualUnmodifiableListView) return _matrixUsers;
     // ignore: implicit_dynamic_type
     return EqualUnmodifiableListView(value);
   }
 
   @override
   String toString() {
-    return 'Policy(schemaVersion: $schemaVersion, identificationStamp: $identificationStamp, flags: $flags, hooks: $hooks, managedRoomIds: $managedRoomIds, users: $users)';
+    return 'Policy(schemaVersion: $schemaVersion, identificationStamp: $identificationStamp, flags: $flags, hooks: $hooks, matrixRooms: $matrixRooms, matrixUsers: $matrixUsers)';
   }
 
   @override
@@ -236,8 +240,9 @@ class _$PolicyImpl implements _Policy {
             (identical(other.flags, flags) || other.flags == flags) &&
             const DeepCollectionEquality().equals(other.hooks, hooks) &&
             const DeepCollectionEquality()
-                .equals(other._managedRoomIds, _managedRoomIds) &&
-            const DeepCollectionEquality().equals(other._users, _users));
+                .equals(other._matrixRooms, _matrixRooms) &&
+            const DeepCollectionEquality()
+                .equals(other._matrixUsers, _matrixUsers));
   }
 
   @JsonKey(ignore: true)
@@ -248,8 +253,8 @@ class _$PolicyImpl implements _Policy {
       const DeepCollectionEquality().hash(identificationStamp),
       flags,
       const DeepCollectionEquality().hash(hooks),
-      const DeepCollectionEquality().hash(_managedRoomIds),
-      const DeepCollectionEquality().hash(_users));
+      const DeepCollectionEquality().hash(_matrixRooms),
+      const DeepCollectionEquality().hash(_matrixUsers));
 
   @JsonKey(ignore: true)
   @override
@@ -267,12 +272,13 @@ class _$PolicyImpl implements _Policy {
 
 abstract class _Policy implements Policy {
   factory _Policy(
-      {final int? schemaVersion,
-      final dynamic identificationStamp,
-      final Flags? flags,
-      final dynamic hooks,
-      final List<String>? managedRoomIds,
-      final List<User>? users}) = _$PolicyImpl;
+          {final int? schemaVersion,
+          final dynamic identificationStamp,
+          final Flags? flags,
+          final dynamic hooks,
+          @JsonKey(name: 'managedRoomIds') final List<MatrixRoom>? matrixRooms,
+          @JsonKey(name: 'users') final List<MatrixUser>? matrixUsers}) =
+      _$PolicyImpl;
 
   factory _Policy.fromJson(Map<String, dynamic> json) = _$PolicyImpl.fromJson;
 
@@ -285,9 +291,11 @@ abstract class _Policy implements Policy {
   @override
   dynamic get hooks;
   @override
-  List<String>? get managedRoomIds;
+  @JsonKey(name: 'managedRoomIds')
+  List<MatrixRoom>? get matrixRooms;
   @override
-  List<User>? get users;
+  @JsonKey(name: 'users')
+  List<MatrixUser>? get matrixUsers;
   @override
   @JsonKey(ignore: true)
   _$$PolicyImplCopyWith<_$PolicyImpl> get copyWith =>

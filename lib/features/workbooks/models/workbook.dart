@@ -11,6 +11,7 @@ class Workbook with _$Workbook {
     String? name,
     String? subject,
     String? level,
+    required int amount,
     @JsonKey(name: 'image_url') String? imageUrl,
   }) = _Workbook;
 
