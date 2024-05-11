@@ -65,8 +65,9 @@ class PupilProfileView extends WatchingWidget {
                               collapseMode: CollapseMode.none,
                               titlePadding: const EdgeInsets.only(
                                   left: 5, top: 5, right: 5, bottom: 5),
-                              title: pupilProfileHeadWidget(
-                                  pupil, context, controller),
+                              title: PupilProfileHeadWidget(
+                                  pupil: pupil,
+                                  pupilProfileController: controller),
                             ),
                           ),
                           SliverToBoxAdapter(
