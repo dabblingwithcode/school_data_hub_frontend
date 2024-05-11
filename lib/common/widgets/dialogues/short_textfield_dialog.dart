@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 
-shortTextfieldDialog(BuildContext context, String title, String labelText) {
+shortTextfieldDialog(
+    {required BuildContext context,
+    required String title,
+    required String labelText,
+    required String hintText,
+    required bool obscureText}) {
   TextEditingController textEditingController = TextEditingController();
 
   return showDialog<String?>(
@@ -12,21 +17,25 @@ shortTextfieldDialog(BuildContext context, String title, String labelText) {
         title: Text(title,
             textAlign: TextAlign.center,
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
-        content: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: backgroundColor),
-            borderRadius: BorderRadius.circular(5.0),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: TextField(
-              controller: textEditingController,
-              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-              //maxLength: 16,
-              decoration: const InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Kürzel eingeben',
+        content: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextField(
+            controller: textEditingController,
+            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+            //maxLength: 16,
+
+            obscureText: obscureText,
+            decoration: InputDecoration(
+              //border: InputBorder.none,
+              border: const OutlineInputBorder(
+                borderSide: BorderSide(color: backgroundColor, width: 2),
               ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: backgroundColor, width: 2),
+              ),
+              labelStyle: const TextStyle(color: backgroundColor),
+              labelText: labelText,
+              hintText: hintText,
             ),
           ),
         ),

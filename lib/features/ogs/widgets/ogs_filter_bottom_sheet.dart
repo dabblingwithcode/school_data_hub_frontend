@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
@@ -19,23 +17,7 @@ class OgsFilterBottomSheet extends WatchingWidget {
       padding: const EdgeInsets.only(left: 20.0, right: 20, top: 8),
       child: Column(
         children: [
-          Row(
-            children: [
-              const Text(
-                'Filter',
-                style: title,
-              ),
-              const Spacer(),
-              IconButton.filled(
-                  iconSize: 35,
-                  color: Colors.amber,
-                  onPressed: () {
-                    locator<PupilFilterManager>().resetFilters();
-                    //Navigator.pop(context);
-                  },
-                  icon: const Icon(Icons.restart_alt_rounded)),
-            ],
-          ),
+          filterHeading(),
           standardFilters(activeFilters),
           const Row(
             children: [

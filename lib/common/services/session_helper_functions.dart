@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
 
 String tokenLifetimeLeft(String token) {
@@ -19,10 +20,8 @@ String tokenLifetimeLeft(String token) {
 
 void logout(BuildContext context) async {
   await locator<SessionManager>().logout();
-  if (context.mounted) {
-    snackbarSuccess(context, 'Zugangsdaten und QR-Ids gelöscht!');
-    //Navigator.of(context).popUntil(ModalRoute.withName(Routes.login));
-  }
+  locator<SnackBarManager>()
+      .showSnackBar(SnackBarType.success, 'Zugangsdaten und QR-Ids gelöscht!');
 }
 
 void logoutAndDeleteAllData(BuildContext context) async {
@@ -33,8 +32,6 @@ void logoutAndDeleteAllData(BuildContext context) async {
 
   await cacheManager.emptyCache();
 
-  if (context.mounted) {
-    snackbarSuccess(context, 'Zugangsdaten und QR-Ids gelöscht!');
-    //Navigator.of(context).popUntil(ModalRoute.withName(Routes.login));
-  }
+  locator<SnackBarManager>()
+      .showSnackBar(SnackBarType.success, 'Alle Daten gelöscht!');
 }

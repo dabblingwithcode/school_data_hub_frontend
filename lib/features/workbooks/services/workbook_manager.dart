@@ -48,13 +48,14 @@ class WorkbookManager {
   }
 
   Future postWorkbook(
-      String name, int isbn, String subject, String level) async {
+      String name, int isbn, String subject, String level, int amount) async {
     final data = jsonEncode({
       "name": name,
       "isbn": isbn,
       "subject": subject,
       "level": level,
-      "image_url": null
+      "image_url": null,
+      "amount": amount
     });
     final Response response = await client.post(
       EndpointsWorkbook.postWorkbook,
@@ -140,8 +141,9 @@ class WorkbookManager {
     final workbooks =
         (response.data as List).map((e) => Workbook.fromJson(e)).toList();
     _workbooks.value = workbooks;
-    List<Pupil> pupils = List<Pupil>.from(locator<PupilManager>().pupils.value);
-    for (Pupil pupil in pupils) {
+    List<PupilProxy> pupils =
+        List<PupilProxy>.from(locator<PupilManager>().pupils.value);
+    for (PupilProxy pupil in pupils) {
       if (pupil.pupilWorkbooks != null) {
         final PupilWorkbook? pupilWorkbook = pupil.pupilWorkbooks!
             .firstWhereOrNull((element) => element.workbookIsbn == isbn);
@@ -150,7 +152,7 @@ class WorkbookManager {
             ...pupil.pupilWorkbooks!
           ];
           updatedPupilWorkbooks.remove(pupilWorkbook);
-          Pupil updatedPupil =
+          PupilProxy updatedPupil =
               pupil.copyWith(pupilWorkbooks: updatedPupilWorkbooks);
 
           locator<PupilManager>().updatePupilInRepository(updatedPupil);

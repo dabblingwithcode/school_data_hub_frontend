@@ -1,24 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:gap/gap.dart';
-
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/models/session_models/session.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_helper_functions.dart';
+import 'package:schuldaten_hub/common/services/session_manager.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/short_textfield_dialog.dart';
-import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
-import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/widgets/qr_views.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
+import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';
+import 'package:schuldaten_hub/features/matrix/services/matrix_policy_helper_functions.dart';
+import 'package:schuldaten_hub/features/matrix/views/set_matrix_environment_values_view.dart';
+import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_view/controller/select_pupils_list_controller.dart';
 import 'package:schuldaten_hub/features/statistics/birthdays_view.dart';
-
 import 'package:schuldaten_hub/features/statistics/statistics_view/controller/statistics.dart';
 import 'package:settings_ui/settings_ui.dart';
 import 'package:watch_it/watch_it.dart';
@@ -29,6 +30,8 @@ class SettingsView extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     final Session session = watchValue((SessionManager x) => x.credentials);
+    final bool matrixPolicyManagerIsRegistered = watchValue(
+        (SessionManager x) => x.matrixPolicyManagerRegistrationStatus);
     final int credit = session.credit!;
     final String username = session.username!;
     final bool isAdmin = session.isAdmin!;
@@ -100,7 +103,11 @@ class SettingsView extends WatchingWidget {
                         onTap: () async {
                           try {
                             final String? password = await shortTextfieldDialog(
-                                context, 'Token erneuern', 'Passwort');
+                                context: context,
+                                title: 'Token erneuern',
+                                labelText: 'Passwort eingeben',
+                                hintText: 'Ihr Passwort hier eingeben',
+                                obscureText: true);
                             if (password == null) {
                               return;
                             }
@@ -108,14 +115,17 @@ class SettingsView extends WatchingWidget {
                             int success = await locator<SessionManager>()
                                 .refreshToken(password);
 
-                            if (success == 401 && context.mounted) {
-                              snackbarError(context, 'Falsches Passwort');
+                            if (success == 401) {
+                              locator<SnackBarManager>().showSnackBar(
+                                  SnackBarType.error, 'Falsches Passwort');
                               return;
-                            } else if (success == 200 && context.mounted) {
-                              snackbarSuccess(context, 'Token erneuert!');
+                            } else if (success == 200) {
+                              locator<SnackBarManager>().showSnackBar(
+                                  SnackBarType.success, 'Token erneuert!');
                             }
                           } catch (e) {
-                            snackbarError(context, 'Unbekannter Fehler');
+                            locator<SnackBarManager>().showSnackBar(
+                                SnackBarType.error, 'Unbekannter Fehler: $e');
                           }
                         },
                         child: const Icon(Icons.password_rounded)),
@@ -128,7 +138,9 @@ class SettingsView extends WatchingWidget {
                               context, 'Ausloggen', 'Wirklich ausloggen?');
                           if (confirm == true && context.mounted) {
                             logout(context);
-                            snackbarSuccess(context, 'Erfolgreich ausgeloggt!');
+                            locator<SnackBarManager>().showSnackBar(
+                                SnackBarType.success,
+                                'Erfolgreich ausgeloggt!');
                           }
                         },
                         child: const Icon(Icons.logout)),
@@ -146,7 +158,8 @@ class SettingsView extends WatchingWidget {
                           'Lokale ID-Schlüssel löschen?');
                       if (confirm == true && context.mounted) {
                         locator.get<PupilBaseManager>().deleteData();
-                        snackbarSuccess(context, 'ID-Schlüssel gelöscht');
+                        locator<SnackBarManager>().showSnackBar(
+                            SnackBarType.success, 'ID-Schlüssel gelöscht');
                       }
                       return;
                     },
@@ -163,9 +176,10 @@ class SettingsView extends WatchingWidget {
                           'Instanz-ID-Schlüssel löschen',
                           'Instanz-ID-Schlüssel löschen?');
                       if (confirm == true && context.mounted) {
-                        locator<EnvManager>().deleteEnv();
-                        snackbarSuccess(
-                            context, 'Instanz-ID-Schlüssel gelöscht');
+                        await locator<EnvManager>().deleteEnv();
+                        locator<SnackBarManager>().showSnackBar(
+                            SnackBarType.success,
+                            'Instanz-ID-Schlüssel gelöscht');
                         final cacheManager = DefaultCacheManager();
                         await cacheManager.emptyCache();
                         if (context.mounted) {
@@ -192,10 +206,9 @@ class SettingsView extends WatchingWidget {
                           if (confirm == true && context.mounted) {
                             final cacheManager = DefaultCacheManager();
                             await cacheManager.emptyCache();
-                            if (context.mounted) {
-                              snackbarSuccess(
-                                  context, 'der Bilder-Cache wurde gelöscht');
-                            }
+                            locator<SnackBarManager>().showSnackBar(
+                                SnackBarType.success,
+                                'der Bilder-Cache wurde gelöscht');
                           }
                           return;
                         },
@@ -259,10 +272,13 @@ class SettingsView extends WatchingWidget {
                               .increaseUsersCredit();
                           if (context.mounted) {
                             if (success) {
-                              snackbarSuccess(context, 'Guthaben übernommen!');
+                              locator<SnackBarManager>().showSnackBar(
+                                  SnackBarType.success,
+                                  'Transaktion erfolgreich!');
                             } else {
-                              snackbarError(
-                                  context, 'Fehler bei der Überweisung');
+                              locator<SnackBarManager>().showSnackBar(
+                                  SnackBarType.error,
+                                  'Fehler bei der Überweisung');
                             }
                           }
                         },
@@ -275,6 +291,43 @@ class SettingsView extends WatchingWidget {
 
                             if (qr != null && context.mounted) {
                               await showQrCode(qr, context);
+                            }
+                          }),
+                      SettingsTile.navigation(
+                          leading: matrixPolicyManagerIsRegistered
+                              ? const Icon(
+                                  Icons.check_circle_rounded,
+                                  color: Colors.green,
+                                )
+                              : const Icon(Icons.chat_rounded),
+                          title: matrixPolicyManagerIsRegistered
+                              ? const Text('Raumverwaltung initialisiert')
+                              : const Text('Raumverwaltung initialisieren'),
+                          onPressed: (context) async {
+                            if (!matrixPolicyManagerIsRegistered) {
+                              bool matrixEnvValuesAvailable =
+                                  await secureStorageContains('matrix');
+                              if (matrixEnvValuesAvailable) {
+                                await registerMatrixPolicyManager();
+                                return;
+                              }
+                              if (context.mounted) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (ctx) =>
+                                      const SetMatrixEnvironmentValuesView(),
+                                ));
+                              }
+                            }
+                          }),
+                      SettingsTile.navigation(
+                          leading: const Icon(Icons.chat_rounded),
+                          title: const Text('Policy generieren'),
+                          onPressed: (context) async {
+                            final bool confirmed =
+                                await generatePolicyJsonFile();
+                            if (confirmed) {
+                              locator<SnackBarManager>().showSnackBar(
+                                  SnackBarType.error, 'Datei generiert');
                             }
                           }),
                     ]),

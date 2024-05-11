@@ -8,7 +8,7 @@ import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/controller/school_list_pupils_controller.dart';
 
-List<Widget> pupilSchoolListContentList(Pupil pupil) {
+List<Widget> pupilSchoolListContentList(PupilProxy pupil) {
   final schoolListLocator = locator<SchoolListManager>();
   List<PupilList> pupilLists =
       locator<SchoolListManager>().getVisibleSchoolLists(pupil);
@@ -63,6 +63,7 @@ List<Widget> pupilSchoolListContentList(Pupil pupil) {
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
+                                color: interactiveColor,
                               ),
                             ),
                           ),

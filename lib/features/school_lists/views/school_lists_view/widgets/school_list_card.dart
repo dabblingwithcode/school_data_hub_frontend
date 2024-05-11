@@ -60,18 +60,26 @@ Widget schoolListCard(BuildContext context, SchoolList schoolList) {
                       children: [
                         Row(
                           children: [
-                            Text(
-                              schoolList.listName,
-                              style: const TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            Expanded(
+                              child: SingleChildScrollView(
+                                scrollDirection: Axis.horizontal,
+                                child: Text(
+                                  schoolList.listName,
+                                  style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: interactiveColor),
+                                ),
+                              ),
                             ),
-                            const Spacer(),
+                            const Gap(10),
                             Text(
-                              schoolList.createdBy,
+                              schoolList.visibility == 'public'
+                                  ? 'HER'
+                                  : schoolList.createdBy,
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
-                                color: backgroundColor,
                               ),
                             ),
                             const Padding(padding: EdgeInsets.only(right: 10))

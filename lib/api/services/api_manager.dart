@@ -10,25 +10,43 @@ import '../../common/services/locator.dart';
 final token = locator<SessionManager>().credentials.value.jwt;
 
 class ApiManager {
+  ValueListenable<String> get tokenKey => _tokenKey;
   ValueListenable<String> get token => _token;
   ValueListenable<DioClient> get dioClient => _dioClient;
   ValueListenable<bool> get isRunning => _isRunning;
 
+  final _tokenKey = ValueNotifier<String>('x-access-token');
   final _token = ValueNotifier<String>('');
-  final _dioClient = ValueNotifier<DioClient>(DioClient(Dio(), '', '', null));
+  final _dioClient = ValueNotifier<DioClient>(
+      DioClient(Dio(), '', 'x-access-token', '', null));
   final _isRunning = ValueNotifier<bool>(false);
   ApiManager();
   Future<ApiManager> init(String token) async {
-    await setApi(token);
+    refreshToken(token);
+
     debug.warning('ApiManager should be ready now');
     return this;
   }
 
-  setApi(String token) {
-    _token.value = token;
-    final baseUrl = locator<EnvManager>().env.value.serverUrl;
+  setCustomDioClientOptions(
+      String baseUrl, String tokenKey, String token, bool isFile) {
     //static const baseUrl = 'http://10.0.2.2:5000/api'; // android VM
     //static const baseUrl = 'http://127.0.0.1:5000/api'; //windows
-    _dioClient.value = DioClient(Dio(), token, baseUrl, false);
+    _dioClient.value = DioClient(Dio(), baseUrl, tokenKey, token, false);
+  }
+
+  setDefaultDioClientOptions() {
+    _dioClient.value = DioClient(
+      Dio(),
+      locator<EnvManager>().env.value.serverUrl!,
+      'x-access-token',
+      _token.value,
+      false,
+    );
+  }
+
+  refreshToken(String token) {
+    _token.value = token;
+    setDefaultDioClientOptions();
   }
 }

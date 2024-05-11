@@ -6,11 +6,13 @@ import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/controller/attendance_list_controller.dart';
 import 'package:schuldaten_hub/features/credit/controller/credit_list_controller.dart';
 import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/controller/learning_support_list_controller.dart';
+import 'package:schuldaten_hub/features/matrix/views/room_list_view/controller/room_list_controller.dart';
 import 'package:schuldaten_hub/features/ogs/controller/ogs_list_controller.dart';
 import 'package:schuldaten_hub/features/pupil/views/special_info_view/controller/special_info_controller.dart';
 
 double buttonSize = 150;
-List<Widget> pupilListButtons(BuildContext context, double screenWidth) {
+List<Widget> pupilListButtons(
+    BuildContext context, double screenWidth, bool matrixSessionConfigured) {
   return [
     Padding(
       padding: const EdgeInsets.all(4.0),
@@ -302,5 +304,42 @@ List<Widget> pupilListButtons(BuildContext context, double screenWidth) {
         ),
       ),
     ),
+    if (matrixSessionConfigured)
+      Padding(
+        padding: const EdgeInsets.all(4.0),
+        child: InkWell(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (ctx) => const RoomList(),
+            ));
+          },
+          child: SizedBox(
+            width: buttonSize,
+            height: buttonSize,
+            child: Card(
+              color: backgroundColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(15.0),
+              ),
+              child: const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.chat_rounded,
+                    size: 50,
+                    color: gridViewColor,
+                  ),
+                  Gap(10),
+                  Text(
+                    'Matrix-Räume',
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
   ];
 }

@@ -3,44 +3,47 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
+import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/authorizations/views/new_authorization_view/new_authorization_view.dart';
 
-BottomAppBar authorizationListBottomNavBar(BuildContext context) {
-  return BottomAppBar(
-    padding: const EdgeInsets.all(9),
-    shape: null,
-    color: backgroundColor,
-    child: IconTheme(
-      data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
-      child: Row(
-        children: <Widget>[
-          const Spacer(),
-          IconButton(
-            tooltip: 'zurück',
-            icon: const Icon(
-              Icons.arrow_back,
-              size: 35,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          const Gap(30),
-          if (locator<SessionManager>().isAdmin.value == true)
+Widget authorizationListBottomNavBar(BuildContext context) {
+  return bottomNavBarLayout(
+    BottomAppBar(
+      padding: const EdgeInsets.all(9),
+      shape: null,
+      color: backgroundColor,
+      child: IconTheme(
+        data: IconThemeData(color: Theme.of(context).colorScheme.onPrimary),
+        child: Row(
+          children: <Widget>[
+            const Spacer(),
             IconButton(
-              tooltip: 'Neue Liste',
+              tooltip: 'zurück',
               icon: const Icon(
-                Icons.add,
+                Icons.arrow_back,
                 size: 35,
               ),
               onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => const NewAuthorizationView(),
-                ));
+                Navigator.pop(context);
               },
             ),
-          const Gap(15)
-        ],
+            const Gap(30),
+            if (locator<SessionManager>().isAdmin.value == true)
+              IconButton(
+                tooltip: 'Neue Liste',
+                icon: const Icon(
+                  Icons.add,
+                  size: 35,
+                ),
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (ctx) => const NewAuthorizationView(),
+                  ));
+                },
+              ),
+            const Gap(15)
+          ],
+        ),
       ),
     ),
   );

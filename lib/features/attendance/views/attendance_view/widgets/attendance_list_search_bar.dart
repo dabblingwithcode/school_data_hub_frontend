@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/controller/attendance_list_controller.dart';
@@ -8,7 +9,7 @@ import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 
-Widget attendanceListSearchBar(BuildContext context, List<Pupil> pupils,
+Widget attendanceListSearchBar(BuildContext context, List<PupilProxy> pupils,
     AttendanceListController controller, DateTime thisDate, bool filtersOn) {
   return Container(
     decoration: BoxDecoration(
@@ -79,7 +80,10 @@ Widget attendanceListSearchBar(BuildContext context, List<Pupil> pupils,
           child: Row(
             children: [
               Expanded(
-                  child: searchTextField('Schüler/in suchen', controller,
+                  child: searchTextField(
+                      SearchType.pupil,
+                      'Schüler/in suchen',
+                      controller,
                       locator<PupilFilterManager>().refreshFilteredPupils)),
               InkWell(
                 onTap: () => showAttendanceFilterBottomSheet(context),

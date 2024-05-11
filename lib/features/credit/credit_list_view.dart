@@ -19,7 +19,7 @@ class CreditListView extends WatchingWidget {
   final CreditListController controller;
   final int userCredit;
   final bool filtersOn;
-  final List<Pupil> pupils;
+  final List<PupilProxy> pupils;
   const CreditListView(
       this.controller, this.userCredit, this.filtersOn, this.pupils,
       {Key? key})
@@ -38,7 +38,11 @@ class CreditListView extends WatchingWidget {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.credit_card, size: 25),
+            const Icon(
+              Icons.credit_card,
+              size: 25,
+              color: Colors.white,
+            ),
             const Gap(10),
             Text(
               'Guthaben: $userCredit',

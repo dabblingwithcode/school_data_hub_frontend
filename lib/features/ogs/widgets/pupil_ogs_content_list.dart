@@ -4,13 +4,12 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
+import 'package:schuldaten_hub/features/ogs/widgets/dialogs/ogs_pickup_time_dialog.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
-import 'package:schuldaten_hub/features/ogs/widgets/dialogs/ogs_pickup_time_dialog.dart';
 
-List<Widget> pupilOgsContentList(Pupil pupil, BuildContext context) {
+List<Widget> pupilOgsContentList(PupilProxy pupil, BuildContext context) {
   return [
     Row(
       children: [
@@ -43,10 +42,6 @@ List<Widget> pupilOgsContentList(Pupil pupil, BuildContext context) {
         if (ogsInfo == null) return;
         await locator<PupilManager>()
             .patchPupil(pupil.internalId, 'ogs_info', ogsInfo);
-        if (context.mounted) {
-          snackbarSuccess(
-              context, 'Die neuen Infos wurden im Server geschrieben!');
-        }
       },
       onLongPress: () async {
         if (pupil.ogsInfo == null) return;

@@ -1,21 +1,22 @@
 import 'package:dio/dio.dart';
 import 'package:schuldaten_hub/api/dio/dio_interceptor.dart';
 import 'package:schuldaten_hub/api/endpoints.dart';
-
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 
 class DioClient {
   // dio instance
   final Dio _dio;
-  final String? token;
   final String? baseUrl;
+  final String? tokenKey;
+  final String? token;
+
   final bool? isFile;
   String? user;
 
   // injecting dio instance
-  DioClient(this._dio, this.token, this.baseUrl, this.isFile) {
+  DioClient(this._dio, this.baseUrl, this.tokenKey, this.token, this.isFile) {
     if (token == '') {
-      debug.success('DioClient with no token!');
+      debug.warning('DioClient has no token!');
     } else {
       debug.success('DioClient has a token! | ${StackTrace.current}');
     }
@@ -23,7 +24,7 @@ class DioClient {
       ..options.baseUrl = baseUrl!
       ..options.connectTimeout = Endpoints.connectionTimeout
       //..options.headers['content-Type'] = 'application/json'
-      ..options.headers['x-access-token'] = token
+      ..options.headers[tokenKey!] = token
       ..options.receiveTimeout = Endpoints.receiveTimeout
       ..options.responseType = ResponseType.json
       ..interceptors.add(DioInterceptor())
@@ -54,9 +55,17 @@ class DioClient {
         onReceiveProgress: onReceiveProgress,
       );
       debug.info('request sent:, $uri | ${StackTrace.current}');
-      return response;
+
+      if (response.statusCode == 200) {
+        return response;
+      } else if (response.statusCode == 404) {
+        debug.error('404 not found: $uri | ${StackTrace.current}');
+        return;
+      } else {
+        debug.error('Dio error:  $uri | ${StackTrace.current}');
+      }
     } catch (e) {
-      debug.error('Dio error: $e in request:, $uri | ${StackTrace.current}');
+      debug.error('Dio rethrowing error: $e | ${StackTrace.current}');
 
       rethrow;
     }

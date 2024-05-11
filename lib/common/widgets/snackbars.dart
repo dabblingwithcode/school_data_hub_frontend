@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:top_snackbar_flutter/custom_snack_bar.dart';
 import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 snackbar(BuildContext context, snackbarType, message) {
   switch (snackbarType) {
-    case 'error':
+    case SnackBarType.error:
       snackbarError(context, message);
       break;
-    case 'warning':
+    case SnackBarType.warning:
       snackbarWarning(context, message);
       break;
-    case 'info':
+    case SnackBarType.info:
       snackbarInfo(context, message);
       break;
-    case 'success':
+    case SnackBarType.success:
       snackbarSuccess(context, message);
       break;
   }
@@ -23,18 +24,23 @@ snackbarInfo(BuildContext context, message) {
   if (context.mounted) {
     showTopSnackBar(
       Overlay.of(context),
-      CustomSnackBar.info(
-        backgroundColor: Colors.blue,
-        textStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-          color: Colors.white,
+      Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: CustomSnackBar.info(
+            backgroundColor: Colors.blue,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.white,
+            ),
+            icon: const Icon(
+              Icons.school,
+              color: Colors.blue,
+            ),
+            message: message,
+          ),
         ),
-        icon: const Icon(
-          Icons.school,
-          color: Colors.blue,
-        ),
-        message: message,
       ),
       animationDuration: const Duration(milliseconds: 1600),
       displayDuration: const Duration(
@@ -48,18 +54,23 @@ snackbarSuccess(context, message) {
   if (context.mounted) {
     showTopSnackBar(
       Overlay.of(context),
-      CustomSnackBar.success(
-        backgroundColor: Colors.green,
-        textStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-          color: Colors.white,
+      Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: CustomSnackBar.success(
+            backgroundColor: Colors.green,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+              color: Colors.white,
+            ),
+            icon: const Icon(
+              Icons.school,
+              color: Colors.green,
+            ),
+            message: message,
+          ),
         ),
-        icon: const Icon(
-          Icons.school,
-          color: Colors.green,
-        ),
-        message: message,
       ),
       animationDuration: const Duration(milliseconds: 1600),
       displayDuration: const Duration(

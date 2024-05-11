@@ -1,37 +1,58 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-part 'competence_check.freezed.dart';
 part 'competence_check.g.dart';
 
-@freezed
-class CompetenceCheck with _$CompetenceCheck {
-  factory CompetenceCheck({
-    @JsonKey(name: 'check_id') required String checkId,
-    required String comment,
-    @JsonKey(name: 'competence_id') required int competenceId,
-    @JsonKey(name: 'competence_status') required int competenceStatus,
-    @JsonKey(name: 'created_at') required DateTime createdAt,
-    @JsonKey(name: 'created_by') required String createdBy,
-    @JsonKey(name: 'pupil_id') required int pupilId,
-    @JsonKey(name: 'is_report') required bool isReport,
-    @JsonKey(name: 'report_id') String? reportId,
-    @JsonKey(name: "competence_check_files")
-    List<CompetenceCheckFile>? competenceCheckFiles,
-  }) = _CompetenceCheck;
+@JsonSerializable()
+class CompetenceCheck {
+  @JsonKey(name: 'check_id')
+  final String checkId;
+  final String comment;
+  @JsonKey(name: 'competence_id')
+  final int competenceId;
+  @JsonKey(name: 'competence_status')
+  final int competenceStatus;
+  @JsonKey(name: 'created_at')
+  final DateTime createdAt;
+  @JsonKey(name: 'created_by')
+  final String createdBy;
+  @JsonKey(name: 'pupil_id')
+  final int pupilId;
+  @JsonKey(name: 'is_report')
+  final bool isReport;
+  @JsonKey(name: 'report_id')
+  final String? reportId;
+  @JsonKey(name: "competence_check_files")
+  final List<CompetenceCheckFile>? competenceCheckFiles;
+
+  CompetenceCheck(
+      {required this.checkId,
+      required this.comment,
+      required this.competenceId,
+      required this.competenceStatus,
+      required this.createdAt,
+      required this.createdBy,
+      required this.pupilId,
+      required this.isReport,
+      required this.reportId,
+      required this.competenceCheckFiles});
 
   factory CompetenceCheck.fromJson(Map<String, dynamic> json) =>
       _$CompetenceCheckFromJson(json);
 }
 
-@freezed
-class CompetenceCheckFile with _$CompetenceCheckFile {
-  const factory CompetenceCheckFile({
-    @JsonKey(name: "check_id") required String checkId,
-    @JsonKey(name: "file_id") required String fileId,
-    @JsonKey(name: "file_url") required String fileUrl,
-  }) = _CompetenceCheckFile;
+@JsonSerializable()
+class CompetenceCheckFile {
+  @JsonKey(name: "check_id")
+  final String checkId;
+  @JsonKey(name: "file_id")
+  final String fileId;
+  @JsonKey(name: "file_url")
+  final String fileUrl;
+
+  CompetenceCheckFile(
+      {required this.checkId, required this.fileId, required this.fileUrl});
 
   factory CompetenceCheckFile.fromJson(Map<String, dynamic> json) =>
       _$CompetenceCheckFileFromJson(json);

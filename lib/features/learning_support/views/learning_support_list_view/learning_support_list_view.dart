@@ -22,10 +22,10 @@ class LearningSupportListView extends WatchingWidget {
   Widget build(BuildContext context) {
     bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
     // These come from the PupilFilterManager
-    List<Pupil> filteredPupils =
+    List<PupilProxy> filteredPupils =
         watchValue((PupilFilterManager x) => x.filteredPupils);
     // We want them to go through the learning support filters first
-    final List<Pupil> pupils = categoryGoalFilteredPupils(filteredPupils);
+    final List<PupilProxy> pupils = categoryGoalFilteredPupils(filteredPupils);
 
     return Scaffold(
       backgroundColor: canvasColor,

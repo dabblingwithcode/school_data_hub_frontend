@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 
-BottomAppBar pupilProfileBottomNavBar(BuildContext context) {
+Widget pupilProfileBottomNavBar(BuildContext context) {
   return BottomAppBar(
     padding: const EdgeInsets.only(bottom: 10, right: 10, top: 6),
     shape: null,

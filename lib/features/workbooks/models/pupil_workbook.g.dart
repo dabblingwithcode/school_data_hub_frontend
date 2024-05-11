@@ -6,8 +6,8 @@ part of 'pupil_workbook.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PupilWorkbookImpl _$$PupilWorkbookImplFromJson(Map<String, dynamic> json) =>
-    _$PupilWorkbookImpl(
+PupilWorkbook _$PupilWorkbookFromJson(Map<String, dynamic> json) =>
+    PupilWorkbook(
       createdAt: DateTime.parse(json['created_at'] as String),
       createdBy: json['created_by'] as String,
       state: json['state'] as String?,
@@ -17,7 +17,7 @@ _$PupilWorkbookImpl _$$PupilWorkbookImplFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['finished_at'] as String),
     );
 
-Map<String, dynamic> _$$PupilWorkbookImplToJson(_$PupilWorkbookImpl instance) =>
+Map<String, dynamic> _$PupilWorkbookToJson(PupilWorkbook instance) =>
     <String, dynamic>{
       'created_at': instance.createdAt.toIso8601String(),
       'created_by': instance.createdBy,

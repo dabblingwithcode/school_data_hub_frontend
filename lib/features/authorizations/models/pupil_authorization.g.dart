@@ -6,8 +6,8 @@ part of 'pupil_authorization.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$AuthorizationImpl _$$AuthorizationImplFromJson(Map<String, dynamic> json) =>
-    _$AuthorizationImpl(
+PupilAuthorization _$PupilAuthorizationFromJson(Map<String, dynamic> json) =>
+    PupilAuthorization(
       comment: json['comment'] as String?,
       createdBy: json['created_by'] as String?,
       fileUrl: json['file_url'] as String?,
@@ -16,7 +16,7 @@ _$AuthorizationImpl _$$AuthorizationImplFromJson(Map<String, dynamic> json) =>
       status: json['status'] as bool?,
     );
 
-Map<String, dynamic> _$$AuthorizationImplToJson(_$AuthorizationImpl instance) =>
+Map<String, dynamic> _$PupilAuthorizationToJson(PupilAuthorization instance) =>
     <String, dynamic>{
       'comment': instance.comment,
       'created_by': instance.createdBy,

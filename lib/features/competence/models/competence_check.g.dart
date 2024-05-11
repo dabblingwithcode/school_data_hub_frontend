@@ -6,9 +6,8 @@ part of 'competence_check.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$CompetenceCheckImpl _$$CompetenceCheckImplFromJson(
-        Map<String, dynamic> json) =>
-    _$CompetenceCheckImpl(
+CompetenceCheck _$CompetenceCheckFromJson(Map<String, dynamic> json) =>
+    CompetenceCheck(
       checkId: json['check_id'] as String,
       comment: json['comment'] as String,
       competenceId: json['competence_id'] as int,
@@ -23,8 +22,7 @@ _$CompetenceCheckImpl _$$CompetenceCheckImplFromJson(
           .toList(),
     );
 
-Map<String, dynamic> _$$CompetenceCheckImplToJson(
-        _$CompetenceCheckImpl instance) =>
+Map<String, dynamic> _$CompetenceCheckToJson(CompetenceCheck instance) =>
     <String, dynamic>{
       'check_id': instance.checkId,
       'comment': instance.comment,
@@ -38,16 +36,15 @@ Map<String, dynamic> _$$CompetenceCheckImplToJson(
       'competence_check_files': instance.competenceCheckFiles,
     };
 
-_$CompetenceCheckFileImpl _$$CompetenceCheckFileImplFromJson(
-        Map<String, dynamic> json) =>
-    _$CompetenceCheckFileImpl(
+CompetenceCheckFile _$CompetenceCheckFileFromJson(Map<String, dynamic> json) =>
+    CompetenceCheckFile(
       checkId: json['check_id'] as String,
       fileId: json['file_id'] as String,
       fileUrl: json['file_url'] as String,
     );
 
-Map<String, dynamic> _$$CompetenceCheckFileImplToJson(
-        _$CompetenceCheckFileImpl instance) =>
+Map<String, dynamic> _$CompetenceCheckFileToJson(
+        CompetenceCheckFile instance) =>
     <String, dynamic>{
       'check_id': instance.checkId,
       'file_id': instance.fileId,

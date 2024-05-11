@@ -1,14 +1,13 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-part 'schoolday.freezed.dart';
 part 'schoolday.g.dart';
 
-@freezed
-class Schoolday with _$Schoolday {
-  factory Schoolday({
-    required DateTime schoolday,
-  }) = _Schoolday;
+@JsonSerializable()
+class Schoolday {
+  final DateTime schoolday;
 
   factory Schoolday.fromJson(Map<String, dynamic> json) =>
       _$SchooldayFromJson(json);
+
+  Schoolday({required this.schoolday});
 }

@@ -4,13 +4,13 @@ import 'package:schuldaten_hub/features/learning_support/services/goal_manager.d
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 
-List<Pupil> categoryGoalFilteredPupils(List<Pupil> filteredPupils) {
+List<PupilProxy> categoryGoalFilteredPupils(List<PupilProxy> filteredPupils) {
   final Map<PupilFilter, bool> activeFilters =
       locator<PupilFilterManager>().filterState.value;
   bool toList = true;
   if (filteredPupils.isNotEmpty) {
-    List<Pupil> categoryFilteredPupils = [];
-    for (Pupil pupil in filteredPupils) {
+    List<PupilProxy> categoryFilteredPupils = [];
+    for (PupilProxy pupil in filteredPupils) {
       if (pupil.pupilGoals != null) {
         if (activeFilters[PupilFilter.supportAreaMotorics] == true &&
             pupil.pupilGoals!.any((element) =>

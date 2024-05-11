@@ -1,21 +1,29 @@
 // ignore_for_file: invalid_annotation_target
 
-import 'package:freezed_annotation/freezed_annotation.dart';
-
-part 'book.freezed.dart';
+import 'package:json_annotation/json_annotation.dart';
 part 'book.g.dart';
 
-@freezed
-class Book with _$Book {
-  factory Book({
-    required String author,
-    @JsonKey(name: "book_id") required String bookId,
-    @JsonKey(name: "image_url") required String imageUrl,
-    required int isbn,
-    required String location,
-    @JsonKey(name: "reading_level") required String readingLevel,
-    required String title,
-  }) = _Book;
+@JsonSerializable()
+class Book {
+  final String author;
+  @JsonKey(name: "book_id")
+  final String bookId;
+  @JsonKey(name: "image_url")
+  final String imageUrl;
+  final int isbn;
+  final String location;
+  @JsonKey(name: "reading_level")
+  final String readingLevel;
+  final String title;
 
   factory Book.fromJson(Map<String, dynamic> json) => _$BookFromJson(json);
+
+  Book(
+      {required this.author,
+      required this.bookId,
+      required this.imageUrl,
+      required this.isbn,
+      required this.location,
+      required this.readingLevel,
+      required this.title});
 }

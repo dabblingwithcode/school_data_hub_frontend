@@ -6,8 +6,8 @@ part of 'competence_goal.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$CompetenceGoalImpl _$$CompetenceGoalImplFromJson(Map<String, dynamic> json) =>
-    _$CompetenceGoalImpl(
+CompetenceGoal _$CompetenceGoalFromJson(Map<String, dynamic> json) =>
+    CompetenceGoal(
       competenceId: json['competence_id'] as int,
       competenceGoalId: json['competence_goal_id'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
@@ -15,15 +15,14 @@ _$CompetenceGoalImpl _$$CompetenceGoalImplFromJson(Map<String, dynamic> json) =>
       pupilId: json['pupil_id'] as int,
       description: json['description'] as String,
       strategies: json['strategies'] as String,
-      achieved: json['achieved'] as int?,
-      achievedAt: json['achieved_at'] == null
+    )
+      ..achieved = json['achieved'] as int?
+      ..achievedAt = json['achieved_at'] == null
           ? null
-          : DateTime.parse(json['achieved_at'] as String),
-      modifiedBy: json['modified_by'] as String?,
-    );
+          : DateTime.parse(json['achieved_at'] as String)
+      ..modifiedBy = json['modified_by'] as String?;
 
-Map<String, dynamic> _$$CompetenceGoalImplToJson(
-        _$CompetenceGoalImpl instance) =>
+Map<String, dynamic> _$CompetenceGoalToJson(CompetenceGoal instance) =>
     <String, dynamic>{
       'competence_id': instance.competenceId,
       'competence_goal_id': instance.competenceGoalId,

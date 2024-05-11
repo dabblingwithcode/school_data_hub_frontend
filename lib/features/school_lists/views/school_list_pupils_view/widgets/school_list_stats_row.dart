@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_helper_functions.dart';
 
-Widget schoolListStatsRow(SchoolList schoolList, List<Pupil> pupils) {
+Widget schoolListStatsRow(SchoolList schoolList, List<PupilProxy> pupils) {
   return Row(
     children: [
       const Icon(

@@ -15,8 +15,8 @@ class AdmonitionList extends WatchingStatefulWidget {
 }
 
 class AdmonitionListController extends State<AdmonitionList> {
-  List<Pupil>? pupils;
-  List<Pupil>? filteredPupils;
+  List<PupilProxy>? pupils;
+  List<PupilProxy>? filteredPupils;
   TextEditingController searchController = TextEditingController();
   bool isSearchMode = false;
   bool isSearching = false;
@@ -33,54 +33,10 @@ class AdmonitionListController extends State<AdmonitionList> {
       return;
     }
     final List<int> pupilsToFetch = [];
-    for (Pupil pupil in filteredPupils!) {
+    for (PupilProxy pupil in filteredPupils!) {
       pupilsToFetch.add(pupil.internalId);
     }
     await locator.get<PupilManager>().fetchPupilsById(pupilsToFetch);
-  }
-
-  // void _search() async {
-  //   if (!isSearching) {
-  //     setState(() {
-  //       isSearching = true;
-  //     });
-  //   }
-
-  //   if (!isSearchMode) return;
-  //   setState(() {
-  //     isSearching = false;
-  //   });
-  // }
-
-  void cancelSearch({bool unfocus = true}) {
-    setState(() {
-      searchController.clear();
-      isSearchMode = false;
-      locator<PupilFilterManager>().setSearchText('');
-      filteredPupils = List.from(pupils!);
-      isSearching = false;
-    });
-
-    if (unfocus) FocusManager.instance.primaryFocus?.unfocus();
-  }
-
-  void onSearchEnter(String text) {
-    if (text.isEmpty) {
-      cancelSearch(unfocus: false);
-      return;
-    }
-    isSearchMode = true;
-    locator<PupilFilterManager>().setSearchText(text);
-    setState(() {
-      // final pupils = locator<PupilFilterManager>().filteredPupils.value;
-      // isSearchMode = true;
-      // filteredPupils = pupils
-      //     .where(
-      //       (user) =>
-      //           user.firstName!.toLowerCase().contains(text.toLowerCase()),
-      //     )
-      //     .toList();
-    });
   }
 
   @override

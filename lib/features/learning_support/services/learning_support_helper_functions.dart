@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/features/learning_support/models/category/pupil_c
 import 'package:schuldaten_hub/features/learning_support/models/goal/pupil_goal.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
-List<PupilGoal> getGoalsForCategory(Pupil pupil, int categoryId) {
+List<PupilGoal> getGoalsForCategory(PupilProxy pupil, int categoryId) {
   List<PupilGoal> goals = [];
   if (pupil.pupilGoals != null) {
     for (PupilGoal goal in pupil.pupilGoals!) {
@@ -18,7 +18,7 @@ List<PupilGoal> getGoalsForCategory(Pupil pupil, int categoryId) {
   return [];
 }
 
-PupilCategoryStatus? getCategoryStatus(Pupil pupil, int goalCategoryId) {
+PupilCategoryStatus? getCategoryStatus(PupilProxy pupil, int goalCategoryId) {
   if (pupil.pupilCategoryStatuses != null) {
     if (pupil.pupilCategoryStatuses!.isNotEmpty) {
       final PupilCategoryStatus? categoryStatus = pupil.pupilCategoryStatuses!
@@ -30,7 +30,7 @@ PupilCategoryStatus? getCategoryStatus(Pupil pupil, int goalCategoryId) {
   return null;
 }
 
-PupilGoal? getGoalForCategory(Pupil pupil, int goalCategoryId) {
+PupilGoal? getGoalForCategory(PupilProxy pupil, int goalCategoryId) {
   if (pupil.pupilGoals != null) {
     if (pupil.pupilGoals!.isNotEmpty) {
       final PupilGoal? goal = pupil.pupilGoals!.lastWhereOrNull(

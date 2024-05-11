@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/features/competence/models/competence_goal.dart';
-import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
 import 'package:schuldaten_hub/features/learning/views/widgets/pupil_competence_tree.dart';
+import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
 import 'package:schuldaten_hub/features/workbooks/views/workbook_list_view/widgets/pupil_workbook_card.dart';
 
-List<Widget> pupilLearningContentList(Pupil pupil, BuildContext context) {
+List<Widget> pupilLearningContentList(PupilProxy pupil, BuildContext context) {
   return [
     const Row(
       children: [
@@ -33,18 +34,17 @@ List<Widget> pupilLearningContentList(Pupil pupil, BuildContext context) {
               .workbooks
               .value
               .any((element) => element.isbn == int.parse(scanResult))) {
-            if (context.mounted) {
-              snackbarError(context,
-                  'Das Arbeitsheft wurde noch nicht erfasst. Bitte zuerst unter "Arbeitshefte" hinzufügen.');
-            }
+            locator<SnackBarManager>().showSnackBar(SnackBarType.error,
+                'Das Arbeitsheft wurde noch nicht erfasst. Bitte zuerst unter "Arbeitshefte" hinzufügen.');
+
             return;
           }
           if (pupil.pupilWorkbooks!.isNotEmpty) {
             if (pupil.pupilWorkbooks!.any(
                 (element) => element.workbookIsbn == int.parse(scanResult))) {
-              if (context.mounted) {
-                snackbarError(context, 'Dieses Arbeitsheft gibt es schon!');
-              }
+              locator<SnackBarManager>().showSnackBar(
+                  SnackBarType.error, 'Dieses Arbeitsheft gibt es schon!');
+
               return;
             }
           }
@@ -52,13 +52,12 @@ List<Widget> pupilLearningContentList(Pupil pupil, BuildContext context) {
               .newPupilWorkbook(pupil.internalId, int.parse(scanResult));
           return;
         }
-        if (context.mounted) {
-          snackbarError(context, 'Fehler beim Scannen');
-        }
+        locator<SnackBarManager>()
+            .showSnackBar(SnackBarType.error, 'Fehler beim Scannen');
       },
       child: const Text(
         "NEUES ARBEITSHEFT",
-        style: TextStyle(fontSize: 17.0),
+        style: buttonTextStyle,
       ),
     ),
     pupil.pupilWorkbooks!.isNotEmpty ? const Gap(15) : const SizedBox.shrink(),
@@ -76,8 +75,9 @@ List<Widget> pupilLearningContentList(Pupil pupil, BuildContext context) {
                 child: Card(
                   child: Column(
                     children: [
-                      pupilWorkbookCard(
-                          context, pupilWorkbooks[index], pupil.internalId),
+                      PupilWorkbookCard(
+                          pupilWorkbook: pupilWorkbooks[index],
+                          pupilId: pupil.internalId),
                     ],
                   ),
                 ),
@@ -99,7 +99,7 @@ List<Widget> pupilLearningContentList(Pupil pupil, BuildContext context) {
       onPressed: () async {},
       child: const Text(
         "NEUES LERNZIEL",
-        style: TextStyle(fontSize: 17.0),
+        style: buttonTextStyle,
       ),
     ),
     pupil.competenceGoals!.isNotEmpty ? const Gap(15) : const SizedBox.shrink(),

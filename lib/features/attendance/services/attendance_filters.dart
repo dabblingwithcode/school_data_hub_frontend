@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 
-bool attendanceFilter(Pupil pupil, bool toList) {
+bool attendanceFilter(PupilProxy pupil, bool toList) {
   final thisDate = locator<SchooldayManager>().thisDate.value;
   final activeFilters = locator<PupilFilterManager>().filterState.value;
   // Filter pupils present

@@ -3,9 +3,14 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
+import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
+import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/controller/attendance_list_controller.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/attendance_dropdown_menu_items.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/dialogues/late_in_minutes_dialog.dart';
@@ -13,37 +18,30 @@ import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/dialogues/returned_time_picker.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-
-import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
-
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceCard extends WatchingWidget {
   final AttendanceListController controller;
-  final Pupil passedPupil;
+  final PupilProxy passedPupil;
   const AttendanceCard(this.controller, this.passedPupil, {super.key});
   @override
   Widget build(BuildContext context) {
-    List<Pupil> pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
-    final Pupil pupil = pupils
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
+    final PupilProxy pupil = pupils
         .where((element) => element.internalId == passedPupil.internalId)
         .first;
     final attendanceManager = locator<AttendanceManager>();
     DateTime thisDate = watchValue((SchooldayManager x) => x.thisDate);
-    String dropdownMissedValue =
-        attendanceManager.setMissedTypeValue(pupil.internalId, thisDate);
-    bool? excusedValue =
-        attendanceManager.setExcusedValue(pupil.internalId, thisDate);
+    String dropdownMissedValue = setMissedTypeValue(pupil.internalId, thisDate);
+    bool? excusedValue = setExcusedValue(pupil.internalId, thisDate);
     String dropdownContactedValue =
-        attendanceManager.setContactedValue(pupil.internalId, thisDate);
-    bool? returnedValue =
-        attendanceManager.setReturnedValue(pupil.internalId, thisDate);
+        setContactedValue(pupil.internalId, thisDate);
+    bool? returnedValue = setReturnedValue(pupil.internalId, thisDate);
     String? createdModifiedValue(pupilId) {
-      return attendanceManager.setCreatedModifiedValue(pupilId, thisDate);
+      return setCreatedModifiedValue(pupilId, thisDate);
     }
 
     if (Platform.isAndroid) {
@@ -388,8 +386,10 @@ class AttendanceCard extends WatchingWidget {
                                     }
                                     if (newValue == 'missed' &&
                                         returnedValue == true) {
-                                      snackbarError(context,
+                                      locator<SnackBarManager>().showSnackBar(
+                                          SnackBarType.error,
                                           'Ein Kind, das abgeholt wurde, gilt nicht als fehlend für den Tag!');
+
                                       return;
                                     }
                                     if (newValue == 'late') {
@@ -529,7 +529,8 @@ class AttendanceCard extends WatchingWidget {
                                   onChanged: (bool? newValue) async {
                                     if (newValue == true) {
                                       if (dropdownMissedValue == 'missed') {
-                                        snackbarError(context,
+                                        locator<SnackBarManager>().showSnackBar(
+                                            SnackBarType.error,
                                             'Ein fehlendes Kind kann nicht abgeholt werden!');
                                         return;
                                       }

@@ -6,8 +6,7 @@ part of 'pupil_goal.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PupilGoalImpl _$$PupilGoalImplFromJson(Map<String, dynamic> json) =>
-    _$PupilGoalImpl(
+PupilGoal _$PupilGoalFromJson(Map<String, dynamic> json) => PupilGoal(
       achieved: json['achieved'] as int?,
       achievedAt: json['achieved_at'] == null
           ? null
@@ -23,8 +22,7 @@ _$PupilGoalImpl _$$PupilGoalImplFromJson(Map<String, dynamic> json) =>
       strategies: json['strategies'] as String?,
     );
 
-Map<String, dynamic> _$$PupilGoalImplToJson(_$PupilGoalImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$PupilGoalToJson(PupilGoal instance) => <String, dynamic>{
       'achieved': instance.achieved,
       'achieved_at': instance.achievedAt?.toIso8601String(),
       'created_at': instance.createdAt.toIso8601String(),

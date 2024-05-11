@@ -6,20 +6,20 @@ part of 'workbook.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$WorkbookImpl _$$WorkbookImplFromJson(Map<String, dynamic> json) =>
-    _$WorkbookImpl(
+Workbook _$WorkbookFromJson(Map<String, dynamic> json) => Workbook(
       isbn: json['isbn'] as int,
       name: json['name'] as String?,
       subject: json['subject'] as String?,
       level: json['level'] as String?,
+      amount: json['amount'] as int,
       imageUrl: json['image_url'] as String?,
     );
 
-Map<String, dynamic> _$$WorkbookImplToJson(_$WorkbookImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$WorkbookToJson(Workbook instance) => <String, dynamic>{
       'isbn': instance.isbn,
       'name': instance.name,
       'subject': instance.subject,
       'level': instance.level,
+      'amount': instance.amount,
       'image_url': instance.imageUrl,
     };

@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
-setAvatar(context, Pupil pupil) async {
+setAvatar(context, PupilProxy pupil) async {
   XFile? image = await ImagePicker().pickImage(
       source: ImageSource.camera,
       preferredCameraDevice:
@@ -61,23 +61,26 @@ class _CropAvatarState extends State<CropAvatarView> {
         bottomNavigationBar: _buildButtons(),
       );
 
-  Widget _buildButtons() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          IconButton(
-            icon: const Icon(Icons.rotate_90_degrees_ccw_outlined),
-            onPressed: _rotateLeft,
-          ),
-          IconButton(
-            icon: const Icon(Icons.rotate_90_degrees_cw_outlined),
-            onPressed: _rotateRight,
-          ),
-          TextButton(
-            onPressed: _finished,
-            child: const Text('Done'),
-          ),
-        ],
+  Widget _buildButtons() => SizedBox(
+        height: 60,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            IconButton(
+              icon: const Icon(Icons.rotate_90_degrees_ccw_outlined),
+              onPressed: _rotateLeft,
+            ),
+            IconButton(
+              icon: const Icon(Icons.rotate_90_degrees_cw_outlined),
+              onPressed: _rotateRight,
+            ),
+            TextButton(
+              onPressed: _finished,
+              child: const Text('Fertig'),
+            ),
+          ],
+        ),
       );
 
   // Future<void> _aspectRatios() async {

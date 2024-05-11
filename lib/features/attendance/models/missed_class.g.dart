@@ -6,12 +6,9 @@ part of 'missed_class.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$MissedClassImpl _$$MissedClassImplFromJson(Map<String, dynamic> json) =>
-    _$MissedClassImpl(
+MissedClass _$MissedClassFromJson(Map<String, dynamic> json) => MissedClass(
       contacted: json['contacted'] as String?,
       createdBy: json['created_by'] as String,
-      excused: json['excused'] as bool?,
-      minutesLate: json['minutes_late'] as int?,
       missedDay: DateTime.parse(json['missed_day'] as String),
       missedPupilId: json['missed_pupil_id'] as int,
       missedType: json['missed_type'] as String,
@@ -19,9 +16,11 @@ _$MissedClassImpl _$$MissedClassImplFromJson(Map<String, dynamic> json) =>
       returned: json['returned'] as bool?,
       returnedAt: json['returned_at'] as String?,
       writtenExcuse: json['written_excuse'] as bool?,
-    );
+    )
+      ..excused = json['excused'] as bool?
+      ..minutesLate = json['minutes_late'] as int?;
 
-Map<String, dynamic> _$$MissedClassImplToJson(_$MissedClassImpl instance) =>
+Map<String, dynamic> _$MissedClassToJson(MissedClass instance) =>
     <String, dynamic>{
       'contacted': instance.contacted,
       'created_by': instance.createdBy,

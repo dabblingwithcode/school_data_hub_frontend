@@ -15,13 +15,15 @@ class EndpointsPupil {
   }
 
   String getPupilAvatar(int id) {
-    return '/pupil/$id/avatar';
+    return '/pupils/$id/avatar';
   }
 
   //- PATCH
   String patchPupil(int id) {
     return '/pupils/$id';
   }
+
+  static const patchSiblings = '/pupils/patch_siblings';
 
   String patchPupilhWithAvatar(int id) {
     return '/pupils/$id/avatar';

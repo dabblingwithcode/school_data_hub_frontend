@@ -25,12 +25,12 @@ class EndpointsSchoolList {
 
   //- POST
   String addPupilsToSchoolList(String listId) {
-    return '/list/$listId/pupils';
+    return '/school_lists/$listId/pupils';
   }
 
   //-PATCH
   String patchPupilSchoolList(int pupilId, String listId) {
-    return 'pupil_lists/$pupilId/$listId';
+    return '/pupil_lists/$pupilId/$listId';
   }
 
   //-DELETE

@@ -55,3 +55,11 @@ ButtonStyle successButtonStyle = ElevatedButton.styleFrom(
     ),
     backgroundColor: groupColor,
     minimumSize: const Size.fromHeight(50));
+
+//- FILTER CHIP STYLES
+
+const filterChipPadding = EdgeInsets.symmetric(horizontal: 0, vertical: 0);
+const filterChipLabelPadding = EdgeInsets.only(left: 10, right: 10);
+
+const filterChipShape =
+    RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20)));

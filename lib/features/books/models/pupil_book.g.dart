@@ -6,8 +6,7 @@ part of 'pupil_book.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PupilBookImpl _$$PupilBookImplFromJson(Map<String, dynamic> json) =>
-    _$PupilBookImpl(
+PupilBook _$PupilBookFromJson(Map<String, dynamic> json) => PupilBook(
       bookId: json['book_id'] as String,
       lentAt: DateTime.parse(json['lent_at'] as String),
       lentBy: json['lent_by'] as String,
@@ -19,8 +18,7 @@ _$PupilBookImpl _$$PupilBookImplFromJson(Map<String, dynamic> json) =>
       state: json['state'] as String,
     );
 
-Map<String, dynamic> _$$PupilBookImplToJson(_$PupilBookImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$PupilBookToJson(PupilBook instance) => <String, dynamic>{
       'book_id': instance.bookId,
       'lent_at': instance.lentAt.toIso8601String(),
       'lent_by': instance.lentBy,

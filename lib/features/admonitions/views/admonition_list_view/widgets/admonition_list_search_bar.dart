@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/admonitions/services/admonition_helper_functions.dart';
@@ -9,7 +10,7 @@ import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/w
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 
-Widget admonitionListSearchBar(BuildContext context, List<Pupil> pupils,
+Widget admonitionListSearchBar(BuildContext context, List<PupilProxy> pupils,
     AdmonitionListController controller, bool filtersOn) {
   return Container(
     decoration: BoxDecoration(
@@ -48,7 +49,7 @@ Widget admonitionListSearchBar(BuildContext context, List<Pupil> pupils,
                   ),
                   const Gap(10),
                   Text(
-                    getAdmonitionCount(pupils).toString(),
+                    SchoolEventHelper.getAdmonitionCount(pupils).toString(),
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -65,7 +66,8 @@ Widget admonitionListSearchBar(BuildContext context, List<Pupil> pupils,
                   ),
                   const Gap(10),
                   Text(
-                    getSchoolAdmonitionCount(pupils).toString(),
+                    SchoolEventHelper.getSchoolAdmonitionCount(pupils)
+                        .toString(),
                     style: const TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,
@@ -81,7 +83,9 @@ Widget admonitionListSearchBar(BuildContext context, List<Pupil> pupils,
                     ),
                   ),
                   const Gap(10),
-                  Text(getOgsAdmonitionCount(pupils).toString(),
+                  Text(
+                      SchoolEventHelper.getOgsAdmonitionCount(pupils)
+                          .toString(),
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -97,7 +101,10 @@ Widget admonitionListSearchBar(BuildContext context, List<Pupil> pupils,
           child: Row(
             children: [
               Expanded(
-                  child: searchTextField('Schüler/in suchen', controller,
+                  child: searchTextField(
+                      SearchType.pupil,
+                      'Schüler/in suchen',
+                      controller,
                       locator<PupilFilterManager>().refreshFilteredPupils)),
               InkWell(
                 onTap: () => showAdmonitionFilterBottomSheet(context),

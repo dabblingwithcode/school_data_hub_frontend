@@ -70,7 +70,7 @@ class _CropAvatarState extends State<CropAvatarView> {
           ),
           TextButton(
             onPressed: _finished,
-            child: const Text('Done'),
+            child: const Text('Fertig'),
           ),
         ],
       );
@@ -129,10 +129,11 @@ class _CropAvatarState extends State<CropAvatarView> {
     );
     final imageBytes = await bitmap.toByteData(format: ImageByteFormat.png);
     final file = await imageToFile(bytes: imageBytes!);
-    if (context.mounted) {
+    if (mounted) {
       Navigator.pop(context, file);
       controller.dispose();
     }
+
     // ignore: use_build_context_synchronously
     // await showDialog<bool>(
     //   context: context,

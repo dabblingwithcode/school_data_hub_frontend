@@ -1,27 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_base.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data_schild.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
-Pupil findPupilById(int pupilId) {
+PupilProxy findPupilById(int pupilId) {
   final pupils = locator<PupilManager>().pupils.value;
-  final Pupil pupil =
+  final PupilProxy pupil =
       pupils.singleWhere((element) => element.internalId == pupilId);
   return pupil;
 }
 
-List<Pupil> pupilsFromPupilIds(List<int> pupilIds) {
-  List<Pupil> pupilsfromPupilIds = [];
+List<PupilProxy> pupilsFromPupilIds(List<int> pupilIds) {
+  List<PupilProxy> pupilsfromPupilIds = [];
   final pupils = locator<PupilManager>().pupils.value;
   pupilsfromPupilIds =
       pupils.where((element) => pupilIds.contains(element.internalId)).toList();
   return pupilsfromPupilIds;
 }
 
-List<int> pupilIdsFromPupils(List<Pupil> pupils) {
+List<int> pupilIdsFromPupils(List<PupilProxy> pupils) {
   List<int> pupilIds = [];
-  for (Pupil pupil in pupils) {
+  for (PupilProxy pupil in pupils) {
     pupilIds.add(pupil.internalId);
   }
   return pupilIds;
@@ -30,7 +30,7 @@ List<int> pupilIdsFromPupils(List<Pupil> pupils) {
 List<int> restOfPupils(List<int> pupilIds) {
   List<int> restOfPupils = [];
   final pupils = locator<PupilManager>().pupils.value;
-  for (Pupil pupil in pupils) {
+  for (PupilProxy pupil in pupils) {
     if (!pupilIds.contains(pupil.internalId)) {
       restOfPupils.add(pupil.internalId);
     }
@@ -38,8 +38,8 @@ List<int> restOfPupils(List<int> pupilIds) {
   return restOfPupils;
 }
 
-Pupil pupilCopiedWith(Pupil namedPupil, Pupil updatedPupil) {
-  final Pupil pupil = updatedPupil.copyWith(
+PupilProxy pupilCopiedWith(PupilProxy namedPupil, PupilProxy updatedPupil) {
+  final PupilProxy pupil = updatedPupil.copyWith(
     firstName: namedPupil.firstName,
     lastName: namedPupil.lastName,
     group: namedPupil.group,
@@ -55,7 +55,8 @@ Pupil pupilCopiedWith(Pupil namedPupil, Pupil updatedPupil) {
   return pupil;
 }
 
-Pupil patchPupilWithPupilbaseData(PupilBase pupilbase, Pupil pupil) {
+PupilProxy patchPupilWithPupilbaseData(
+    PupilDataFromSchild pupilbase, PupilProxy pupil) {
   return pupil.copyWith(
     firstName: pupilbase.name,
     lastName: pupilbase.lastName,
@@ -122,11 +123,11 @@ String communicationPredicate(String? value) {
   }
 }
 
-List<Pupil> siblings(Pupil pupil) {
+List<PupilProxy> siblings(PupilProxy pupil) {
   if (pupil.family == null) {
     return [];
   }
-  List<Pupil> pupilSiblings = [];
+  List<PupilProxy> pupilSiblings = [];
   final pupils = locator<PupilManager>().pupils.value;
   pupilSiblings =
       pupils.where((element) => element.family == pupil.family).toList();
@@ -148,18 +149,19 @@ bool hadLanguageSupport(DateTime? date) {
   return false;
 }
 
-List<Pupil> pupilsWithBirthdayInTheLastSevenDays() {
-  final List<Pupil> pupils = locator<PupilManager>().pupils.value;
+List<PupilProxy> pupilsWithBirthdayInTheLastSevenDays() {
+  final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
   final DateTime now = DateTime.now();
 
-  List<Pupil> pupilsWithBirthdayInTheLastSevenDays = [];
-  for (Pupil pupil in pupils) {
+  List<PupilProxy> pupilsWithBirthdayInTheLastSevenDays = [];
+  final int currentDay = now.day;
+  final int currentMonth = now.month;
+
+  for (PupilProxy pupil in pupils) {
     if (pupil.birthday != null) {
       // Extract day and month from birthday and current date
       final int pupilBirthDay = pupil.birthday!.day;
       final int pupilBirthMonth = pupil.birthday!.month;
-      final int currentDay = now.day;
-      final int currentMonth = now.month;
 
       // Check if birthday falls within the last seven days (including today)
       final bool isBirthdayTodayOrInLastSevenDays = (currentMonth ==

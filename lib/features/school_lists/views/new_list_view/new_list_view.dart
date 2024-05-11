@@ -36,11 +36,22 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
 
   @override
   Widget build(BuildContext context) {
-    List<Pupil> pupilsFromIds = pupilsFromPupilIds(pupilIds.toList());
+    List<PupilProxy> pupilsFromIds = pupilsFromPupilIds(pupilIds.toList());
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: backgroundColor,
-        title: const Text('Neue Liste'),
+        title: const Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(Icons.rule_rounded, size: 25, color: Colors.white),
+            Gap(10),
+            Text(
+              'Neue Liste',
+              style: appBarTextStyle,
+            ),
+          ],
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -125,7 +136,7 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: pupilsFromIds.length,
                                 itemBuilder: (context, int index) {
-                                  Pupil listedPupil = pupilsFromIds[index];
+                                  PupilProxy listedPupil = pupilsFromIds[index];
                                   return Column(
                                     children: [
                                       const Gap(5),
@@ -209,7 +220,7 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
                   },
                   child: const Text(
                     'KINDER AUSWÄHLEN',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: buttonTextStyle,
                   ),
                 ),
                 const Gap(15),
@@ -221,7 +232,7 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
                   },
                   child: const Text(
                     'SENDEN',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: buttonTextStyle,
                   ),
                 ),
                 const Gap(15),
@@ -232,7 +243,7 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
                   },
                   child: const Text(
                     'ABBRECHEN',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    style: buttonTextStyle,
                   ),
                 ),
               ],

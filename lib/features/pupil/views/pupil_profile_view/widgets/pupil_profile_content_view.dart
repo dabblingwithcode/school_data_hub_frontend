@@ -12,29 +12,27 @@ import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_stat
 import 'package:schuldaten_hub/features/attendance/views/widgets/pupil_attendance_content_list.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/controller/authorizations_controller.dart';
 import 'package:schuldaten_hub/features/authorizations/views/pupil_authorizations_content_list.dart';
+import 'package:schuldaten_hub/features/credit/controller/credit_list_controller.dart';
+import 'package:schuldaten_hub/features/credit/widgets/pupil_credit_content_list.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
-import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/controller/learning_support_list_controller.dart';
 import 'package:schuldaten_hub/features/learning/views/widgets/pupil_learning_content_list.dart';
+import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/controller/learning_support_list_controller.dart';
+import 'package:schuldaten_hub/features/learning_support/views/pupil_profile_learning_support_content.dart';
 import 'package:schuldaten_hub/features/ogs/controller/ogs_list_controller.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/pupil_ogs_content_list.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/credit/controller/credit_list_controller.dart';
-import 'package:schuldaten_hub/features/credit/widgets/pupil_credit_content_list.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
-
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_infos_content_list.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_language_content_list.dart';
-import 'package:schuldaten_hub/features/learning_support/views/pupil_profile_learning_support_content.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/widgets/pupil_school_list_content_list.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_lists_view/controller/school_lists_controller.dart';
 
-Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
+Widget pupilProfileContentView(PupilProxy pupil, List<Admonition> admonitions,
     BuildContext context, PupilProfileController controller) {
   return SingleChildScrollView(
     child: Column(
       children: <Widget>[
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            0) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 0)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -65,10 +63,8 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
                 ...pupilInfosContentList(pupil, context)
               ]),
             ),
-          )
-        ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            1) ...<Widget>[
+          ),
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 1)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -102,7 +98,6 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
                   ]),
             ),
           ),
-        ],
         if (locator<BottomNavManager>().pupilProfileNavState.value ==
             2) ...<Widget>[
           Card(
@@ -149,8 +144,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
             ),
           ),
         ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            3) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 3)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -187,9 +181,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            4) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 4)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -224,7 +216,6 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
         if (locator<BottomNavManager>().pupilProfileNavState.value ==
             5) ...<Widget>[
           Card(
@@ -262,8 +253,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
             ),
           ),
         ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            6) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 6)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -298,9 +288,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            7) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 7)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -335,9 +323,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            8) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 8)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -386,9 +372,7 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
-        if (locator<BottomNavManager>().pupilProfileNavState.value ==
-            9) ...<Widget>[
+        if (locator<BottomNavManager>().pupilProfileNavState.value == 9)
           Card(
             color: pupilProfileCardColor,
             shape: RoundedRectangleBorder(
@@ -418,7 +402,6 @@ Widget pupilProfileContentView(Pupil pupil, List<Admonition> admonitions,
               ]),
             ),
           ),
-        ],
         const Gap(20),
       ],
     ),

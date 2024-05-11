@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 import 'package:schuldaten_hub/api/endpoints.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/download_decrypt_or_cached_image.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_manager.dart';
+import 'package:schuldaten_hub/features/admonitions/services/admonition_helper_functions.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
 import 'package:widget_zoom/widget_zoom.dart';
-import 'package:functional_widget_annotation/functional_widget_annotation.dart';
 
 part 'avatar.g.dart';
 
-Widget avatarImage(Pupil pupil, double size) {
+Widget avatarImage(PupilProxy pupil, double size) {
   return SizedBox(
     width: size,
     height: size,
@@ -39,7 +39,6 @@ Widget avatarImage(Pupil pupil, double size) {
                       // Display an error message if the future encounters an error
                       return Text('Error: ${snapshot.error}');
                     } else {
-                      // Display the result when the future is complete
                       return snapshot.data!;
                     }
                   },
@@ -57,7 +56,7 @@ Widget avatarImage(Pupil pupil, double size) {
 }
 
 @swidget
-Widget avatarWithBadges(Pupil pupil, double size) {
+Widget avatarWithBadges(PupilProxy pupil, double size) {
   return Padding(
     padding: const EdgeInsets.all(5.0),
     child: Stack(
@@ -96,7 +95,7 @@ Widget avatarWithBadges(Pupil pupil, double size) {
             width: 30.0,
             height: 30.0,
             decoration: BoxDecoration(
-              color: locator<AdmonitionManager>().pupilIsAdmonishedToday(pupil)
+              color: SchoolEventHelper.pupilIsAdmonishedToday(pupil)
                   ? Colors.red
                   : schoolyearColor,
               shape: BoxShape.circle,

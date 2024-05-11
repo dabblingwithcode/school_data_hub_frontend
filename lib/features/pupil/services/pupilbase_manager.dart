@@ -7,30 +7,29 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/api/endpoints.dart';
-import 'package:schuldaten_hub/common/models/manager_report.dart';
+import 'package:schuldaten_hub/api/services/api_manager.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
-
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_base.dart';
-import 'package:schuldaten_hub/api/services/api_manager.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data_schild.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
-import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 
 class PupilBaseManager {
-  ValueListenable<List<PupilBase>> get pupilbase => _pupilbase;
+  ValueListenable<List<PupilDataFromSchild>> get pupilbase => _pupilbase;
   ValueListenable<List<int>> get availablePupilIds => _availablePupilIds;
-  ValueListenable<Report> get operationReport => _operationReport;
+
   ValueListenable<bool> get isRunning => _isRunning;
 
-  final _pupilbase = ValueNotifier<List<PupilBase>>([]);
+  final _pupilbase = ValueNotifier<List<PupilDataFromSchild>>([]);
   final _availablePupilIds = ValueNotifier<List<int>>([]);
-  final _operationReport = ValueNotifier<Report>(Report(null, null));
+
   final _isRunning = ValueNotifier<bool>(false);
   PupilBaseManager();
 
@@ -40,71 +39,72 @@ class PupilBaseManager {
   }
 
   Future deleteData() async {
-    _isRunning.value = true;
+    locator<SnackBarManager>().isRunningValue(true);
     await secureStorageDelete('pupilBase');
     _pupilbase.value = [];
     locator<PupilManager>().deletePupils();
     locator<PupilFilterManager>().deleteFilteredPupils();
     _availablePupilIds.value = [];
-    _isRunning.value = false;
+    locator<SnackBarManager>().isRunningValue(false);
   }
 
   Future getStoredPupilBase() async {
-    debug.warning('GETPUPILBASE Getting the stored pupilbase');
-    List<PupilBase> storedPupilBase = [];
+    debug.warning('Getting the stored pupilbase');
+    List<PupilDataFromSchild> storedPupilBase = [];
     bool pupilBaseExists = await secureStorage.containsKey(key: 'pupilBase');
     if (pupilBaseExists == true) {
-      debug.warning('GETPUPILBASE There is a pupilbase');
+      debug.warning('There is a pupilbase');
       List<int> pupilIds = [];
       String? storedString = await secureStorageRead('pupilBase');
       storedPupilBase = (json.decode(storedString!) as List)
-          .map((i) => PupilBase.fromJson(i))
+          .map((i) => PupilDataFromSchild.fromJson(i))
           .toList();
       _pupilbase.value = storedPupilBase;
       // let's fill _availablePupilIds too
-      for (PupilBase pupil in storedPupilBase) {
+      for (PupilDataFromSchild pupil in storedPupilBase) {
         pupilIds.add(pupil.id);
       }
       _availablePupilIds.value = pupilIds;
       //- This would be great place for SIGNAL READY!!!
       debug.info(
-          'GETPUPILBASE Pupilbase loaded - Length is ${_pupilbase.value.length} | ${StackTrace.current}');
+          'Pupilbase loaded - Length is ${_pupilbase.value.length} | ${StackTrace.current}');
       return;
     } else {
-      debug.info(
-          'GETPUPILBASE No pupilBase in storage! | ${StackTrace.current}');
+      debug.info('No pupilBase in storage! | ${StackTrace.current}');
       return;
     }
   }
 
   scanNewPupilBase(BuildContext context) async {
-    final String? scanResult = await scanner(context, 'Kinder-Code scannen');
+    final String? scanResult = await scanner(context, 'Scanning Pupilbase');
     if (scanResult != null) {
       addNewPupilBase(scanResult);
     } else {
-      if (context.mounted) {
-        snackbarWarning(context, 'Scanvorgang abgebrochen');
-      }
+      locator<SnackBarManager>()
+          .showSnackBar(SnackBarType.warning, 'Scan abgebrochen');
+      return;
     }
   }
 
-  setNewPupilBase(List<PupilBase> pupilBase) async {
+  setNewPupilBase(List<PupilDataFromSchild> pupilBase) async {
     _pupilbase.value = pupilBase;
     await secureStorageWrite('pupilBase', jsonEncode(pupilBase));
   }
 
   void addNewPupilBase(String scanResult) async {
     String? decryptedResult;
+
     if (!Platform.isWindows) {
       decryptedResult = await customEncrypter.decrypt(scanResult);
     } else {
+      // If the string is imported in windows, it's not encrypted
       decryptedResult = scanResult;
     }
-    List<PupilBase> oldPupilbase = _pupilbase.value;
+    List<PupilDataFromSchild> oldPupilbase = _pupilbase.value;
     // The pupils in the string are separated by a '\n' - let's split them apart
     List<String> splittedPupilBase = decryptedResult!.split('\n');
     // The properties are separated by commas, let's build the pupilbase objects with them
-    List<PupilBase> scannedPupilBase = [];
+    List<PupilDataFromSchild> scannedPupilBase = [];
     for (String data in splittedPupilBase) {
       if (data != '') {
         List splittedData = data.split(',');
@@ -113,7 +113,7 @@ class PupilBaseManager {
             : splittedData[4] == '04'
                 ? 'S4'
                 : splittedData[4];
-        scannedPupilBase.add(PupilBase(
+        scannedPupilBase.add(PupilDataFromSchild(
           id: int.parse(splittedData[0]),
           name: splittedData[1],
           lastName: splittedData[2],
@@ -133,11 +133,12 @@ class PupilBaseManager {
         ));
       }
     }
-    debug.info('base verarbeitet');
+    debug.info('Pupilbase processed');
     // Now we need to combine it with the stored pupilbase -
     // old elements not present in the new pupilbase are added
-    List<PupilBase> newPupilBase = List<PupilBase>.from(scannedPupilBase);
-    for (PupilBase oldPupil in oldPupilbase) {
+    List<PupilDataFromSchild> newPupilBase =
+        List<PupilDataFromSchild>.from(scannedPupilBase);
+    for (PupilDataFromSchild oldPupil in oldPupilbase) {
       if (newPupilBase.where((element) => element.id == oldPupil.id).isEmpty) {
         newPupilBase.add(oldPupil);
       }
@@ -145,7 +146,7 @@ class PupilBaseManager {
     _pupilbase.value = newPupilBase;
     // we have a new pupilbase - let's update _availablePupilIds too
     List<int> availablePupils = [];
-    for (PupilBase pupil in _pupilbase.value) {
+    for (PupilDataFromSchild pupil in _pupilbase.value) {
       availablePupils.add(pupil.id);
     }
     _availablePupilIds.value = availablePupils;
@@ -158,12 +159,12 @@ class PupilBaseManager {
   }
 
   void importPupilsFromTxt(String scanResult) async {
-    List<PupilBase> oldPupilbase = _pupilbase.value;
+    List<PupilDataFromSchild> oldPupilbase = _pupilbase.value;
     // The pupils in the string are separated by a line break - let's split them out
     List splittedPupilBase = scanResult.split('\n');
     // The properties are separated by commas, let's build the pupilbase objects with them
     String updatedPupils = '';
-    List<PupilBase> scannedPupilBase = [];
+    List<PupilDataFromSchild> scannedPupilBase = [];
     for (String data in splittedPupilBase) {
       if (data != '') {
         List splittedData = data.split(',');
@@ -172,7 +173,7 @@ class PupilBaseManager {
             : splittedData[4] == '04'
                 ? 'S4'
                 : splittedData[4];
-        scannedPupilBase.add(PupilBase(
+        scannedPupilBase.add(PupilDataFromSchild(
           id: int.parse(splittedData[0]),
           name: splittedData[1],
           lastName: splittedData[2],
@@ -217,8 +218,9 @@ class PupilBaseManager {
     textFile.delete();
     _pupilbase.value = scannedPupilBase;
     // old elements not present in the new pupilbase are added
-    List<PupilBase> newPupilBase = List<PupilBase>.from(scannedPupilBase);
-    for (PupilBase oldPupil in oldPupilbase) {
+    List<PupilDataFromSchild> newPupilBase =
+        List<PupilDataFromSchild>.from(scannedPupilBase);
+    for (PupilDataFromSchild oldPupil in oldPupilbase) {
       if (newPupilBase.where((element) => element.id == oldPupil.id).isEmpty) {
         newPupilBase.add(oldPupil);
       }
@@ -226,7 +228,7 @@ class PupilBaseManager {
     _pupilbase.value = newPupilBase;
     // we have a new pupilbase - let's update _availablePupilIds too
     List<int> availablePupils = [];
-    for (PupilBase pupil in _pupilbase.value) {
+    for (PupilDataFromSchild pupil in _pupilbase.value) {
       availablePupils.add(pupil.id);
     }
     _availablePupilIds.value = availablePupils;
@@ -240,7 +242,7 @@ class PupilBaseManager {
   Future<String> generatePupilBaseQrData(List<int> pupilIds) async {
     String qrString = '';
     for (int pupilId in pupilIds) {
-      PupilBase pupilbase =
+      PupilDataFromSchild pupilbase =
           _pupilbase.value.where((element) => element.id == pupilId).single;
       final migrationSupportEnds = pupilbase.migrationSupportEnds != null
           ? pupilbase.migrationSupportEnds!.formatForJson()
@@ -256,9 +258,9 @@ class PupilBaseManager {
   }
 
   Future<Map<String, String>> generateAllPupilBaseQrData(int qrsize) async {
-    final List<PupilBase> pupilBase = _pupilbase.value;
+    final List<PupilDataFromSchild> pupilBase = _pupilbase.value;
     // First we group the pupils by their group in a map
-    Map<String, List<PupilBase>> groupedPupils = {};
+    Map<String, List<PupilDataFromSchild>> groupedPupils = {};
 
     for (var pupil in pupilBase) {
       if (groupedPupils.containsKey(pupil.group)) {
@@ -271,11 +273,11 @@ class PupilBaseManager {
 
     // Now we iterate over the groupedPupils and generate maps with smaller lists with no more than 12 items and add to the group name the subgroup number
     for (String groupName in groupedPupils.keys) {
-      final List<PupilBase> group = groupedPupils[groupName]!;
+      final List<PupilDataFromSchild> group = groupedPupils[groupName]!;
       int numSubgroups = (group.length / qrsize).ceil();
 
       for (int i = 0; i < numSubgroups; i++) {
-        List<PupilBase> smallerGroup = [];
+        List<PupilDataFromSchild> smallerGroup = [];
         int start = i * qrsize;
         int end = (i + 1) * qrsize;
         if (end > group.length) {
@@ -283,7 +285,7 @@ class PupilBaseManager {
         }
         smallerGroup.addAll(group.sublist(start, end));
         String qrString = '';
-        for (PupilBase pupilbase in smallerGroup) {
+        for (PupilDataFromSchild pupilbase in smallerGroup) {
           final migrationSupportEnds = pupilbase.migrationSupportEnds != null
               ? pupilbase.migrationSupportEnds!.formatForJson()
               : '';
@@ -307,14 +309,15 @@ class PupilBaseManager {
     return sortedQrGroupLists;
   }
 
-  void deletePupilBaseElements(List<PupilBase> toBeDeletedPupilBase) {
-    _isRunning.value = true;
-    List<PupilBase> modifiedPupilBaseList = List.from(_pupilbase.value);
+  void deletePupilBaseElements(List<PupilDataFromSchild> toBeDeletedPupilBase) {
+    locator<SnackBarManager>().isRunningValue(true);
+    List<PupilDataFromSchild> modifiedPupilBaseList =
+        List.from(_pupilbase.value);
     modifiedPupilBaseList.removeWhere((pupilBase) =>
         toBeDeletedPupilBase.any((element) => element.id == pupilBase.id));
     _pupilbase.value = modifiedPupilBaseList;
     secureStorageWrite('pupilBase', jsonEncode(_pupilbase.value));
-    _isRunning.value = false;
+    locator<SnackBarManager>().isRunningValue(false);
     debug.info(
         'Pupilbase reduced: deleted ${toBeDeletedPupilBase.length} pupils not present in the database, now ${_pupilbase.value.length} | ${StackTrace.current}');
   }

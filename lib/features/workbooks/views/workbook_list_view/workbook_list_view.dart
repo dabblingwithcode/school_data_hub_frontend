@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:watch_it/watch_it.dart';
-
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
@@ -12,6 +11,7 @@ import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart
 import 'package:schuldaten_hub/features/workbooks/views/workbook_list_view/controller/workbook_controller.dart';
 import 'package:schuldaten_hub/features/workbooks/views/workbook_list_view/widgets/workbook_card.dart';
 import 'package:schuldaten_hub/features/workbooks/views/workbook_list_view/widgets/workbook_list_bottom_navbar.dart';
+import 'package:watch_it/watch_it.dart';
 
 class WorkbookListView extends WatchingWidget {
   final WorkbookController controller;
@@ -93,6 +93,7 @@ class WorkbookListView extends WatchingWidget {
                           children: [
                             Expanded(
                               child: searchTextField(
+                                  SearchType.workbook,
                                   'Arbeitsheft suchen',
                                   controller,
                                   locator<WorkbookManager>().getWorkbooks),
@@ -132,8 +133,8 @@ class WorkbookListView extends WatchingWidget {
                               child: ListView.builder(
                                 itemCount: workbooks.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return workbookCard(
-                                      context, workbooks[index]);
+                                  return WorkbookCard(
+                                      workbook: workbooks[index]);
                                 },
                               ),
                             ),

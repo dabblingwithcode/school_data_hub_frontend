@@ -11,7 +11,7 @@ import 'package:schuldaten_hub/features/learning_support/services/goal_manager.d
 
 import 'package:schuldaten_hub/features/learning_support/views/new_category_item_view/controller/new_category_item_controller.dart';
 
-List<Widget> buildPupilCompetenceTree(Pupil pupil, int? parentId,
+List<Widget> buildPupilCompetenceTree(PupilProxy pupil, int? parentId,
     double indentation, Color? passedBackGroundColor, BuildContext context) {
   List<Widget> competenceWidgets = [];
   final competenceLocator = locator<CompetenceManager>();

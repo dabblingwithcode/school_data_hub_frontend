@@ -13,7 +13,7 @@ import 'package:schuldaten_hub/features/learning_support/views/new_category_item
 import 'package:schuldaten_hub/features/learning_support/widgets/pupil_category_widgets/category_tree_ancestors_names.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
-List<Widget> pupilCategoryStatusesList(Pupil pupil, BuildContext context) {
+List<Widget> pupilCategoryStatusesList(PupilProxy pupil, BuildContext context) {
   if (pupil.pupilCategoryStatuses != null) {
     List<Widget> statusesWidgetList = [];
 
@@ -249,7 +249,7 @@ List<Widget> pupilCategoryStatusesList(Pupil pupil, BuildContext context) {
 }
 
 Widget statusEntry(
-    Pupil pupil, PupilCategoryStatus status, BuildContext context) {
+    PupilProxy pupil, PupilCategoryStatus status, BuildContext context) {
   return Padding(
     padding: const EdgeInsets.only(left: 8.0, right: 8, bottom: 8),
     child: InkWell(

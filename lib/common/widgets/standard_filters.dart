@@ -7,6 +7,26 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 
 import '../../features/pupil/services/pupil_filter_manager.dart';
 
+Widget filterHeading() {
+  return Row(
+    children: [
+      const Text(
+        'Filter',
+        style: title,
+      ),
+      const Spacer(),
+      IconButton(
+          iconSize: 35,
+          color: interactiveColor,
+          onPressed: () {
+            locator<PupilFilterManager>().resetFilters();
+            //Navigator.pop(context);
+          },
+          icon: const Icon(Icons.restart_alt_rounded)),
+    ],
+  );
+}
+
 Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
   bool valueA1 = activeFilters[PupilFilter.A1]!;
   bool valueA2 = activeFilters[PupilFilter.A2]!;
@@ -40,6 +60,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -53,6 +76,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -66,6 +92,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -79,6 +108,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -92,6 +124,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -120,6 +155,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -133,6 +171,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -146,6 +187,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -159,6 +203,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -172,6 +219,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -185,6 +235,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -198,6 +251,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -211,6 +267,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -224,6 +283,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,
@@ -237,6 +299,9 @@ Widget standardFilters(Map<PupilFilter, bool> activeFilters) {
             },
           ),
           FilterChip(
+            padding: filterChipPadding,
+            labelPadding: filterChipLabelPadding,
+            shape: filterChipShape,
             selectedColor: filterChipSelectedColor,
             checkmarkColor: filterChipSelectedCheckColor,
             backgroundColor: filterChipUnselectedColor,

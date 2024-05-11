@@ -5,14 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:schuldaten_hub/api/services/connection_manager.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/routes/app_routes.dart';
-import 'package:schuldaten_hub/api/services/connection_manager.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
-import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/landing_views/loading_page.dart';
+import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';
 import 'package:schuldaten_hub/features/landing_views/no_connection_view.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
 import 'package:watch_it/watch_it.dart';
@@ -67,6 +67,7 @@ class MyApp extends WatchingWidget {
   Widget build(BuildContext context) {
     bool envIsReady = watchValue((EnvManager x) => x.envReady);
     bool isAuthenticated = watchValue((SessionManager x) => x.isAuthenticated);
+
     AsyncSnapshot<List<ConnectivityResult>?> connectionStatus =
         watchStream((ConnectionManager x) => x.connectivity.value);
 
@@ -94,10 +95,7 @@ class MyApp extends WatchingWidget {
                   future: locator.allReady(),
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
-                      return SafeArea(
-                          child: Scaffold(
-                              backgroundColor: canvasColor,
-                              bottomNavigationBar: BottomNavigation()));
+                      return BottomNavigation();
                     } else {
                       return const LoadingPage();
                     }

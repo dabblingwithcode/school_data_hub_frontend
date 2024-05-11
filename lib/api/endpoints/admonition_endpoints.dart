@@ -24,6 +24,10 @@ class EndpointsAdmonition {
     return '/admonitions/$id/file';
   }
 
+  String patchAdmonitionProcessedFile(String id) {
+    return '/admonitions/$id/processed_file';
+  }
+
   //- DELETE
   String deleteAdmonition(String id) {
     return '/admonitions/$id/delete';
@@ -32,5 +36,9 @@ class EndpointsAdmonition {
 //- DELETE
   String deleteAdmonitionFile(String id) {
     return '/admonitions/$id/file';
+  }
+
+  String deleteAdmonitionProcessedFile(String id) {
+    return '/admonitions/$id/processed_file';
   }
 }

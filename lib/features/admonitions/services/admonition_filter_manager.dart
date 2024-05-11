@@ -18,7 +18,8 @@ class AdmonitionFilterManager {
       ValueNotifier<Map<AdmonitionFilter, bool>>(initialAdmonitionFilterValues);
   final _admonitionsFiltersOn = ValueNotifier<bool>(false);
   final _filteredAdmonitionsCount = ValueNotifier<int>(
-      getAdmonitionCount(locator<PupilFilterManager>().filteredPupils.value));
+      SchoolEventHelper.getAdmonitionCount(
+          locator<PupilFilterManager>().filteredPupils.value));
   AdmonitionFilterManager() {
     debug.info('AdmonitionFilterManager says hello!');
   }
@@ -35,7 +36,7 @@ class AdmonitionFilterManager {
     };
   }
 
-  List<Admonition> admonitionsInTheLastSevenDays(Pupil pupil) {
+  List<Admonition> admonitionsInTheLastSevenDays(PupilProxy pupil) {
     DateTime sevenDaysAgo = DateTime.now().subtract(const Duration(days: 7));
     List<Admonition> admonitions = [];
     if (pupil.pupilAdmonitions != null) {
@@ -48,7 +49,7 @@ class AdmonitionFilterManager {
     return admonitions;
   }
 
-  List<Admonition> admonitionsNotProcessed(Pupil pupil) {
+  List<Admonition> admonitionsNotProcessed(PupilProxy pupil) {
     List<Admonition> admonitions = [];
     if (pupil.pupilAdmonitions != null) {
       for (Admonition admonition in pupil.pupilAdmonitions!) {
@@ -60,7 +61,7 @@ class AdmonitionFilterManager {
     return admonitions;
   }
 
-  List<Admonition> admonitionsInTheLastFourteenDays(Pupil pupil) {
+  List<Admonition> admonitionsInTheLastFourteenDays(PupilProxy pupil) {
     DateTime fourteenDaysAgo =
         DateTime.now().subtract(const Duration(days: 14));
     List<Admonition> admonitions = [];
@@ -74,7 +75,7 @@ class AdmonitionFilterManager {
     return admonitions;
   }
 
-  List<Admonition> filteredAdmonitions(Pupil pupil) {
+  List<Admonition> filteredAdmonitions(PupilProxy pupil) {
     List<Admonition> filteredAdmonitions = [];
     DateTime sevenDaysAgo = DateTime.now().subtract(const Duration(days: 7));
     if (pupil.pupilAdmonitions != null) {
@@ -125,10 +126,12 @@ class AdmonitionFilterManager {
 
         filteredAdmonitions.add(admonition);
       }
+
+      // sort admonitions, latest first
+      filteredAdmonitions
+          .sort((a, b) => b.admonishedDay.compareTo(a.admonishedDay));
+      return filteredAdmonitions;
     }
-    // sort admonitions, latest first
-    filteredAdmonitions
-        .sort((a, b) => b.admonishedDay.compareTo(a.admonishedDay));
-    return filteredAdmonitions;
+    return [];
   }
 }

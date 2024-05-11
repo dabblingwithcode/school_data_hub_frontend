@@ -1,22 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
+import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/information_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
-import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
-
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_helper_functions.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
-import 'package:schuldaten_hub/common/widgets/avatar.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
-
 import 'package:watch_it/watch_it.dart';
 
 class SchoolListPupilCard extends StatelessWidget with WatchItMixin {
@@ -26,8 +25,9 @@ class SchoolListPupilCard extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     final schoolListLocator = locator<SchoolListManager>();
-    List<Pupil> pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
-    final Pupil pupil =
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
+    final PupilProxy pupil =
         pupils.where((pupil) => pupil.internalId == internalId).first;
     final PupilList pupilList = pupil.pupilLists!
         .where((pupilList) => pupilList.originList == originList)
@@ -65,8 +65,10 @@ class SchoolListPupilCard extends StatelessWidget with WatchItMixin {
                                   .credentials
                                   .value
                                   .username) {
-                            snackbarWarning(context,
-                                'Löchen nicht möglich - keine Berechtigung!');
+                            locator<SnackBarManager>().showSnackBar(
+                                SnackBarType.error,
+                                'Löschen nicht möglich - keine Berechtigung!');
+
                             return;
                           }
                         }
@@ -101,6 +103,9 @@ class SchoolListPupilCard extends StatelessWidget with WatchItMixin {
                             'Kommentar ändern',
                             pupilList.pupilListComment,
                             context);
+                        if (listComment == null) {
+                          return;
+                        }
                         await locator<SchoolListManager>().patchSchoolListPupil(
                           pupil.internalId,
                           originList,

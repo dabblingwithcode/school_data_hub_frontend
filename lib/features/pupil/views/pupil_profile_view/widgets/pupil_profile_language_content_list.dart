@@ -8,7 +8,7 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_language_communication_values_widget.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/dialogs/language_dialog.dart';
 
-List<Widget> pupilLanguageContentList(Pupil pupil, BuildContext context) {
+List<Widget> pupilLanguageContentList(PupilProxy pupil, BuildContext context) {
   return [
     Row(
       children: [

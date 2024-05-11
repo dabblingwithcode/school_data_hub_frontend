@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 final TextEditingController _textEditingController = TextEditingController();
 
 // based on https://mobikul.com/creating-stateful-dialog-form-in-flutter/
 
-Future<void> changeCreditDialog(BuildContext context, Pupil pupil) async {
+Future<void> changeCreditDialog(BuildContext context, PupilProxy pupil) async {
   return await showDialog(
       context: context,
       builder: (context) {

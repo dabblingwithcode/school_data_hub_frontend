@@ -6,16 +6,16 @@ import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
 import 'package:schuldaten_hub/common/widgets/list_tile.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/controller/attendance_ranking_list_controller.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_stats_pupil.dart';
+import 'package:schuldaten_hub/features/attendance/views/widgets/pupil_attendance_content_list.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
-import 'package:schuldaten_hub/features/attendance/views/widgets/pupil_attendance_content_list.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceRankingListCard extends WatchingStatefulWidget {
   final AttendanceRankingListController controller;
-  final Pupil passedPupil;
+  final PupilProxy passedPupil;
   const AttendanceRankingListCard(this.controller, this.passedPupil,
       {super.key});
 
@@ -34,7 +34,7 @@ class _AttendanceRankingListCardState extends State<AttendanceRankingListCard> {
 
   @override
   Widget build(BuildContext context) {
-    Pupil pupil = watchValue((PupilFilterManager x) => x.filteredPupils)
+    PupilProxy pupil = watchValue((PupilFilterManager x) => x.filteredPupils)
         .where((element) => element.internalId == widget.passedPupil.internalId)
         .first;
 

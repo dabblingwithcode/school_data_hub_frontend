@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
-import 'package:schuldaten_hub/common/utils/extensions.dart';
-import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/utils/extensions.dart';
+import 'package:schuldaten_hub/common/widgets/avatar.dart';
+import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
+import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
-import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
-import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
 
-List<Widget> pupilInfosContentList(Pupil pupil, BuildContext context) {
-  List<Pupil> pupilSiblings = siblings(pupil);
+List<Widget> pupilInfosContentList(PupilProxy pupil, BuildContext context) {
+  List<PupilProxy> pupilSiblings = siblings(pupil);
   return [
     const Row(
       children: [
@@ -51,8 +51,10 @@ List<Widget> pupilInfosContentList(Pupil pupil, BuildContext context) {
                         color: backgroundColor))
                 : const Text(
                     'keine Informationen',
-                    style:
-                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: interactiveColor),
                   ),
           ),
         ],
@@ -105,7 +107,7 @@ List<Widget> pupilInfosContentList(Pupil pupil, BuildContext context) {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: pupilSiblings.length,
             itemBuilder: (context, int index) {
-              Pupil sibling = pupilSiblings[index];
+              PupilProxy sibling = pupilSiblings[index];
               return Column(
                 children: [
                   const Gap(5),

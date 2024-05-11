@@ -6,6 +6,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
+import 'package:schuldaten_hub/common/widgets/list_tile.dart';
 import 'package:schuldaten_hub/features/admonitions/models/admonition.dart';
 import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
 import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/controller/admonition_list_controller.dart';
@@ -14,12 +15,11 @@ import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
-import 'package:schuldaten_hub/common/widgets/list_tile.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AdmonitionListCard extends WatchingStatefulWidget {
   final AdmonitionListController controller;
-  final Pupil passedPupil;
+  final PupilProxy passedPupil;
   const AdmonitionListCard(this.controller, this.passedPupil, {super.key});
 
   @override
@@ -37,10 +37,11 @@ class _AdmonitionListCardState extends State<AdmonitionListCard> {
 
   @override
   Widget build(BuildContext context) {
-    List<Pupil> pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
     Map<AdmonitionFilter, bool> admonitionFilters =
         watchValue((AdmonitionFilterManager x) => x.admonitionsFilterState);
-    final Pupil pupil = pupils
+    final PupilProxy pupil = pupils
         .where((element) => element.internalId == widget.passedPupil.internalId)
         .first;
     final List<Admonition> admonitions = List.from(pupil.pupilAdmonitions!);

@@ -13,45 +13,15 @@ class OgsList extends WatchingStatefulWidget {
 }
 
 class OgsListController extends State<OgsList> {
+  FocusNode focusNode = FocusNode();
   @override
   void initState() {
     locator<PupilFilterManager>().setFilter(PupilFilter.ogs, true);
     super.initState();
   }
 
-  TextEditingController searchController = TextEditingController();
-  bool isSearchMode = false;
-  bool isSearching = false;
-  FocusNode focusNode = FocusNode();
-
   String pickUpValue(String? value) {
     return pickupTimePredicate(value);
-  }
-
-  void cancelSearch({bool unfocus = true}) {
-    if (locator<PupilFilterManager>().filterState.value ==
-        initialFilterValues) {
-      locator<PupilFilterManager>().filtersOnSwitch(false);
-      locator<PupilFilterManager>().refreshFilteredPupils();
-    }
-    setState(() {
-      searchController.clear();
-      isSearchMode = false;
-      isSearching = false;
-    });
-    locator<PupilFilterManager>().setSearchText('');
-    if (unfocus) FocusManager.instance.primaryFocus?.unfocus();
-  }
-
-  void onSearchEnter(String text) {
-    locator<PupilFilterManager>().filtersOnSwitch(true);
-    if (text.isEmpty) {
-      cancelSearch(unfocus: false);
-      return;
-    }
-    isSearchMode = true;
-
-    locator<PupilFilterManager>().setSearchText(text);
   }
 
   @override

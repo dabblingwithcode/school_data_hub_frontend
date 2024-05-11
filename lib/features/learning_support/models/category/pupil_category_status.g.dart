@@ -6,9 +6,8 @@ part of 'pupil_category_status.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PupilCategoryStatusImpl _$$PupilCategoryStatusImplFromJson(
-        Map<String, dynamic> json) =>
-    _$PupilCategoryStatusImpl(
+PupilCategoryStatus _$PupilCategoryStatusFromJson(Map<String, dynamic> json) =>
+    PupilCategoryStatus(
       comment: json['comment'] as String,
       fileUrl: json['file_url'] as String?,
       goalCategoryId: json['goal_category_id'] as int,
@@ -18,8 +17,8 @@ _$PupilCategoryStatusImpl _$$PupilCategoryStatusImplFromJson(
       state: json['state'] as String,
     );
 
-Map<String, dynamic> _$$PupilCategoryStatusImplToJson(
-        _$PupilCategoryStatusImpl instance) =>
+Map<String, dynamic> _$PupilCategoryStatusToJson(
+        PupilCategoryStatus instance) =>
     <String, dynamic>{
       'comment': instance.comment,
       'file_url': instance.fileUrl,

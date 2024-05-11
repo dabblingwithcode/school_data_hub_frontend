@@ -5,7 +5,8 @@ import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_badg
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/statistics/statistics_view/controller/statistics.dart';
 
-Widget statisticsGroupCard(StatisticsController controller, List<Pupil> group) {
+Widget statisticsGroupCard(
+    StatisticsController controller, List<PupilProxy> group) {
   return Card(
     child: Padding(
       padding: const EdgeInsets.all(10.0),

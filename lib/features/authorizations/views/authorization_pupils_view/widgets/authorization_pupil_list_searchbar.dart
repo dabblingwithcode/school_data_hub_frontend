@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/controller/authorization_pupils_controller.dart';
@@ -8,8 +9,11 @@ import 'package:schuldaten_hub/features/authorizations/views/authorization_pupil
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 
-Widget authorizationPupilListSearchBar(BuildContext context, List<Pupil> pupils,
-    AuthorizationPupilsController controller, bool filtersOn) {
+Widget authorizationPupilListSearchBar(
+    BuildContext context,
+    List<PupilProxy> pupils,
+    AuthorizationPupilsController controller,
+    bool filtersOn) {
   return Container(
     decoration: BoxDecoration(
       color: canvasColor,
@@ -44,7 +48,10 @@ Widget authorizationPupilListSearchBar(BuildContext context, List<Pupil> pupils,
           child: Row(
             children: [
               Expanded(
-                  child: searchTextField('Schüler/in suchen', controller,
+                  child: searchTextField(
+                      SearchType.pupil,
+                      'Schüler/in suchen',
+                      controller,
                       locator<PupilFilterManager>().refreshFilteredPupils)),
               InkWell(
                 onTap: () => showAuthorizationPupilsFilterBottomSheet(context),

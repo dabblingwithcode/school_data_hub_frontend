@@ -25,10 +25,10 @@ class AuthorizationPupilsView extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
-    List<Pupil> filteredPupils =
+    List<PupilProxy> filteredPupils =
         watchValue((PupilFilterManager x) => x.filteredPupils);
 
-    List<Pupil> pupilsInList =
+    List<PupilProxy> pupilsInList =
         controller.addAuthorizationFiltersToFilteredPupils(filteredPupils);
 
     return Scaffold(

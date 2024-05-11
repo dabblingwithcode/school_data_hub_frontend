@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
 
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/controller/authorization_pupils_controller.dart';
@@ -26,7 +27,9 @@ Card authorizationCard(BuildContext context, Authorization authorization) {
                   Text(
                     authorization.authorizationName,
                     style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: interactiveColor),
                   ),
                   const Gap(5),
                   SizedBox(

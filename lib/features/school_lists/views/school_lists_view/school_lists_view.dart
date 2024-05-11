@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
-
-import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
 import 'package:schuldaten_hub/common/models/session_models/session.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
+import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
+import 'package:schuldaten_hub/features/school_lists/services/school_list_filter_manager.dart';
+import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_lists_view/controller/school_lists_controller.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_lists_view/widgets/school_list_card.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_lists_view/widgets/school_lists_bottom_navbar.dart';
@@ -22,11 +21,11 @@ class SchoolListsView extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
+    bool filtersOn = watchValue((SchoolListFilterManager x) => x.filterState);
 
     Session session = watchValue((SessionManager x) => x.credentials);
     List<SchoolList> schoolLists =
-        watchValue((SchoolListManager x) => x.schoolLists);
+        watchValue((SchoolListFilterManager x) => x.filteredSchoolLists);
     List<SchoolList> visibleSchoolLists = schoolLists
         .where((element) =>
             element.visibility == 'public' ||
@@ -43,7 +42,7 @@ class SchoolListsView extends WatchingWidget {
         title: const Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.rule_rounded, size: 25),
+            Icon(Icons.rule_rounded, size: 25, color: Colors.white),
             Gap(10),
             Text(
               'Listen',
@@ -99,6 +98,7 @@ class SchoolListsView extends WatchingWidget {
                           children: [
                             Expanded(
                               child: searchTextField(
+                                  SearchType.list,
                                   'Liste suchen',
                                   controller,
                                   locator<SchoolListManager>()
@@ -109,7 +109,8 @@ class SchoolListsView extends WatchingWidget {
                               onTap: () {},
 
                               onLongPress: () =>
-                                  locator<PupilFilterManager>().resetFilters(),
+                                  locator<SchoolListFilterManager>()
+                                      .resetFilters(),
                               // onPressed: () => showBottomSheetFilters(context),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),

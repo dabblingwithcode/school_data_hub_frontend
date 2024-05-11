@@ -6,12 +6,10 @@ part of 'schoolday.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$SchooldayImpl _$$SchooldayImplFromJson(Map<String, dynamic> json) =>
-    _$SchooldayImpl(
+Schoolday _$SchooldayFromJson(Map<String, dynamic> json) => Schoolday(
       schoolday: DateTime.parse(json['schoolday'] as String),
     );
 
-Map<String, dynamic> _$$SchooldayImplToJson(_$SchooldayImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$SchooldayToJson(Schoolday instance) => <String, dynamic>{
       'schoolday': instance.schoolday.toIso8601String(),
     };

@@ -6,16 +6,14 @@ part of 'pupil_list.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$PupilListImpl _$$PupilListImplFromJson(Map<String, dynamic> json) =>
-    _$PupilListImpl(
+PupilList _$PupilListFromJson(Map<String, dynamic> json) => PupilList(
       originList: json['origin_list'] as String,
       pupilListComment: json['pupil_list_comment'] as String?,
       pupilListEntryBy: json['pupil_list_entry_by'] as String?,
       pupilListStatus: json['pupil_list_status'] as bool?,
     );
 
-Map<String, dynamic> _$$PupilListImplToJson(_$PupilListImpl instance) =>
-    <String, dynamic>{
+Map<String, dynamic> _$PupilListToJson(PupilList instance) => <String, dynamic>{
       'origin_list': instance.originList,
       'pupil_list_comment': instance.pupilListComment,
       'pupil_list_entry_by': instance.pupilListEntryBy,

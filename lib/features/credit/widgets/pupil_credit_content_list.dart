@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/features/pupil/models/credit_history_log.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/credit/widgets/dialogues/change_credit_dialog.dart';
 
-List<Widget> pupilCreditContentList(Pupil pupil, BuildContext context) {
+List<Widget> pupilCreditContentList(PupilProxy pupil, BuildContext context) {
   return [
     Padding(
       padding: const EdgeInsets.all(10.0),

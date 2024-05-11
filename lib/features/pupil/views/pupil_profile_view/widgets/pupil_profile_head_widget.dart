@@ -13,7 +13,7 @@ part 'pupil_profile_head_widget.g.dart';
 
 @swidget
 Widget pupilProfileHeadWidget(
-    Pupil pupil, BuildContext context, PupilProfileController controller) {
+    PupilProxy pupil, BuildContext context, PupilProfileController controller) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -29,12 +29,14 @@ Widget pupilProfileHeadWidget(
                 position: position,
                 items: [
                   PopupMenuItem(
-                    child: const Text('Foto ersetzen'),
+                    child: pupil.avatarUrl == null
+                        ? const Text('Foto hochladen')
+                        : const Text('Foto ersetzen'),
                     onTap: () => setAvatar(context, pupil),
                   ),
                   if (pupil.avatarUrl != null)
                     PopupMenuItem(
-                      child: const Text('Bild löschen'),
+                      child: const Text('Foto löschen'),
                       onTap: () async {
                         await controller.deleteAvatar();
                       },
