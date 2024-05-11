@@ -40,7 +40,7 @@ class SchoolListPupilCard extends StatelessWidget with WatchItMixin {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            avatarWithBadges(pupil, 80),
+            AvatarWithBadges(pupil: pupil, size: 80),
             const SizedBox(width: 10), // Add some spacing
             Expanded(
               child: Padding(

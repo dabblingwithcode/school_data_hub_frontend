@@ -58,7 +58,7 @@ class AttendanceCard extends WatchingWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              AvatarWithBadges(pupil, 80),
+              AvatarWithBadges(pupil: pupil, size: 80),
               Expanded(
                 child: GestureDetector(
                   onLongPress: () => createMissedClassList(context, pupil),
@@ -312,7 +312,7 @@ class AttendanceCard extends WatchingWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            avatarWithBadges(pupil, 80),
+            AvatarWithBadges(pupil: pupil, size: 80),
             Expanded(
               child: GestureDetector(
                 onLongPress: () => createMissedClassList(context, pupil),

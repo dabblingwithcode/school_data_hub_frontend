@@ -29,7 +29,7 @@ class SelectMatrixUserCard extends WatchingWidget {
               : Colors.white,
           child: Row(
             children: [
-              avatarWithBadges(pupil, 80),
+              AvatarWithBadges(pupil: pupil, size: 80),
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(

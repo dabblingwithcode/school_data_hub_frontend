@@ -55,7 +55,7 @@ class _AdmonitionListCardState extends State<AdmonitionListCard> {
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                avatarWithBadges(pupil, 80),
+                AvatarWithBadges(pupil: pupil, size: 80),
                 Expanded(
                   child: Column(
                     children: [

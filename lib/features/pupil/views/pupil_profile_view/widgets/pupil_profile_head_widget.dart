@@ -44,7 +44,7 @@ Widget pupilProfileHeadWidget(
                 ],
               );
             },
-            child: avatarWithBadges(pupil, 100),
+            child: AvatarWithBadges(pupil: pupil, size: 100),
           ),
         ],
       ),

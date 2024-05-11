@@ -24,7 +24,7 @@ class SpecialInfoCard extends WatchingWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          avatarWithBadges(pupil, 80),
+          AvatarWithBadges(pupil: pupil, size: 80),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
