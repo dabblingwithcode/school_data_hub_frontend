@@ -48,7 +48,7 @@ class _RoomListCardState extends State<RoomListCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              //avatarWithBadges(pupil, 80),
+              //AvatarWithBadges(pupil: pupil, size: 80),
               const Gap(10),
               Expanded(
                 child: Column(

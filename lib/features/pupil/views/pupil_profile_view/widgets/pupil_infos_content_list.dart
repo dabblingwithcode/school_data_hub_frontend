@@ -121,7 +121,7 @@ List<Widget> pupilInfosContentList(PupilProxy pupil, BuildContext context) {
                     },
                     child: Row(
                       children: [
-                        avatarImage(sibling, 30),
+                        AvatarImage(pupil: sibling, size: 30),
                         const Gap(10),
                         Text(
                           sibling.firstName!,

@@ -6,8 +6,8 @@ part of 'pupil_data_schild.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PupilDataFromSchild _$PupilDataFromSchildFromJson(Map<String, dynamic> json) =>
-    PupilDataFromSchild(
+PupilPersonalData _$PupilDataFromSchildFromJson(Map<String, dynamic> json) =>
+    PupilPersonalData(
       id: json['id'] as int,
       name: json['name'] as String,
       lastName: json['lastName'] as String,
@@ -24,8 +24,7 @@ PupilDataFromSchild _$PupilDataFromSchildFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['migrationSupportEnds'] as String),
     );
 
-Map<String, dynamic> _$PupilDataFromSchildToJson(
-        PupilDataFromSchild instance) =>
+Map<String, dynamic> _$PupilDataFromSchildToJson(PupilPersonalData instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
@@ -44,7 +43,7 @@ Map<String, dynamic> _$PupilDataFromSchildToJson(
 PupilBaseList _$PupilBaseListFromJson(Map<String, dynamic> json) =>
     PupilBaseList(
       pupilBaseList: (json['pupilBaseList'] as List<dynamic>)
-          .map((e) => PupilDataFromSchild.fromJson(e as Map<String, dynamic>))
+          .map((e) => PupilPersonalData.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 

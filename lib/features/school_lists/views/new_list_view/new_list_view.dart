@@ -157,7 +157,8 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
                                         },
                                         child: Row(
                                           children: [
-                                            avatarImage(listedPupil, 30),
+                                            AvatarImage(
+                                                pupil: listedPupil, size: 30),
                                             const Gap(10),
                                             Text(
                                               listedPupil.firstName!,
