@@ -7,8 +7,8 @@ import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/authorizations/views/new_authorization_view/new_authorization_view.dart';
 
 Widget authorizationListBottomNavBar(BuildContext context) {
-  return bottomNavBarLayout(
-    BottomAppBar(
+  return BottomNavBarLayout(
+    bottomNavBar: BottomAppBar(
       padding: const EdgeInsets.all(9),
       shape: null,
       color: backgroundColor,

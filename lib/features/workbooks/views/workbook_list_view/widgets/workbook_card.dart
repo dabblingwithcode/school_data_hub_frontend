@@ -80,10 +80,11 @@ class WorkbookCard extends StatelessWidget {
                                 // );
                               },
                         child: workbook.imageUrl != null
-                            ? documentImage(
-                                '${locator<EnvManager>().env.value.serverUrl}${EndpointsWorkbook().getWorkbookImage(workbook.isbn)}',
-                                workbook.imageUrl,
-                                100)
+                            ? DocumentImage(
+                                documentTag:
+                                    '${locator<EnvManager>().env.value.serverUrl}${EndpointsWorkbook().getWorkbookImage(workbook.isbn)}',
+                                documentUrl: workbook.imageUrl,
+                                size: 100)
                             : SizedBox(
                                 height: 100,
                                 child: ClipRRect(

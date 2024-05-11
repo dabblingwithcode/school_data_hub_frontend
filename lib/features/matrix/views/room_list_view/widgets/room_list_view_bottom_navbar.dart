@@ -9,8 +9,8 @@ import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/room
 import '../../../../pupil/services/pupil_filter_manager.dart';
 
 Widget roomListViewBottomNavBar(BuildContext context, bool filtersOn) {
-  return bottomNavBarLayout(
-    BottomAppBar(
+  return BottomNavBarLayout(
+    bottomNavBar: BottomAppBar(
       padding: const EdgeInsets.all(10),
       shape: null,
       color: backgroundColor,

@@ -124,10 +124,12 @@ List<Widget> pupilAuthorizationsContentList(PupilProxy pupil) {
                                                 'Die Einwilligung wurde geändert!');
                                           },
                                     child: pupilAuthorization.fileUrl != null
-                                        ? documentImage(
-                                            '${locator<EnvManager>().env.value.serverUrl}${EndpointsAuthorization().getPupilAuthorizationFile(pupil.internalId, authorization.authorizationId)}',
-                                            pupilAuthorization.fileUrl,
-                                            70)
+                                        ? DocumentImage(
+                                            documentTag:
+                                                '${locator<EnvManager>().env.value.serverUrl}${EndpointsAuthorization().getPupilAuthorizationFile(pupil.internalId, authorization.authorizationId)}',
+                                            documentUrl:
+                                                pupilAuthorization.fileUrl,
+                                            size: 70)
                                         : SizedBox(
                                             height: 70,
                                             child: ClipRRect(

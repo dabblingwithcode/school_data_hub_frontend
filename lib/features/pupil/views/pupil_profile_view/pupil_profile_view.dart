@@ -93,8 +93,8 @@ class PupilProfileView extends WatchingWidget {
           ),
         ),
       ),
-      bottomNavigationBar:
-          bottomNavBarProfiLeLayout(pupilProfileBottomNavBar(context)),
+      bottomNavigationBar: const BottomNavBarProfileLayout(
+          bottomNavBar: PupilProfileBottomNavBar()),
     );
   }
 }

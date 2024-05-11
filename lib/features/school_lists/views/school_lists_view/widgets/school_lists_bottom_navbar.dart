@@ -5,8 +5,8 @@ import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/school_lists/views/new_list_view/new_list_view.dart';
 
 Widget schoolListsBottomNavBar(BuildContext context) {
-  return bottomNavBarLayout(
-    BottomAppBar(
+  return BottomNavBarLayout(
+    bottomNavBar: BottomAppBar(
       padding: const EdgeInsets.all(9),
       shape: null,
       color: backgroundColor,

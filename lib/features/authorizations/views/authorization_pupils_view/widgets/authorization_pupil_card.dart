@@ -197,10 +197,11 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                                   'Die Einwilligung wurde geändert!');
                             },
                       child: pupilAuthorization.fileUrl != null
-                          ? documentImage(
-                              '${locator<EnvManager>().env.value.serverUrl}${EndpointsAuthorization().getPupilAuthorizationFile(pupil.internalId, authorizationId)}',
-                              pupilAuthorization.fileUrl,
-                              70)
+                          ? DocumentImage(
+                              documentTag:
+                                  '${locator<EnvManager>().env.value.serverUrl}${EndpointsAuthorization().getPupilAuthorizationFile(pupil.internalId, authorizationId)}',
+                              documentUrl: pupilAuthorization.fileUrl,
+                              size: 70)
                           : SizedBox(
                               height: 70,
                               child: ClipRRect(

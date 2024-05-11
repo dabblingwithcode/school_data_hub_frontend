@@ -9,8 +9,8 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manag
 
 Widget attendanceRankingListViewBottomNavBar(
     BuildContext context, bool filtersOn) {
-  return bottomNavBarLayout(
-    BottomAppBar(
+  return BottomNavBarLayout(
+    bottomNavBar: BottomAppBar(
       padding: const EdgeInsets.all(10),
       shape: null,
       color: backgroundColor,
