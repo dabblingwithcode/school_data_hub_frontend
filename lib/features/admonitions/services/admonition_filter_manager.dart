@@ -36,7 +36,7 @@ class AdmonitionFilterManager {
     };
   }
 
-  List<Admonition> admonitionsInTheLastSevenDays(Pupil pupil) {
+  List<Admonition> admonitionsInTheLastSevenDays(PupilProxy pupil) {
     DateTime sevenDaysAgo = DateTime.now().subtract(const Duration(days: 7));
     List<Admonition> admonitions = [];
     if (pupil.pupilAdmonitions != null) {
@@ -49,7 +49,7 @@ class AdmonitionFilterManager {
     return admonitions;
   }
 
-  List<Admonition> admonitionsNotProcessed(Pupil pupil) {
+  List<Admonition> admonitionsNotProcessed(PupilProxy pupil) {
     List<Admonition> admonitions = [];
     if (pupil.pupilAdmonitions != null) {
       for (Admonition admonition in pupil.pupilAdmonitions!) {
@@ -61,7 +61,7 @@ class AdmonitionFilterManager {
     return admonitions;
   }
 
-  List<Admonition> admonitionsInTheLastFourteenDays(Pupil pupil) {
+  List<Admonition> admonitionsInTheLastFourteenDays(PupilProxy pupil) {
     DateTime fourteenDaysAgo =
         DateTime.now().subtract(const Duration(days: 14));
     List<Admonition> admonitions = [];
@@ -75,7 +75,7 @@ class AdmonitionFilterManager {
     return admonitions;
   }
 
-  List<Admonition> filteredAdmonitions(Pupil pupil) {
+  List<Admonition> filteredAdmonitions(PupilProxy pupil) {
     List<Admonition> filteredAdmonitions = [];
     DateTime sevenDaysAgo = DateTime.now().subtract(const Duration(days: 7));
     if (pupil.pupilAdmonitions != null) {

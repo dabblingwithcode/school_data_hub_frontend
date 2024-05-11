@@ -11,7 +11,8 @@ final GlobalKey<FormState> _missedDatesformKey = GlobalKey<FormState>();
 
 // based on https://mobikul.com/creating-stateful-dialog-form-in-flutter/
 
-Future<void> createMissedClassList(BuildContext context, Pupil pupil) async {
+Future<void> createMissedClassList(
+    BuildContext context, PupilProxy pupil) async {
   final DateTime thisDate = locator<SchooldayManager>().thisDate.value;
   return await showDialog(
       context: context,

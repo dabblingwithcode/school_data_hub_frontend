@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
@@ -10,7 +9,6 @@ import 'package:schuldaten_hub/features/attendance/views/attendance_view/control
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/atendance_list_card.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/attendance_list_search_bar.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/attendance_view_bottom_navbar.dart';
-
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
@@ -23,7 +21,8 @@ class AttendanceListView extends WatchingWidget {
   Widget build(BuildContext context) {
     DateTime thisDate = watchValue((SchooldayManager x) => x.thisDate);
     bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
-    List<Pupil> pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
 
     return Scaffold(
       backgroundColor: canvasColor,

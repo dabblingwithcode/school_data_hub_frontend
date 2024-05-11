@@ -14,7 +14,7 @@ class BirthdaysView extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<Pupil> pupils = pupilsWithBirthdayInTheLastSevenDays();
+    final List<PupilProxy> pupils = pupilsWithBirthdayInTheLastSevenDays();
     return Scaffold(
         appBar: AppBar(
           centerTitle: true,
@@ -39,7 +39,7 @@ class BirthdaysView extends WatchingWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         itemCount: pupils.length,
                         itemBuilder: (context, int index) {
-                          Pupil listedPupil = pupils[index];
+                          PupilProxy listedPupil = pupils[index];
                           return Column(
                             children: [
                               const Gap(5),

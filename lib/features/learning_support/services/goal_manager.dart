@@ -63,8 +63,8 @@ class GoalManager {
 
   List<PupilGoal> getPupilGoalsForCategory(int categoryId) {
     List<PupilGoal> goals = [];
-    final List<Pupil> pupils = locator<PupilManager>().pupils.value;
-    for (Pupil pupil in pupils) {
+    final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
+    for (PupilProxy pupil in pupils) {
       for (PupilGoal goal in pupil.pupilGoals!) {
         if (goal.goalCategoryId == categoryId) {
           goals.add(goal);
@@ -74,8 +74,8 @@ class GoalManager {
     return goals;
   }
 
-  Future postCategoryStatus(
-      Pupil pupil, int goalCategoryId, String state, String comment) async {
+  Future postCategoryStatus(PupilProxy pupil, int goalCategoryId, String state,
+      String comment) async {
     snackBarManager.isRunningValue(true);
     final data =
         jsonEncode({"state": state, "file_url": null, "comment": comment});
@@ -100,7 +100,7 @@ class GoalManager {
     return;
   }
 
-  Future patchCategoryStatus(Pupil pupil, String statusId, String? state,
+  Future patchCategoryStatus(PupilProxy pupil, String statusId, String? state,
       String? comment, String? createdBy, String? createdAt) async {
     snackBarManager.isRunningValue(true);
     final data = jsonEncode({
@@ -176,8 +176,8 @@ class GoalManager {
   }
 
   Future deleteGoal(String goalId) async {
-    // final List<Pupil> pupils = locator<PupilManager>().pupils.value;
-    // final Pupil pupil = pupils
+    // final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
+    // final PupilProxy pupil = pupils
     //     .where((element) =>
     //         element.pupilGoals!.any((element) => element.goalId == goalId))
     //     .single;
@@ -239,7 +239,7 @@ class GoalManager {
   }
 
   Widget getCategoryStatusSymbol(
-      Pupil pupil, int goalCategoryId, String statusId) {
+      PupilProxy pupil, int goalCategoryId, String statusId) {
     if (pupil.pupilCategoryStatuses!.isNotEmpty) {
       final PupilCategoryStatus categoryStatus = pupil.pupilCategoryStatuses!
           .firstWhere((element) =>
@@ -268,7 +268,7 @@ class GoalManager {
     return SizedBox(width: 50, child: Image.asset('assets/growth_1-4.png'));
   }
 
-  Widget getLastCategoryStatusSymbol(Pupil pupil, int goalCategoryId) {
+  Widget getLastCategoryStatusSymbol(PupilProxy pupil, int goalCategoryId) {
     if (pupil.pupilCategoryStatuses!.isNotEmpty) {
       final PupilCategoryStatus? categoryStatus = pupil.pupilCategoryStatuses!
           .lastWhereOrNull(

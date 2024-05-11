@@ -11,7 +11,7 @@ import 'package:schuldaten_hub/features/attendance/services/attendance_manager.d
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_badges.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
-List<Widget> pupilAttendanceContentList(Pupil pupil, context) {
+List<Widget> pupilAttendanceContentList(PupilProxy pupil, context) {
   List<MissedClass> missedClasses = List.from(pupil.pupilMissedClasses!);
   // sort by missedDay
   missedClasses.sort((b, a) => a.missedDay.compareTo(b.missedDay));

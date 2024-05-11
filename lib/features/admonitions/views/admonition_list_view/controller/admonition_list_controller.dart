@@ -15,8 +15,8 @@ class AdmonitionList extends WatchingStatefulWidget {
 }
 
 class AdmonitionListController extends State<AdmonitionList> {
-  List<Pupil>? pupils;
-  List<Pupil>? filteredPupils;
+  List<PupilProxy>? pupils;
+  List<PupilProxy>? filteredPupils;
   TextEditingController searchController = TextEditingController();
   bool isSearchMode = false;
   bool isSearching = false;
@@ -33,7 +33,7 @@ class AdmonitionListController extends State<AdmonitionList> {
       return;
     }
     final List<int> pupilsToFetch = [];
-    for (Pupil pupil in filteredPupils!) {
+    for (PupilProxy pupil in filteredPupils!) {
       pupilsToFetch.add(pupil.internalId);
     }
     await locator.get<PupilManager>().fetchPupilsById(pupilsToFetch);

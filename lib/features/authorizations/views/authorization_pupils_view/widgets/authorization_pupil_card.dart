@@ -29,8 +29,9 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     final schoolListLocator = locator<AuthorizationManager>();
-    List<Pupil> pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
-    final Pupil pupil =
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
+    final PupilProxy pupil =
         pupils.firstWhere((pupil) => pupil.internalId == internalId);
     final PupilAuthorization pupilAuthorization = pupil.authorizations!
         .where((authorization) =>

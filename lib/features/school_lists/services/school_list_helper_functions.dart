@@ -34,9 +34,9 @@ String shareList(String teacher, SchoolList schoolList) {
 }
 
 int totalShownPupilsMarkedWithYesNoOrNull(
-    SchoolList schoolList, List<Pupil> pupilsInList, bool? yesNoOrNull) {
+    SchoolList schoolList, List<PupilProxy> pupilsInList, bool? yesNoOrNull) {
   int count = 0;
-  for (Pupil pupil in pupilsInList) {
+  for (PupilProxy pupil in pupilsInList) {
     if (pupil.pupilLists != null) {
       if (pupil.pupilLists!.any((element) =>
           element.originList == schoolList.listId &&
@@ -49,9 +49,9 @@ int totalShownPupilsMarkedWithYesNoOrNull(
 }
 
 int totalShownPupilsWithComment(
-    SchoolList schoolList, List<Pupil> pupilsInList) {
+    SchoolList schoolList, List<PupilProxy> pupilsInList) {
   int count = 0;
-  for (Pupil pupil in pupilsInList) {
+  for (PupilProxy pupil in pupilsInList) {
     if (pupil.pupilLists != null) {
       if (pupil.pupilLists!.any((element) =>
           element.originList == schoolList.listId &&

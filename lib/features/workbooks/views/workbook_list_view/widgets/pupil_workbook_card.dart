@@ -15,8 +15,8 @@ import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 import 'package:schuldaten_hub/features/workbooks/models/workbook.dart';
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
 
-class PupiWorkbookCard extends StatelessWidget {
-  const PupiWorkbookCard(
+class PupilWorkbookCard extends StatelessWidget {
+  const PupilWorkbookCard(
       {required this.pupilWorkbook, required this.pupilId, super.key});
   final PupilWorkbook pupilWorkbook;
   final int pupilId;

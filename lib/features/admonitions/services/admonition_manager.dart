@@ -34,9 +34,9 @@ class AdmonitionManager {
 
   //- HANDLE Admonition CARD
 
-  // Pupil? findPupilById(int pupilId) {
+  // PupilProxy? findPupilById(int pupilId) {
   //   final pupils = pupilManager.readPupils();
-  //   final Pupil pupil =
+  //   final PupilProxy pupil =
   //       pupils.singleWhere((element) => element.internalId == pupilId);
   //   return pupil;
   // }

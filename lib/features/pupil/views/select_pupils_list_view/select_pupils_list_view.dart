@@ -16,7 +16,7 @@ import 'package:watch_it/watch_it.dart';
 
 class SelectPupilListView extends WatchingWidget {
   final SelectPupilListController controller;
-  final List<Pupil> filteredPupilsInLIst;
+  final List<PupilProxy> filteredPupilsInLIst;
   const SelectPupilListView(this.controller, this.filteredPupilsInLIst,
       {Key? key})
       : super(key: key);

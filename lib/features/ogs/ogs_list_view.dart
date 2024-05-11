@@ -21,7 +21,8 @@ class OgsListView extends WatchingWidget {
   Widget build(BuildContext context) {
     bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
 
-    List<Pupil> pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
 
     return Scaffold(
       backgroundColor: canvasColor,

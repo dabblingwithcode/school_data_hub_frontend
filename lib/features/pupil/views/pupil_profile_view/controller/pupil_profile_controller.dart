@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_view.dart';
 
 class PupilProfile extends StatefulWidget {
-  final Pupil pupil;
+  final PupilProxy pupil;
 
   const PupilProfile(
     this.pupil, {

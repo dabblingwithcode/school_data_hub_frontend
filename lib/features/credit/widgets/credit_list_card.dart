@@ -15,7 +15,7 @@ import 'package:watch_it/watch_it.dart';
 
 class CreditListCard extends WatchingStatefulWidget {
   final CreditListController controller;
-  final Pupil passedPupil;
+  final PupilProxy passedPupil;
   const CreditListCard(this.controller, this.passedPupil, {super.key});
 
   @override
@@ -32,7 +32,7 @@ class _CreditListCardState extends State<CreditListCard> {
 
   @override
   Widget build(BuildContext context) {
-    Pupil pupil = watchValue((PupilFilterManager x) => x.filteredPupils)
+    PupilProxy pupil = watchValue((PupilFilterManager x) => x.filteredPupils)
         .where((element) => element.internalId == widget.passedPupil.internalId)
         .first;
 

@@ -29,11 +29,11 @@ class SchoolListPupilsView extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
-    List<Pupil> filteredPupils =
+    List<PupilProxy> filteredPupils =
         watchValue((PupilFilterManager x) => x.filteredPupils);
-    List<Pupil> filteredPupilsInList = locator<SchoolListManager>()
+    List<PupilProxy> filteredPupilsInList = locator<SchoolListManager>()
         .pupilsInSchoolList(schoolList.listId, filteredPupils);
-    List<Pupil> pupilsInList =
+    List<PupilProxy> pupilsInList =
         controller.addPupilListFiltersToFilteredPupils(filteredPupilsInList);
 
     // Map<PupilFilter, bool> activeFilters =

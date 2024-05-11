@@ -11,7 +11,7 @@ final TextEditingController _textEditingController = TextEditingController();
 // based on https://mobikul.com/creating-stateful-dialog-form-in-flutter/
 
 Future competenceStatusDialog(
-    Pupil pupil, int goalCategoryId, BuildContext parentContext) async {
+    PupilProxy pupil, int goalCategoryId, BuildContext parentContext) async {
   return await showDialog(
       context: parentContext,
       builder: (context) {

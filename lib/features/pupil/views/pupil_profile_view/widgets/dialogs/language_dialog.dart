@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 // based on https://mobikul.com/creating-stateful-dialog-form-in-flutter/
 
 Future<void> languageDialog(
-    BuildContext context, Pupil pupil, String type, String? value) async {
+    BuildContext context, PupilProxy pupil, String type, String? value) async {
   String languageValue = value ?? '000';
 
   return await showDialog(

@@ -14,7 +14,7 @@ import 'package:watch_it/watch_it.dart';
 
 class SelectMatrixUsersListView extends WatchingWidget {
   final SelectMatrixUsersListController controller;
-  final List<Pupil> filteredPupilsInLIst;
+  final List<PupilProxy> filteredPupilsInLIst;
   const SelectMatrixUsersListView(this.controller, this.filteredPupilsInLIst,
       {Key? key})
       : super(key: key);

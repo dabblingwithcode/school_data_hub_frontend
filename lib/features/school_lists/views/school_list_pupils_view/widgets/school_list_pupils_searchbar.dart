@@ -14,7 +14,7 @@ import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_vi
 
 Widget schoolListPupilsSearchBar(
     BuildContext context,
-    List<Pupil> pupils,
+    List<PupilProxy> pupils,
     SchoolList schoolList,
     SchoolListPupilsController controller,
     bool filtersOn) {

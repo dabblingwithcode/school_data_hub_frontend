@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/features/attendance/services/attendance_helper_fu
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_badges.dart';
 
-Widget attendanceStats(Pupil pupil) {
+Widget attendanceStats(PupilProxy pupil) {
   return Row(
     children: [
       excusedBadge(false),

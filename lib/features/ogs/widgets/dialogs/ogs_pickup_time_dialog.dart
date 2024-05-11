@@ -8,7 +8,7 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 // based on https://mobikul.com/creating-stateful-dialog-form-in-flutter/
 
 Future<void> pickUpTimeDialog(
-    BuildContext context, Pupil pupil, String? value) async {
+    BuildContext context, PupilProxy pupil, String? value) async {
   return await showDialog(
       context: context,
       builder: (context) {

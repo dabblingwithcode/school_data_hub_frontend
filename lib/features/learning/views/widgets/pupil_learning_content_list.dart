@@ -14,7 +14,7 @@ import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
 import 'package:schuldaten_hub/features/workbooks/views/workbook_list_view/widgets/pupil_workbook_card.dart';
 
-List<Widget> pupilLearningContentList(Pupil pupil, BuildContext context) {
+List<Widget> pupilLearningContentList(PupilProxy pupil, BuildContext context) {
   return [
     const Row(
       children: [
@@ -75,8 +75,9 @@ List<Widget> pupilLearningContentList(Pupil pupil, BuildContext context) {
                 child: Card(
                   child: Column(
                     children: [
-                      pupilWorkbookCard(
-                          context, pupilWorkbooks[index], pupil.internalId),
+                      PupilWorkbookCard(
+                          pupilWorkbook: pupilWorkbooks[index],
+                          pupilId: pupil.internalId),
                     ],
                   ),
                 ),

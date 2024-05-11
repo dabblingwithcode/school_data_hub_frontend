@@ -25,8 +25,9 @@ class SchoolListPupilCard extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     final schoolListLocator = locator<SchoolListManager>();
-    List<Pupil> pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
-    final Pupil pupil =
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
+    final PupilProxy pupil =
         pupils.where((pupil) => pupil.internalId == internalId).first;
     final PupilList pupilList = pupil.pupilLists!
         .where((pupilList) => pupilList.originList == originList)

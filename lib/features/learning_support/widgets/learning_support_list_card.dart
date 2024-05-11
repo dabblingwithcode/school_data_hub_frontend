@@ -16,7 +16,7 @@ import 'package:watch_it/watch_it.dart';
 
 class LearningSupportCard extends WatchingStatefulWidget {
   final LearningSupportListController controller;
-  final Pupil passedPupil;
+  final PupilProxy passedPupil;
   const LearningSupportCard(this.controller, this.passedPupil, {super.key});
 
   @override
@@ -28,7 +28,7 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
       CustomExpansionTileController();
   @override
   Widget build(BuildContext context) {
-    Pupil pupil = widget.passedPupil;
+    PupilProxy pupil = widget.passedPupil;
 
     return Card(
       color: Colors.white,

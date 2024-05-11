@@ -3,11 +3,11 @@ import 'package:schuldaten_hub/features/admonitions/models/admonition.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
 class SchoolEventHelper {
-  static int? admonitionSum(Pupil pupil) {
+  static int? admonitionSum(PupilProxy pupil) {
     return pupil.pupilAdmonitions?.length;
   }
 
-  static int? findAdmonitionIndex(Pupil pupil, DateTime date) {
+  static int? findAdmonitionIndex(PupilProxy pupil, DateTime date) {
     final int? foundAdmonitionIndex = pupil.pupilAdmonitions
         ?.indexWhere((datematch) => (datematch.admonishedDay.isSameDate(date)));
     if (foundAdmonitionIndex == null) {
@@ -16,7 +16,7 @@ class SchoolEventHelper {
     return foundAdmonitionIndex;
   }
 
-  static bool pupilIsAdmonishedToday(Pupil pupil) {
+  static bool pupilIsAdmonishedToday(PupilProxy pupil) {
     if (pupil.pupilAdmonitions!.isEmpty) return false;
     if (pupil.pupilAdmonitions!
         .any((element) => element.admonishedDay.isSameDate(DateTime.now()))) {
@@ -25,9 +25,9 @@ class SchoolEventHelper {
     return false;
   }
 
-  static int getAdmonitionCount(List<Pupil> pupils) {
+  static int getAdmonitionCount(List<PupilProxy> pupils) {
     int admonitions = 0;
-    for (Pupil pupil in pupils) {
+    for (PupilProxy pupil in pupils) {
       if (pupil.pupilAdmonitions != null) {
         admonitions = admonitions + pupil.pupilAdmonitions!.length;
       }
@@ -35,9 +35,9 @@ class SchoolEventHelper {
     return admonitions;
   }
 
-  static int getSchoolAdmonitionCount(List<Pupil> pupils) {
+  static int getSchoolAdmonitionCount(List<PupilProxy> pupils) {
     int admonitions = 0;
-    for (Pupil pupil in pupils) {
+    for (PupilProxy pupil in pupils) {
       if (pupil.pupilAdmonitions != null) {
         for (Admonition admonition in pupil.pupilAdmonitions!) {
           if (admonition.admonitionType == 'rk') {
@@ -49,9 +49,9 @@ class SchoolEventHelper {
     return admonitions;
   }
 
-  static int getOgsAdmonitionCount(List<Pupil> pupils) {
+  static int getOgsAdmonitionCount(List<PupilProxy> pupils) {
     int admonitions = 0;
-    for (Pupil pupil in pupils) {
+    for (PupilProxy pupil in pupils) {
       if (pupil.pupilAdmonitions != null) {
         for (Admonition admonition in pupil.pupilAdmonitions!) {
           if (admonition.admonitionType == 'rkogs') {

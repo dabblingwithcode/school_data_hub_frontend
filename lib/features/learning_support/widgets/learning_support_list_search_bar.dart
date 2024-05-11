@@ -9,8 +9,11 @@ import 'package:schuldaten_hub/features/learning_support/widgets/learning_suppor
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 
-Widget learningSupportListSearchBar(BuildContext context, List<Pupil> pupils,
-    LearningSupportListController controller, bool filtersOn) {
+Widget learningSupportListSearchBar(
+    BuildContext context,
+    List<PupilProxy> pupils,
+    LearningSupportListController controller,
+    bool filtersOn) {
   return Container(
     decoration: BoxDecoration(
       color: canvasColor,

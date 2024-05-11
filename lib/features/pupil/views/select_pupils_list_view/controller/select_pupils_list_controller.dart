@@ -18,8 +18,8 @@ class SelectPupilList extends WatchingStatefulWidget {
 }
 
 class SelectPupilListController extends State<SelectPupilList> {
-  List<Pupil>? pupils;
-  List<Pupil>? filteredPupils;
+  List<PupilProxy>? pupils;
+  List<PupilProxy>? filteredPupils;
   Map<PupilFilter, bool>? inheritedFilters;
   TextEditingController searchController = TextEditingController();
   bool isSearchMode = false;
@@ -45,7 +45,7 @@ class SelectPupilListController extends State<SelectPupilList> {
   //     return;
   //   }
   //   final List<int> pupilsToFetch = [];
-  //   for (Pupil pupil in filteredPupils!) {
+  //   for (PupilProxy pupil in filteredPupils!) {
   //     pupilsToFetch.add(pupil.internalId);
   //   }
   //   await locator.get<PupilManager>().fetchPupilsById(pupilsToFetch);
@@ -110,7 +110,7 @@ class SelectPupilListController extends State<SelectPupilList> {
     setState(() {
       isSelectAllMode = !isSelectAllMode;
       if (isSelectAllMode) {
-        final List<Pupil> shownPupils =
+        final List<PupilProxy> shownPupils =
             locator<PupilFilterManager>().filteredPupils.value;
         isSelectMode = true;
         selectedPupilIds =
@@ -155,9 +155,9 @@ class SelectPupilListController extends State<SelectPupilList> {
 
   @override
   Widget build(BuildContext context) {
-    List<Pupil> filteredPupils =
+    List<PupilProxy> filteredPupils =
         watchValue((PupilFilterManager x) => x.filteredPupils);
-    List<Pupil> filteredListedPupils =
+    List<PupilProxy> filteredListedPupils =
         pupilsFromPupilIds(widget.selectablePupils!)
             .where((pupil) => filteredPupils.contains(pupil))
             .toList();

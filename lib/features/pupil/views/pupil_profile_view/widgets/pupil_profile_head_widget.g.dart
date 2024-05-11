@@ -14,7 +14,7 @@ class PupilProfileHeadWidget extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final Pupil pupil;
+  final PupilProxy pupil;
 
   final BuildContext context;
 

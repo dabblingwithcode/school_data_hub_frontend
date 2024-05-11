@@ -15,7 +15,7 @@ import 'package:watch_it/watch_it.dart';
 
 class OgsCard extends WatchingWidget {
   final OgsListController controller;
-  final Pupil pupil;
+  final PupilProxy pupil;
   const OgsCard(this.controller, this.pupil, {super.key});
   @override
   Widget build(BuildContext context) {

@@ -9,8 +9,11 @@ import 'package:schuldaten_hub/features/authorizations/views/authorization_pupil
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 
-Widget authorizationPupilListSearchBar(BuildContext context, List<Pupil> pupils,
-    AuthorizationPupilsController controller, bool filtersOn) {
+Widget authorizationPupilListSearchBar(
+    BuildContext context,
+    List<PupilProxy> pupils,
+    AuthorizationPupilsController controller,
+    bool filtersOn) {
   return Container(
     decoration: BoxDecoration(
       color: canvasColor,

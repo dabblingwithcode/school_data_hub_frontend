@@ -59,9 +59,10 @@ class SchoolListPupilsController extends State<SchoolListPupils> {
     locator<PupilFilterManager>().setSearchText(text);
   }
 
-  List<Pupil> addPupilListFiltersToFilteredPupils(List<Pupil> pupils) {
-    List<Pupil> filteredPupils = [];
-    for (Pupil pupil in pupils) {
+  List<PupilProxy> addPupilListFiltersToFilteredPupils(
+      List<PupilProxy> pupils) {
+    List<PupilProxy> filteredPupils = [];
+    for (PupilProxy pupil in pupils) {
       bool toList = true;
       final PupilList? pupilList = pupil.pupilLists!.firstWhereOrNull(
           (pupilList) => pupilList.originList == widget.schoolList.listId);

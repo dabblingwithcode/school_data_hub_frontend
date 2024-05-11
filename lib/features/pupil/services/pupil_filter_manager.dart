@@ -13,7 +13,7 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 class PupilFilterManager {
   ValueListenable<bool> get filtersOn => _filtersOn;
   ValueListenable<String> get searchText => _searchText;
-  ValueListenable<List<Pupil>> get filteredPupils => _filteredPupils;
+  ValueListenable<List<PupilProxy>> get filteredPupils => _filteredPupils;
   ValueListenable<Map<PupilFilter, bool>> get filterState => _filterState;
   ValueListenable<Map<PupilSortMode, bool>> get sortMode => _sortMode;
 
@@ -22,7 +22,7 @@ class PupilFilterManager {
   final _filtersOn = ValueNotifier<bool>(false);
   final _searchText = ValueNotifier<String>('');
   final _filteredPupils =
-      ValueNotifier<List<Pupil>>(locator<PupilManager>().pupils.value);
+      ValueNotifier<List<PupilProxy>>(locator<PupilManager>().pupils.value);
   final _filterState =
       ValueNotifier<Map<PupilFilter, bool>>(initialFilterValues);
   final _sortMode =
@@ -52,16 +52,16 @@ class PupilFilterManager {
   }
 
   refreshFilteredPupils() {
-    final List<Pupil> filteredPupils = List.from(_filteredPupils.value);
-    final List<Pupil> pupils = locator<PupilManager>().pupils.value;
+    final List<PupilProxy> filteredPupils = List.from(_filteredPupils.value);
+    final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
 
-    Map<int, Pupil> pupilMap = {
-      for (Pupil pupil in pupils) pupil.internalId: pupil
+    Map<int, PupilProxy> pupilMap = {
+      for (PupilProxy pupil in pupils) pupil.internalId: pupil
     };
 
     // Update each element in filteredPupils with matching pupil from pupils
     for (int i = 0; i < filteredPupils.length; i++) {
-      Pupil pupil = filteredPupils[i];
+      PupilProxy pupil = filteredPupils[i];
       if (pupilMap.containsKey(pupil.internalId)) {
         pupil = pupilMap[pupil.internalId]!;
       } else {
@@ -74,9 +74,9 @@ class PupilFilterManager {
     _filteredPupils.value = filteredPupils;
   }
 
-  cloneToFilteredPupil(Pupil pupil) {
-    List<Pupil> filteredPupils = _filteredPupils.value;
-    List<Pupil> updatedPupils = List<Pupil>.from(filteredPupils);
+  cloneToFilteredPupil(PupilProxy pupil) {
+    List<PupilProxy> filteredPupils = _filteredPupils.value;
+    List<PupilProxy> updatedPupils = List<PupilProxy>.from(filteredPupils);
     int index = updatedPupils
         .indexWhere((element) => element.internalId == pupil.internalId);
     updatedPupils[index] = pupil;
@@ -84,7 +84,7 @@ class PupilFilterManager {
   }
 
   rebuildFilteredPupils() {
-    // List<Pupil> pupils = locator<PupilManager>().pupils.value;
+    // List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
     _filteredPupils.value = locator<PupilManager>().pupils.value;
     filterPupils();
     sortPupils();
@@ -110,10 +110,10 @@ class PupilFilterManager {
     filterPupils();
   }
 
-  List<Pupil> filteredPupilsFromList(List<Pupil> pupilsFromList) {
-    List<Pupil> filteredPupilsFromList = [];
-    for (Pupil pupil in pupilsFromList) {
-      Pupil filteredPupil = _filteredPupils.value
+  List<PupilProxy> filteredPupilsFromList(List<PupilProxy> pupilsFromList) {
+    List<PupilProxy> filteredPupilsFromList = [];
+    for (PupilProxy pupil in pupilsFromList) {
+      PupilProxy filteredPupil = _filteredPupils.value
           .where((element) => element.internalId == pupil.internalId)
           .single;
       filteredPupilsFromList.add(filteredPupil);
@@ -144,10 +144,10 @@ class PupilFilterManager {
     }
     _searchText.value = text;
     _filtersOn.value = true;
-    List<Pupil> filteredPupils = [];
-    List<Pupil> filteredPupilsState = List.from(_filteredPupils.value);
+    List<PupilProxy> filteredPupils = [];
+    List<PupilProxy> filteredPupilsState = List.from(_filteredPupils.value);
     filteredPupils = filteredPupilsState
-        .where((Pupil pupil) =>
+        .where((PupilProxy pupil) =>
             pupil.internalId.toString().contains(text) ||
             pupil.firstName!.toLowerCase().contains(text.toLowerCase()) ||
             pupil.lastName!.toLowerCase().contains(text.toLowerCase()))
@@ -166,8 +166,8 @@ class PupilFilterManager {
       _filteredPupils.value = pupils;
     }
 
-    List<Pupil> filteredPupils = [];
-    for (Pupil pupil in pupils) {
+    List<PupilProxy> filteredPupils = [];
+    for (PupilProxy pupil in pupils) {
       bool toList = true;
       // first we make sure that common group and schoolyear filters work
       if (((activeFilters[PupilFilter.E1]! && pupil.schoolyear == 'E1') ||
@@ -293,7 +293,7 @@ class PupilFilterManager {
   }
 
   sortPupils() {
-    List<Pupil> filteredPupils = List.from(_filteredPupils.value);
+    List<PupilProxy> filteredPupils = List.from(_filteredPupils.value);
     final sortMode = _sortMode.value;
 
     // Sort by first Name
@@ -340,7 +340,7 @@ class PupilFilterManager {
     _filteredPupils.value = filteredPupils;
   }
 
-  int comparePupilsByAdmonishedDate(Pupil a, Pupil b) {
+  int comparePupilsByAdmonishedDate(PupilProxy a, PupilProxy b) {
     // Handle potential null cases with null-aware operators
     return (a.pupilAdmonitions?.isEmpty ?? true) ==
             (b.pupilAdmonitions?.isEmpty ?? true)
@@ -350,7 +350,7 @@ class PupilFilterManager {
             : -1; // Place empty after non-empty
   }
 
-  int comparePupilsByLastNonProcessedAdmonition(Pupil a, Pupil b) {
+  int comparePupilsByLastNonProcessedAdmonition(PupilProxy a, PupilProxy b) {
     // Handle potential null cases with null-aware operators
     return (a.pupilAdmonitions?.isEmpty ?? true) ==
             (b.pupilAdmonitions?.isEmpty ?? true)
@@ -360,7 +360,7 @@ class PupilFilterManager {
             : -1; // Place empty after non-empty
   }
 
-  int compareLastAdmonishedDates(Pupil a, Pupil b) {
+  int compareLastAdmonishedDates(PupilProxy a, PupilProxy b) {
     // Ensure non-empty lists before accessing elements
     if (a.pupilAdmonitions!.isNotEmpty && b.pupilAdmonitions!.isNotEmpty) {
       final admonishedDateA = a.pupilAdmonitions!.last.admonishedDay;

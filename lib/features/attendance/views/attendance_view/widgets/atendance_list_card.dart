@@ -24,12 +24,13 @@ import 'package:watch_it/watch_it.dart';
 
 class AttendanceCard extends WatchingWidget {
   final AttendanceListController controller;
-  final Pupil passedPupil;
+  final PupilProxy passedPupil;
   const AttendanceCard(this.controller, this.passedPupil, {super.key});
   @override
   Widget build(BuildContext context) {
-    List<Pupil> pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
-    final Pupil pupil = pupils
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
+    final PupilProxy pupil = pupils
         .where((element) => element.internalId == passedPupil.internalId)
         .first;
     final attendanceManager = locator<AttendanceManager>();

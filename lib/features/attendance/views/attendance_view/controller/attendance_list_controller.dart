@@ -50,10 +50,10 @@ class AttendanceListController extends State<AttendanceList> {
 
   //- overview numbers functions
 
-  int missedPupils(List<Pupil> filteredPupils, DateTime thisDate) {
-    List<Pupil> missedPupils = [];
+  int missedPupils(List<PupilProxy> filteredPupils, DateTime thisDate) {
+    List<PupilProxy> missedPupils = [];
     if (filteredPupils.isNotEmpty) {
-      for (Pupil pupil in filteredPupils) {
+      for (PupilProxy pupil in filteredPupils) {
         if (pupil.pupilMissedClasses!.any((missedClass) =>
             missedClass.missedDay == thisDate &&
             (missedClass.missedType == 'missed' ||
@@ -67,10 +67,10 @@ class AttendanceListController extends State<AttendanceList> {
     return 0;
   }
 
-  int unexcusedPupils(List<Pupil> filteredPupils, DateTime thisDate) {
-    List<Pupil> unexcusedPupils = [];
+  int unexcusedPupils(List<PupilProxy> filteredPupils, DateTime thisDate) {
+    List<PupilProxy> unexcusedPupils = [];
 
-    for (Pupil pupil in filteredPupils) {
+    for (PupilProxy pupil in filteredPupils) {
       if (pupil.pupilMissedClasses!.any((missedClass) =>
           missedClass.missedDay == thisDate && missedClass.excused == true)) {
         unexcusedPupils.add(pupil);

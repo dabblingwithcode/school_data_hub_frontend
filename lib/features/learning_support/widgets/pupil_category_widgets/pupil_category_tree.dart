@@ -13,7 +13,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 
 List<Widget> buildPupilCategoryTree(
   BuildContext context,
-  Pupil pupil,
+  PupilProxy pupil,
   int? parentId,
   double indentation,
   Color? backGroundColor,

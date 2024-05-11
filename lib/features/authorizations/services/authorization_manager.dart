@@ -76,8 +76,8 @@ class AuthorizationManager {
       snackBarManager.isRunningValue(false);
       return;
     }
-    final List<Pupil> responsePupils = (List<Pupil>.from(
-        (response.data as List).map((e) => Pupil.fromJson(e))));
+    final List<PupilProxy> responsePupils = (List<PupilProxy>.from(
+        (response.data as List).map((e) => PupilProxy.fromJson(e))));
     locator<PupilManager>().updateListOfPupilsInRepository(responsePupils);
     fetchAuthorizations();
     snackBarManager.showSnackBar(SnackBarType.success, 'Einwilligung erstellt');
@@ -125,8 +125,8 @@ class AuthorizationManager {
       snackBarManager.isRunningValue(false);
       return;
     }
-    final List<Pupil> responsePupils = (List<Pupil>.from(
-        (response.data as List).map((e) => Pupil.fromJson(e))));
+    final List<PupilProxy> responsePupils = (List<PupilProxy>.from(
+        (response.data as List).map((e) => PupilProxy.fromJson(e))));
     locator<PupilManager>().updateListOfPupilsInRepository(responsePupils);
     snackBarManager.showSnackBar(
         SnackBarType.success, 'Einwilligungen erstellt');
@@ -145,7 +145,7 @@ class AuthorizationManager {
       snackBarManager.isRunningValue(false);
       return;
     }
-    final pupil = Pupil.fromJson(response.data);
+    final pupil = PupilProxy.fromJson(response.data);
     locator<PupilManager>().updatePupilInRepository(pupil);
     snackBarManager.showSnackBar(SnackBarType.success, 'Einwilligung gelöscht');
     snackBarManager.isRunningValue(false);
@@ -237,7 +237,7 @@ class AuthorizationManager {
   }
 
   PupilAuthorization getPupilAuthorization(int pupilId, String authId) {
-    final Pupil pupil = locator<PupilManager>()
+    final PupilProxy pupil = locator<PupilManager>()
         .pupils
         .value
         .where((element) => element.internalId == pupilId)
@@ -248,8 +248,8 @@ class AuthorizationManager {
     return pupilAuthorization;
   }
 
-  List<Pupil> getPupilsInAuthorization(String authorizationId) {
-    final List<Pupil> listedPupils = locator<PupilManager>()
+  List<PupilProxy> getPupilsInAuthorization(String authorizationId) {
+    final List<PupilProxy> listedPupils = locator<PupilManager>()
         .pupils
         .value
         .where((pupil) => pupil.authorizations!.any((authorization) =>
@@ -258,9 +258,9 @@ class AuthorizationManager {
     return listedPupils;
   }
 
-  List<Pupil> getListedPupilsInAuthorization(
-      String authorizationId, List<Pupil> filteredPupils) {
-    final List<Pupil> listedPupils = filteredPupils
+  List<PupilProxy> getListedPupilsInAuthorization(
+      String authorizationId, List<PupilProxy> filteredPupils) {
+    final List<PupilProxy> listedPupils = filteredPupils
         .where((pupil) => pupil.authorizations!.any((authorization) =>
             authorization.originAuthorization == authorizationId))
         .toList();

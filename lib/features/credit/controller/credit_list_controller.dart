@@ -14,25 +14,25 @@ class CreditList extends WatchingStatefulWidget {
 }
 
 class CreditListController extends State<CreditList> {
-  List<Pupil>? pupils;
-  List<Pupil>? filteredPupils;
+  List<PupilProxy>? pupils;
+  List<PupilProxy>? filteredPupils;
   TextEditingController searchController = TextEditingController();
   bool isSearchMode = false;
   bool isSearching = false;
   FocusNode focusNode = FocusNode();
 
   //- Values for the search bar
-  int totalFluidCredit(List<Pupil> pupils) {
+  int totalFluidCredit(List<PupilProxy> pupils) {
     int totalCredit = 0;
-    for (Pupil pupil in pupils) {
+    for (PupilProxy pupil in pupils) {
       totalCredit = totalCredit + pupil.credit;
     }
     return totalCredit;
   }
 
-  int totalGeneratedCredit(List<Pupil> pupils) {
+  int totalGeneratedCredit(List<PupilProxy> pupils) {
     int totalGeneratedCredit = 0;
-    for (Pupil pupil in pupils) {
+    for (PupilProxy pupil in pupils) {
       totalGeneratedCredit = totalGeneratedCredit + pupil.creditEarned;
     }
     return totalGeneratedCredit;
@@ -42,7 +42,8 @@ class CreditListController extends State<CreditList> {
   Widget build(BuildContext context) {
     int userCredit = watchValue((SessionManager x) => x.credentials).credit!;
     bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
-    List<Pupil> pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
     return CreditListView(this, userCredit, filtersOn, pupils);
   }
 }

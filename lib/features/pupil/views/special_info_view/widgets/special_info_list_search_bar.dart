@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart
 import 'package:schuldaten_hub/features/pupil/views/special_info_view/controller/special_info_controller.dart';
 import 'package:schuldaten_hub/features/pupil/views/special_info_view/widgets/special_info_reset_filter_button.dart';
 
-Widget specialInfoListSearchBar(BuildContext context, List<Pupil> pupils,
+Widget specialInfoListSearchBar(BuildContext context, List<PupilProxy> pupils,
     SpecialInfoListController controller, bool filtersOn) {
   return Container(
     decoration: BoxDecoration(

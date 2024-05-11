@@ -29,7 +29,7 @@ class _RoomListCardState extends State<RoomListCard> {
 
   @override
   Widget build(BuildContext context) {
-    // Pupil pupil = watchValue((PupilFilterManager x) => x.filteredPupils)
+    // PupilProxy pupil = watchValue((PupilFilterManager x) => x.filteredPupils)
     //     .where((element) => element.internalId == widget.passedPupil.internalId)
     //     .first;
     final List<MatrixUser> matrixUsersInRoom =

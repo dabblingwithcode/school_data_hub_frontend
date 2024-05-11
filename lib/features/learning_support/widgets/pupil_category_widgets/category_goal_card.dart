@@ -8,7 +8,7 @@ import 'package:schuldaten_hub/features/learning_support/services/goal_manager.d
 import 'package:schuldaten_hub/features/learning_support/widgets/pupil_category_widgets/category_goal_card_banner.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
-Widget categoryGoalCard(BuildContext context, Pupil pupil, int index) {
+Widget categoryGoalCard(BuildContext context, PupilProxy pupil, int index) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 8.0),
     child: ClipRRect(

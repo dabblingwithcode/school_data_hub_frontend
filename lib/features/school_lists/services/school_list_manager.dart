@@ -108,7 +108,7 @@ class SchoolListManager {
     return schoolList;
   }
 
-  List<PupilList> getVisibleSchoolLists(Pupil pupil) {
+  List<PupilList> getVisibleSchoolLists(PupilProxy pupil) {
     final Session session = locator<SessionManager>().credentials.value;
     List<PupilList> visiblePupilLists = pupil.pupilLists!
         .where((pupilList) =>
@@ -147,8 +147,8 @@ class SchoolListManager {
       debug.error('addPupilToSchoolList error: ${response.data}');
       return;
     }
-    final List<Pupil> responsePupils =
-        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+    final List<PupilProxy> responsePupils =
+        (response.data as List).map((e) => PupilProxy.fromJson(e)).toList();
     locator<PupilManager>().updateListOfPupilsInRepository(responsePupils);
 
     // final SchoolList modifiedSchoolList = SchoolList.fromJson(response.data);
@@ -172,8 +172,8 @@ class SchoolListManager {
       debug.error('removePupilFromSchoolList error: ${response.data}');
       return;
     }
-    final List<Pupil> responsePupils =
-        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+    final List<PupilProxy> responsePupils =
+        (response.data as List).map((e) => PupilProxy.fromJson(e)).toList();
     locator<PupilManager>().updateListOfPupilsInRepository(responsePupils);
     // final SchoolList modifiedSchoolList = SchoolList.fromJson(response.data);
     // List<SchoolList> updatedSchoolLists = List.from(_schoolLists.value);
@@ -219,14 +219,14 @@ class SchoolListManager {
   //     //handle errors
   //     debug.error('deletePupilsFromSchoolList error: ${response.data}');
   //   }
-  //   final List<Pupil> pupils =
-  //       (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+  //   final List<PupilProxy> pupils =
+  //       (response.data as List).map((e) => PupilProxy.fromJson(e)).toList();
 
   //   locator<PupilManager>().patchListOfPupils(pupils);
   // }
 
   PupilList getPupilSchoolListEntry(int pupilId, String listId) {
-    final Pupil pupil = locator<PupilManager>()
+    final PupilProxy pupil = locator<PupilManager>()
         .pupils
         .value
         .where((element) => element.internalId == pupilId)
@@ -238,17 +238,17 @@ class SchoolListManager {
     return pupilSchoolListEntry;
   }
 
-  List<Pupil> getPupilsinSchoolList(String listId) {
-    final List<Pupil> pupils = locator<PupilManager>().pupils.value;
-    final List<Pupil> listedPupils = pupils
+  List<PupilProxy> getPupilsinSchoolList(String listId) {
+    final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
+    final List<PupilProxy> listedPupils = pupils
         .where((pupil) => pupil.pupilLists!
             .any((pupilList) => pupilList.originList == listId))
         .toList();
     return listedPupils;
   }
 
-  List<Pupil> pupilsInSchoolList(String listId, List<Pupil> pupils) {
-    List<Pupil> pupilsInList = getPupilsinSchoolList(listId);
+  List<PupilProxy> pupilsInSchoolList(String listId, List<PupilProxy> pupils) {
+    List<PupilProxy> pupilsInList = getPupilsinSchoolList(listId);
     return pupils
         .where((pupil) => pupilsInList
             .any((element) => element.internalId == pupil.internalId))

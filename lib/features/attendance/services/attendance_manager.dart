@@ -4,8 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/endpoints.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
-
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
@@ -15,7 +15,6 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
-import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 
 import '../../../api/services/api_manager.dart';
 import '../../../common/services/locator.dart';
@@ -62,7 +61,7 @@ class AttendanceManager {
 
   void changeExcusedValue(int pupilId, DateTime date, bool newValue) async {
     locator<SnackBarManager>().isRunningValue(true);
-    final Pupil pupil = findPupilById(pupilId);
+    final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     if (missedClass == null || missedClass == -1) {
       return;
@@ -105,7 +104,7 @@ class AttendanceManager {
   void changeReturnedValue(
       int pupilId, bool newValue, DateTime date, String? time) async {
     locator<SnackBarManager>().isRunningValue(true);
-    final Pupil pupil = findPupilById(pupilId);
+    final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     final List<int> pupilBaseIds =
         locator<PupilBaseManager>().availablePupilIds.value;
@@ -193,7 +192,7 @@ class AttendanceManager {
       int pupilId, String dropdownValue, DateTime date, int minutesLate) async {
     locator<SnackBarManager>().isRunningValue(true);
     // Let's look for an existing missed class - if pupil and date match, there is one
-    final Pupil pupil = findPupilById(pupilId);
+    final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     if (missedClass == -1) {
       // The missed class does not exist - let's create one
@@ -252,7 +251,7 @@ class AttendanceManager {
       id, startdate, enddate, missedType) async {
     locator<SnackBarManager>().isRunningValue(true);
     List<Map<String, dynamic>> missedClasses = [];
-    final Pupil pupil =
+    final PupilProxy pupil =
         pupilManager.pupils.value.firstWhere((pupil) => pupil.internalId == id);
     final List<DateTime> validSchooldays =
         locator<SchooldayManager>().availableDates.value;
@@ -301,7 +300,7 @@ class AttendanceManager {
       return;
     }
     // Let's look for an existing missed class - if pupil and date match, there is one
-    final Pupil pupil = findPupilById(pupilId);
+    final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     if (missedClass == -1) {
       // The missed class does not exist - let's create one

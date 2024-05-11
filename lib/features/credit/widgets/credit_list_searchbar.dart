@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart
 import 'package:schuldaten_hub/features/credit/controller/credit_list_controller.dart';
 import 'package:schuldaten_hub/features/credit/widgets/credit_filter_bottom_sheet.dart';
 
-Widget creditListSearchBar(BuildContext context, List<Pupil> pupils,
+Widget creditListSearchBar(BuildContext context, List<PupilProxy> pupils,
     CreditListController controller, bool filtersOn) {
   return Container(
     decoration: BoxDecoration(

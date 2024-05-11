@@ -6,12 +6,15 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/controller/attendance_ranking_list_controller.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/widgets/attendance_ranking_filter_bottom_sheet.dart';
+import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_badges.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_badges.dart';
 
-Widget attendanceRankingListSearchBar(BuildContext context, List<Pupil> pupils,
-    AttendanceRankingListController controller, bool filtersOn) {
+Widget attendanceRankingListSearchBar(
+    BuildContext context,
+    List<PupilProxy> pupils,
+    AttendanceRankingListController controller,
+    bool filtersOn) {
   return Container(
     decoration: BoxDecoration(
       color: canvasColor,

@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/features/learning_support/models/category/pupil_c
 import 'package:schuldaten_hub/features/learning_support/services/learning_support_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
-Widget getCategoryStatusComment(Pupil pupil, int goalCategoryId) {
+Widget getCategoryStatusComment(PupilProxy pupil, int goalCategoryId) {
   if (pupil.pupilCategoryStatuses!.isNotEmpty) {
     final PupilCategoryStatus? categoryStatus =
         getCategoryStatus(pupil, goalCategoryId);

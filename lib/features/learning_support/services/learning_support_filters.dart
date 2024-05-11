@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
 
-bool learningSupportFilter(Pupil pupil, bool toList) {
+bool learningSupportFilter(PupilProxy pupil, bool toList) {
   final activeFilters = locator<PupilFilterManager>().filterState.value;
   if (activeFilters[PupilFilter.developmentPlan1]! &&
       pupil.individualDevelopmentPlan == 1 &&

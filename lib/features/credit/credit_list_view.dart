@@ -19,7 +19,7 @@ class CreditListView extends WatchingWidget {
   final CreditListController controller;
   final int userCredit;
   final bool filtersOn;
-  final List<Pupil> pupils;
+  final List<PupilProxy> pupils;
   const CreditListView(
       this.controller, this.userCredit, this.filtersOn, this.pupils,
       {Key? key})

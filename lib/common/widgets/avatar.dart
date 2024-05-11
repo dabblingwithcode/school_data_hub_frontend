@@ -13,7 +13,7 @@ import 'package:widget_zoom/widget_zoom.dart';
 
 part 'avatar.g.dart';
 
-Widget avatarImage(Pupil pupil, double size) {
+Widget avatarImage(PupilProxy pupil, double size) {
   return SizedBox(
     width: size,
     height: size,
@@ -56,7 +56,7 @@ Widget avatarImage(Pupil pupil, double size) {
 }
 
 @swidget
-Widget avatarWithBadges(Pupil pupil, double size) {
+Widget avatarWithBadges(PupilProxy pupil, double size) {
   return Padding(
     padding: const EdgeInsets.all(5.0),
     child: Stack(

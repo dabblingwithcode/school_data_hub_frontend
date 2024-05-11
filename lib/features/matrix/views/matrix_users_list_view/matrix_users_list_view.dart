@@ -17,7 +17,7 @@ class MatrixUsersListView extends WatchingWidget {
   final MatrixUsersListController controller;
   final int userCredit;
   final bool filtersOn;
-  final List<Pupil> pupils;
+  final List<PupilProxy> pupils;
   final List<MatrixUser> matrixUsers;
   const MatrixUsersListView(this.controller, this.userCredit, this.filtersOn,
       this.pupils, this.matrixUsers,

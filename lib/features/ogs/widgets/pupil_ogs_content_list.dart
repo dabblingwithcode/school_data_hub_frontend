@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
-List<Widget> pupilOgsContentList(Pupil pupil, BuildContext context) {
+List<Widget> pupilOgsContentList(PupilProxy pupil, BuildContext context) {
   return [
     Row(
       children: [

@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/w
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 
-Widget admonitionListSearchBar(BuildContext context, List<Pupil> pupils,
+Widget admonitionListSearchBar(BuildContext context, List<PupilProxy> pupils,
     AdmonitionListController controller, bool filtersOn) {
   return Container(
     decoration: BoxDecoration(

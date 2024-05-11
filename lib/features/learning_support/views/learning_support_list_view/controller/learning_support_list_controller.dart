@@ -23,10 +23,10 @@ class LearningSupportListController extends State<LearningSupportList> {
   FocusNode focusNode = FocusNode();
 
   //- overview numbers functions
-  int developmentPlan1Pupils(List<Pupil> filteredPupils) {
-    List<Pupil> developmentPlan1Pupils = [];
+  int developmentPlan1Pupils(List<PupilProxy> filteredPupils) {
+    List<PupilProxy> developmentPlan1Pupils = [];
     if (filteredPupils.isNotEmpty) {
-      for (Pupil pupil in filteredPupils) {
+      for (PupilProxy pupil in filteredPupils) {
         if (pupil.individualDevelopmentPlan == 1) {
           developmentPlan1Pupils.add(pupil);
         }
@@ -36,10 +36,10 @@ class LearningSupportListController extends State<LearningSupportList> {
     return 0;
   }
 
-  int developmentPlan2Pupils(List<Pupil> filteredPupils) {
-    List<Pupil> developmentPlan1Pupils = [];
+  int developmentPlan2Pupils(List<PupilProxy> filteredPupils) {
+    List<PupilProxy> developmentPlan1Pupils = [];
     if (filteredPupils.isNotEmpty) {
-      for (Pupil pupil in filteredPupils) {
+      for (PupilProxy pupil in filteredPupils) {
         if (pupil.individualDevelopmentPlan == 2) {
           developmentPlan1Pupils.add(pupil);
         }
@@ -49,10 +49,10 @@ class LearningSupportListController extends State<LearningSupportList> {
     return 0;
   }
 
-  int developmentPlan3Pupils(List<Pupil> filteredPupils) {
-    List<Pupil> developmentPlan1Pupils = [];
+  int developmentPlan3Pupils(List<PupilProxy> filteredPupils) {
+    List<PupilProxy> developmentPlan1Pupils = [];
     if (filteredPupils.isNotEmpty) {
-      for (Pupil pupil in filteredPupils) {
+      for (PupilProxy pupil in filteredPupils) {
         if (pupil.individualDevelopmentPlan == 3) {
           developmentPlan1Pupils.add(pupil);
         }

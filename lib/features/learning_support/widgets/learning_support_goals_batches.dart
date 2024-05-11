@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/features/learning_support/models/category/pupil_c
 import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
-List<Widget> learningSupportCategoryStatusBatches(Pupil pupil) {
+List<Widget> learningSupportCategoryStatusBatches(PupilProxy pupil) {
   List<Widget> widgetList = [];
   List<PupilCategoryStatus> pupilGoals = pupil.pupilCategoryStatuses!;
 

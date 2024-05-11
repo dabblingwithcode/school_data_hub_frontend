@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 
-Widget attendanceListSearchBar(BuildContext context, List<Pupil> pupils,
+Widget attendanceListSearchBar(BuildContext context, List<PupilProxy> pupils,
     AttendanceListController controller, DateTime thisDate, bool filtersOn) {
   return Container(
     decoration: BoxDecoration(

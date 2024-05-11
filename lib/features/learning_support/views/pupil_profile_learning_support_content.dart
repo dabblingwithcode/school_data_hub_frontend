@@ -11,7 +11,7 @@ import 'package:schuldaten_hub/features/learning_support/widgets/dialogs/individ
 import 'package:schuldaten_hub/features/learning_support/widgets/dialogs/preschool_revision_dialog.dart';
 
 List<Widget> pupilLearningSupportContentList(
-    Pupil pupil, BuildContext context) {
+    PupilProxy pupil, BuildContext context) {
   return [
     const Row(
       children: [

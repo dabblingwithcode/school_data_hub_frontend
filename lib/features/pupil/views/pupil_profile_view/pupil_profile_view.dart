@@ -25,8 +25,9 @@ class PupilProfileView extends WatchingWidget {
     int pupilProfileNavState =
         watchValue((BottomNavManager x) => x.pupilProfileNavState);
 
-    final Pupil pupil = watchValue((PupilManager x) => x.pupils).firstWhere(
-        (element) => element.internalId == controller.widget.pupil.internalId);
+    final PupilProxy pupil = watchValue((PupilManager x) => x.pupils)
+        .firstWhere((element) =>
+            element.internalId == controller.widget.pupil.internalId);
     // final pupil = findPupilById(controller.widget.pupil.internalId);
     final List<Admonition> admonitions = List.from(pupil.pupilAdmonitions!);
     admonitions.sort((a, b) => b.admonishedDay.compareTo(a.admonishedDay));

@@ -26,7 +26,7 @@ import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
 
 List<Widget> pupilAdmonitionsContentList(
-  Pupil pupil,
+  PupilProxy pupil,
   BuildContext context,
 ) {
   final List<Admonition> filteredAdmonitions =

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
@@ -20,7 +19,8 @@ class SpecialInfoListView extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
-    List<Pupil> pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
 
     return Scaffold(
       backgroundColor: canvasColor,

@@ -10,7 +10,7 @@ final TextEditingController _textEditingController = TextEditingController();
 
 // based on https://mobikul.com/creating-stateful-dialog-form-in-flutter/
 
-Future<void> changeCreditDialog(BuildContext context, Pupil pupil) async {
+Future<void> changeCreditDialog(BuildContext context, PupilProxy pupil) async {
   return await showDialog(
       context: context,
       builder: (context) {

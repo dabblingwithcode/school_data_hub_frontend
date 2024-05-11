@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/features/ogs/widgets/ogs_filter_bottom_sheet.dart
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 
-Widget ogsListSearchBar(BuildContext context, List<Pupil> pupils,
+Widget ogsListSearchBar(BuildContext context, List<PupilProxy> pupils,
     OgsListController controller, bool filtersOn) {
   return Container(
     decoration: BoxDecoration(

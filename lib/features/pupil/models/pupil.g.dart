@@ -6,24 +6,7 @@ part of 'pupil.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-Pupil _$PupilFromJson(Map<String, dynamic> json) => Pupil(
-      firstName: json['firstName'] as String?,
-      lastName: json['lastName'] as String?,
-      group: json['group'] as String?,
-      schoolyear: json['schoolyear'] as String?,
-      specialNeeds: json['specialNeeds'] as String?,
-      gender: json['gender'] as String?,
-      language: json['language'] as String?,
-      family: json['family'] as String?,
-      birthday: json['birthday'] == null
-          ? null
-          : DateTime.parse(json['birthday'] as String),
-      migrationSupportEnds: json['migrationSupportEnds'] == null
-          ? null
-          : DateTime.parse(json['migrationSupportEnds'] as String),
-      pupilSince: json['pupilSince'] == null
-          ? null
-          : DateTime.parse(json['pupilSince'] as String),
+PupilProxy _$PupilProxyFromJson(Map<String, dynamic> json) => PupilProxy(
       avatarUrl: json['avatar_url'] as String?,
       communicationPupil: json['communication_pupil'] as String?,
       communicationTutor1: json['communication_tutor1'] as String?,
@@ -75,18 +58,8 @@ Pupil _$PupilFromJson(Map<String, dynamic> json) => Pupil(
           ?.map((e) => CompetenceCheck.fromJson(e as Map<String, dynamic>))
           .toList();
 
-Map<String, dynamic> _$PupilToJson(Pupil instance) => <String, dynamic>{
-      'firstName': instance.firstName,
-      'lastName': instance.lastName,
-      'group': instance.group,
-      'schoolyear': instance.schoolyear,
-      'specialNeeds': instance.specialNeeds,
-      'gender': instance.gender,
-      'language': instance.language,
-      'family': instance.family,
-      'birthday': instance.birthday?.toIso8601String(),
-      'migrationSupportEnds': instance.migrationSupportEnds?.toIso8601String(),
-      'pupilSince': instance.pupilSince?.toIso8601String(),
+Map<String, dynamic> _$PupilProxyToJson(PupilProxy instance) =>
+    <String, dynamic>{
       'avatar_url': instance.avatarUrl,
       'communication_pupil': instance.communicationPupil,
       'communication_tutor1': instance.communicationTutor1,

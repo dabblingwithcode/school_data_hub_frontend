@@ -11,8 +11,8 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.da
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
 
-List<Widget> pupilInfosContentList(Pupil pupil, BuildContext context) {
-  List<Pupil> pupilSiblings = siblings(pupil);
+List<Widget> pupilInfosContentList(PupilProxy pupil, BuildContext context) {
+  List<PupilProxy> pupilSiblings = siblings(pupil);
   return [
     const Row(
       children: [
@@ -107,7 +107,7 @@ List<Widget> pupilInfosContentList(Pupil pupil, BuildContext context) {
             physics: const NeverScrollableScrollPhysics(),
             itemCount: pupilSiblings.length,
             itemBuilder: (context, int index) {
-              Pupil sibling = pupilSiblings[index];
+              PupilProxy sibling = pupilSiblings[index];
               return Column(
                 children: [
                   const Gap(5),

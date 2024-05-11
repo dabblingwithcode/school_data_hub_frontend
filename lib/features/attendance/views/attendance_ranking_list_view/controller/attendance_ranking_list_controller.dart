@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/attendance_ranking_list_view.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceRankingList extends WatchingStatefulWidget {
@@ -13,24 +12,24 @@ class AttendanceRankingList extends WatchingStatefulWidget {
 }
 
 class AttendanceRankingListController extends State<AttendanceRankingList> {
-  // List<Pupil>? pupils;
-  // List<Pupil>? filteredPupils;
+  // List<PupilProxy>? pupils;
+  // List<PupilProxy>? filteredPupils;
   TextEditingController searchController = TextEditingController();
   bool isSearchMode = false;
   bool isSearching = false;
   FocusNode focusNode = FocusNode();
 
-  int totalFluidCredit(List<Pupil> pupils) {
+  int totalFluidCredit(List<PupilProxy> pupils) {
     int totalCredit = 0;
-    for (Pupil pupil in pupils) {
+    for (PupilProxy pupil in pupils) {
       totalCredit = totalCredit + pupil.credit;
     }
     return totalCredit;
   }
 
-  int totalGeneratedCredit(List<Pupil> pupils) {
+  int totalGeneratedCredit(List<PupilProxy> pupils) {
     int totalGeneratedCredit = 0;
-    for (Pupil pupil in pupils) {
+    for (PupilProxy pupil in pupils) {
       totalGeneratedCredit = totalGeneratedCredit + pupil.creditEarned;
     }
     return totalGeneratedCredit;

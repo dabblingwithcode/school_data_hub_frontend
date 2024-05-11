@@ -32,7 +32,7 @@ class NewAuthorizationViewState extends State<NewAuthorizationView> {
 
   @override
   Widget build(BuildContext context) {
-    List<Pupil> pupilsFromIds = pupilsFromPupilIds(pupilIds.toList());
+    List<PupilProxy> pupilsFromIds = pupilsFromPupilIds(pupilIds.toList());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -103,7 +103,7 @@ class NewAuthorizationViewState extends State<NewAuthorizationView> {
                                 physics: const NeverScrollableScrollPhysics(),
                                 itemCount: pupilsFromIds.length,
                                 itemBuilder: (context, int index) {
-                                  Pupil listedPupil = pupilsFromIds[index];
+                                  PupilProxy listedPupil = pupilsFromIds[index];
                                   return Column(
                                     children: [
                                       const Gap(5),

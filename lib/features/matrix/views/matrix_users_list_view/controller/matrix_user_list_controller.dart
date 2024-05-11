@@ -22,7 +22,8 @@ class MatrixUsersListController extends State<MatrixUsersList> {
   Widget build(BuildContext context) {
     int userCredit = watchValue((SessionManager x) => x.credentials).credit!;
     bool filtersOn = watchValue((SearchManager x) => x.searchState);
-    List<Pupil> pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
     List<MatrixUser> matrixUsers = watchValue(
       (MatrixPolicyFilterManager x) => x.filteredMatrixUsers,
     );

@@ -33,9 +33,10 @@ class AuthorizationPupilsController extends State<AuthorizationPupils> {
     super.initState();
   }
 
-  List<Pupil> addAuthorizationFiltersToFilteredPupils(List<Pupil> pupils) {
-    List<Pupil> filteredPupils = [];
-    for (Pupil pupil in pupils) {
+  List<PupilProxy> addAuthorizationFiltersToFilteredPupils(
+      List<PupilProxy> pupils) {
+    List<PupilProxy> filteredPupils = [];
+    for (PupilProxy pupil in pupils) {
       bool toList = true;
       // Check first if the filtered pupil is in the authorization. If not, continue with next one.
       final PupilAuthorization? pupilAuthorization = pupil.authorizations!

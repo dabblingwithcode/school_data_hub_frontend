@@ -13,7 +13,7 @@ part 'pupil_profile_head_widget.g.dart';
 
 @swidget
 Widget pupilProfileHeadWidget(
-    Pupil pupil, BuildContext context, PupilProfileController controller) {
+    PupilProxy pupil, BuildContext context, PupilProfileController controller) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [

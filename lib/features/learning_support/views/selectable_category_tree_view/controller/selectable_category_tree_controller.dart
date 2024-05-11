@@ -3,7 +3,7 @@ import 'package:schuldaten_hub/features/learning_support/views/selectable_catego
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
 class SelectableCategoryTree extends StatefulWidget {
-  final Pupil pupil;
+  final PupilProxy pupil;
   final String elementType;
   const SelectableCategoryTree(
     this.pupil,

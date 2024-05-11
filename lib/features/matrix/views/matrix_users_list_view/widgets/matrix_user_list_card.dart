@@ -27,7 +27,7 @@ class _MatrixUsersListCardState extends State<MatrixUsersListCard> {
 
   @override
   Widget build(BuildContext context) {
-    // Pupil pupil = watchValue((PupilFilterManager x) => x.filteredPupils)
+    // PupilProxy pupil = watchValue((PupilFilterManager x) => x.filteredPupils)
     //     .where((element) => element.internalId == widget.passedPupil.internalId)
     //     .first;
 

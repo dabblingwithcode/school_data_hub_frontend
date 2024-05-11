@@ -8,7 +8,7 @@ import 'package:watch_it/watch_it.dart';
 
 class SpecialInfoCard extends WatchingWidget {
   final SpecialInfoListController controller;
-  final Pupil pupil;
+  final PupilProxy pupil;
   const SpecialInfoCard(this.controller, this.pupil, {super.key});
   @override
   Widget build(BuildContext context) {

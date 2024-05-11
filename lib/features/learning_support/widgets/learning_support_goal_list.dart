@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/features/learning_support/views/new_category_item
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/pupil_category_widgets/category_goal_card.dart';
 
-List<Widget> learningSupportGoalList(BuildContext context, Pupil pupil) {
+List<Widget> learningSupportGoalList(BuildContext context, PupilProxy pupil) {
   return [
     Padding(
       padding: const EdgeInsets.all(10.0),
