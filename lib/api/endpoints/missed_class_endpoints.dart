@@ -1,3 +1,5 @@
+import 'package:schuldaten_hub/common/utils/extensions.dart';
+
 class EndpointsMissedClass {
   //- GET
   String getMissedClasses = '/missed_classes/all';

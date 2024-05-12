@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/competence/models/competence.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
@@ -20,7 +20,7 @@ class CompetenceManager {
   final _competences = ValueNotifier<List<Competence>>([]);
   final _isRunning = ValueNotifier<bool>(false);
   final client = locator.get<ApiManager>().dioClient.value;
-  final snackBarManager = locator<SnackBarManager>();
+  final snackBarManager = locator<NotificationManager>();
   CompetenceManager() {
     debug.warning('CompetenceManager initialized');
   }
@@ -40,13 +40,14 @@ class CompetenceManager {
       _competences.value = competences;
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).message;
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
+      snackBarManager.showSnackBar(NotificationType.error, errorMessage);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
       snackBarManager.isRunningValue(false);
       rethrow;
     }
-    snackBarManager.showSnackBar(SnackBarType.success, 'Kompetenzen geladen');
+    snackBarManager.showSnackBar(
+        NotificationType.success, 'Kompetenzen geladen');
     snackBarManager.isRunningValue(false);
     return;
   }
@@ -64,13 +65,14 @@ class CompetenceManager {
           .refreshFilteredCompetences(competences);
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).message;
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
+      snackBarManager.showSnackBar(NotificationType.error, errorMessage);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
       snackBarManager.isRunningValue(false);
       rethrow;
     }
-    snackBarManager.showSnackBar(SnackBarType.success, 'Kompetenzen geladen');
+    snackBarManager.showSnackBar(
+        NotificationType.success, 'Kompetenzen geladen');
     snackBarManager.isRunningValue(false);
     return;
   }
@@ -94,12 +96,13 @@ class CompetenceManager {
       _competences.value = [..._competences.value, ...newCompetences];
       locator<CompetenceFilterManager>()
           .refreshFilteredCompetences(_competences.value);
-      snackBarManager.showSnackBar(SnackBarType.success, 'Kompetenz erstellt');
+      snackBarManager.showSnackBar(
+          NotificationType.success, 'Kompetenz erstellt');
       snackBarManager.isRunningValue(false);
       return;
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).message;
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
+      snackBarManager.showSnackBar(NotificationType.error, errorMessage);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
       snackBarManager.isRunningValue(false);
@@ -130,7 +133,7 @@ class CompetenceManager {
           .refreshFilteredCompetences(_competences.value);
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).message;
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
+      snackBarManager.showSnackBar(NotificationType.error, errorMessage);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
       snackBarManager.isRunningValue(false);

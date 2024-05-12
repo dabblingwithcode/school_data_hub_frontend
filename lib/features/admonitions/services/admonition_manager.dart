@@ -8,7 +8,7 @@ import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
@@ -44,7 +44,7 @@ class AdmonitionManager {
   //-POST ADMONITION
   Future<void> postAdmonition(
       int pupilId, DateTime date, String type, String reason) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
 
     final data = jsonEncode({
       "admonished_day": date.formatForJson(),
@@ -60,11 +60,11 @@ class AdmonitionManager {
         await client.post(EndpointsAdmonition.postAdmonition, data: data);
     final Map<String, dynamic> pupilResponse = response.data;
     if (response.statusCode == 200) {
-      locator<SnackBarManager>()
-          .showSnackBar(SnackBarType.success, 'Eintrag erfolgreich!');
+      locator<NotificationManager>()
+          .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
 
       pupilManager.patchPupilFromResponse(pupilResponse);
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().isRunningValue(false);
     }
   }
 
@@ -97,7 +97,7 @@ class AdmonitionManager {
   }
 
   patchAdmonitionAsProcessed(String admonitionId, bool processed) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
 
     String data;
     if (processed) {
@@ -115,23 +115,23 @@ class AdmonitionManager {
         .patch(EndpointsAdmonition().patchAdmonition(admonitionId), data: data);
     // Handle errors.
     if (response.statusCode != 200) {
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.warning, 'Fehler beim Patchen der Fehlzeit!');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.warning, 'Fehler beim Patchen der Fehlzeit!');
+      locator<NotificationManager>().isRunningValue(false);
       return;
     }
     // Success! We have a pupil response - let's patch the pupil with the data
-    locator<SnackBarManager>()
-        .showSnackBar(SnackBarType.success, 'Ereignis geändert!');
+    locator<NotificationManager>()
+        .showSnackBar(NotificationType.success, 'Ereignis geändert!');
     final Map<String, dynamic> pupilResponse = response.data;
 
     await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().isRunningValue(false);
   }
 
   postAdmonitionFile(
       File imageFile, String admonitionId, bool isProcessed) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     final encryptedFile = await customEncrypter.encryptFile(imageFile);
     String endpoint;
     String fileName = encryptedFile.path.split('/').last;
@@ -156,21 +156,21 @@ class AdmonitionManager {
     );
     // Handle errors.
     if (response.statusCode != 200) {
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.warning, 'Fehler beim Patchen der Fehlzeit!');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.warning, 'Fehler beim Patchen der Fehlzeit!');
+      locator<NotificationManager>().isRunningValue(false);
     }
     // Success! We have a pupil response - let's patch the pupil with the data
-    locator<SnackBarManager>()
-        .showSnackBar(SnackBarType.success, 'Datei erfolgreich hochgeladen!');
+    locator<NotificationManager>().showSnackBar(
+        NotificationType.success, 'Datei erfolgreich hochgeladen!');
     final Map<String, dynamic> pupilResponse = response.data;
     await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().isRunningValue(false);
   }
 
   deleteAdmonitionFile(
       String admonitionId, String cacheKey, bool isProcessed) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     // choose endpoint depending on isProcessed
     String endpoint;
     if (isProcessed) {
@@ -184,9 +184,9 @@ class AdmonitionManager {
     final Response response = await client.delete(endpoint);
     // Handle errors.
     if (response.statusCode != 200) {
-      locator<SnackBarManager>()
-          .showSnackBar(SnackBarType.warning, 'Fehler beim Löschen der Datei!');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.warning, 'Fehler beim Löschen der Datei!');
+      locator<NotificationManager>().isRunningValue(false);
     }
     // Success! We have a pupil response
     final Map<String, dynamic> pupilResponse = response.data;
@@ -195,28 +195,28 @@ class AdmonitionManager {
     await cacheManager.removeFile(cacheKey);
     // And patch the pupil with the data
     await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
-    locator<SnackBarManager>()
-        .showSnackBar(SnackBarType.success, 'Datei erfolgreich gelöscht!');
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>()
+        .showSnackBar(NotificationType.success, 'Datei erfolgreich gelöscht!');
+    locator<NotificationManager>().isRunningValue(false);
   }
 
   deleteAdmonition(String admonitionId) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
 
     // send request
     Response response = await client
         .delete(EndpointsAdmonition().deleteAdmonition(admonitionId));
 
     if (response.statusCode != 200) {
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.warning, 'Fehler - statuscode ${response.statusCode}!');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().showSnackBar(NotificationType.warning,
+          'Fehler - statuscode ${response.statusCode}!');
+      locator<NotificationManager>().isRunningValue(false);
       return;
     }
-    locator<SnackBarManager>()
-        .showSnackBar(SnackBarType.success, 'Fehlzeit gelöscht!');
+    locator<NotificationManager>()
+        .showSnackBar(NotificationType.success, 'Fehlzeit gelöscht!');
 
     locator<PupilManager>().patchPupilFromResponse(response.data);
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().isRunningValue(false);
   }
 }

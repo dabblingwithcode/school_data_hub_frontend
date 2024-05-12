@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_helper_functions.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/short_textfield_dialog.dart';
@@ -116,16 +116,17 @@ class SettingsView extends WatchingWidget {
                                 .refreshToken(password);
 
                             if (success == 401) {
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.error, 'Falsches Passwort');
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.error, 'Falsches Passwort');
                               return;
                             } else if (success == 200) {
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.success, 'Token erneuert!');
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.success, 'Token erneuert!');
                             }
                           } catch (e) {
-                            locator<SnackBarManager>().showSnackBar(
-                                SnackBarType.error, 'Unbekannter Fehler: $e');
+                            locator<NotificationManager>().showSnackBar(
+                                NotificationType.error,
+                                'Unbekannter Fehler: $e');
                           }
                         },
                         child: const Icon(Icons.password_rounded)),
@@ -138,8 +139,8 @@ class SettingsView extends WatchingWidget {
                               context, 'Ausloggen', 'Wirklich ausloggen?');
                           if (confirm == true && context.mounted) {
                             logout(context);
-                            locator<SnackBarManager>().showSnackBar(
-                                SnackBarType.success,
+                            locator<NotificationManager>().showSnackBar(
+                                NotificationType.success,
                                 'Erfolgreich ausgeloggt!');
                           }
                         },
@@ -158,8 +159,8 @@ class SettingsView extends WatchingWidget {
                           'Lokale ID-Schlüssel löschen?');
                       if (confirm == true && context.mounted) {
                         locator.get<PupilPersonalDataManager>().deleteData();
-                        locator<SnackBarManager>().showSnackBar(
-                            SnackBarType.success, 'ID-Schlüssel gelöscht');
+                        locator<NotificationManager>().showSnackBar(
+                            NotificationType.success, 'ID-Schlüssel gelöscht');
                       }
                       return;
                     },
@@ -177,8 +178,8 @@ class SettingsView extends WatchingWidget {
                           'Instanz-ID-Schlüssel löschen?');
                       if (confirm == true && context.mounted) {
                         await locator<EnvManager>().deleteEnv();
-                        locator<SnackBarManager>().showSnackBar(
-                            SnackBarType.success,
+                        locator<NotificationManager>().showSnackBar(
+                            NotificationType.success,
                             'Instanz-ID-Schlüssel gelöscht');
                         final cacheManager = DefaultCacheManager();
                         await cacheManager.emptyCache();
@@ -206,8 +207,8 @@ class SettingsView extends WatchingWidget {
                           if (confirm == true && context.mounted) {
                             final cacheManager = DefaultCacheManager();
                             await cacheManager.emptyCache();
-                            locator<SnackBarManager>().showSnackBar(
-                                SnackBarType.success,
+                            locator<NotificationManager>().showSnackBar(
+                                NotificationType.success,
                                 'der Bilder-Cache wurde gelöscht');
                           }
                           return;
@@ -272,12 +273,12 @@ class SettingsView extends WatchingWidget {
                               .increaseUsersCredit();
                           if (context.mounted) {
                             if (success) {
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.success,
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.success,
                                   'Transaktion erfolgreich!');
                             } else {
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.error,
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.error,
                                   'Fehler bei der Überweisung');
                             }
                           }
@@ -326,8 +327,8 @@ class SettingsView extends WatchingWidget {
                             final bool confirmed =
                                 await generatePolicyJsonFile();
                             if (confirmed) {
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.error, 'Datei generiert');
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.error, 'Datei generiert');
                             }
                           }),
                     ]),

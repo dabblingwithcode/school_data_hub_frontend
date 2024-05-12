@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
@@ -34,7 +34,7 @@ class SchoolListManager {
     return this;
   }
 
-  final snackBarManager = locator<SnackBarManager>();
+  final snackBarManager = locator<NotificationManager>();
 
   SchoolList getSchoolListById(String listId) {
     return _schoolLists.value.firstWhere((element) => element.listId == listId);
@@ -49,17 +49,19 @@ class SchoolListManager {
       debug.success(
           'SchoolListRepository fetched ${schoolLists.length} schooldays! | ${StackTrace.current}');
       _schoolLists.value = schoolLists;
-      snackBarManager.showSnackBar(SnackBarType.success, 'Schullisten geladen');
+      snackBarManager.showSnackBar(
+          NotificationType.success, 'Schullisten geladen');
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e);
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage.message);
+      snackBarManager.showSnackBar(
+          NotificationType.error, errorMessage.message);
       snackBarManager.isRunningValue(false);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
 
       rethrow;
     }
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().isRunningValue(false);
     return;
   }
 

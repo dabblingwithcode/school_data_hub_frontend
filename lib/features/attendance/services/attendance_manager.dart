@@ -5,12 +5,11 @@ import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
@@ -47,8 +46,8 @@ class AttendanceManager {
       return;
     }
     if (response.statusCode != 200) {
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.error, 'Fehler: status code ${response.statusCode}');
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.error, 'Fehler: status code ${response.statusCode}');
 
       return;
     }
@@ -61,7 +60,7 @@ class AttendanceManager {
   }
 
   void changeExcusedValue(int pupilId, DateTime date, bool newValue) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     if (missedClass == null || missedClass == -1) {
@@ -72,39 +71,39 @@ class AttendanceManager {
         .patch(endpoints.patchMissedClass(pupilId, date), data: data);
     final Map<String, dynamic> pupilResponse = response.data;
     if (response.statusCode == 200) {
-      locator<SnackBarManager>()
-          .showSnackBar(SnackBarType.success, 'Eintrag erfolgreich!');
+      locator<NotificationManager>()
+          .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
 
       debug.warning('Changed excused state to $newValue');
 
       pupilManager.patchPupilFromResponse(pupilResponse);
     }
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().isRunningValue(false);
     return;
   }
 
   Future<void> deleteMissedClass(int pupilId, DateTime date) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     final response = await client
         .delete(EndpointsMissedClass().deleteMissedClass(pupilId, date));
 
     if (response.statusCode != 200) {
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.error, 'Fehler: status code ${response.statusCode}');
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.error, 'Fehler: status code ${response.statusCode}');
 
       //- TO-DO: delete the missed class in the manager too! E.g. make the server respond with the pupil?
 
       return;
     }
     pupilManager.patchPupilFromResponse(response.data);
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().isRunningValue(false);
 
     return;
   }
 
   void changeReturnedValue(
       int pupilId, bool newValue, DateTime date, String? time) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     final List<int> pupilBaseIds =
@@ -132,15 +131,15 @@ class AttendanceManager {
       final Map<String, dynamic> pupilResponse = response.data;
       // handle errors
       if (response.statusCode != 200) {
-        locator<SnackBarManager>().showSnackBar(
-            SnackBarType.error, 'Fehler: status code ${response.statusCode}');
-        locator<SnackBarManager>().isRunningValue(false);
+        locator<NotificationManager>().showSnackBar(NotificationType.error,
+            'Fehler: status code ${response.statusCode}');
+        locator<NotificationManager>().isRunningValue(false);
         return;
       }
       // the request was successful -
       //we patch the pupil in the pupilmanager with the response
       pupilManager.patchPupilFromResponse(pupilResponse);
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().isRunningValue(false);
       return;
     }
     //* Case delete 'none' + 'returned' missed class *//
@@ -152,14 +151,14 @@ class AttendanceManager {
           .delete(EndpointsMissedClass().deleteMissedClass(pupilId, date));
       await pupilManager.fetchPupilsByInternalId(pupilBaseIds);
       if (response.statusCode != 200) {
-        locator<SnackBarManager>().showSnackBar(
-            SnackBarType.error, 'Fehler: status code ${response.statusCode}');
-        locator<SnackBarManager>().isRunningValue(false);
+        locator<NotificationManager>().showSnackBar(NotificationType.error,
+            'Fehler: status code ${response.statusCode}');
+        locator<NotificationManager>().isRunningValue(false);
         return;
       }
       locator<PupilFilterManager>().refreshFilteredPupils();
-      locator<SnackBarManager>()
-          .showSnackBar(SnackBarType.success, 'Fehlzeit gelöscht!');
+      locator<NotificationManager>()
+          .showSnackBar(NotificationType.success, 'Fehlzeit gelöscht!');
 
       return;
     }
@@ -173,9 +172,9 @@ class AttendanceManager {
           .patch(endpoints.patchMissedClass(pupilId, date), data: data);
       // handle errors
       if (response.statusCode != 200) {
-        locator<SnackBarManager>().showSnackBar(
-            SnackBarType.error, 'Fehler: status code ${response.statusCode}');
-        locator<SnackBarManager>().isRunningValue(false);
+        locator<NotificationManager>().showSnackBar(NotificationType.error,
+            'Fehler: status code ${response.statusCode}');
+        locator<NotificationManager>().isRunningValue(false);
 
         return;
       }
@@ -183,15 +182,15 @@ class AttendanceManager {
       //we patch the pupil in the pupilmanager with the response
       final Map<String, dynamic> pupilResponse = response.data;
       pupilManager.patchPupilFromResponse(pupilResponse);
-      locator<SnackBarManager>()
-          .showSnackBar(SnackBarType.success, 'Eintrag erfolgreich!');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>()
+          .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
+      locator<NotificationManager>().isRunningValue(false);
     }
   }
 
   Future<void> changeLateTypeValue(
       int pupilId, String dropdownValue, DateTime date, int minutesLate) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     // Let's look for an existing missed class - if pupil and date match, there is one
     final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
@@ -214,15 +213,15 @@ class AttendanceManager {
           await client.post(EndpointsMissedClass.postMissedClass, data: data);
       final Map<String, dynamic> pupilResponse = response.data;
       if (response.statusCode != 200) {
-        locator<SnackBarManager>().showSnackBar(
-            SnackBarType.error, 'Fehler: status code ${response.statusCode}');
-        locator<SnackBarManager>().isRunningValue(false);
+        locator<NotificationManager>().showSnackBar(NotificationType.error,
+            'Fehler: status code ${response.statusCode}');
+        locator<NotificationManager>().isRunningValue(false);
         return;
       }
       pupilManager.patchPupilFromResponse(pupilResponse);
-      locator<SnackBarManager>()
-          .showSnackBar(SnackBarType.success, 'Eintrag erfolgreich!');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>()
+          .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
+      locator<NotificationManager>().isRunningValue(false);
       return;
     }
     // The missed class exists already - patching it
@@ -233,24 +232,24 @@ class AttendanceManager {
         .patch(endpoints.patchMissedClass(pupilId, date), data: data);
     final Map<String, dynamic> pupilResponse = response.data;
     if (response.statusCode != 200) {
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.error, 'Fehler: status code ${response.statusCode}');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.error, 'Fehler: status code ${response.statusCode}');
+      locator<NotificationManager>().isRunningValue(false);
 
       return;
     }
     // the request was successful -
     //we patch the pupil in the pupilmanager with the response
     pupilManager.patchPupilFromResponse(pupilResponse);
-    locator<SnackBarManager>()
-        .showSnackBar(SnackBarType.success, 'Eintrag erfolgreich!');
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>()
+        .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
+    locator<NotificationManager>().isRunningValue(false);
     return;
   }
 
   Future<void> createManyMissedClasses(
       id, startdate, enddate, missedType) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     List<Map<String, dynamic>> missedClasses = [];
     final PupilProxy pupil =
         pupilManager.pupils.value.firstWhere((pupil) => pupil.internalId == id);
@@ -279,25 +278,25 @@ class AttendanceManager {
     final response = await client.post(EndpointsMissedClass.postMissedClassList,
         data: listData);
     if (response.statusCode != 200) {
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.error, 'Fehler: status code ${response.statusCode}');
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.error, 'Fehler: status code ${response.statusCode}');
       return;
     }
     await pupilManager.patchPupilFromResponse(response.data);
-    locator<SnackBarManager>()
-        .showSnackBar(SnackBarType.success, 'Einträge erfolgreich!');
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>()
+        .showSnackBar(NotificationType.success, 'Einträge erfolgreich!');
+    locator<NotificationManager>().isRunningValue(false);
     return;
   }
 
   void changeMissedTypeValue(
       int pupilId, String dropdownValue, DateTime date) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
 
     if (dropdownValue == 'none') {
       // change value to 'none' means there was a missed class that has to be deleted
       await deleteMissedClass(pupilId, date);
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().isRunningValue(false);
       return;
     }
     // Let's look for an existing missed class - if pupil and date match, there is one
@@ -322,15 +321,15 @@ class AttendanceManager {
           await client.post(EndpointsMissedClass.postMissedClass, data: data);
       final Map<String, dynamic> pupilResponse = response.data;
       if (response.statusCode != 200) {
-        locator<SnackBarManager>().showSnackBar(
-            SnackBarType.error, 'Fehler: status code ${response.statusCode}');
-        locator<SnackBarManager>().isRunningValue(false);
+        locator<NotificationManager>().showSnackBar(NotificationType.error,
+            'Fehler: status code ${response.statusCode}');
+        locator<NotificationManager>().isRunningValue(false);
         return;
       }
       await pupilManager.patchPupilFromResponse(pupilResponse);
-      locator<SnackBarManager>()
-          .showSnackBar(SnackBarType.success, 'Eintrag erfolgreich!');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>()
+          .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
+      locator<NotificationManager>().isRunningValue(false);
       return;
     }
     // The missed class exists already - patching it
@@ -343,22 +342,22 @@ class AttendanceManager {
         .patch(endpoints.patchMissedClass(pupilId, date), data: data);
     final Map<String, dynamic> pupilResponse = response.data;
     if (response.statusCode != 200) {
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.error, 'Fehler: status code ${response.statusCode}');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.error, 'Fehler: status code ${response.statusCode}');
+      locator<NotificationManager>().isRunningValue(false);
       return;
     }
 
     await pupilManager.patchPupilFromResponse(pupilResponse);
-    locator<SnackBarManager>()
-        .showSnackBar(SnackBarType.success, 'Eintrag erfolgreich!');
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>()
+        .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
+    locator<NotificationManager>().isRunningValue(false);
     return;
   }
 
   void changeContactedValue(
       int pupilId, String dropdownValue, DateTime date) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
 
     debug.info('Changing contacted value');
     debug.info('pupilId $pupilId, dropdownValue $dropdownValue, date $date');
@@ -370,15 +369,15 @@ class AttendanceManager {
         .patch(endpoints.patchMissedClass(pupilId, date), data: data);
     final Map<String, dynamic> pupilResponse = response.data;
     if (response.statusCode != 200) {
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.error, 'Fehler: status code ${response.statusCode}');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.error, 'Fehler: status code ${response.statusCode}');
+      locator<NotificationManager>().isRunningValue(false);
       return;
     }
     await pupilManager.patchPupilFromResponse(pupilResponse);
-    locator<SnackBarManager>()
-        .showSnackBar(SnackBarType.success, 'Eintrag erfolgreich!');
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>()
+        .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
+    locator<NotificationManager>().isRunningValue(false);
     return;
   }
 }

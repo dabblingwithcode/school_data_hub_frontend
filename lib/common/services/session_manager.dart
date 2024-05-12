@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 
 import 'package:schuldaten_hub/common/services/env_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
@@ -89,7 +89,7 @@ class SessionManager {
   }
 
   Future<void> checkStoredCredentials() async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     if (await secureStorageContains('session') == true) {
       final String? storedSession = await secureStorageRead('session');
       debug.success('Session found!');
@@ -101,12 +101,12 @@ class SessionManager {
           await secureStorageDelete('session');
           debug.warning(
               'Session was not valid - deleted! | ${StackTrace.current}');
-          locator<SnackBarManager>().isRunningValue(false);
+          locator<NotificationManager>().isRunningValue(false);
           return;
         }
         if (locator<EnvManager>().env.value.serverUrl == null) {
           debug.warning('No environment found! | ${StackTrace.current}');
-          locator<SnackBarManager>().isRunningValue(false);
+          locator<NotificationManager>().isRunningValue(false);
           return;
         }
         debug.info('Stored session is valid! | ${StackTrace.current}');
@@ -115,19 +115,19 @@ class SessionManager {
             'SessionManager: isAuthenticated is ${_isAuthenticated.value.toString()}');
         debug.warning('Calling ApiManager instance');
         registerDependentManagers(_credentials.value.jwt!);
-        locator<SnackBarManager>().isRunningValue(false);
+        locator<NotificationManager>().isRunningValue(false);
         return;
       } catch (e) {
         debug.error(
           'Error reading session from secureStorage: $e | ${StackTrace.current}',
         );
         await secureStorageDelete('session');
-        locator<SnackBarManager>().isRunningValue(false);
+        locator<NotificationManager>().isRunningValue(false);
         return;
       }
     } else {
       debug.info('No session found');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().isRunningValue(false);
       return;
     }
   }
@@ -159,7 +159,7 @@ class SessionManager {
   Future<void> attemptLogin(String? username, String? password) async {
     String auth = 'Basic ${base64Encode(utf8.encode('$username:$password'))}';
     //_operationReport.value = Report(null, null);
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     final response = await _dio.get(EndpointsUser.login,
         options: Options(headers: <String, String>{'Authorization': auth}));
     if (response.statusCode == 200) {
@@ -169,18 +169,18 @@ class SessionManager {
       await saveSession(session);
       authenticate(session);
       //await locator.allReady();
-      locator<SnackBarManager>()
-          .showSnackBar(SnackBarType.success, 'Login erfolgreich!');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>()
+          .showSnackBar(NotificationType.success, 'Login erfolgreich!');
+      locator<NotificationManager>().isRunningValue(false);
       return;
     }
     if (response.statusCode == 401) {
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.warning, 'Login fehlgeschlagen - falsches passwort!');
+      locator<NotificationManager>().showSnackBar(NotificationType.warning,
+          'Login fehlgeschlagen - falsches passwort!');
 
       return;
     }
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().isRunningValue(false);
     return;
   }
 
@@ -197,14 +197,14 @@ class SessionManager {
   }
 
   logout() async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     await secureStorageDelete('session');
     //await secureStorageDelete('pupilBase');
     locator.get<BottomNavManager>().setBottomNavPage(0);
     _isAuthenticated.value = false;
-    locator<SnackBarManager>()
-        .showSnackBar(SnackBarType.success, 'Zugangsdaten und QR-IDs gelöscht');
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().showSnackBar(
+        NotificationType.success, 'Zugangsdaten und QR-IDs gelöscht');
+    locator<NotificationManager>().isRunningValue(false);
     await unregisterDependentManagers();
     return;
   }

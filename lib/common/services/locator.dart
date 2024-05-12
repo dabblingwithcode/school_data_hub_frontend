@@ -1,7 +1,7 @@
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/search_textfield_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
 import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
@@ -63,7 +63,7 @@ void registerBaseManagers() {
     debug.info('PupilBaseManager initialized');
     return pupilBaseManager;
   });
-  locator.registerSingleton<SnackBarManager>(SnackBarManager());
+  locator.registerSingleton<NotificationManager>(NotificationManager());
   locator.registerSingleton<BottomNavManager>(BottomNavManager());
   locator.registerSingleton<SearchManager>(SearchManager());
 }
@@ -172,8 +172,8 @@ Future<bool> registerMatrixPolicyManager() async {
     final policyManager = MatrixPolicyManager();
     await policyManager.init();
     debug.info('MatrixPolicyManager initialized');
-    locator<SnackBarManager>().showSnackBar(
-        SnackBarType.success, 'Matrix-Räumeverwaltung initialisiert');
+    locator<NotificationManager>().showSnackBar(
+        NotificationType.success, 'Matrix-Räumeverwaltung initialisiert');
     return policyManager;
   }, dependsOn: [SessionManager, PupilManager, PupilFilterManager]);
 

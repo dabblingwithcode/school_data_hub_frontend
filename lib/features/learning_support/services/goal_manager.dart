@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/learning_support/models/category/goal_category.dart';
@@ -36,7 +36,7 @@ class GoalManager {
   }
 
   final client = locator.get<ApiManager>().dioClient.value;
-  final snackBarManager = locator<SnackBarManager>();
+  final snackBarManager = locator<NotificationManager>();
   Future fetchGoalCategories() async {
     snackBarManager.isRunningValue(true);
     try {
@@ -44,7 +44,8 @@ class GoalManager {
           await client.get(EndpointsLearningSupport().fetchGoalCategories);
       final goalCategories =
           (response.data as List).map((e) => GoalCategory.fromJson(e)).toList();
-      snackBarManager.showSnackBar(SnackBarType.success, 'Katgorien geladen');
+      snackBarManager.showSnackBar(
+          NotificationType.success, 'Katgorien geladen');
       debug.success(
           'Fetched ${goalCategories.length} goal categories! | ${StackTrace.current}');
       _goalCategories.value = goalCategories;
@@ -52,7 +53,8 @@ class GoalManager {
       return;
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e);
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage.message);
+      snackBarManager.showSnackBar(
+          NotificationType.error, errorMessage.message);
       snackBarManager.isRunningValue(false);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
@@ -89,7 +91,8 @@ class GoalManager {
       }
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e);
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage.message);
+      snackBarManager.showSnackBar(
+          NotificationType.error, errorMessage.message);
       snackBarManager.isRunningValue(false);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
@@ -116,10 +119,11 @@ class GoalManager {
     if (response.statusCode != 200) {
       //- TO-DO: Error handling
       snackBarManager.showSnackBar(
-          SnackBarType.error, 'Error: ${response.data}');
+          NotificationType.error, 'Error: ${response.data}');
       snackBarManager.isRunningValue(false);
     }
-    snackBarManager.showSnackBar(SnackBarType.success, 'Status aktualisiert');
+    snackBarManager.showSnackBar(
+        NotificationType.success, 'Status aktualisiert');
     locator<PupilManager>().patchPupilFromResponse(response.data);
     snackBarManager.isRunningValue(false);
   }
@@ -131,13 +135,15 @@ class GoalManager {
           .delete(EndpointsLearningSupport().deleteCategoryStatus(statusId));
       if (response.statusCode == 200) {
         locator<PupilManager>().patchPupilFromResponse(response.data);
-        snackBarManager.showSnackBar(SnackBarType.success, 'Status gelöscht');
+        snackBarManager.showSnackBar(
+            NotificationType.success, 'Status gelöscht');
         snackBarManager.isRunningValue(false);
         return;
       }
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e);
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage.message);
+      snackBarManager.showSnackBar(
+          NotificationType.error, errorMessage.message);
       snackBarManager.isRunningValue(false);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
@@ -161,11 +167,13 @@ class GoalManager {
           .post(EndpointsLearningSupport().postGoal(pupilId), data: data);
       if (response.statusCode == 200) {
         locator<PupilManager>().patchPupilFromResponse(response.data);
-        snackBarManager.showSnackBar(SnackBarType.success, 'Ziel hinzugefügt');
+        snackBarManager.showSnackBar(
+            NotificationType.success, 'Ziel hinzugefügt');
       }
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e);
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage.message);
+      snackBarManager.showSnackBar(
+          NotificationType.error, errorMessage.message);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
 
@@ -188,12 +196,13 @@ class GoalManager {
           await client.delete(EndpointsLearningSupport().deleteGoal(goalId));
       if (response.statusCode == 200) {
         locator<PupilManager>().patchPupilFromResponse(response.data);
-        snackBarManager.showSnackBar(SnackBarType.success, 'Ziel gelöscht');
+        snackBarManager.showSnackBar(NotificationType.success, 'Ziel gelöscht');
         snackBarManager.isRunningValue(false);
       }
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e);
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage.message);
+      snackBarManager.showSnackBar(
+          NotificationType.error, errorMessage.message);
       snackBarManager.isRunningValue(false);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');

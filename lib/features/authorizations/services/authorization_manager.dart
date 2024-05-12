@@ -7,7 +7,7 @@ import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
@@ -31,7 +31,7 @@ class AuthorizationManager {
     return this;
   }
 
-  final snackBarManager = locator<SnackBarManager>();
+  final snackBarManager = locator<NotificationManager>();
 
   Future fetchAuthorizations() async {
     snackBarManager.isRunningValue(true);
@@ -42,11 +42,11 @@ class AuthorizationManager {
           .map((e) => Authorization.fromJson(e))
           .toList();
       snackBarManager.showSnackBar(
-          SnackBarType.success, 'Einwilligungen geladen');
+          NotificationType.success, 'Einwilligungen geladen');
       _authorizations.value = authorizations;
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e).message;
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
+      snackBarManager.showSnackBar(NotificationType.error, errorMessage);
       debug.error(
           'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
       snackBarManager.isRunningValue(false);
@@ -72,7 +72,7 @@ class AuthorizationManager {
       debug.error(
           'Dio error: ${response.statusCode} ${response.toString()} | ${StackTrace.current}');
       snackBarManager.showSnackBar(
-          SnackBarType.error, 'Error: ${response.data}');
+          NotificationType.error, 'Error: ${response.data}');
       snackBarManager.isRunningValue(false);
       return;
     }
@@ -80,7 +80,8 @@ class AuthorizationManager {
         (response.data as List).map((e) => PupilProxy.fromJson(e))));
     locator<PupilManager>().updatePupilsRepository(responsePupils);
     fetchAuthorizations();
-    snackBarManager.showSnackBar(SnackBarType.success, 'Einwilligung erstellt');
+    snackBarManager.showSnackBar(
+        NotificationType.success, 'Einwilligung erstellt');
     snackBarManager.isRunningValue(false);
     return;
   }
@@ -94,14 +95,15 @@ class AuthorizationManager {
         data: data);
     if (response.statusCode != 200) {
       snackBarManager.showSnackBar(
-          SnackBarType.error, 'Error: ${response.data}');
+          NotificationType.error, 'Error: ${response.data}');
       debug.error(
           'Dio error: ${response.statusCode} ${response.toString()} | ${StackTrace.current}');
       snackBarManager.isRunningValue(false);
       return;
     }
     locator<PupilManager>().patchPupilFromResponse(response.data);
-    snackBarManager.showSnackBar(SnackBarType.success, 'Einwilligung erstellt');
+    snackBarManager.showSnackBar(
+        NotificationType.success, 'Einwilligung erstellt');
     debug.success('list entry successful');
 
     // Success! We have a pupil response - let's patch the pupil with the data
@@ -119,7 +121,7 @@ class AuthorizationManager {
     if (response.statusCode != 200) {
       //handle errors...
       snackBarManager.showSnackBar(
-          SnackBarType.error, 'Error: ${response.data}');
+          NotificationType.error, 'Error: ${response.data}');
       debug.error(
           'Dio error: ${response.statusCode} ${response.toString()} | ${StackTrace.current}');
       snackBarManager.isRunningValue(false);
@@ -129,7 +131,7 @@ class AuthorizationManager {
         (response.data as List).map((e) => PupilProxy.fromJson(e))));
     locator<PupilManager>().updatePupilsRepository(responsePupils);
     snackBarManager.showSnackBar(
-        SnackBarType.success, 'Einwilligungen erstellt');
+        NotificationType.success, 'Einwilligungen erstellt');
   }
 
   Future deletePupilAuthorization(int pupilId, String authId) async {
@@ -139,7 +141,7 @@ class AuthorizationManager {
     if (response.statusCode != 200) {
       //handle errors...
       snackBarManager.showSnackBar(
-          SnackBarType.error, 'Error: ${response.data}');
+          NotificationType.error, 'Error: ${response.data}');
       debug.error(
           'Dio error: ${response.statusCode} ${response.toString()} | ${StackTrace.current}');
       snackBarManager.isRunningValue(false);
@@ -147,7 +149,8 @@ class AuthorizationManager {
     }
     final pupil = PupilProxy.fromJson(response.data);
     locator<PupilManager>().updatePupilInRepository(pupil);
-    snackBarManager.showSnackBar(SnackBarType.success, 'Einwilligung gelöscht');
+    snackBarManager.showSnackBar(
+        NotificationType.success, 'Einwilligung gelöscht');
     snackBarManager.isRunningValue(false);
   }
 
@@ -168,7 +171,7 @@ class AuthorizationManager {
         data: data);
     if (response.statusCode != 200) {
       snackBarManager.showSnackBar(
-          SnackBarType.error, 'Error: ${response.data}');
+          NotificationType.error, 'Error: ${response.data}');
       debug.error(
           'Dio error: ${response.statusCode} ${response.toString()} | ${StackTrace.current}');
       snackBarManager.isRunningValue(false);
@@ -177,7 +180,8 @@ class AuthorizationManager {
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
     await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
-    snackBarManager.showSnackBar(SnackBarType.success, 'Einwilligung geändert');
+    snackBarManager.showSnackBar(
+        NotificationType.success, 'Einwilligung geändert');
     snackBarManager.isRunningValue(false);
   }
 
@@ -200,13 +204,13 @@ class AuthorizationManager {
     );
     if (response.statusCode != 200) {
       snackBarManager.showSnackBar(
-          SnackBarType.error, 'Error: ${response.data}');
+          NotificationType.error, 'Error: ${response.data}');
       debug.warning('Something went wrong with the multipart request');
     }
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
     await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
-    snackBarManager.showSnackBar(SnackBarType.success, 'Datei hochgeladen');
+    snackBarManager.showSnackBar(NotificationType.success, 'Datei hochgeladen');
   }
 
   Future deleteAuthorizationFile(
@@ -216,7 +220,7 @@ class AuthorizationManager {
         EndpointsAuthorization().deletePupilAuthorizationFile(pupilId, authId));
     if (response.statusCode != 200) {
       snackBarManager.showSnackBar(
-          SnackBarType.error, 'Error: ${response.data}');
+          NotificationType.error, 'Error: ${response.data}');
     }
     // Success! We have a pupil response
     final Map<String, dynamic> pupilResponse = response.data;
@@ -225,7 +229,7 @@ class AuthorizationManager {
     await cacheManager.removeFile(cacheKey);
     // Then we patch the pupil with the data
     await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
-    snackBarManager.showSnackBar(SnackBarType.success, 'Datei gelöscht');
+    snackBarManager.showSnackBar(NotificationType.success, 'Datei gelöscht');
     snackBarManager.isRunningValue(false);
   }
 

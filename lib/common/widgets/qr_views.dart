@@ -11,9 +11,9 @@ import 'package:gap/gap.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 
-showQrCarousel(
+void showQrCarousel(
     Map<String, String> qrMap, bool autoPlay, BuildContext context) async {
   final mediaQuery = MediaQuery.of(context);
   double maxHeight;
@@ -86,7 +86,7 @@ showQrCarousel(
       });
 }
 
-showQrCode(String qr, BuildContext context) async {
+void showQrCode(String qr, BuildContext context) async {
   final qrImageKey = GlobalKey();
   final mediaQuery = MediaQuery.of(context);
   final maxWidth =
@@ -155,6 +155,6 @@ void saveQrCode(String qr, BuildContext context, GlobalKey qrKey) async {
   await imgFile.writeAsBytes(pngBytes);
 
   // Show a success message
-  locator<SnackBarManager>()
-      .showSnackBar(SnackBarType.success, ' QR-Code gespeichert');
+  locator<NotificationManager>()
+      .showSnackBar(NotificationType.success, ' QR-Code gespeichert');
 }

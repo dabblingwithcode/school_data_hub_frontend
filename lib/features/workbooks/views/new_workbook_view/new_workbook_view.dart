@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
@@ -202,8 +202,8 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
                       if (locator<WorkbookManager>().workbooks.value.any(
                           (element) =>
                               element.isbn == int.parse(scannedIsbn))) {
-                        locator<SnackBarManager>().showSnackBar(
-                            SnackBarType.error,
+                        locator<NotificationManager>().showSnackBar(
+                            NotificationType.error,
                             'Dieses Arbeitsheft gibt es schon!');
 
                         return;
@@ -231,8 +231,8 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
                             (element) =>
                                 element.isbn ==
                                 int.parse(isbnTextFieldController.text))) {
-                          locator<SnackBarManager>().showSnackBar(
-                              SnackBarType.error,
+                          locator<NotificationManager>().showSnackBar(
+                              NotificationType.error,
                               'Dieses Arbeitsheft gibt es schon!');
 
                           return;

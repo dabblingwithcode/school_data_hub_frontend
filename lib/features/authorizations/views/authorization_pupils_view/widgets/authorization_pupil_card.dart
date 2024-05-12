@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
@@ -173,8 +173,8 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                         await locator<AuthorizationManager>()
                             .postAuthorizationFile(
                                 file, pupil.internalId, authorizationId);
-                        locator<SnackBarManager>().showSnackBar(
-                            SnackBarType.success,
+                        locator<NotificationManager>().showSnackBar(
+                            NotificationType.success,
                             'Die Einwilligung wurde geändert!');
                       },
                       onLongPress: (pupilAuthorization.fileUrl == null)
@@ -192,8 +192,8 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                                 authorizationId,
                                 pupilAuthorization.fileUrl!,
                               );
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.success,
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.success,
                                   'Die Einwilligung wurde geändert!');
                             },
                       child: pupilAuthorization.fileUrl != null

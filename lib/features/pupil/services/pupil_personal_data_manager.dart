@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
@@ -39,12 +39,12 @@ class PupilPersonalDataManager {
   }
 
   Future deleteData() async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     await secureStorageDelete('pupilBase');
     _pupilPersonalData.clear();
     locator<PupilManager>().deletePupils();
     locator<PupilFilterManager>().deleteFilteredPupils();
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().isRunningValue(false);
   }
 
   Future getStoredPupilBase() async {
@@ -77,8 +77,8 @@ class PupilPersonalDataManager {
     if (scanResult != null) {
       addNewPupilBase(scanResult);
     } else {
-      locator<SnackBarManager>()
-          .showSnackBar(SnackBarType.warning, 'Scan abgebrochen');
+      locator<NotificationManager>()
+          .showSnackBar(NotificationType.warning, 'Scan abgebrochen');
       return;
     }
   }
@@ -277,7 +277,7 @@ class PupilPersonalDataManager {
   }
 
   Future<String> deletePupilBaseElements(List<int> toBeDeletedDataIds) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     List<String> toBeDeletedDataNames = [];
 
     for (int id in toBeDeletedDataIds) {
@@ -287,7 +287,7 @@ class PupilPersonalDataManager {
 
     await secureStorageWrite(
         'pupilBase', jsonEncode(_pupilPersonalData.values.toList()));
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().isRunningValue(false);
     debug.info(
         'Pupilbase reduced: deleted ${toBeDeletedDataIds.length} pupils not present in the database, now ${_pupilPersonalData.length} | ${StackTrace.current}');
 

@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
@@ -387,8 +387,8 @@ class AttendanceCard extends WatchingWidget {
                                     }
                                     if (newValue == 'missed' &&
                                         returnedValue == true) {
-                                      locator<SnackBarManager>().showSnackBar(
-                                          SnackBarType.error,
+                                      locator<NotificationManager>().showSnackBar(
+                                          NotificationType.error,
                                           'Ein Kind, das abgeholt wurde, gilt nicht als fehlend für den Tag!');
 
                                       return;
@@ -530,8 +530,8 @@ class AttendanceCard extends WatchingWidget {
                                   onChanged: (bool? newValue) async {
                                     if (newValue == true) {
                                       if (dropdownMissedValue == 'missed') {
-                                        locator<SnackBarManager>().showSnackBar(
-                                            SnackBarType.error,
+                                        locator<NotificationManager>().showSnackBar(
+                                            NotificationType.error,
                                             'Ein fehlendes Kind kann nicht abgeholt werden!');
                                         return;
                                       }

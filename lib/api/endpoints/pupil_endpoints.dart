@@ -10,6 +10,7 @@ class EndpointsPupil {
   // auch für diese endpoints funktionen wie unten erstellen
   //- POST
   static const postPupil = '/pupils/new';
+
   static const exportPupilsTxt = '/import/pupils/txt';
 
   //- GET
@@ -57,6 +58,16 @@ class EndpointsPupil {
 
   String patchPupilhWithAvatar(int id) {
     return '/pupils/$id/avatar';
+  }
+
+  Future<Pupil> patchPupilWithAvatar(int id) {
+    return client.patch(patchPupilhWithAvatar(id)).then((response) {
+      if (response.statusCode != 200) {
+        throw ApiException(
+            'Failed to patch pupil with avatar', response.statusCode);
+      }
+      return Pupil.fromJson(response.data);
+    });
   }
 
   //- DELETE

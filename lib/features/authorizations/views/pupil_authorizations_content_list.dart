@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/document_image.dart';
@@ -96,8 +96,8 @@ List<Widget> pupilAuthorizationsContentList(PupilProxy pupil) {
                                               file,
                                               pupil.internalId,
                                               authorization.authorizationId);
-                                      locator<SnackBarManager>().showSnackBar(
-                                          SnackBarType.success,
+                                      locator<NotificationManager>().showSnackBar(
+                                          NotificationType.success,
                                           'Die Einwilligung wurde geändert!');
                                     },
                                     onLongPress: (pupilAuthorization.fileUrl ==
@@ -119,9 +119,10 @@ List<Widget> pupilAuthorizationsContentList(PupilProxy pupil) {
                                               authorization.authorizationId,
                                               pupilAuthorization.fileUrl!,
                                             );
-                                            locator<SnackBarManager>().showSnackBar(
-                                                SnackBarType.success,
-                                                'Die Einwilligung wurde geändert!');
+                                            locator<NotificationManager>()
+                                                .showSnackBar(
+                                                    NotificationType.success,
+                                                    'Die Einwilligung wurde geändert!');
                                           },
                                     child: pupilAuthorization.fileUrl != null
                                         ? DocumentImage(

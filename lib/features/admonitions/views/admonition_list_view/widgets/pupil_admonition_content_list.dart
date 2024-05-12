@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/date_picker.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
@@ -71,8 +71,9 @@ List<Widget> pupilAdmonitionsContentList(
             },
             onLongPress: () async {
               if (filteredAdmonitions[index].processed) {
-                locator<SnackBarManager>().showSnackBar(
-                    SnackBarType.error, 'Ereignis wurde bereits bearbeitet!');
+                locator<NotificationManager>().showSnackBar(
+                    NotificationType.error,
+                    'Ereignis wurde bereits bearbeitet!');
 
                 return;
               }
@@ -81,8 +82,8 @@ List<Widget> pupilAdmonitionsContentList(
               if (confirm! == false) return;
               await locator<AdmonitionManager>()
                   .deleteAdmonition(filteredAdmonitions[index].admonitionId);
-              locator<SnackBarManager>().showSnackBar(
-                  SnackBarType.success, 'Das Ereignis wurde gelöscht!');
+              locator<NotificationManager>().showSnackBar(
+                  NotificationType.success, 'Das Ereignis wurde gelöscht!');
             },
             child: Card(
               color: cardInCardColor,
@@ -216,8 +217,8 @@ List<Widget> pupilAdmonitionsContentList(
                                             filteredAdmonitions[index]
                                                 .admonitionId,
                                             true);
-                                    locator<SnackBarManager>().showSnackBar(
-                                        SnackBarType.success,
+                                    locator<NotificationManager>().showSnackBar(
+                                        NotificationType.success,
                                         'Vorfall geändert!');
                                   },
                                   onLongPress: () async {
@@ -234,8 +235,8 @@ List<Widget> pupilAdmonitionsContentList(
                                                 .admonitionId,
                                             filteredAdmonitions[index].fileUrl!,
                                             true);
-                                    locator<SnackBarManager>().showSnackBar(
-                                        SnackBarType.success,
+                                    locator<NotificationManager>().showSnackBar(
+                                        NotificationType.success,
                                         'Dokument gelöscht!');
                                   },
                                   child: filteredAdmonitions[index]
@@ -275,8 +276,8 @@ List<Widget> pupilAdmonitionsContentList(
                                           filteredAdmonitions[index]
                                               .admonitionId,
                                           false);
-                                  locator<SnackBarManager>().showSnackBar(
-                                    SnackBarType.success,
+                                  locator<NotificationManager>().showSnackBar(
+                                    NotificationType.success,
                                     'Ereignis gespeichert!',
                                   );
                                 },
@@ -294,8 +295,8 @@ List<Widget> pupilAdmonitionsContentList(
                                               .admonitionId,
                                           filteredAdmonitions[index].fileUrl!,
                                           false);
-                                  locator<SnackBarManager>().showSnackBar(
-                                      SnackBarType.success,
+                                  locator<NotificationManager>().showSnackBar(
+                                      NotificationType.success,
                                       'Dokument gelöscht!');
                                 },
                                 child: filteredAdmonitions[index].fileUrl !=
@@ -334,8 +335,8 @@ List<Widget> pupilAdmonitionsContentList(
                                   .patchAdmonitionAsProcessed(
                                       filteredAdmonitions[index].admonitionId,
                                       true);
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.success,
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.success,
                                   'Ereignis als bearbeitet markiert!');
                             },
                             onLongPress: () async {

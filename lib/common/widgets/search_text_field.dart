@@ -3,6 +3,25 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/search_textfield_manager.dart';
 
+// class SearchTextField extends StatelessWidget {
+//   final SearchType searchType;
+//   final String hintText;
+//   final Function refreshFunction;
+//   const SearchTextField(
+//       {required this.searchType,
+//       required this.hintText,
+//       required this.refreshFunction,
+//       super.key});
+// final searchManager = locator<SearchManager>();
+
+//   @override
+//   Widget build(BuildContext context) {
+//       searchManager.setSearchType(searchType);
+
+//     return const Placeholder();
+//   }
+// }
+
 TextField searchTextField(
   SearchType searchType,
   String hintText,

@@ -1,3 +1,5 @@
+import 'package:schuldaten_hub/common/utils/extensions.dart';
+
 class EndpointsSchoolday {
   //- GET
   static const getSchooldaysWithChildren = '/schooldays/all';

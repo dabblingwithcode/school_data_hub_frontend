@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
@@ -48,9 +48,9 @@ class PupilManager {
     await fetchPupilsByInternalId(pupils.map((e) => e.internalId).toList());
   }
 
-  //-Fetch pupils with the given ids from the backend
+  //- Fetch pupils with the given ids from the backend
   Future fetchPupilsByInternalId(List<int> internalPupilIds) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     // we request the data posting a json with the id list - let's build that
     final pupilIdList = jsonEncode({"pupils": internalPupilIds});
     // and a list to manipulate the matched pupils
@@ -87,22 +87,22 @@ class PupilManager {
     if (outdatedPupilPersonalDataIds.isNotEmpty) {
       final deletedPupils = await personalDataManager
           .deletePupilBaseElements(outdatedPupilPersonalDataIds);
-      locator<SnackBarManager>().showSnackBar(SnackBarType.warning,
+      locator<NotificationManager>().showSnackBar(NotificationType.warning,
           '$deletedPupils had no match and have been deleted from the pupilbase!');
     }
 
     sortPupilsByName();
 
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().isRunningValue(false);
   }
 
   List<PupilProxy> readPupils() {
-    List<PupilProxy> readPupils = _pupils.value;
+    List<PupilProxy> readPupils = _pupils;
     return readPupils;
   }
 
   deletePupils() {
-    _pupils.value = [];
+    _pupils = [];
     return;
   }
 
@@ -289,7 +289,7 @@ class PupilManager {
   }
 
   Future<void> patchPupil(int pupilId, String jsonKey, var value) async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     //- if the value is relevant to siblings, check for siblings first and handle it if true
 
     if (jsonKey == 'communication_tutor1' ||
@@ -308,9 +308,9 @@ class PupilManager {
         final Response siblingsResponse = await client
             .patch(EndpointsPupil.patchSiblings, data: siblingsPatchData);
         if (siblingsResponse.statusCode != 200) {
-          locator<SnackBarManager>().showSnackBar(
-              SnackBarType.warning, 'Fehler beim Patchen der Geschwister!');
-          locator<SnackBarManager>().isRunningValue(false);
+          locator<NotificationManager>().showSnackBar(
+              NotificationType.warning, 'Fehler beim Patchen der Geschwister!');
+          locator<NotificationManager>().isRunningValue(false);
           return;
         }
         // let's update the siblings
@@ -318,9 +318,9 @@ class PupilManager {
             .map((e) => PupilProxy.fromJson(e))
             .toList();
         updatePupilsRepository(responsePupils);
-        locator<SnackBarManager>().showSnackBar(
-            SnackBarType.success, 'Geschwister erfolgreich gepatcht!');
-        locator<SnackBarManager>().isRunningValue(false);
+        locator<NotificationManager>().showSnackBar(
+            NotificationType.success, 'Geschwister erfolgreich gepatcht!');
+        locator<NotificationManager>().isRunningValue(false);
       }
     }
     // prepare the data for the request
@@ -331,16 +331,16 @@ class PupilManager {
     final Map<String, dynamic> pupilResponse = response.data;
     // handle errors
     if (response.statusCode != 200) {
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.warning, 'Fehler beim Patchen des Schülers!');
-      locator<SnackBarManager>().isRunningValue(false);
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.warning, 'Fehler beim Patchen des Schülers!');
+      locator<NotificationManager>().isRunningValue(false);
       return;
     }
     // let's patch the pupil with the response
     patchPupilFromResponse(pupilResponse);
-    locator<SnackBarManager>()
-        .showSnackBar(SnackBarType.success, 'Schüler erfolgreich gepatcht!');
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().showSnackBar(
+        NotificationType.success, 'Schüler erfolgreich gepatcht!');
+    locator<NotificationManager>().isRunningValue(false);
     return;
   }
 }

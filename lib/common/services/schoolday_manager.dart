@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
@@ -42,13 +42,13 @@ class SchooldayManager {
   }
 
   Future getSchooldays() async {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     try {
       final response = await client.get(EndpointsSchoolday.getSchooldays);
       final schooldays =
           (response.data as List).map((e) => Schoolday.fromJson(e)).toList();
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.success, '${schooldays.length} Schultage geladen!');
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.success, '${schooldays.length} Schultage geladen!');
 
       _schooldays.value = schooldays;
       setAvailableDates();
@@ -59,11 +59,11 @@ class SchooldayManager {
 
       rethrow;
     }
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().isRunningValue(false);
   }
 
   setAvailableDates() {
-    locator<SnackBarManager>().isRunningValue(true);
+    locator<NotificationManager>().isRunningValue(true);
     List<DateTime> processedAvailableDates = [];
     for (Schoolday day in _schooldays.value) {
       DateTime validDate = day.schoolday;

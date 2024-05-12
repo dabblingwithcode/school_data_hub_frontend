@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/information_dialog.dart';
@@ -65,8 +65,8 @@ class SchoolListPupilCard extends StatelessWidget with WatchItMixin {
                                   .credentials
                                   .value
                                   .username) {
-                            locator<SnackBarManager>().showSnackBar(
-                                SnackBarType.error,
+                            locator<NotificationManager>().showSnackBar(
+                                NotificationType.error,
                                 'Löschen nicht möglich - keine Berechtigung!');
 
                             return;
