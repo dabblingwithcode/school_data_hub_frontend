@@ -93,12 +93,20 @@ There are also a couple of models in the backend that are not implemented in the
 #### Design
 
 - review widgets (I'm still not very good at it), and for that matter, the overall design structure (for instance implementing a theme). **Priority: medium**
+
+#### Code quality / architecture
+
+- no dynamic type functions -> functions should have a return type (`void` or `Future<void>` )
+  
+- detach API calls from the managers, instead 
+
+- subsitute hard coded enum filters with a dynamic solution, so that the app can be used for other schools. **Priority: high**
   
 #### Functionality
 
 - error handling in API calls. **Priority: high**
 - review state management (specially filters, but also controllers and get_it managers) across views. **Priority: high**
-- subsitute hard coded enum filters with a more dynamic solution, so that the app can be used for other schools. **Priority: high**
+
 - implement stream checking connection (don't know how to generate/handle streams yet), and generally review the start-up process. **Priority: high**
 - review / implement navigation **Priority: medium**
 - internationalization
