@@ -86,11 +86,10 @@ Widget matrixUserListSearchBar(
           child: Row(
             children: [
               Expanded(
-                  child: searchTextField(
-                      SearchType.matrixUser,
-                      'Schüler/in suchen',
-                      controller,
-                      locator<MatrixPolicyFilterManager>()
+                  child: SearchTextField(
+                      searchType: SearchType.matrixUser,
+                      hintText: 'Schüler/in suchen',
+                      refreshFunction: locator<MatrixPolicyFilterManager>()
                           .filterUsersWithSearchText)),
               InkWell(
                 onTap: () => showCreditFilterBottomSheet(context),

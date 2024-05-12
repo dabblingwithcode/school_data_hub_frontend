@@ -103,11 +103,11 @@ Widget learningSupportListSearchBar(
           child: Row(
             children: [
               Expanded(
-                  child: searchTextField(
-                      SearchType.pupil,
-                      'Schüler/in suchen',
-                      controller,
-                      locator<PupilFilterManager>().refreshFilteredPupils)),
+                  child: SearchTextField(
+                      searchType: SearchType.pupil,
+                      hintText: 'Schüler/in suchen',
+                      refreshFunction:
+                          locator<PupilFilterManager>().refreshFilteredPupils)),
               InkWell(
                 onTap: () => showLearningSupportFilterBottomSheet(context),
                 onLongPress: () => locator<PupilFilterManager>().resetFilters(),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
-import 'package:schuldaten_hub/common/widgets/download_decrypt_or_cached_image.dart';
+import 'package:schuldaten_hub/common/widgets/download_or_cached_and_decrypt_image.dart';
 import 'package:widget_zoom/widget_zoom.dart';
 
 class DocumentImage extends StatelessWidget {

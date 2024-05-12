@@ -49,11 +49,10 @@ Widget roomListSearchBar(BuildContext context, List<MatrixRoom> matrixRooms,
           child: Row(
             children: [
               Expanded(
-                  child: searchTextField(
-                      SearchType.room,
-                      'Raum suchen',
-                      controller,
-                      locator<MatrixPolicyFilterManager>()
+                  child: SearchTextField(
+                      searchType: SearchType.room,
+                      hintText: 'Raum suchen',
+                      refreshFunction: locator<MatrixPolicyFilterManager>()
                           .filterRoomsWithSearchText)),
               InkWell(
                 onTap: () => showCreditFilterBottomSheet(context),
