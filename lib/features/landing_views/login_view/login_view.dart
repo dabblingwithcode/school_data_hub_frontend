@@ -22,7 +22,7 @@ class LoginView extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     registerHandler(
-      select: (SnackBarManager x) => x.snackBar,
+      select: (NotificationManager x) => x.notification,
       handler: (context, value, cancel) =>
           snackbar(context, value.type, value.message),
     );

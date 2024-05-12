@@ -15,8 +15,8 @@ class LoadingPage extends WatchingStatefulWidget {
 class LoadingPageState extends State<LoadingPage> {
   @override
   Widget build(BuildContext context) {
-    final SnackBarData snackBarData =
-        watchValue((SnackBarManager x) => x.snackBar);
+    final NotificationData snackBarData =
+        watchValue((NotificationManager x) => x.notification);
     // registerHandler(
     //     select: (SnackBarManager x) => x.snackBar,
     //     handler: (context, value, cancel) {

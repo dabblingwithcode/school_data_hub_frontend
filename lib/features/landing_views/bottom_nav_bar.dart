@@ -53,12 +53,12 @@ class BottomNavigation extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     registerHandler(
-        select: (SnackBarManager x) => x.snackBar,
+        select: (NotificationManager x) => x.notification,
         handler: (context, value, cancel) {
           snackbar(context, value.type, value.message);
         });
     registerHandler(
-        select: (SnackBarManager x) => x.isRunning,
+        select: (NotificationManager x) => x.isRunning,
         handler: (context, value, cancel) {
           value ? showLoadingOverlay(context) : hideLoadingOverlay();
         });
