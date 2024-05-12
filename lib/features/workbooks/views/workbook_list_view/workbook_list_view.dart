@@ -92,11 +92,11 @@ class WorkbookListView extends WatchingWidget {
                         child: Row(
                           children: [
                             Expanded(
-                              child: searchTextField(
-                                  SearchType.workbook,
-                                  'Arbeitsheft suchen',
-                                  controller,
-                                  locator<WorkbookManager>().getWorkbooks),
+                              child: SearchTextField(
+                                  searchType: SearchType.workbook,
+                                  hintText: 'Arbeitsheft suchen',
+                                  refreshFunction:
+                                      locator<WorkbookManager>().getWorkbooks),
                             ),
                             //---------------------------------
                             InkWell(

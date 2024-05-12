@@ -91,12 +91,12 @@ class AuthorizationsView extends WatchingWidget {
                         child: Row(
                           children: [
                             Expanded(
-                              child: searchTextField(
-                                  SearchType.authorization,
-                                  'Liste suchen',
-                                  controller,
-                                  locator<AuthorizationManager>()
-                                      .fetchAuthorizations),
+                              child: SearchTextField(
+                                  searchType: SearchType.authorization,
+                                  hintText: 'Liste suchen',
+                                  refreshFunction:
+                                      locator<AuthorizationManager>()
+                                          .fetchAuthorizations),
                             ),
                             //---------------------------------
                             InkWell(

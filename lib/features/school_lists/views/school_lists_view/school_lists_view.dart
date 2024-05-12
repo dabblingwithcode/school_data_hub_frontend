@@ -97,11 +97,10 @@ class SchoolListsView extends WatchingWidget {
                         child: Row(
                           children: [
                             Expanded(
-                              child: searchTextField(
-                                  SearchType.list,
-                                  'Liste suchen',
-                                  controller,
-                                  locator<SchoolListManager>()
+                              child: SearchTextField(
+                                  searchType: SearchType.list,
+                                  hintText: 'Liste suchen',
+                                  refreshFunction: locator<SchoolListManager>()
                                       .fetchSchoolLists),
                             ),
                             //---------------------------------

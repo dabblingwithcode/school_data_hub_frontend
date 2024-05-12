@@ -80,11 +80,11 @@ Widget attendanceListSearchBar(BuildContext context, List<PupilProxy> pupils,
           child: Row(
             children: [
               Expanded(
-                  child: searchTextField(
-                      SearchType.pupil,
-                      'Schüler/in suchen',
-                      controller,
-                      locator<PupilFilterManager>().refreshFilteredPupils)),
+                  child: SearchTextField(
+                      searchType: SearchType.pupil,
+                      hintText: 'Schüler/in suchen',
+                      refreshFunction:
+                          locator<PupilFilterManager>().refreshFilteredPupils)),
               InkWell(
                 onTap: () => showAttendanceFilterBottomSheet(context),
                 onLongPress: () => locator<PupilFilterManager>().resetFilters(),
