@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
-import 'package:schuldaten_hub/api/endpoints.dart';
+import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';

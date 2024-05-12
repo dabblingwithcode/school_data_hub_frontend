@@ -1,5 +1,3 @@
-part of '../endpoints.dart';
-
 class EndpointsAuthorization {
   static const String getAuthorizations = '/authorizations/all';
   static const String getAuthorizationsFlat = '/authorizations/all/flat';

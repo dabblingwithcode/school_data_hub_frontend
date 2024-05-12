@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
-import 'package:schuldaten_hub/api/endpoints.dart';
+import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 
 import 'package:schuldaten_hub/common/services/env_manager.dart';
@@ -40,8 +40,8 @@ class SessionManager {
   late final Dio _dio = Dio(
     BaseOptions(
       baseUrl: locator<EnvManager>().env.value.serverUrl!,
-      connectTimeout: Endpoints.connectionTimeout,
-      receiveTimeout: Endpoints.receiveTimeout,
+      connectTimeout: ApiSettings.connectionTimeout,
+      receiveTimeout: ApiSettings.receiveTimeout,
       responseType: ResponseType.json,
     ),
   );

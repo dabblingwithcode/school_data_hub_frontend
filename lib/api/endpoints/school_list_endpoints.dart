@@ -1,5 +1,3 @@
-part of '../endpoints.dart';
-
 class EndpointsSchoolList {
   //- SCHOOL LISTS -//
 

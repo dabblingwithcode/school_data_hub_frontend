@@ -1,5 +1,3 @@
-part of '../endpoints.dart';
-
 class EndpointsCompetence {
   //-POST
   String postNewCompetence = '/competences/new';

@@ -1,5 +1,3 @@
-part of '../endpoints.dart';
-
 class EndpointsLearningSupport {
   //- GOAL CATEGORIES --------------------------------------------------
 

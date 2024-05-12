@@ -1,5 +1,3 @@
-part of '../endpoints.dart';
-
 class EndpointsSchoolday {
   //- GET
   static const getSchooldaysWithChildren = '/schooldays/all';

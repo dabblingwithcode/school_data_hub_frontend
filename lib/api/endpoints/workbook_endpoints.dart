@@ -1,5 +1,3 @@
-part of '../endpoints.dart';
-
 class EndpointsWorkbook {
   static const getWorkbooks = '/workbooks/all/flat';
   static const getWorkbooksWithPupils = '/workbooks/all';

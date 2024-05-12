@@ -1,5 +1,3 @@
-part of '../endpoints.dart';
-
 class EndpointsAdmonition {
   //- POST
   static const postAdmonition = '/admonitions/new';

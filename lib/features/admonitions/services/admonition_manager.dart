@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:schuldaten_hub/api/endpoints.dart';
+import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
@@ -20,7 +20,7 @@ class AdmonitionManager {
   final pupilManager = locator<PupilManager>();
   final schooldayManager = locator<SchooldayManager>();
   final client = locator<ApiManager>().dioClient.value;
-  final endpoints = Endpoints();
+  final endpoints = ApiSettings();
 
   ValueListenable<bool> get isRunning => _isRunning;
 

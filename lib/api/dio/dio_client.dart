@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/dio/dio_interceptor.dart';
-import 'package:schuldaten_hub/api/endpoints.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 
 class DioClient {
@@ -22,10 +22,10 @@ class DioClient {
     }
     _dio
       ..options.baseUrl = baseUrl!
-      ..options.connectTimeout = Endpoints.connectionTimeout
+      ..options.connectTimeout = ApiSettings.connectionTimeout
       //..options.headers['content-Type'] = 'application/json'
       ..options.headers[tokenKey!] = token
-      ..options.receiveTimeout = Endpoints.receiveTimeout
+      ..options.receiveTimeout = ApiSettings.receiveTimeout
       ..options.responseType = ResponseType.json
       ..interceptors.add(DioInterceptor())
       ..interceptors.add(LogInterceptor(
@@ -39,7 +39,7 @@ class DioClient {
 
   //- GET:-----------------------------------------------------------------------
 
-  Future<dynamic> get(
+  Future<Response> get(
     String uri, {
     Map<String, dynamic>? queryParameters,
     Options? options,
@@ -56,14 +56,12 @@ class DioClient {
       );
       debug.info('request sent:, $uri | ${StackTrace.current}');
 
-      if (response.statusCode == 200) {
-        return response;
-      } else if (response.statusCode == 404) {
+      if (response.statusCode == 404) {
         debug.error('404 not found: $uri | ${StackTrace.current}');
-        return;
       } else {
         debug.error('Dio error:  $uri | ${StackTrace.current}');
       }
+      return response;
     } catch (e) {
       debug.error('Dio rethrowing error: $e | ${StackTrace.current}');
 
@@ -73,7 +71,7 @@ class DioClient {
 
 //- PATCH:-----------------------------------------------------------------------
 
-  Future<dynamic> patch(
+  Future<Response> patch(
     String uri, {
     data,
     Map<String, dynamic>? queryParameters,
@@ -81,6 +79,8 @@ class DioClient {
     CancelToken? cancelToken,
     ProgressCallback? onReceiveProgress,
   }) async {
+    // these try catch are not necessary, unless you want to do something with the error
+    // any exception will be thrown to the caller without them (and the rethrow)
     try {
       final Response response = await _dio.patch(
         uri,

@@ -1,5 +1,3 @@
-part of '../endpoints.dart';
-
 class EndpointsMissedClass {
   //- GET
   String getMissedClasses = '/missed_classes/all';

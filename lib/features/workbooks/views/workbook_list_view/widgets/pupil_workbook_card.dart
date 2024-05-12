@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:schuldaten_hub/api/endpoints.dart';
+import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';

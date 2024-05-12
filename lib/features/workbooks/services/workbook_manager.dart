@@ -5,7 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
-import 'package:schuldaten_hub/api/endpoints.dart';
+import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
