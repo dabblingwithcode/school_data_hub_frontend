@@ -3,34 +3,30 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
+import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
 
 class PupilManager {
-  ValueListenable<bool> get isRunning => _isRunning;
-
   final _pupils = <int, PupilProxy>{};
 
-  final _isRunning = ValueNotifier<bool>(false);
   final client = locator.get<ApiManager>().dioClient.value;
+
   PupilManager();
+
   Future init() async {
     await fetchAllPupils();
-    return;
   }
 
   //- Fetch all available pupils from the backend
@@ -91,141 +87,38 @@ class PupilManager {
           '$deletedPupils had no match and have been deleted from the pupilbase!');
     }
 
-    sortPupilsByName();
-
     locator<NotificationManager>().isRunningValue(false);
   }
 
-  List<PupilProxy> readPupils() {
-    List<PupilProxy> readPupils = _pupils;
-    return readPupils;
+  void clearData() {
+    _pupils.clear();
   }
 
-  deletePupils() {
-    _pupils = [];
-    return;
-  }
+  void updatePupilsFromMissedClasses(List<MissedClass> allMissedClasses) {
+    for (MissedClass missedClass in allMissedClasses) {
+      final missedPupil = _pupils[missedClass.missedPupilId];
 
-  //- update pupil in repository
-  // updatePupilInRepository(PupilProxy pupil) {
-  //   List<PupilProxy> pupils = List.from(_pupils.value);
-  //   int index =
-  //       pupils.indexWhere((element) => element.internalId == pupil.internalId);
-  //   pupils[index] = pupilCopiedWith(pupils[index], pupil);
-  //   _pupils.value = pupils;
-  //   locator<PupilFilterManager>().cloneToFilteredPupil(pupil);
-  // }
-
-  //- update list of pupils in repository
-  // void updatePupilsRepository(List<PupilProxy> pupils)  {
-  //   List<PupilProxy> repositoryPupils = List.from(_pupils.value);
-  //   for (Pupil pupil in pupils) {
-  //     int match = repositoryPupils
-  //         .indexWhere((element) => element.internalId == pupil.internalId);
-  //     if (match != -1) {
-  //       repositoryPupils[match] =
-  //           pupilCopiedWith(repositoryPupils[match], pupil);
-  //     } else {
-  //       repositoryPupils.add(pupil);
-  //     }
-  //   }
-
-  //   sortPupilsByName(repositoryPupils);
-
-  //   locator<PupilFilterManager>().rebuildFilteredPupils();
-
-  //   locator<SnackBarManager>().isRunningValue(false);
-  // }
-
-  sortPupilsByName() {
-    _pupils.value.sort((a, b) => a.firstName.compareTo(b.firstName));
-  }
-
-  patchPupilsWithMissedClasses(List<MissedClass> missedClasses) {
-    final List<PupilProxy> pupils = List.from(_pupils.value);
-    final DateTime schoolday = missedClasses[0].missedDay;
-    for (MissedClass missedClass in missedClasses) {
-      int missedPupil = pupils.indexWhere(
-          (element) => element.internalId == missedClass.missedPupilId);
-      if (missedPupil == -1) {
+      if (missedPupil == null) {
         debug.error('${missedClass.missedPupilId} not found');
         continue;
       }
-      int missedClassIndex = pupils[missedPupil]
-          .pupilMissedClasses!
-          .indexWhere((element) => element.missedDay == missedClass.missedDay);
-      //debugger();
-      if (missedClassIndex == -1) {
-        pupils[missedPupil] = pupils[missedPupil].copyWith(
-          pupilMissedClasses: [
-            ...pupils[missedPupil].pupilMissedClasses!,
-            missedClass,
-          ],
-        );
-      } else {
-        List<MissedClass> updatedMissedClasses =
-            List.from(pupils[missedPupil].pupilMissedClasses!);
-        updatedMissedClasses[missedClassIndex] = missedClass;
-        pupils[missedPupil] = pupils[missedPupil].copyWith(
-          pupilMissedClasses: updatedMissedClasses,
-        );
-      }
+
+      missedPupil.updateFromAllMissedClasses(allMissedClasses);
     }
-    for (PupilProxy pupil in pupils) {
-      if (pupil.pupilMissedClasses != null) {
-        int missedClassIndex = pupil.pupilMissedClasses!
-            .indexWhere((element) => element.missedDay == schoolday);
-        if (missedClassIndex != -1 &&
-            !missedClasses.any((element) =>
-                element.missedDay == schoolday &&
-                element.missedPupilId == pupil.internalId)) {
-          List<MissedClass> updatedMissedClasses =
-              List.from(pupil.pupilMissedClasses!);
-          updatedMissedClasses.removeAt(missedClassIndex);
-          pupils[pupils.indexOf(pupil)] = pupils[pupils.indexOf(pupil)]
-              .copyWith(pupilMissedClasses: updatedMissedClasses);
-        }
-      }
-    }
-    _pupils.value = pupils;
-    locator<PupilFilterManager>().filterPupils();
   }
 
   Future fetchShownPupils() async {
-    if (locator.isReadySync<PupilFilterManager>()) {
-      final List<PupilProxy> shownPupils =
-          locator<PupilFilterManager>().filteredPupils.value;
-      final List<int> shownPupilIds = pupilIdsFromPupils(shownPupils);
-      await fetchPupilsByInternalId(shownPupilIds);
-    }
+    /// todo
+    // // final List<PupilProxy> shownPupils =
+    // //     locator<PupilFilterManager>().filteredPupils.value;
+    // // final List<int> shownPupilIds = pupilIdsFromPupils(shownPupils);
+    // await fetchPupilsByInternalId(shownPupilIds);
   }
 
-  void patchPupilFromResponse(Map<String, dynamic> pupilResponse) {
+  void updatePupilFromResponse(Map<String, dynamic> pupilResponse) {
     // the response comes as a json - let's make a pupil
     final Pupil responsePupil = Pupil.fromJson(pupilResponse);
-    // TODO possibly change internally to map
-    _pupils.value
-        .firstWhere((element) => element.internalId == responsePupil.internalId)
-        .updatePupil(responsePupil);
-
-    // final personalData = locator<PupilPersonalDataManager>()
-    //     .getPersonalData(responsePupil.internalId);
-    // // now let's patch
-    // PupilProxy namedPupil =
-    //     patchPupilWithPupilbaseData(pupilbase, responsePupil);
-    // // we create a list to manipulate it
-    // List<PupilProxy> pupils = List.from(_pupils.value);
-    // // let's find the pupil by index from the response
-    // int index = pupils.indexWhere(
-    //     (element) => element.internalId == responsePupil.internalId);
-    // pupils[index] = namedPupil;
-
-    // // write the new value in the manager
-    // _pupils.value = pupils;
-    // // Because we use the filtered pupils in the presentation layer,
-    // // we need to update the filtered list too, ideally without
-    // // altering the filter state
-    // locator<PupilFilterManager>().cloneToFilteredPupil(namedPupil);
+    _pupils[responsePupil.internalId]!.updatePupil(responsePupil);
   }
 
   Future<void> postAvatarImage(
@@ -258,14 +151,9 @@ class PupilManager {
     final cacheManager = DefaultCacheManager();
     final cacheKey = pupil.internalId;
 
-    // TODO: what is this for?
-    final fileInfo = await cacheManager.getFileFromCache(cacheKey.toString());
-    if (fileInfo != null && await fileInfo.file.exists()) {
-      await fileInfo.file.delete();
-      // File is already cached, use it directly
-      //cacheManager.emptyCache();
-    }
-    patchPupilFromResponse(pupilResponse);
+    cacheManager.removeFile(cacheKey.toString());
+
+    updatePupilFromResponse(pupilResponse);
   }
 
   Future<void> deleteAvatarImage(int pupilId, String cacheKey) async {
@@ -285,7 +173,7 @@ class PupilManager {
     final cacheManager = DefaultCacheManager();
     await cacheManager.removeFile(cacheKey);
     // and update the repository
-    findPupilById(pupilId).clearAvtar();
+    _pupils[pupilId]!.clearAvtar();
   }
 
   Future<void> patchPupil(int pupilId, String jsonKey, var value) async {
@@ -298,13 +186,15 @@ class PupilManager {
       final PupilProxy pupil = findPupilById(pupilId);
       if (pupil.family != null) {
         // create list with ids of all pupils with the same family value
-        final List<int> pupilIdsWithSameFamily = _pupils.value
+        final List<int> pupilIdsWithSameFamily = _pupils.values
             .where((p) => p.family == pupil.family)
             .map((p) => p.internalId)
             .toList();
 
-        final siblingsPatchData =
-            jsonEncode({jsonKey: value, 'pupils': pupilIdsWithSameFamily});
+        final siblingsPatchData = jsonEncode({
+          jsonKey: value,
+          'pupils': pupilIdsWithSameFamily,
+        });
         final Response siblingsResponse = await client
             .patch(EndpointsPupil.patchSiblings, data: siblingsPatchData);
         if (siblingsResponse.statusCode != 200) {
@@ -314,10 +204,13 @@ class PupilManager {
           return;
         }
         // let's update the siblings
-        final List<PupilProxy> responsePupils = (siblingsResponse.data as List)
-            .map((e) => PupilProxy.fromJson(e))
+        final List<Pupil> siblingPupils = (siblingsResponse.data as List)
+            .map((e) => Pupil.fromJson(e))
             .toList();
-        updatePupilsRepository(responsePupils);
+        for (Pupil sibling in siblingPupils) {
+          _pupils[sibling.internalId]!.updatePupil(sibling);
+        }
+
         locator<NotificationManager>().showSnackBar(
             NotificationType.success, 'Geschwister erfolgreich gepatcht!');
         locator<NotificationManager>().isRunningValue(false);
@@ -337,10 +230,9 @@ class PupilManager {
       return;
     }
     // let's patch the pupil with the response
-    patchPupilFromResponse(pupilResponse);
+    updatePupilFromResponse(pupilResponse);
     locator<NotificationManager>().showSnackBar(
         NotificationType.success, 'Schüler erfolgreich gepatcht!');
     locator<NotificationManager>().isRunningValue(false);
-    return;
   }
 }

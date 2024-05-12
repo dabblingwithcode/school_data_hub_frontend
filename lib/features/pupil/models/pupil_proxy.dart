@@ -15,16 +15,20 @@ import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 
 class PupilProxy with ChangeNotifier {
   PupilProxy({required Pupil pupil, required PupilPersonalData personalData})
-      : _pupil = pupil,
-        _pupilPersonalData = personalData;
+      : _pupilPersonalData = personalData {
+    updatePupil(pupil);
+  }
 
-  Pupil _pupil;
+  late Pupil _pupil;
   PupilPersonalData _pupilPersonalData;
 
   bool pupilIsDirty = false;
 
   void updatePupil(Pupil pupil) {
     _pupil = pupil;
+    // ignore: prefer_for_elements_to_map_fromiterable
+    _missedClasses = Map.fromIterable(pupil.pupilMissedClasses,
+        key: (e) => e.missedDay, value: (e) => e);
     pupilIsDirty = false;
     notifyListeners();
   }
@@ -36,6 +40,25 @@ class PupilProxy with ChangeNotifier {
 
   void clearAvtar() {
     _avatarUrlOverride = null;
+    _avatarUpdated = true;
+    pupilIsDirty = true;
+    notifyListeners();
+  }
+
+  void updateFromAllMissedClasses(List<MissedClass> allMissedClasses) {
+    // add new missed classes
+    for (final missed in allMissedClasses) {
+      if (missed.missedPupilId == _pupil.internalId) {
+        _missedClasses[missed.missedDay] = missed;
+      }
+    }
+
+    /// remove missed classes that are no longer [allMissedClasses]
+    for (final pupilMissedClass in _missedClasses.values) {
+      if (!allMissedClasses.contains(pupilMissedClass)) {
+        _missedClasses.remove(pupilMissedClass.missedDay);
+      }
+    }
     pupilIsDirty = true;
     notifyListeners();
   }
@@ -53,7 +76,9 @@ class PupilProxy with ChangeNotifier {
   DateTime get pupilSince => _pupilPersonalData.pupilSince;
 
   String? _avatarUrlOverride;
-  String? get avatarUrl => _avatarUrlOverride ?? _pupil.avatarUrl;
+  bool _avatarUpdated = false;
+  String? get avatarUrl =>
+      _avatarUpdated ? _avatarUrlOverride : _pupil.avatarUrl;
 
   String? get communicationPupil => _pupil.communicationPupil;
   String? get communicationTutor1 => _pupil.communicationTutor1;
@@ -77,7 +102,10 @@ class PupilProxy with ChangeNotifier {
   List<PupilBook>? get pupilBooks => _pupil.pupilBooks;
   List<PupilList>? get pupilLists => _pupil.pupilLists;
   List<PupilGoal>? get pupilGoals => _pupil.pupilGoals;
-  List<MissedClass>? get pupilMissedClasses => _pupil.pupilMissedClasses;
+
+  List<MissedClass>? get pupilMissedClasses => _missedClasses.values.toList();
+  Map<DateTime, MissedClass> _missedClasses = {};
+
   List<PupilWorkbook>? get pupilWorkbooks => _pupil.pupilWorkbooks;
   List<PupilAuthorization>? get authorizations => _pupil.authorizations;
   List<CreditHistoryLog>? get creditHistoryLogs => _pupil.creditHistoryLogs;
