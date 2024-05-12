@@ -53,7 +53,7 @@ class PupilManager {
     List<int> outdatedPupilPersonalDataIds = [];
     // request
     final response =
-        await client.post(EndpointsPupil.getPupils, data: pupilIdList);
+        await client.post(EndpointsPupil.fetchPupils, data: pupilIdList);
     debug.info('PupilProxy request sent!');
     // we have the response - let's build unidentified Pupils with it
     final fetchedPupils =
