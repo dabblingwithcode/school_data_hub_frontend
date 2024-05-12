@@ -1,12 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
 
 import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
@@ -19,7 +17,6 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
@@ -28,13 +25,13 @@ class PupilPersonalDataManager {
   final Map<int, PupilPersonalData> _pupilPersonalData = {};
   List<int> get availablePupilIds => _pupilPersonalData.keys.toList();
 
-  PupilPersonalData? getPersonalData(int pupilId) {
-    return _pupilPersonalData[pupilId];
+  PupilPersonalData getPersonalData(int pupilId) {
+    if (_pupilPersonalData.containsKey(pupilId) == false) {
+      throw StateError(
+          'Pupil with id $pupilId not found in PupilPersonalData!');
+    }
+    return _pupilPersonalData[pupilId]!;
   }
-
-  // wird nirgends verwendet
-  // ValueListenable<bool> get isRunning => _isRunning;
-  // final _isRunning = ValueNotifier<bool>(false);
 
   Future<PupilPersonalDataManager> init() async {
     await getStoredPupilBase();
@@ -60,14 +57,12 @@ class PupilPersonalDataManager {
 
       String? storedString = await secureStorageRead('pupilBase');
       storedPersonalDataEntries = (json.decode(storedString!) as List)
-          .map((i) => PupilPersonalData.fromJson(i))
+          .map((element) => PupilPersonalData.fromJson(element))
           .toList();
+
       for (PupilPersonalData pupil in storedPersonalDataEntries) {
         _pupilPersonalData[pupil.id] = pupil;
       }
-
-      //- This would be great place for SIGNAL READY!!!
-      // TODO not necessary
       debug.info(
           'Pupilbase loaded - Length is ${_pupilPersonalData.length} | ${StackTrace.current}');
       return;
@@ -135,10 +130,7 @@ class PupilPersonalDataManager {
               : DateTime.tryParse(splittedData[11])!,
           pupilSince: DateTime.tryParse(splittedData[12])!,
         );
-        // TODO: do we really only want to add new entries and not update existing ones?
-        if (!_pupilPersonalData.containsKey(newPersonalData.id)) {
-          _pupilPersonalData[newPersonalData.id] = newPersonalData;
-        }
+        _pupilPersonalData[newPersonalData.id] = newPersonalData;
       }
     }
     debug.info('Pupilbase processed');
@@ -205,14 +197,10 @@ class PupilPersonalDataManager {
       data: formData,
     );
     debug.warning('RESPONSE is ${response.data}');
-    // TODO
-    //locator<PupilManager>().patchPupilFromResponse(pupilResponse: response.data);
-    // we got now the updated data, let's substitute the old pupilbase
     textFile.delete();
+
     for (PupilPersonalData element in scannedPupilBase) {
-      if (!_pupilPersonalData.containsKey(element.id)) {
-        _pupilPersonalData[element.id] = element;
-      }
+      _pupilPersonalData[element.id] = element;
     }
 
     await secureStorageWrite(
@@ -248,13 +236,6 @@ class PupilPersonalDataManager {
     Map<String, List<PupilPersonalData>> groupedPupils =
         pupilBase.groupListsBy((element) => element.group);
 
-    // for (var pupil in pupilBase) {
-    //   if (groupedPupils.containsKey(pupil.group)) {
-    //     groupedPupils[pupil.group]!.add(pupil);
-    //   } else {
-    //     groupedPupils[pupil.group] = [pupil];
-    //   }
-    // }
     final Map<String, String> finalGroupedList = {};
 
     // Now we iterate over the groupedPupils and generate maps with smaller lists with no more than 12 items and add to the group name the subgroup number
@@ -295,17 +276,22 @@ class PupilPersonalDataManager {
     return sortedQrGroupLists;
   }
 
-  Future<void> deletePupilBaseElements(
-      List<PupilPersonalData> toBeDeletedPupilBase) async {
+  Future<String> deletePupilBaseElements(List<int> toBeDeletedDataIds) async {
     locator<SnackBarManager>().isRunningValue(true);
-    for (PupilPersonalData pupilBase in toBeDeletedPupilBase) {
-      _pupilPersonalData.remove(pupilBase.id);
+    List<String> toBeDeletedDataNames = [];
+
+    for (int id in toBeDeletedDataIds) {
+      toBeDeletedDataNames.add(_pupilPersonalData[id]!.name);
+      _pupilPersonalData.remove(id);
     }
+
     await secureStorageWrite(
         'pupilBase', jsonEncode(_pupilPersonalData.values.toList()));
     locator<SnackBarManager>().isRunningValue(false);
     debug.info(
-        'Pupilbase reduced: deleted ${toBeDeletedPupilBase.length} pupils not present in the database, now ${_pupilPersonalData.length} | ${StackTrace.current}');
+        'Pupilbase reduced: deleted ${toBeDeletedDataIds.length} pupils not present in the database, now ${_pupilPersonalData.length} | ${StackTrace.current}');
+
+    return toBeDeletedDataNames.join(', ');
   }
 
   importPupilBaseWithWindows() async {

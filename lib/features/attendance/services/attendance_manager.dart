@@ -150,7 +150,7 @@ class AttendanceManager {
         pupil.pupilMissedClasses![missedClass!].missedType == 'none') {
       final response = await client
           .delete(EndpointsMissedClass().deleteMissedClass(pupilId, date));
-      await pupilManager.fetchPupilsById(pupilBaseIds);
+      await pupilManager.fetchPupilsByInternalId(pupilBaseIds);
       if (response.statusCode != 200) {
         locator<SnackBarManager>().showSnackBar(
             SnackBarType.error, 'Fehler: status code ${response.statusCode}');

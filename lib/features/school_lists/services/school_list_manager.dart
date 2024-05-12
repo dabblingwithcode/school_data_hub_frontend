@@ -133,7 +133,7 @@ class SchoolListManager {
       List<SchoolList> updatedSchoolLists = List.from(_schoolLists.value);
       updatedSchoolLists.add(newList);
       _schoolLists.value = updatedSchoolLists;
-      await locator<PupilManager>().fetchPupilsById(pupilIds);
+      await locator<PupilManager>().fetchPupilsByInternalId(pupilIds);
       debug.success('list entry successful');
     }
   }

@@ -1,9 +1,11 @@
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/dio/dio_client.dart';
+import 'package:schuldaten_hub/api/services/api_manager.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
 class EndpointsPupil {
-  final DioClient client;
+  late final DioClient _client = locator<ApiManager>().dioClient.value;
 
   // auch für diese endpoints funktionen wie unten erstellen
   //- POST
@@ -14,8 +16,6 @@ class EndpointsPupil {
   static const getAllPupils = '/pupils/all';
   static const getPupilsFlat = '/pupils/all/flat';
   static const getPupils = '/pupils/list';
-
-  EndpointsPupil(this.client);
 
   String getOnePupil(int id) {
     return '/pupils/$id';
@@ -41,7 +41,7 @@ class EndpointsPupil {
     required dynamic value,
   }) async {
     final Map<String, dynamic> data = {property: value};
-    final response = await client.patch(patchPupil(id), data: data);
+    final response = await _client.patch(patchPupil(id), data: data);
     if (response.statusCode != 200) {
       throw ApiException(
           'Failed to update pupil property', response.statusCode);

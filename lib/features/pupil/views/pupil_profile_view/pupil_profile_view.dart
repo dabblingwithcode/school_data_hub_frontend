@@ -34,8 +34,7 @@ class PupilProfileView extends WatchingWidget {
     return Scaffold(
       backgroundColor: canvasColor,
       body: RefreshIndicator(
-        onRefresh: () async =>
-            locator<PupilManager>().fetchThesePupils([pupil]),
+        onRefresh: () async => locator<PupilManager>().updatePupilList([pupil]),
         child: SafeArea(
           child: Padding(
             padding: const EdgeInsets.only(left: 5.0, top: 5, right: 5),

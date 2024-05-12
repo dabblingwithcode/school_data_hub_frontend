@@ -2,11 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
-import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
@@ -17,17 +15,15 @@ import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
 
 class PupilManager {
-  ValueListenable<List<PupilProxy>> get pupils => _pupils;
-
   ValueListenable<bool> get isRunning => _isRunning;
-  final _pupils = ValueNotifier<List<PupilProxy>>([]);
+
+  final _pupils = <int, PupilProxy>{};
 
   final _isRunning = ValueNotifier<bool>(false);
   final client = locator.get<ApiManager>().dioClient.value;
@@ -45,107 +41,59 @@ class PupilManager {
       return;
     }
     debug.warning('availablePupils im PupilManager $pupilsToFetch');
-    await fetchPupilsById(pupilsToFetch);
+    await fetchPupilsByInternalId(pupilsToFetch);
   }
 
-  //- Fetch listed pupils from the backend
-  Future fetchThesePupils(List<PupilProxy> pupils) async {
-    List<int> pupilIds = [];
-    for (PupilProxy pupil in pupils) {
-      pupilIds.add(pupil.internalId);
-    }
-    await fetchPupilsById(pupilIds);
+  Future<void> updatePupilList(List<PupilProxy> pupils) async {
+    await fetchPupilsByInternalId(pupils.map((e) => e.internalId).toList());
   }
 
   //-Fetch pupils with the given ids from the backend
-  Future fetchPupilsById(List<int> pupilIds) async {
+  Future fetchPupilsByInternalId(List<int> internalPupilIds) async {
     locator<SnackBarManager>().isRunningValue(true);
     // we request the data posting a json with the id list - let's build that
-    final pupilIdList = jsonEncode({"pupils": pupilIds});
+    final pupilIdList = jsonEncode({"pupils": internalPupilIds});
     // and a list to manipulate the matched pupils
-    List<PupilProxy> mergedPupils = [];
-    List<PupilPersonalData> outdatedPupilPersonalData = [];
+    List<int> outdatedPupilPersonalDataIds = [];
     // request
-    try {
-      final response =
-          await client.post(EndpointsPupil.getPupils, data: pupilIdList);
-      debug.info('PupilProxy request sent!');
-      // we have the response - let's build unidentified Pupils with it
-      final fetchedPupils =
-          (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+    final response =
+        await client.post(EndpointsPupil.getPupils, data: pupilIdList);
+    debug.info('PupilProxy request sent!');
+    // we have the response - let's build unidentified Pupils with it
+    final fetchedPupils =
+        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
 
-      // now we match them with their personal data
-      final personalDataManager = locator.get<PupilPersonalDataManager>();
-      for (Pupil fetchedPupil in fetchedPupils) {
-        final proxyInRepository = _pupils.value.firstWhereOrNull(
-            (element) => element.internalId == fetchedPupil.internalId);
+    outdatedPupilPersonalDataIds = internalPupilIds
+        .where((element) =>
+            !fetchedPupils.any((pupil) => pupil.internalId == element))
+        .toList();
 
-        if (proxyInRepository != null) {
-          proxyInRepository.updatePupil(fetchedPupil);
-          continue;
-        }
+    // now we match them with their personal data
+    final personalDataManager = locator.get<PupilPersonalDataManager>();
+    for (Pupil fetchedPupil in fetchedPupils) {
+      final proxyInRepository = _pupils[fetchedPupil.internalId];
+
+      if (proxyInRepository != null) {
+        proxyInRepository.updatePupil(fetchedPupil);
+      } else {
         final personalData =
             personalDataManager.getPersonalData(fetchedPupil.internalId);
-        if (personalData != null) {
-          _pupils.value.add(PupilProxy(
-              pupil: fetchedPupil, pupilDataFromSchild: personalData));
-        } else {
-          /// TODO ich glaube, das mein code oben genau das macht was er soll,
-          /// allerdings passter der rest nicht dazu.
 
-          // if the pupilbase element was sent and didn't get a response from the server,
-          // this means it is outdated -
-          // let's remove those
-
-          // if (pupilIds.contains(pupilPersonalData.id)) {
-          //   outdatedPupilPersonalData.add(pupilPersonalData);
-          // }
-
-          // wenn dann müsste hier behandelt werden, dass wir ein pupil in der liste haben,
-          // für den es kein personaldata gibt.
-        }
+        _pupils[fetchedPupil.internalId] =
+            PupilProxy(pupil: fetchedPupil, personalData: personalData);
       }
-      // now check if the pupilbase was modified - if so, store the modified base
-      if (outdatedPupilPersonalData.isNotEmpty) {
-        locator<PupilPersonalDataManager>()
-            .deletePupilBaseElements(outdatedPupilPersonalData);
-        // debug print the internal_id of every element of the outdated pupilbase in one string
-        String deletedPupils = '';
-        for (PupilPersonalData element in outdatedPupilPersonalData) {
-          deletedPupils += '${element.id}, ';
-        }
-        locator<SnackBarManager>().showSnackBar(SnackBarType.warning,
-            '$deletedPupils had no match and have been deleted from the pupilbase!');
-      }
-
-      sortPupilsByName();
-      // TODO trigger rebuild
-
-      // let's update the filtered pupils too
-      // handle errors...
-      if (mergedPupils.isEmpty) {
-        debug.info('PUPILS FETCHED: No matches! | ${StackTrace.current}');
-      } else {
-        locator<SnackBarManager>().showSnackBar(SnackBarType.success,
-            'PUPILS FETCHED: There are ${mergedPupils.length} matches! | ${StackTrace.current}');
-      }
-      if (locator.isReadySync<PupilFilterManager>()) {
-        //locator<PupilFilterManager>().refreshFilteredPupils();
-        locator<PupilFilterManager>().rebuildFilteredPupils();
-      }
-
-      locator<SnackBarManager>().isRunningValue(false);
-
-      // //! This one gives an error
-      // final pupilFilterManager = locator<PupilFilterManager>();
-      // pupilFilterManager.refreshFilteredPupils();
-    } on DioException catch (e) {
-      // handle errors...
-      final errorMessage = DioExceptions.fromDioError(e);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
-      rethrow;
     }
+    // remove the outdated pupilbase elements
+    if (outdatedPupilPersonalDataIds.isNotEmpty) {
+      final deletedPupils = await personalDataManager
+          .deletePupilBaseElements(outdatedPupilPersonalDataIds);
+      locator<SnackBarManager>().showSnackBar(SnackBarType.warning,
+          '$deletedPupils had no match and have been deleted from the pupilbase!');
+    }
+
+    sortPupilsByName();
+
+    locator<SnackBarManager>().isRunningValue(false);
   }
 
   List<PupilProxy> readPupils() {
@@ -248,7 +196,7 @@ class PupilManager {
       final List<PupilProxy> shownPupils =
           locator<PupilFilterManager>().filteredPupils.value;
       final List<int> shownPupilIds = pupilIdsFromPupils(shownPupils);
-      await fetchPupilsById(shownPupilIds);
+      await fetchPupilsByInternalId(shownPupilIds);
     }
   }
 

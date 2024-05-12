@@ -14,10 +14,9 @@ import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 
 class PupilProxy with ChangeNotifier {
-  PupilProxy(
-      {required Pupil pupil, required PupilPersonalData pupilDataFromSchild})
+  PupilProxy({required Pupil pupil, required PupilPersonalData personalData})
       : _pupil = pupil,
-        _pupilPersonalData = pupilDataFromSchild;
+        _pupilPersonalData = personalData;
 
   Pupil _pupil;
   PupilPersonalData _pupilPersonalData;
@@ -30,7 +29,6 @@ class PupilProxy with ChangeNotifier {
     notifyListeners();
   }
 
-  /// TODO not sure if it can happen that the personal data changes
   void updateDataFromSchild(PupilPersonalData personalData) {
     _pupilPersonalData = personalData;
     notifyListeners();

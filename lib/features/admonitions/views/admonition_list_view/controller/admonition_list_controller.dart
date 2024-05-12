@@ -35,7 +35,7 @@ class AdmonitionListController extends State<AdmonitionList> {
     for (PupilProxy pupil in filteredPupils!) {
       pupilsToFetch.add(pupil.internalId);
     }
-    await locator.get<PupilManager>().fetchPupilsById(pupilsToFetch);
+    await locator.get<PupilManager>().fetchPupilsByInternalId(pupilsToFetch);
   }
 
   @override

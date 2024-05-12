@@ -50,7 +50,7 @@ class LearningSupportListView extends WatchingWidget {
         automaticallyImplyLeading: false,
       ),
       body: RefreshIndicator(
-        onRefresh: () async => locator<PupilManager>().fetchThesePupils(pupils),
+        onRefresh: () async => locator<PupilManager>().updatePupilList(pupils),
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 800),
