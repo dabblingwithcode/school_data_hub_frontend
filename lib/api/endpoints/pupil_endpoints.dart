@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 class EndpointsPupil {
   late final DioClient _client = locator<ApiManager>().dioClient.value;
 
-  //-
+  //- This one is in PupilPersonalDataManager, have to review that one
   static const exportPupilsTxt = '/import/pupils/txt';
 
   //- THIS ENDPOINTS ARE NOT USED IN THE APP
