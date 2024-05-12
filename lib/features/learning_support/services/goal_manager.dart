@@ -87,7 +87,7 @@ class GoalManager {
               .postCategoryStatus(pupil.internalId, goalCategoryId),
           data: data);
       if (response.statusCode == 200) {
-        locator<PupilManager>().patchPupilFromResponse(response.data);
+        locator<PupilManager>().updatePupilFromResponse(response.data);
       }
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e);
@@ -124,7 +124,7 @@ class GoalManager {
     }
     snackBarManager.showSnackBar(
         NotificationType.success, 'Status aktualisiert');
-    locator<PupilManager>().patchPupilFromResponse(response.data);
+    locator<PupilManager>().updatePupilFromResponse(response.data);
     snackBarManager.isRunningValue(false);
   }
 
@@ -134,7 +134,7 @@ class GoalManager {
       final response = await client
           .delete(EndpointsLearningSupport().deleteCategoryStatus(statusId));
       if (response.statusCode == 200) {
-        locator<PupilManager>().patchPupilFromResponse(response.data);
+        locator<PupilManager>().updatePupilFromResponse(response.data);
         snackBarManager.showSnackBar(
             NotificationType.success, 'Status gelöscht');
         snackBarManager.isRunningValue(false);
@@ -166,7 +166,7 @@ class GoalManager {
       final response = await client
           .post(EndpointsLearningSupport().postGoal(pupilId), data: data);
       if (response.statusCode == 200) {
-        locator<PupilManager>().patchPupilFromResponse(response.data);
+        locator<PupilManager>().updatePupilFromResponse(response.data);
         snackBarManager.showSnackBar(
             NotificationType.success, 'Ziel hinzugefügt');
       }
@@ -195,7 +195,7 @@ class GoalManager {
       final response =
           await client.delete(EndpointsLearningSupport().deleteGoal(goalId));
       if (response.statusCode == 200) {
-        locator<PupilManager>().patchPupilFromResponse(response.data);
+        locator<PupilManager>().updatePupilFromResponse(response.data);
         snackBarManager.showSnackBar(NotificationType.success, 'Ziel gelöscht');
         snackBarManager.isRunningValue(false);
       }

@@ -63,7 +63,7 @@ class AdmonitionManager {
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
 
-      pupilManager.patchPupilFromResponse(pupilResponse);
+      pupilManager.updatePupilFromResponse(pupilResponse);
       locator<NotificationManager>().isRunningValue(false);
     }
   }
@@ -93,7 +93,7 @@ class AdmonitionManager {
     }
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
-    await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
+    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
   }
 
   patchAdmonitionAsProcessed(String admonitionId, bool processed) async {
@@ -125,7 +125,7 @@ class AdmonitionManager {
         .showSnackBar(NotificationType.success, 'Ereignis geändert!');
     final Map<String, dynamic> pupilResponse = response.data;
 
-    await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
+    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
     locator<NotificationManager>().isRunningValue(false);
   }
 
@@ -164,7 +164,7 @@ class AdmonitionManager {
     locator<NotificationManager>().showSnackBar(
         NotificationType.success, 'Datei erfolgreich hochgeladen!');
     final Map<String, dynamic> pupilResponse = response.data;
-    await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
+    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
     locator<NotificationManager>().isRunningValue(false);
   }
 
@@ -194,7 +194,7 @@ class AdmonitionManager {
     final cacheManager = DefaultCacheManager();
     await cacheManager.removeFile(cacheKey);
     // And patch the pupil with the data
-    await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
+    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Datei erfolgreich gelöscht!');
     locator<NotificationManager>().isRunningValue(false);
@@ -216,7 +216,7 @@ class AdmonitionManager {
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Fehlzeit gelöscht!');
 
-    locator<PupilManager>().patchPupilFromResponse(response.data);
+    locator<PupilManager>().updatePupilFromResponse(response.data);
     locator<NotificationManager>().isRunningValue(false);
   }
 }

@@ -176,7 +176,7 @@ class WorkbookManager {
     }
     debug.success('Workbook created! | ${StackTrace.current}');
 
-    locator<PupilManager>().patchPupilFromResponse(response.data);
+    locator<PupilManager>().updatePupilFromResponse(response.data);
   }
 
   deletePupilWorkbook(int pupilId, int isbn) async {
@@ -186,6 +186,6 @@ class WorkbookManager {
       // handle errors
     }
     debug.success('Workbook deleted! | ${StackTrace.current}');
-    locator<PupilManager>().patchPupilFromResponse(response.data);
+    locator<PupilManager>().updatePupilFromResponse(response.data);
   }
 }

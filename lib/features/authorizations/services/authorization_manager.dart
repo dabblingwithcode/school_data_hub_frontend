@@ -101,14 +101,14 @@ class AuthorizationManager {
       snackBarManager.isRunningValue(false);
       return;
     }
-    locator<PupilManager>().patchPupilFromResponse(response.data);
+    locator<PupilManager>().updatePupilFromResponse(response.data);
     snackBarManager.showSnackBar(
         NotificationType.success, 'Einwilligung erstellt');
     debug.success('list entry successful');
 
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
-    await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
+    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
     snackBarManager.isRunningValue(false);
   }
 
@@ -179,7 +179,7 @@ class AuthorizationManager {
     }
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
-    await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
+    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
     snackBarManager.showSnackBar(
         NotificationType.success, 'Einwilligung geändert');
     snackBarManager.isRunningValue(false);
@@ -209,7 +209,7 @@ class AuthorizationManager {
     }
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
-    await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
+    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
     snackBarManager.showSnackBar(NotificationType.success, 'Datei hochgeladen');
   }
 
@@ -228,7 +228,7 @@ class AuthorizationManager {
     final cacheManager = DefaultCacheManager();
     await cacheManager.removeFile(cacheKey);
     // Then we patch the pupil with the data
-    await locator<PupilManager>().patchPupilFromResponse(pupilResponse);
+    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
     snackBarManager.showSnackBar(NotificationType.success, 'Datei gelöscht');
     snackBarManager.isRunningValue(false);
   }

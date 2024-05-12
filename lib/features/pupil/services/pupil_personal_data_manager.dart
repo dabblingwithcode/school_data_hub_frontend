@@ -42,7 +42,7 @@ class PupilPersonalDataManager {
     locator<NotificationManager>().isRunningValue(true);
     await secureStorageDelete('pupilBase');
     _pupilPersonalData.clear();
-    locator<PupilManager>().deletePupils();
+    locator<PupilManager>().clearData();
     locator<PupilFilterManager>().deleteFilteredPupils();
     locator<NotificationManager>().isRunningValue(false);
   }

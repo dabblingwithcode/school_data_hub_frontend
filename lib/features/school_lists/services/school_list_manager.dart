@@ -206,7 +206,7 @@ class SchoolListManager {
         EndpointsSchoolList().patchPupilSchoolList(pupilId, listId),
         data: data);
     if (response.statusCode == 200) {
-      await locator<PupilManager>().patchPupilFromResponse(response.data);
+      locator<PupilManager>().updatePupilFromResponse(response.data);
       debug.success('list entry successful');
     }
   }

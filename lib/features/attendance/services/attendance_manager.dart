@@ -4,8 +4,8 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
-import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
+import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
@@ -54,7 +54,7 @@ class AttendanceManager {
     final List<MissedClass> missedClasses = response.data
         .map<MissedClass>((missedClass) => MissedClass.fromJson(missedClass))
         .toList();
-    pupilManager.patchPupilsWithMissedClasses(missedClasses);
+    pupilManager.updatePupilsFromMissedClasses(missedClasses);
 
     return;
   }
@@ -76,7 +76,7 @@ class AttendanceManager {
 
       debug.warning('Changed excused state to $newValue');
 
-      pupilManager.patchPupilFromResponse(pupilResponse);
+      pupilManager.updatePupilFromResponse(pupilResponse);
     }
     locator<NotificationManager>().isRunningValue(false);
     return;
@@ -95,7 +95,7 @@ class AttendanceManager {
 
       return;
     }
-    pupilManager.patchPupilFromResponse(response.data);
+    pupilManager.updatePupilFromResponse(response.data);
     locator<NotificationManager>().isRunningValue(false);
 
     return;
@@ -138,7 +138,7 @@ class AttendanceManager {
       }
       // the request was successful -
       //we patch the pupil in the pupilmanager with the response
-      pupilManager.patchPupilFromResponse(pupilResponse);
+      pupilManager.updatePupilFromResponse(pupilResponse);
       locator<NotificationManager>().isRunningValue(false);
       return;
     }
@@ -181,7 +181,7 @@ class AttendanceManager {
       // the request was successful -
       //we patch the pupil in the pupilmanager with the response
       final Map<String, dynamic> pupilResponse = response.data;
-      pupilManager.patchPupilFromResponse(pupilResponse);
+      pupilManager.updatePupilFromResponse(pupilResponse);
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
       locator<NotificationManager>().isRunningValue(false);
@@ -218,7 +218,7 @@ class AttendanceManager {
         locator<NotificationManager>().isRunningValue(false);
         return;
       }
-      pupilManager.patchPupilFromResponse(pupilResponse);
+      pupilManager.updatePupilFromResponse(pupilResponse);
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
       locator<NotificationManager>().isRunningValue(false);
@@ -240,7 +240,7 @@ class AttendanceManager {
     }
     // the request was successful -
     //we patch the pupil in the pupilmanager with the response
-    pupilManager.patchPupilFromResponse(pupilResponse);
+    pupilManager.updatePupilFromResponse(pupilResponse);
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
     locator<NotificationManager>().isRunningValue(false);
@@ -282,7 +282,7 @@ class AttendanceManager {
           NotificationType.error, 'Fehler: status code ${response.statusCode}');
       return;
     }
-    await pupilManager.patchPupilFromResponse(response.data);
+    await pupilManager.updatePupilFromResponse(response.data);
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Einträge erfolgreich!');
     locator<NotificationManager>().isRunningValue(false);
@@ -326,7 +326,7 @@ class AttendanceManager {
         locator<NotificationManager>().isRunningValue(false);
         return;
       }
-      await pupilManager.patchPupilFromResponse(pupilResponse);
+      await pupilManager.updatePupilFromResponse(pupilResponse);
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
       locator<NotificationManager>().isRunningValue(false);
@@ -348,7 +348,7 @@ class AttendanceManager {
       return;
     }
 
-    await pupilManager.patchPupilFromResponse(pupilResponse);
+    await pupilManager.updatePupilFromResponse(pupilResponse);
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
     locator<NotificationManager>().isRunningValue(false);
@@ -374,7 +374,7 @@ class AttendanceManager {
       locator<NotificationManager>().isRunningValue(false);
       return;
     }
-    await pupilManager.patchPupilFromResponse(pupilResponse);
+    await pupilManager.updatePupilFromResponse(pupilResponse);
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
     locator<NotificationManager>().isRunningValue(false);

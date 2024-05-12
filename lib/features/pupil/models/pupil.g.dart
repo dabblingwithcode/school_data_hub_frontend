@@ -22,41 +22,40 @@ Pupil _$PupilFromJson(Map<String, dynamic> json) => Pupil(
       ogsInfo: json['ogs_info'] as String?,
       pickUpTime: json['pick_up_time'] as String?,
       specialInformation: json['special_information'] as String?,
-      pupilCategoryStatuses: (json['pupil_category_statuses'] as List<dynamic>?)
-          ?.map((e) => PupilCategoryStatus.fromJson(e as Map<String, dynamic>))
+      pupilCategoryStatuses: (json['pupil_category_statuses'] as List<dynamic>)
+          .map((e) => PupilCategoryStatus.fromJson(e as Map<String, dynamic>))
           .toList(),
-      pupilAdmonitions: (json['pupil_admonitions'] as List<dynamic>?)
-          ?.map((e) => Admonition.fromJson(e as Map<String, dynamic>))
+      pupilAdmonitions: (json['pupil_admonitions'] as List<dynamic>)
+          .map((e) => Admonition.fromJson(e as Map<String, dynamic>))
           .toList(),
-      pupilBooks: (json['pupil_books'] as List<dynamic>?)
-          ?.map((e) => PupilBook.fromJson(e as Map<String, dynamic>))
+      pupilBooks: (json['pupil_books'] as List<dynamic>)
+          .map((e) => PupilBook.fromJson(e as Map<String, dynamic>))
           .toList(),
-      pupilLists: (json['pupil_lists'] as List<dynamic>?)
-          ?.map((e) => PupilList.fromJson(e as Map<String, dynamic>))
+      pupilLists: (json['pupil_lists'] as List<dynamic>)
+          .map((e) => PupilList.fromJson(e as Map<String, dynamic>))
           .toList(),
-      pupilGoals: (json['pupil_goals'] as List<dynamic>?)
-          ?.map((e) => PupilGoal.fromJson(e as Map<String, dynamic>))
+      pupilGoals: (json['pupil_goals'] as List<dynamic>)
+          .map((e) => PupilGoal.fromJson(e as Map<String, dynamic>))
           .toList(),
-      pupilMissedClasses: (json['pupil_missed_classes'] as List<dynamic>?)
-          ?.map((e) => MissedClass.fromJson(e as Map<String, dynamic>))
+      pupilMissedClasses: (json['pupil_missed_classes'] as List<dynamic>)
+          .map((e) => MissedClass.fromJson(e as Map<String, dynamic>))
           .toList(),
-      pupilWorkbooks: (json['pupil_workbooks'] as List<dynamic>?)
-          ?.map((e) => PupilWorkbook.fromJson(e as Map<String, dynamic>))
+      pupilWorkbooks: (json['pupil_workbooks'] as List<dynamic>)
+          .map((e) => PupilWorkbook.fromJson(e as Map<String, dynamic>))
           .toList(),
-      authorizations: (json['authorizations'] as List<dynamic>?)
-          ?.map((e) => PupilAuthorization.fromJson(e as Map<String, dynamic>))
+      authorizations: (json['authorizations'] as List<dynamic>)
+          .map((e) => PupilAuthorization.fromJson(e as Map<String, dynamic>))
           .toList(),
-      creditHistoryLogs: (json['credit_history_logs'] as List<dynamic>?)
-          ?.map((e) => CreditHistoryLog.fromJson(e as Map<String, dynamic>))
+      creditHistoryLogs: (json['credit_history_logs'] as List<dynamic>)
+          .map((e) => CreditHistoryLog.fromJson(e as Map<String, dynamic>))
           .toList(),
-      competenceGoals: (json['competence_goals'] as List<dynamic>?)
-          ?.map((e) => CompetenceGoal.fromJson(e as Map<String, dynamic>))
+      competenceGoals: (json['competence_goals'] as List<dynamic>)
+          .map((e) => CompetenceGoal.fromJson(e as Map<String, dynamic>))
           .toList(),
-    )
-      ..preschoolRevision = json['preschool_revision'] as int?
-      ..competenceChecks = (json['competence_checks'] as List<dynamic>?)
-          ?.map((e) => CompetenceCheck.fromJson(e as Map<String, dynamic>))
-          .toList();
+      competenceChecks: (json['competence_checks'] as List<dynamic>)
+          .map((e) => CompetenceCheck.fromJson(e as Map<String, dynamic>))
+          .toList(),
+    )..preschoolRevision = json['preschool_revision'] as int?;
 
 Map<String, dynamic> _$PupilToJson(Pupil instance) => <String, dynamic>{
       'avatar_url': instance.avatarUrl,
