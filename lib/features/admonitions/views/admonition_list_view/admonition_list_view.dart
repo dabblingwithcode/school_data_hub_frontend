@@ -4,7 +4,6 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/controller/admonition_list_controller.dart';
 import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_list_card.dart';
 import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_list_search_bar.dart';
 import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_list_view_bottom_navbar.dart';
@@ -14,8 +13,7 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AdmonitionListView extends WatchingWidget {
-  final AdmonitionListController controller;
-  const AdmonitionListView(this.controller, {Key? key}) : super(key: key);
+  const AdmonitionListView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +67,10 @@ class AdmonitionListView extends WatchingWidget {
                     titlePadding: const EdgeInsets.only(
                         left: 5, top: 5, right: 5, bottom: 5),
                     collapseMode: CollapseMode.none,
-                    title: admonitionListSearchBar(
-                        context, pupils, controller, filtersOn),
+                    title: AdmonitionListSearchBar(
+                      pupils: pupils,
+                      filtersOn: filtersOn,
+                    ),
                   ),
                 ),
                 pupils.isEmpty
@@ -82,8 +82,7 @@ class AdmonitionListView extends WatchingWidget {
                     : SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
-                            return AdmonitionListCard(
-                                controller, pupils[index]);
+                            return AdmonitionListCard(pupils[index]);
                           },
                           childCount: pupils.length,
                         ),

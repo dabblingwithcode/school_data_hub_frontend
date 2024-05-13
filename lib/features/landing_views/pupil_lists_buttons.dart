@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/controller/admonition_list_controller.dart';
+import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/admonition_list_view.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/controller/attendance_ranking_list_controller.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/controller/attendance_list_controller.dart';
 import 'package:schuldaten_hub/features/credit/controller/credit_list_controller.dart';
@@ -19,7 +19,7 @@ List<Widget> pupilListButtons(
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => const AdmonitionList(),
+            builder: (ctx) => const AdmonitionListView(),
           ));
         },
         child: SizedBox(
