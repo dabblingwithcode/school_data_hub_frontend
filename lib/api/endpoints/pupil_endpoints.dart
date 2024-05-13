@@ -12,7 +12,7 @@ class EndpointsPupil {
   late final DioClient _client = locator<ApiManager>().dioClient.value;
 
   //- This one is in PupilPersonalDataManager, have to review that one
-  static const exportPupilsTxt = '/import/pupils/txt';
+  static const updateBackendPupilsDatabaseUrl = '/import/pupils/txt';
   Future<void> updateBackendPupilsDatabase({required File file}) async {
     String fileName = file.path.split('/').last;
     FormData formData = FormData.fromMap({
@@ -22,7 +22,7 @@ class EndpointsPupil {
       ),
     });
     final response = await _client.post(
-      EndpointsPupil.exportPupilsTxt,
+      EndpointsPupil.updateBackendPupilsDatabaseUrl,
       data: formData,
     );
     if (response.statusCode != 200) {
@@ -40,12 +40,13 @@ class EndpointsPupil {
 
   //- fetch list of pupils
 
-  static const fetchPupils = '/pupils/list';
+  static const fetchPupilsUrl = '/pupils/list';
   Future<List<Pupil>> fetchListOfPupils({
     required List<int> internalPupilIds,
   }) async {
     final pupilIdsListToJson = jsonEncode({"pupils": internalPupilIds});
-    final response = await _client.post(fetchPupils, data: pupilIdsListToJson);
+    final response =
+        await _client.post(fetchPupilsUrl, data: pupilIdsListToJson);
     if (response.statusCode != 200) {
       throw ApiException('Failed to fetch pupils', response.statusCode);
     }
@@ -69,7 +70,7 @@ class EndpointsPupil {
   /// diese funktionen lassen sich dann auch testen
   //- update pupil property
 
-  String patchPupil(int id) {
+  String updatePupilPropertyUrl(int id) {
     return '/pupils/$id';
   }
 
@@ -79,7 +80,8 @@ class EndpointsPupil {
     required dynamic value,
   }) async {
     final Map<String, dynamic> data = {property: value};
-    final response = await _client.patch(patchPupil(id), data: data);
+    final response =
+        await _client.patch(updatePupilPropertyUrl(id), data: data);
     if (response.statusCode != 200) {
       throw ApiException(
           'Failed to update pupil property', response.statusCode);
@@ -93,7 +95,7 @@ class EndpointsPupil {
 
   //- patch siblings
 
-  static const patchSiblings = '/pupils/patch_siblings';
+  static const patchSiblingsUrl = '/pupils/patch_siblings';
   Future<List<Pupil>> updateSiblingsProperty({
     required List<int> siblingsPupilIds,
     required String property,
@@ -103,7 +105,7 @@ class EndpointsPupil {
       'pupils': siblingsPupilIds,
       property: value,
     });
-    final response = await _client.patch(patchSiblings, data: data);
+    final response = await _client.patch(patchSiblingsUrl, data: data);
     if (response.statusCode != 200) {
       throw ApiException('Failed to patch siblings', response.statusCode);
     }
@@ -112,7 +114,7 @@ class EndpointsPupil {
 
   //- post / patch pupil avatar
 
-  String patchPupilhWithAvatar(int id) {
+  String updatePupilhWithAvatarUrl(int id) {
     return '/pupils/$id/avatar';
   }
 
@@ -121,7 +123,7 @@ class EndpointsPupil {
     required FormData formData,
   }) async {
     final Response response =
-        await _client.patch(patchPupilhWithAvatar(id), data: formData);
+        await _client.patch(updatePupilhWithAvatarUrl(id), data: formData);
     if (response.statusCode != 200) {
       throw ApiException('Failed to upload pupil avatar', response.statusCode);
     }
@@ -130,13 +132,13 @@ class EndpointsPupil {
 
   //- delete pupil avatar
 
-  String deletePupilAvatar(int internalId) {
+  String deletePupilAvatarUrl(int internalId) {
     return '/pupils/$internalId/avatar';
   }
 
-  Future<Pupil> deleteAvatar(int internalId) async {
+  Future<Pupil> deletePupilAvatar(int internalId) async {
     final Response response =
-        await _client.delete(deletePupilAvatar(internalId));
+        await _client.delete(deletePupilAvatarUrl(internalId));
     if (response.statusCode != 200) {
       throw ApiException(
           'Something went wrong deleting the avatar', response.statusCode);

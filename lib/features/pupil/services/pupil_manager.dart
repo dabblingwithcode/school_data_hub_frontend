@@ -55,7 +55,7 @@ class PupilManager {
     List<int> outdatedPupilPersonalDataIds = [];
     // request
     final response =
-        await client.post(EndpointsPupil.fetchPupils, data: pupilIdList);
+        await client.post(EndpointsPupil.fetchPupilsUrl, data: pupilIdList);
     debug.info('PupilProxy request sent!');
     // we have the response - let's build unidentified Pupils with it
     final fetchedPupils =
@@ -139,7 +139,7 @@ class PupilManager {
     });
     // send request
     final Response response = await client.patch(
-      EndpointsPupil().patchPupilhWithAvatar(pupil.internalId),
+      EndpointsPupil().updatePupilhWithAvatarUrl(pupil.internalId),
       data: formData,
     );
     // Handle errors.
@@ -161,7 +161,7 @@ class PupilManager {
   Future<void> deleteAvatarImage(int pupilId, String cacheKey) async {
     // send request
     final Response response = await client.delete(
-      EndpointsPupil().deletePupilAvatar(pupilId),
+      EndpointsPupil().deletePupilAvatarUrl(pupilId),
       options: Options(headers: {
         'x-access-token': locator<SessionManager>().credentials.value.jwt
       }),
@@ -198,7 +198,7 @@ class PupilManager {
           'pupils': pupilIdsWithSameFamily,
         });
         final Response siblingsResponse = await client
-            .patch(EndpointsPupil.patchSiblings, data: siblingsPatchData);
+            .patch(EndpointsPupil.patchSiblingsUrl, data: siblingsPatchData);
         if (siblingsResponse.statusCode != 200) {
           locator<NotificationManager>().showSnackBar(
               NotificationType.warning, 'Fehler beim Patchen der Geschwister!');
@@ -220,8 +220,8 @@ class PupilManager {
     }
     // prepare the data for the request
     final data = jsonEncode({jsonKey: value});
-    final Response response =
-        await client.patch(EndpointsPupil().patchPupil(pupilId), data: data);
+    final Response response = await client
+        .patch(EndpointsPupil().updatePupilPropertyUrl(pupilId), data: data);
     // we have a response
     final Map<String, dynamic> pupilResponse = response.data;
     // handle errors
