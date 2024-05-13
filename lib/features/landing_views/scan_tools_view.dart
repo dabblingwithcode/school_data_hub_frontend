@@ -22,7 +22,7 @@ class QrToolsView extends WatchingWidget {
       if (function == 'schild') {
         locator
             .get<PupilPersonalDataManager>()
-            .importPupilsFromTxt(rawTextResult);
+            .updatePupilsFromSchoolDataSource(rawTextResult);
       } else if (function == 'pupilbase') {
         locator.get<PupilPersonalDataManager>().addNewPupilBase(rawTextResult);
       }

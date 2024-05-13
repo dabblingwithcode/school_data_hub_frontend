@@ -143,63 +143,72 @@ class PupilPersonalDataManager {
     locator<BottomNavManager>().setBottomNavPage(0);
   }
 
-  void importPupilsFromTxt(String scanResult) async {
+  void updatePupilsFromSchoolDataSource(String textFileContent) async {
     // The pupils in the string are separated by a line break - let's split them out
-    List splittedPupilBase = scanResult.split('\n');
+    List splittedPupilPersonalData = textFileContent.split('\n');
+    // Wer prepare a string with the pupils that are going to be updated later in the server
+    String pupilListTxtFileContentForBackendUpdate = '';
     // The properties are separated by commas, let's build the pupilbase objects with them
-    String updatedPupils = '';
-    List<PupilPersonalData> scannedPupilBase = [];
-    for (String data in splittedPupilBase) {
+    List<PupilPersonalData> importedPupilPersonalDataList = [];
+    for (String data in splittedPupilPersonalData) {
       if (data != '') {
-        List splittedData = data.split(',');
-        final schoolyear = splittedData[4] == '03'
+        List splittedPersonalDataValues = data.split(',');
+        final schoolyear = splittedPersonalDataValues[4] == '03'
             ? 'S3'
-            : splittedData[4] == '04'
+            : splittedPersonalDataValues[4] == '04'
                 ? 'S4'
-                : splittedData[4];
-        scannedPupilBase.add(PupilPersonalData(
-          id: int.parse(splittedData[0]),
-          name: splittedData[1],
-          lastName: splittedData[2],
-          group: splittedData[3],
+                : splittedPersonalDataValues[4];
+        importedPupilPersonalDataList.add(PupilPersonalData(
+          id: int.parse(splittedPersonalDataValues[0]),
+          name: splittedPersonalDataValues[1],
+          lastName: splittedPersonalDataValues[2],
+          group: splittedPersonalDataValues[3],
           schoolyear: schoolyear,
-          specialNeeds: splittedData[5] == ''
+          specialNeeds: splittedPersonalDataValues[5] == ''
               ? null
-              : '${splittedData[5]}${splittedData[6]}',
-          gender: splittedData[7],
-          language: splittedData[8],
-          family: splittedData[9] == '' ? null : splittedData[9],
-          birthday: DateTime.tryParse(splittedData[10])!,
-          migrationSupportEnds: splittedData[11] == ''
+              : '${splittedPersonalDataValues[5]}${splittedPersonalDataValues[6]}',
+          gender: splittedPersonalDataValues[7],
+          language: splittedPersonalDataValues[8],
+          family: splittedPersonalDataValues[9] == ''
               ? null
-              : DateTime.tryParse(splittedData[11])!,
-          pupilSince: DateTime.tryParse(splittedData[12])!,
+              : splittedPersonalDataValues[9],
+          birthday: DateTime.tryParse(splittedPersonalDataValues[10])!,
+          migrationSupportEnds: splittedPersonalDataValues[11] == ''
+              ? null
+              : DateTime.tryParse(splittedPersonalDataValues[11])!,
+          pupilSince: DateTime.tryParse(splittedPersonalDataValues[12])!,
         ));
-        final bool ogsStatus = splittedData[13] == 'OFFGANZ' ? true : false;
-        final pupilString = '${int.parse(splittedData[0])},$ogsStatus';
-        updatedPupils += '$pupilString\n';
+        final bool ogsStatus =
+            splittedPersonalDataValues[13] == 'OFFGANZ' ? true : false;
+        final pupilToString =
+            '${int.parse(splittedPersonalDataValues[0])},$ogsStatus';
+        pupilListTxtFileContentForBackendUpdate += '$pupilToString\n';
       }
     }
-    // let's update the pupils in the server with a txt file
+    // We have the latest dataset from the school database.
+    // Now let's update the pupils in the server with a txt file
     // First we generate a txt file with updatedPupils
-    final textFile = File('temp.txt')..writeAsStringSync(updatedPupils);
-    final client = locator.get<ApiManager>().dioClient.value;
-    String fileName = textFile.path.split('/').last;
-    // Prepare the form data for the request.
-    var formData = FormData.fromMap({
-      'file': await MultipartFile.fromFile(
-        textFile.path,
-        filename: fileName,
-      ),
-    });
-    final response = await client.post(
-      EndpointsPupil.exportPupilsTxt,
-      data: formData,
-    );
-    debug.warning('RESPONSE is ${response.data}');
+    // The server will
+    final textFile = File('temp.txt')
+      ..writeAsStringSync(pupilListTxtFileContentForBackendUpdate);
+    EndpointsPupil().updateBackendPupilsDatabase(file: textFile);
+    // final client = locator.get<ApiManager>().dioClient.value;
+    // String fileName = textFile.path.split('/').last;
+    // // Prepare the form data for the request.
+    // var formData = FormData.fromMap({
+    //   'file': await MultipartFile.fromFile(
+    //     textFile.path,
+    //     filename: fileName,
+    //   ),
+    // });
+    // final response = await client.post(
+    //   EndpointsPupil.exportPupilsTxt,
+    //   data: formData,
+    // );
+    // debug.warning('RESPONSE is ${response.data}');
     textFile.delete();
 
-    for (PupilPersonalData element in scannedPupilBase) {
+    for (PupilPersonalData element in importedPupilPersonalDataList) {
       _pupilPersonalData[element.id] = element;
     }
 

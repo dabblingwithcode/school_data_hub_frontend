@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:schuldaten_hub/api/api.dart';
@@ -12,6 +13,22 @@ class EndpointsPupil {
 
   //- This one is in PupilPersonalDataManager, have to review that one
   static const exportPupilsTxt = '/import/pupils/txt';
+  Future<void> updateBackendPupilsDatabase({required File file}) async {
+    String fileName = file.path.split('/').last;
+    FormData formData = FormData.fromMap({
+      'file': await MultipartFile.fromFile(
+        file.path,
+        filename: fileName,
+      ),
+    });
+    final response = await _client.post(
+      EndpointsPupil.exportPupilsTxt,
+      data: formData,
+    );
+    if (response.statusCode != 200) {
+      throw ApiException('Failed to export pupils to txt', response.statusCode);
+    }
+  }
 
   //- THIS ENDPOINTS ARE NOT USED IN THE APP
   static const getAllPupils = '/pupils/all';
