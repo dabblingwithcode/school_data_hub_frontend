@@ -251,8 +251,8 @@ class AttendanceManager {
       id, startdate, enddate, missedType) async {
     locator<NotificationManager>().isRunningValue(true);
     List<Map<String, dynamic>> missedClasses = [];
-    final PupilProxy pupil =
-        pupilManager.pupils.value.firstWhere((pupil) => pupil.internalId == id);
+    final PupilProxy pupil = pupilManager.allPupils.value
+        .firstWhere((pupil) => pupil.internalId == id);
     final List<DateTime> validSchooldays =
         locator<SchooldayManager>().availableDates.value;
     for (DateTime validSchoolday in validSchooldays) {

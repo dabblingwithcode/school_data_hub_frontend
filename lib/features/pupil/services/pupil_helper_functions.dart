@@ -3,8 +3,10 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
+// we should probably move this functions to the pupil manager in future
+
 PupilProxy findPupilById(int pupilId) {
-  final pupils = locator<PupilManager>().pupils.value;
+  final pupils = locator<PupilManager>().allPupils;
   final PupilProxy pupil =
       pupils.singleWhere((element) => element.internalId == pupilId);
   return pupil;
@@ -12,7 +14,7 @@ PupilProxy findPupilById(int pupilId) {
 
 List<PupilProxy> pupilsFromPupilIds(List<int> pupilIds) {
   List<PupilProxy> pupilsfromPupilIds = [];
-  final pupils = locator<PupilManager>().pupils.value;
+  final pupils = locator<PupilManager>().allPupils;
   pupilsfromPupilIds =
       pupils.where((element) => pupilIds.contains(element.internalId)).toList();
   return pupilsfromPupilIds;
@@ -28,7 +30,7 @@ List<int> pupilIdsFromPupils(List<PupilProxy> pupils) {
 
 List<int> restOfPupils(List<int> pupilIds) {
   List<int> restOfPupils = [];
-  final pupils = locator<PupilManager>().pupils.value;
+  final pupils = locator<PupilManager>().allPupils;
   for (PupilProxy pupil in pupils) {
     if (!pupilIds.contains(pupil.internalId)) {
       restOfPupils.add(pupil.internalId);
@@ -93,29 +95,29 @@ List<PupilProxy> siblings(PupilProxy pupil) {
     return [];
   }
   List<PupilProxy> pupilSiblings = [];
-  final pupils = locator<PupilManager>().pupils.value;
+  final pupils = locator<PupilManager>().allPupils;
   pupilSiblings =
       pupils.where((element) => element.family == pupil.family).toList();
   pupilSiblings.remove(pupil);
   return pupilSiblings;
 }
 
-bool hasLanguageSupport(DateTime? date) {
-  if (date != null) {
-    return date.isAfter(DateTime.now());
+bool hasLanguageSupport(DateTime? endOfSupport) {
+  if (endOfSupport != null) {
+    return endOfSupport.isAfter(DateTime.now());
   }
   return false;
 }
 
-bool hadLanguageSupport(DateTime? date) {
-  if (date != null) {
-    return date.isBefore(DateTime.now());
+bool hadLanguageSupport(DateTime? endOfSupport) {
+  if (endOfSupport != null) {
+    return endOfSupport.isBefore(DateTime.now());
   }
   return false;
 }
 
 List<PupilProxy> pupilsWithBirthdayInTheLastSevenDays() {
-  final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
+  final List<PupilProxy> pupils = locator<PupilManager>().allPupils;
   final DateTime now = DateTime.now();
 
   List<PupilProxy> pupilsWithBirthdayInTheLastSevenDays = [];

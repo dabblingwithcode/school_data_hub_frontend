@@ -142,7 +142,7 @@ class WorkbookManager {
         (response.data as List).map((e) => Workbook.fromJson(e)).toList();
     _workbooks.value = workbooks;
     List<PupilProxy> pupils =
-        List<PupilProxy>.from(locator<PupilManager>().pupils.value);
+        List<PupilProxy>.from(locator<PupilManager>().allPupils.value);
     for (PupilProxy pupil in pupils) {
       if (pupil.pupilWorkbooks != null) {
         final PupilWorkbook? pupilWorkbook = pupil.pupilWorkbooks!

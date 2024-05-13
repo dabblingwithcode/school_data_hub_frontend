@@ -99,7 +99,7 @@ Widget schoolListCard(BuildContext context, SchoolList schoolList) {
                             schoolList,
                             locator<SchoolListManager>().pupilsInSchoolList(
                               schoolList.listId,
-                              locator<PupilManager>().pupils.value,
+                              locator<PupilManager>().allPupils.value,
                             )),
                         const Column(
                           children: [],

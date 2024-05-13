@@ -65,7 +65,7 @@ class GoalManager {
 
   List<PupilGoal> getPupilGoalsForCategory(int categoryId) {
     List<PupilGoal> goals = [];
-    final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
+    final List<PupilProxy> pupils = locator<PupilManager>().allPupils.value;
     for (PupilProxy pupil in pupils) {
       for (PupilGoal goal in pupil.pupilGoals!) {
         if (goal.goalCategoryId == categoryId) {

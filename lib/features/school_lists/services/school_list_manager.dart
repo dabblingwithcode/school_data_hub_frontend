@@ -229,7 +229,7 @@ class SchoolListManager {
 
   PupilList getPupilSchoolListEntry(int pupilId, String listId) {
     final PupilProxy pupil = locator<PupilManager>()
-        .pupils
+        .allPupils
         .value
         .where((element) => element.internalId == pupilId)
         .first;
@@ -241,7 +241,7 @@ class SchoolListManager {
   }
 
   List<PupilProxy> getPupilsinSchoolList(String listId) {
-    final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
+    final List<PupilProxy> pupils = locator<PupilManager>().allPupils.value;
     final List<PupilProxy> listedPupils = pupils
         .where((pupil) => pupil.pupilLists!
             .any((pupilList) => pupilList.originList == listId))

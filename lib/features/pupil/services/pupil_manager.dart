@@ -21,6 +21,8 @@ import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manag
 class PupilManager {
   final _pupils = <int, PupilProxy>{};
 
+  List<PupilProxy> get allPupils => _pupils.values.toList();
+
   final client = locator.get<ApiManager>().dioClient.value;
 
   PupilManager();

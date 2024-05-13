@@ -23,7 +23,7 @@ class AdmonitionListController extends State<AdmonitionList> {
   @override
   void initState() {
     locator<PupilFilterManager>().refreshFilteredPupils();
-    pupils = locator<PupilManager>().pupils.value;
+    pupils = locator<PupilManager>().allPupils.value;
     super.initState();
   }
 

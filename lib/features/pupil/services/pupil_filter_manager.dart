@@ -8,7 +8,6 @@ import 'package:schuldaten_hub/features/attendance/services/attendance_filters.d
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/learning_support/services/learning_support_filters.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
 
 class PupilFilterManager {
@@ -18,43 +17,36 @@ class PupilFilterManager {
   ValueListenable<Map<PupilFilter, bool>> get filterState => _filterState;
   ValueListenable<Map<PupilSortMode, bool>> get sortMode => _sortMode;
 
-  ValueListenable<bool> get isRunning => _isRunning;
-
   final _filtersOn = ValueNotifier<bool>(false);
   final _searchText = ValueNotifier<String>('');
   final _filteredPupils =
-      ValueNotifier<List<PupilProxy>>(locator<PupilManager>().pupils.value);
+      ValueNotifier<List<PupilProxy>>(locator<PupilManager>().allPupils);
   final _filterState =
       ValueNotifier<Map<PupilFilter, bool>>(initialFilterValues);
   final _sortMode =
       ValueNotifier<Map<PupilSortMode, bool>>(initialSortModeValues);
 
-  final _isRunning = ValueNotifier<bool>(false);
-
   PupilFilterManager() {
     debug.warning('PupilFilterManager says hello!');
   }
-  isRunningSwitch(bool value) {
-    _isRunning.value = value;
-  }
 
-  filtersOnSwitch(value) {
+  void filtersOnSwitch(bool value) {
     if (_filterState.value == initialFilterValues) {
       _filtersOn.value = value;
     }
   }
 
-  deleteFilteredPupils() {
-    _filteredPupils.value = [];
-  }
+  // void deleteFilteredPupils() {
+  //   _filteredPupils.value = [];
+  // }
 
-  restoreFilterValues(Map<PupilFilter, bool> inheritedFilters) {
-    _filterState.value = {...inheritedFilters};
-  }
+  // void restoreFilterValues(Map<PupilFilter, bool> inheritedFilters) {
+  //   _filterState.value = inheritedFilters;
+  // }
 
-  refreshFilteredPupils() {
+  void refreshFilteredPupils() {
     final List<PupilProxy> filteredPupils = List.from(_filteredPupils.value);
-    final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
+    final List<PupilProxy> pupils = locator<PupilManager>().allPupils;
 
     Map<int, PupilProxy> pupilMap = {
       for (PupilProxy pupil in pupils) pupil.internalId: pupil
@@ -86,7 +78,7 @@ class PupilFilterManager {
 
   rebuildFilteredPupils() {
     // List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
-    _filteredPupils.value = locator<PupilManager>().pupils.value;
+    _filteredPupils.value = locator<PupilManager>().allPupils;
     filterPupils();
     sortPupils();
     //setSearchText(_searchText.value);
@@ -138,7 +130,7 @@ class PupilFilterManager {
 
   setSearchText(String? text) {
     if (text!.isEmpty) {
-      _filteredPupils.value = locator<PupilManager>().pupils.value;
+      _filteredPupils.value = locator<PupilManager>().allPupils;
       _searchText.value = '';
       _filtersOn.value = false;
       return;
@@ -159,7 +151,7 @@ class PupilFilterManager {
   filterPupils() {
     _filtersOn.value = false;
 
-    final pupils = locator<PupilManager>().pupils.value;
+    final pupils = locator<PupilManager>().allPupils;
     final activeFilters = _filterState.value;
 
     if (_filterState.value == initialFilterValues) {
@@ -169,7 +161,7 @@ class PupilFilterManager {
 
     List<PupilProxy> filteredPupils = [];
     for (PupilProxy pupil in pupils) {
-      bool toList = true;
+      bool isMatching = true;
       // first we make sure that common group and schoolyear filters work
       if (((activeFilters[PupilFilter.E1]! && pupil.schoolyear == 'E1') ||
               (activeFilters[PupilFilter.E2]! && pupil.schoolyear == 'E2') ||
@@ -201,53 +193,55 @@ class PupilFilterManager {
                   activeFilters[PupilFilter.C1] == false &&
                   activeFilters[PupilFilter.C2] == false &&
                   activeFilters[PupilFilter.C3] == false))) {
-        toList = true;
+        isMatching = true;
       } else {
         _filtersOn.value = true;
-        toList = false;
+        isMatching = false;
       }
       // Now apply the rest of the filters!
 
       //- Attendance filters -//
 
-      toList = attendanceFilter(pupil, toList);
-      toList = learningSupportFilter(pupil, toList);
+      isMatching = attendanceFilter(pupil, isMatching);
+      isMatching = learningSupportFilter(pupil, isMatching);
 
       //- OGS filters -//
       // Filter ogs
       if (activeFilters[PupilFilter.ogs]! &&
           pupil.ogs == true &&
-          toList == true) {
-        toList = true;
-      } else if (activeFilters[PupilFilter.ogs] == false && toList == true) {
-        toList = true;
+          isMatching == true) {
+        isMatching = true;
+      } else if (activeFilters[PupilFilter.ogs] == false &&
+          isMatching == true) {
+        isMatching = true;
       } else {
         _filtersOn.value = true;
-        toList = false;
+        isMatching = false;
       }
 
       //- Filter not ogs
       if (activeFilters[PupilFilter.notOgs]! &&
           pupil.ogs == false &&
-          toList == true) {
-        toList = true;
-      } else if (activeFilters[PupilFilter.notOgs] == false && toList == true) {
-        toList = true;
+          isMatching == true) {
+        isMatching = true;
+      } else if (activeFilters[PupilFilter.notOgs] == false &&
+          isMatching == true) {
+        isMatching = true;
       } else {
         _filtersOn.value = true;
-        toList = false;
+        isMatching = false;
       }
       //- Special Infomation filter - //
       if (activeFilters[PupilFilter.specialInfo]! &&
           pupil.specialInformation != null &&
-          toList == true) {
-        toList = true;
+          isMatching == true) {
+        isMatching = true;
       } else if (activeFilters[PupilFilter.specialInfo] == false &&
-          toList == true) {
-        toList = true;
+          isMatching == true) {
+        isMatching = true;
       } else {
         _filtersOn.value = true;
-        toList = false;
+        isMatching = false;
       }
       //- Development filters -//
       // Filter development plan 1
@@ -255,33 +249,33 @@ class PupilFilterManager {
       // Filter boys
       if (activeFilters[PupilFilter.justBoys]! &&
           pupil.gender == 'm' &&
-          toList == true) {
+          isMatching == true) {
         setFilter(PupilFilter.justGirls, false);
-        toList = true;
+        isMatching = true;
       } else if (activeFilters[PupilFilter.justBoys] == false &&
-          toList == true) {
-        toList = true;
+          isMatching == true) {
+        isMatching = true;
       } else {
         _filtersOn.value = true;
-        toList = false;
+        isMatching = false;
       }
 
       //- Filter girls
       if (activeFilters[PupilFilter.justGirls]! &&
           pupil.gender == 'm' &&
-          toList == true) {
+          isMatching == true) {
         setFilter(PupilFilter.justBoys, false);
-        toList = true;
+        isMatching = true;
       } else if (activeFilters[PupilFilter.justGirls] == false &&
-          toList == true) {
-        toList = true;
+          isMatching == true) {
+        isMatching = true;
       } else {
         _filtersOn.value = true;
-        toList = false;
+        isMatching = false;
       }
 
       // We're done with filtering - let's add the filtered pupils to the list
-      if (toList == true) {
+      if (isMatching == true) {
         filteredPupils.add(pupil);
       }
     }

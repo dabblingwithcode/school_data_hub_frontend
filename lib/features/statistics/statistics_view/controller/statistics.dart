@@ -18,7 +18,7 @@ class Statistics extends WatchingStatefulWidget {
 }
 
 class StatisticsController extends State<Statistics> {
-  final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
+  final List<PupilProxy> pupils = locator<PupilManager>().allPupils.value;
   Map<String, int> languageOccurrences = {};
   Map<String, DateTime> enrollments = {};
   @override
