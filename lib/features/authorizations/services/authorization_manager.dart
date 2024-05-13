@@ -242,7 +242,7 @@ class AuthorizationManager {
 
   PupilAuthorization getPupilAuthorization(int pupilId, String authId) {
     final PupilProxy pupil = locator<PupilManager>()
-        .pupils
+        .allPupils
         .value
         .where((element) => element.internalId == pupilId)
         .first;
@@ -254,7 +254,7 @@ class AuthorizationManager {
 
   List<PupilProxy> getPupilsInAuthorization(String authorizationId) {
     final List<PupilProxy> listedPupils = locator<PupilManager>()
-        .pupils
+        .allPupils
         .value
         .where((pupil) => pupil.authorizations!.any((authorization) =>
             authorization.originAuthorization == authorizationId))

@@ -13,19 +13,19 @@
 //   AdmonitionListController createState() => AdmonitionListController();
 // }
 
-// class AdmonitionListController extends State<AdmonitionList> {
-//   List<PupilProxy>? pupils;
-//   List<PupilProxy>? filteredPupils;
-//   TextEditingController searchController = TextEditingController();
-//   bool isSearchMode = false;
-//   bool isSearching = false;
-//   FocusNode focusNode = FocusNode();
-//   @override
-//   void initState() {
-//     locator<PupilFilterManager>().refreshFilteredPupils();
-//     pupils = locator<PupilManager>().pupils.value;
-//     super.initState();
-//   }
+class AdmonitionListController extends State<AdmonitionList> {
+  List<PupilProxy>? pupils;
+  List<PupilProxy>? filteredPupils;
+  TextEditingController searchController = TextEditingController();
+  bool isSearchMode = false;
+  bool isSearching = false;
+  FocusNode focusNode = FocusNode();
+  @override
+  void initState() {
+    locator<PupilFilterManager>().refreshFilteredPupils();
+    pupils = locator<PupilManager>().allPupils.value;
+    super.initState();
+  }
 
 //   void getPupilsFromServer() async {
 //     if (filteredPupils == []) {

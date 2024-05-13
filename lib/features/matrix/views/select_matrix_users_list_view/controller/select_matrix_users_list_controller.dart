@@ -35,7 +35,7 @@ class SelectMatrixUsersListController extends State<SelectMatrixUserList> {
     //locator<PupilFilterManager>().refreshFilteredPupils();
     setState(() {
       inheritedFilters = locator<PupilFilterManager>().filterState.value;
-      pupils = locator<PupilManager>().pupils.value;
+      pupils = locator<PupilManager>().allPupils.value;
       //filteredPupils = List.from(pupils!);
     });
     super.initState();

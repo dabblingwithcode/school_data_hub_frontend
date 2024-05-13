@@ -25,7 +25,7 @@ class PupilProfileView extends WatchingWidget {
     int pupilProfileNavState =
         watchValue((BottomNavManager x) => x.pupilProfileNavState);
 
-    final PupilProxy pupil = watchValue((PupilManager x) => x.pupils)
+    final PupilProxy pupil = watchValue((PupilManager x) => x.allPupils)
         .firstWhere((element) =>
             element.internalId == controller.widget.pupil.internalId);
     // final pupil = findPupilById(controller.widget.pupil.internalId);
