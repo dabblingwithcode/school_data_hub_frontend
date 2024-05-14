@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 
 Widget communicationValues(String values) {
   String understandingValue = values.substring(0, 1);

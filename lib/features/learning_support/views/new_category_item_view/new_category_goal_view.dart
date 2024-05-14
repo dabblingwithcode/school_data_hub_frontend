@@ -8,7 +8,7 @@ import 'package:schuldaten_hub/features/learning_support/views/selectable_catego
 
 import 'package:schuldaten_hub/features/learning_support/widgets/pupil_category_widgets/category_status_dropdown.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/pupil_category_widgets/category_tree_ancestors_names.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 
 class NewCategoryGoalView extends StatelessWidget {
   final NewCategoryGoalController controller;

@@ -13,10 +13,10 @@ import 'package:schuldaten_hub/features/competence/services/competence_manager.d
 import 'package:schuldaten_hub/api/services/connection_manager.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
 import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
-import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_filter_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';

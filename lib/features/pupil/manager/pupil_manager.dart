@@ -13,10 +13,11 @@ import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
+import 'package:schuldaten_hub/features/pupil/manager/filtered_pupils.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
 
 class PupilManager {
   final _pupils = <int, PupilProxy>{};
@@ -237,4 +238,6 @@ class PupilManager {
         NotificationType.success, 'Schüler erfolgreich gepatcht!');
     locator<NotificationManager>().isRunningValue(false);
   }
+
+  FilteredPupils getPupilFilter() {}
 }

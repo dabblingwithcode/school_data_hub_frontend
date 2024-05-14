@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/controller/learning_support_list_controller.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
 Widget learningSupportListSearchBar(
     BuildContext context,

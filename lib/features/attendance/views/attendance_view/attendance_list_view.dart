@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/attendance_list_search_bar.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/attendance_view_bottom_navbar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceListView extends WatchingWidget {

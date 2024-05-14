@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 
-import '../../features/pupil/services/pupil_filter_manager.dart';
+import '../../features/pupil/manager/pupil_filter_manager.dart';
 
 Widget filterHeading() {
   return Row(

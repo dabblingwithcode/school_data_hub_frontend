@@ -14,7 +14,7 @@ import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/landing_views/loading_page.dart';
 import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';
 import 'package:schuldaten_hub/features/landing_views/no_connection_view.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:window_manager/window_manager.dart';
 

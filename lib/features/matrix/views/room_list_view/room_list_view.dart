@@ -12,7 +12,7 @@ import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/room
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/room_list_searchbar.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/room_list_view_bottom_navbar.dart';
 
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 import 'package:watch_it/watch_it.dart';
 

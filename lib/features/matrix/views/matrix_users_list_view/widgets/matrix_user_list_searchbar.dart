@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filters_manager.dart';
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/controller/matrix_user_list_controller.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
 import 'package:schuldaten_hub/features/credit/widgets/credit_filter_bottom_sheet.dart';
 

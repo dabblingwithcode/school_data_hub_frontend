@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/ogs/controller/ogs_list_controller.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/ogs_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
 Widget ogsListSearchBar(BuildContext context, List<PupilProxy> pupils,
     OgsListController controller, bool filtersOn) {

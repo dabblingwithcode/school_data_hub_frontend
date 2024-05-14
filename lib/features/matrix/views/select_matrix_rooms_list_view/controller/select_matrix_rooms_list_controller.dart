@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filters_ma
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_helper_functions.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_rooms_list_view/select_matrix_rooms_list_view.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
 import 'package:watch_it/watch_it.dart';
 

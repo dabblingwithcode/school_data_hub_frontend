@@ -8,8 +8,8 @@ import 'package:schuldaten_hub/features/matrix/views/select_matrix_users_list_vi
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_users_list_view/widgets/select_matrix_users_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_users_list_view/widgets/select_matrix_users_list_view_bottom_navbar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class SelectMatrixUsersListView extends WatchingWidget {

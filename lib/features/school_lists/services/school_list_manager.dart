@@ -13,7 +13,7 @@ import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/common/models/session_models/session.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 
 class SchoolListManager {
@@ -43,7 +43,7 @@ class SchoolListManager {
   Future fetchSchoolLists() async {
     snackBarManager.isRunningValue(true);
     try {
-      final response = await client.get(EndpointsSchoolList.getSchoolLists);
+      final response = await client.get(EndpointsSchoolList.getSchoolListsUrl);
       final schoolLists =
           (response.data as List).map((e) => SchoolList.fromJson(e)).toList();
       debug.success(
@@ -65,7 +65,6 @@ class SchoolListManager {
     return;
   }
 
-//-TO-DO: Rest of snackbars, isRunning and error handling
   Future patchSchoolList(String listId, String? name, String? description,
       String? visibility) async {
     final schoolListToUpdate = getSchoolListById(listId);
@@ -97,19 +96,21 @@ class SchoolListManager {
 
   Future deleteSchoolList(String listId) async {
     final response =
-        await client.delete(EndpointsSchoolList().deleteSchoolList(listId));
+        await client.delete(EndpointsSchoolList().deleteSchoolListUrl(listId));
     if (response.statusCode == 200) {
       debug.success('list entry successful');
       await fetchSchoolLists();
     }
   }
 
+  //- this one does not use the api
   SchoolList getSchoolList(String listId) {
     final SchoolList schoolList =
         _schoolLists.value.where((element) => element.listId == listId).first;
     return schoolList;
   }
 
+  //- this one does not use the api
   List<PupilList> getVisibleSchoolLists(PupilProxy pupil) {
     final Session session = locator<SessionManager>().credentials.value;
     List<PupilList> visiblePupilLists = pupil.pupilLists!
@@ -129,7 +130,7 @@ class SchoolListManager {
       "visibility": visibility
     });
     final response = await client
-        .post(EndpointsSchoolList.postSchoolListWithGroup, data: data);
+        .post(EndpointsSchoolList.postSchoolListWithGroupUrl, data: data);
     if (response.statusCode == 200) {
       final newList = SchoolList.fromJson(response.data);
       List<SchoolList> updatedSchoolLists = List.from(_schoolLists.value);

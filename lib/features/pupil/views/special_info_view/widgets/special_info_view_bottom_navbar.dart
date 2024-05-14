@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/special_info_view/widgets/special_info_reset_filter_button.dart';
 
 Widget specialInfoViewBottomNavBar(BuildContext context, bool filtersOn) {

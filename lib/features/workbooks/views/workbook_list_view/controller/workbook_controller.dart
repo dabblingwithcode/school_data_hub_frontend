@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
 import 'package:schuldaten_hub/features/workbooks/views/workbook_list_view/workbook_list_view.dart';

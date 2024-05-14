@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filters_manager.dart';
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/matrix_users_list_view.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class MatrixUsersList extends WatchingStatefulWidget {

@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/features/authorizations/models/authorization.dart
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/widgets/authorization_list_bottom_navbar.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
 import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/controller/authorizations_controller.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/widgets/authorization_card.dart';

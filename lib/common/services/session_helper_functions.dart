@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
 
 String tokenLifetimeLeft(String token) {
   Duration remainingTime = JwtDecoder.getRemainingTime(token);

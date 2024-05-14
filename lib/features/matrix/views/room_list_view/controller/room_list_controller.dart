@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filters_ma
 
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/room_list_view.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class RoomList extends WatchingStatefulWidget {

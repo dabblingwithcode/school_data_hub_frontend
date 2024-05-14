@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/widgets/download_or_cached_and_decrypt_ima
 import 'package:schuldaten_hub/features/admonitions/services/admonition_helper_functions.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:widget_zoom/widget_zoom.dart';
 
 class AvatarImage extends StatelessWidget {

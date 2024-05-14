@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/features/matrix/views/select_matrix_rooms_list_vi
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_rooms_list_view/widgets/select_matrix_room_card.dart';
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_rooms_list_view/widgets/select_matrix_rooms_list_view_bottom_navbar.dart';
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_rooms_list_view/widgets/select_room_list_searchbar.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class SelectMatrixRoomsListView extends WatchingWidget {

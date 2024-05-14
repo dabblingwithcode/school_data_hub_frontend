@@ -1,7 +1,7 @@
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 
 int missedclassSum(PupilProxy pupil) {
   // count the number of missed classes - avoid null when missedClasses is empty

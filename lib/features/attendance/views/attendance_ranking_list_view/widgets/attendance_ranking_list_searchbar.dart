@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_badges.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
 Widget attendanceRankingListSearchBar(
     BuildContext context,

@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/controller/matrix_user_list_controller.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/room_list_filter_bottom_sheet.dart';
 
-import '../../../../pupil/services/pupil_filter_manager.dart';
+import '../../../../pupil/manager/pupil_filter_manager.dart';
 
 Widget roomListViewBottomNavBar(BuildContext context, bool filtersOn) {
   return BottomNavBarLayout(

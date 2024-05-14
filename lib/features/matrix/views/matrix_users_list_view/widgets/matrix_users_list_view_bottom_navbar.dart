@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/features/credit/widgets/credit_filter_bottom_shee
 import 'package:schuldaten_hub/features/matrix/views/new_matrix_user_view.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/controller/room_list_controller.dart';
 
-import '../../../../pupil/services/pupil_filter_manager.dart';
+import '../../../../pupil/manager/pupil_filter_manager.dart';
 
 Widget matrixUsersListViewBottomNavBar(
   BuildContext context,

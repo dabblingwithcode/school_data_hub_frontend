@@ -11,13 +11,22 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
 
 import '../../../api/services/api_manager.dart';
 import '../../../common/services/locator.dart';
+
+enum MissedType {
+  isLate('late'),
+  isMissed('missed'),
+  notSet('none');
+
+  final String value;
+  const MissedType(this.value);
+}
 
 class AttendanceManager {
   final pupilManager = locator<PupilManager>();
@@ -111,6 +120,7 @@ class AttendanceManager {
     // pupils gone home during class for whatever reason
     //are marked as returned with a time stamp
     //* Case create a new missed class
+    //- make missedType enum
     // if the missed class does not exist we have to create one with the type "none"
     if (missedClass == -1) {
       debug.info('This missed class is new');

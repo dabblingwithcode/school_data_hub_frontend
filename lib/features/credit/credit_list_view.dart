@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/credit/controller/credit_list_controller.dart';
 import 'package:schuldaten_hub/features/credit/widgets/credit_list_card.dart';
 import 'package:schuldaten_hub/features/credit/widgets/credit_list_searchbar.dart';
