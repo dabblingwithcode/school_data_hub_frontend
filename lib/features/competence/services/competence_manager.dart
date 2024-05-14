@@ -32,7 +32,8 @@ class CompetenceManager {
   Future firstFetchCompetences() async {
     snackBarManager.isRunningValue(true);
     try {
-      final response = await client.get(EndpointsCompetence().fetchCompetences);
+      final response =
+          await client.get(EndpointsCompetence().fetchCompetencesUrl);
       final competences =
           (response.data as List).map((e) => Competence.fromJson(e)).toList();
       debug.success(
@@ -55,7 +56,8 @@ class CompetenceManager {
   Future fetchCompetences() async {
     snackBarManager.isRunningValue(true);
     try {
-      final response = await client.get(EndpointsCompetence().fetchCompetences);
+      final response =
+          await client.get(EndpointsCompetence().fetchCompetencesUrl);
       final competences =
           (response.data as List).map((e) => Competence.fromJson(e)).toList();
       debug.success(
@@ -88,7 +90,7 @@ class CompetenceManager {
     });
     try {
       final response = await client
-          .post(EndpointsCompetence().postNewCompetence, data: data);
+          .post(EndpointsCompetence().postNewCompetenceUrl, data: data);
       final newCompetences =
           (response.data as List).map((e) => Competence.fromJson(e)).toList();
       debug.success(
@@ -120,7 +122,7 @@ class CompetenceManager {
     });
     try {
       final Response response = await client.patch(
-          EndpointsCompetence().patchCompetence(competenceId),
+          EndpointsCompetence().patchCompetenceUrl(competenceId),
           data: data);
 
       final patchedCompetence = Competence.fromJson(response.data);
@@ -143,6 +145,7 @@ class CompetenceManager {
     return;
   }
 
+  //- hier werden keine API Calls gemacht, nur die Kompetenz aus der Liste geholt
   Competence getCompetence(int competenceId) {
     final Competence competence = _competences.value
         .firstWhere((element) => element.competenceId == competenceId);
