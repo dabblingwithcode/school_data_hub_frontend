@@ -57,7 +57,7 @@ class AdmonitionManager {
       "processed_by": null
     });
     final Response response =
-        await client.post(EndpointsAdmonition.postAdmonition, data: data);
+        await client.post(EndpointsAdmonition.postAdmonitionUrl, data: data);
     final Map<String, dynamic> pupilResponse = response.data;
     if (response.statusCode == 200) {
       locator<NotificationManager>()
@@ -83,11 +83,12 @@ class AdmonitionManager {
       if (reason != null) "admonition_reason": reason,
       if (processed != null) "processed": processed,
       if (file != null) "file_url": file,
-      if (processedBy != null) "processed_by": processedBy,
-      if (processedAt != null) "processed_at": processedAt.formatForJson()
+      if (processed != null) "processed_by": processedBy,
+      if (processed != null) "processed_at": DateTime.now().formatForJson(),
     });
-    final Response response = await client
-        .patch(EndpointsAdmonition().patchAdmonition(admonitionId), data: data);
+    final Response response = await client.patch(
+        EndpointsAdmonition().patchAdmonitionUrl(admonitionId),
+        data: data);
     if (response.statusCode != 200) {
       // Handle errors.
     }
@@ -96,6 +97,8 @@ class AdmonitionManager {
     await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
   }
 
+  //- THIS ONE IS NOT NEEDED ANY MORE
+  //- TODO - SWITCH TO THE NEW PATCH ADMONITION FUNCTION
   patchAdmonitionAsProcessed(String admonitionId, bool processed) async {
     locator<NotificationManager>().isRunningValue(true);
 
@@ -111,8 +114,9 @@ class AdmonitionManager {
           {"processed": processed, "processed_at": null, "processed_by": null});
     }
     // send request
-    final Response response = await client
-        .patch(EndpointsAdmonition().patchAdmonition(admonitionId), data: data);
+    final Response response = await client.patch(
+        EndpointsAdmonition().patchAdmonitionUrl(admonitionId),
+        data: data);
     // Handle errors.
     if (response.statusCode != 200) {
       locator<NotificationManager>().showSnackBar(
@@ -129,7 +133,7 @@ class AdmonitionManager {
     locator<NotificationManager>().isRunningValue(false);
   }
 
-  postAdmonitionFile(
+  patchAdmonitionWithFile(
       File imageFile, String admonitionId, bool isProcessed) async {
     locator<NotificationManager>().isRunningValue(true);
     final encryptedFile = await customEncrypter.encryptFile(imageFile);
@@ -145,9 +149,9 @@ class AdmonitionManager {
     // choose endpoint depending on isProcessed
     if (isProcessed) {
       endpoint =
-          EndpointsAdmonition().patchAdmonitionProcessedFile(admonitionId);
+          EndpointsAdmonition().patchAdmonitionProcessedFileUrl(admonitionId);
     } else {
-      endpoint = EndpointsAdmonition().patchAdmonitionFile(admonitionId);
+      endpoint = EndpointsAdmonition().patchAdmonitionFileUrl(admonitionId);
     }
     // send request
     final Response response = await client.patch(
@@ -175,9 +179,9 @@ class AdmonitionManager {
     String endpoint;
     if (isProcessed) {
       endpoint =
-          EndpointsAdmonition().deleteAdmonitionProcessedFile(admonitionId);
+          EndpointsAdmonition().deleteAdmonitionProcessedFileUrl(admonitionId);
     } else {
-      endpoint = EndpointsAdmonition().deleteAdmonitionFile(admonitionId);
+      endpoint = EndpointsAdmonition().deleteAdmonitionFileUrl(admonitionId);
     }
 
     // send request
@@ -205,7 +209,7 @@ class AdmonitionManager {
 
     // send request
     Response response = await client
-        .delete(EndpointsAdmonition().deleteAdmonition(admonitionId));
+        .delete(EndpointsAdmonition().deleteAdmonitionUrl(admonitionId));
 
     if (response.statusCode != 200) {
       locator<NotificationManager>().showSnackBar(NotificationType.warning,

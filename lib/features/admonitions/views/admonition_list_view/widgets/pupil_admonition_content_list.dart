@@ -212,7 +212,7 @@ List<Widget> pupilAdmonitionsContentList(
                                         await uploadImage(context);
                                     if (file == null) return;
                                     await locator<AdmonitionManager>()
-                                        .postAdmonitionFile(
+                                        .patchAdmonitionWithFile(
                                             file,
                                             filteredAdmonitions[index]
                                                 .admonitionId,
@@ -244,7 +244,7 @@ List<Widget> pupilAdmonitionsContentList(
                                           null
                                       ? DocumentImage(
                                           documentTag:
-                                              '${locator<EnvManager>().env.value.serverUrl}${EndpointsAdmonition().getAdmonitionFile(filteredAdmonitions[index].admonitionId)}',
+                                              '${locator<EnvManager>().env.value.serverUrl}${EndpointsAdmonition().getAdmonitionFileUrl(filteredAdmonitions[index].admonitionId)}',
                                           documentUrl:
                                               filteredAdmonitions[index]
                                                   .fileUrl,
@@ -271,7 +271,7 @@ List<Widget> pupilAdmonitionsContentList(
                                   final File? file = await uploadImage(context);
                                   if (file == null) return;
                                   await locator<AdmonitionManager>()
-                                      .postAdmonitionFile(
+                                      .patchAdmonitionWithFile(
                                           file,
                                           filteredAdmonitions[index]
                                               .admonitionId,
@@ -303,7 +303,7 @@ List<Widget> pupilAdmonitionsContentList(
                                         null
                                     ? DocumentImage(
                                         documentTag:
-                                            '${locator<EnvManager>().env.value.serverUrl}${EndpointsAdmonition().getAdmonitionFile(filteredAdmonitions[index].admonitionId)}',
+                                            '${locator<EnvManager>().env.value.serverUrl}${EndpointsAdmonition().getAdmonitionFileUrl(filteredAdmonitions[index].admonitionId)}',
                                         documentUrl:
                                             filteredAdmonitions[index].fileUrl,
                                         size: 70)
