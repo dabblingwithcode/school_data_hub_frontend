@@ -37,7 +37,7 @@ class AuthorizationManager {
     snackBarManager.isRunningValue(true);
     try {
       final response =
-          await client.get(EndpointsAuthorization.getAuthorizations);
+          await client.get(EndpointsAuthorization.getAuthorizationsUrl);
       final authorizations = (response.data as List)
           .map((e) => Authorization.fromJson(e))
           .toList();
@@ -65,7 +65,7 @@ class AuthorizationManager {
       "pupils": pupilIds
     });
     final Response response = await client.post(
-        EndpointsAuthorization.postAuthorizationWithPupilsFromList,
+        EndpointsAuthorization.postAuthorizationWithPupilsFromListUrl,
         data: data);
     if (response.statusCode != 200) {
       //handle errors...
@@ -91,7 +91,7 @@ class AuthorizationManager {
     final data =
         jsonEncode({"comment": null, "file_url": null, "status": null});
     final response = await client.post(
-        EndpointsAuthorization().postPupilAuthorization(pupilId, authId),
+        EndpointsAuthorization().postPupilAuthorizationUrl(pupilId, authId),
         data: data);
     if (response.statusCode != 200) {
       snackBarManager.showSnackBar(
@@ -116,7 +116,7 @@ class AuthorizationManager {
     snackBarManager.isRunningValue(true);
     final data = jsonEncode({"pupils": pupilIds});
     final response = await client.post(
-        EndpointsAuthorization().postPupilAuthorizations(authId),
+        EndpointsAuthorization().postPupilAuthorizationsUrl(authId),
         data: data);
     if (response.statusCode != 200) {
       //handle errors...
@@ -137,7 +137,7 @@ class AuthorizationManager {
   Future deletePupilAuthorization(int pupilId, String authId) async {
     snackBarManager.isRunningValue(true);
     final response = await client.delete(
-        EndpointsAuthorization().deletePupilAuthorization(pupilId, authId));
+        EndpointsAuthorization().deletePupilAuthorizationUrl(pupilId, authId));
     if (response.statusCode != 200) {
       //handle errors...
       snackBarManager.showSnackBar(
@@ -167,7 +167,7 @@ class AuthorizationManager {
     }
 
     final response = await client.patch(
-        EndpointsAuthorization().patchPupilAuthorization(pupilId, listId),
+        EndpointsAuthorization().patchPupilAuthorizationUrl(pupilId, listId),
         data: data);
     if (response.statusCode != 200) {
       snackBarManager.showSnackBar(
@@ -194,7 +194,8 @@ class AuthorizationManager {
     final encryptedFile = await customEncrypter.encryptFile(file);
     String fileName = encryptedFile.path.split('/').last;
     final Response response = await client.patch(
-      EndpointsAuthorization().patchPupilAuthorizationWithFile(pupilId, authId),
+      EndpointsAuthorization()
+          .patchPupilAuthorizationWithFileUrl(pupilId, authId),
       data: FormData.fromMap(
         {
           "file": await MultipartFile.fromFile(encryptedFile.path,
@@ -216,8 +217,8 @@ class AuthorizationManager {
   Future deleteAuthorizationFile(
       int pupilId, String authId, String cacheKey) async {
     snackBarManager.isRunningValue(true);
-    final Response response = await client.delete(
-        EndpointsAuthorization().deletePupilAuthorizationFile(pupilId, authId));
+    final Response response = await client.delete(EndpointsAuthorization()
+        .deletePupilAuthorizationFileUrl(pupilId, authId));
     if (response.statusCode != 200) {
       snackBarManager.showSnackBar(
           NotificationType.error, 'Error: ${response.data}');
@@ -240,6 +241,7 @@ class AuthorizationManager {
     return authorizations;
   }
 
+  //- diesie Funktionen haben keinen API-Call
   PupilAuthorization getPupilAuthorization(int pupilId, String authId) {
     final PupilProxy pupil = locator<PupilManager>()
         .allPupils
