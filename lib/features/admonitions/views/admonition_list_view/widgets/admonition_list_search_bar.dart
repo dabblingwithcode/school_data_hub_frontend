@@ -6,17 +6,21 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/admonitions/services/admonition_helper_functions.dart';
 import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_filter_bottom_sheet.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:watch_it/watch_it.dart';
 
-class AdmonitionListSearchBar extends StatelessWidget {
-  final List<PupilProxy> pupils;
-  final bool filtersOn;
-  const AdmonitionListSearchBar(
-      {required this.pupils, required this.filtersOn, super.key});
+class AdmonitionListSearchBar extends WatchingWidget {
+  const AdmonitionListSearchBar(this.pupilsFilter, {super.key});
+
+  final PupilsFilter pupilsFilter;
 
   @override
   Widget build(BuildContext context) {
+    final pupils = pupilsFilter.filteredPupils.value;
+    final filtersOn =
+        watchPropertyValue((f) => f.filtersOn, target: pupilsFilter);
+
     return Container(
       decoration: BoxDecoration(
         color: canvasColor,

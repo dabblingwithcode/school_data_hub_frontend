@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
@@ -13,13 +14,14 @@ import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
-import 'package:schuldaten_hub/features/pupil/manager/filtered_pupils.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
 
-class PupilManager {
+class PupilManager extends ChangeNotifier {
   final _pupils = <int, PupilProxy>{};
 
   List<PupilProxy> get allPupils => _pupils.values.toList();
@@ -41,6 +43,7 @@ class PupilManager {
     }
     debug.warning('availablePupils im PupilManager $pupilsToFetch');
     await fetchPupilsByInternalId(pupilsToFetch);
+    notifyListeners();
   }
 
   Future<void> updatePupilList(List<PupilProxy> pupils) async {
@@ -91,6 +94,8 @@ class PupilManager {
     }
 
     locator<NotificationManager>().isRunningValue(false);
+
+    notifyListeners();
   }
 
   void clearData() {
@@ -108,14 +113,6 @@ class PupilManager {
 
       missedPupil.updateFromAllMissedClasses(allMissedClasses);
     }
-  }
-
-  Future fetchShownPupils() async {
-    /// todo
-    // // final List<PupilProxy> shownPupils =
-    // //     locator<PupilFilterManager>().filteredPupils.value;
-    // // final List<int> shownPupilIds = pupilIdsFromPupils(shownPupils);
-    // await fetchPupilsByInternalId(shownPupilIds);
   }
 
   void updatePupilFromResponse(Map<String, dynamic> pupilResponse) {
@@ -239,5 +236,11 @@ class PupilManager {
     locator<NotificationManager>().isRunningValue(false);
   }
 
-  FilteredPupils getPupilFilter() {}
+  PupilsFilter getPupilFilter({
+    Map<PupilFilter, bool>? filterState,
+    Map<PupilSortMode, bool>? sortMode,
+  }) {
+    return PupilsFilterImplementation(this,
+        filterState: filterState, sortMode: sortMode);
+  }
 }

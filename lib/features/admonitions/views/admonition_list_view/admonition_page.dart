@@ -7,21 +7,30 @@ import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_m
 import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_list_card.dart';
 import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_list_search_bar.dart';
 import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_list_view_bottom_navbar.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:watch_it/watch_it.dart';
 
-class AdmonitionListView extends WatchingWidget {
-  const AdmonitionListView({Key? key}) : super(key: key);
+class AdmonitionPage extends WatchingStatefulWidget {
+  const AdmonitionPage({Key? key}) : super(key: key);
+
+  @override
+  State<AdmonitionPage> createState() => _AdmonitionPageState();
+}
+
+class _AdmonitionPageState extends State<AdmonitionPage> {
+  late final pupilsFilter = locator<PupilManager>().getPupilFilter();
 
   @override
   Widget build(BuildContext context) {
-    bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
     bool admonitionFiltersOn =
         watchValue((AdmonitionFilterManager x) => x.admonitionsFiltersOn);
-    List<PupilProxy> pupils =
-        watchValue((PupilFilterManager x) => x.filteredPupils);
+
+    List<PupilProxy> pupils = watch(pupilsFilter.filteredPupils).value;
+    bool filtersOn =
+        watchPropertyValue((f) => f.filtersOn, target: pupilsFilter);
+
     return Scaffold(
       backgroundColor: canvasColor,
       appBar: AppBar(
@@ -64,14 +73,10 @@ class AdmonitionListView extends WatchingWidget {
                   stretch: false,
                   elevation: 0,
                   flexibleSpace: FlexibleSpaceBar(
-                    titlePadding: const EdgeInsets.only(
-                        left: 5, top: 5, right: 5, bottom: 5),
-                    collapseMode: CollapseMode.none,
-                    title: AdmonitionListSearchBar(
-                      pupils: pupils,
-                      filtersOn: filtersOn,
-                    ),
-                  ),
+                      titlePadding: const EdgeInsets.only(
+                          left: 5, top: 5, right: 5, bottom: 5),
+                      collapseMode: CollapseMode.none,
+                      title: AdmonitionListSearchBar(pupilsFilter)),
                 ),
                 pupils.isEmpty
                     ? const SliverToBoxAdapter(

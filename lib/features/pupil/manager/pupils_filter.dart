@@ -2,15 +2,17 @@ import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
-abstract class FilteredPupils implements Listenable {
-  ValueListenable<bool> get filtersOn;
+abstract class PupilsFilter implements Listenable {
+  bool get filtersOn;
   ValueListenable<List<PupilProxy>> get filteredPupils;
 
   Map<PupilFilter, bool> get filterState;
   Map<PupilSortMode, bool> get sortMode;
 
+  /// must be called when this object is no longer needed
+  void dispose();
+
   bool getFilterState(PupilFilter filter);
-  bool setFilterState(PupilFilter filter, bool value);
 
   // updates the filtered pupils with current filters
   // and sort mode
