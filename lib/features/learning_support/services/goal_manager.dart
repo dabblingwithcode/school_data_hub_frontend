@@ -41,7 +41,7 @@ class GoalManager {
     snackBarManager.isRunningValue(true);
     try {
       final response =
-          await client.get(EndpointsLearningSupport().fetchGoalCategories);
+          await client.get(EndpointsLearningSupport().fetchGoalCategoriesUrl);
       final goalCategories =
           (response.data as List).map((e) => GoalCategory.fromJson(e)).toList();
       snackBarManager.showSnackBar(
@@ -63,6 +63,7 @@ class GoalManager {
     }
   }
 
+  //- this function does not call the API
   List<PupilGoal> getPupilGoalsForCategory(int categoryId) {
     List<PupilGoal> goals = [];
     final List<PupilProxy> pupils = locator<PupilManager>().allPupils.value;
@@ -84,7 +85,7 @@ class GoalManager {
     try {
       final response = await client.post(
           EndpointsLearningSupport()
-              .postCategoryStatus(pupil.internalId, goalCategoryId),
+              .postCategoryStatusUrl(pupil.internalId, goalCategoryId),
           data: data);
       if (response.statusCode == 200) {
         locator<PupilManager>().updatePupilFromResponse(response.data);
@@ -113,7 +114,7 @@ class GoalManager {
       if (createdAt != null) "created_at": createdAt
     });
     final response = await client.patch(
-        EndpointsLearningSupport().patchCategoryStatus(statusId),
+        EndpointsLearningSupport().patchCategoryStatusUrl(statusId),
         data: data);
 
     if (response.statusCode != 200) {
@@ -132,7 +133,7 @@ class GoalManager {
     snackBarManager.isRunningValue(true);
     try {
       final response = await client
-          .delete(EndpointsLearningSupport().deleteCategoryStatus(statusId));
+          .delete(EndpointsLearningSupport().deleteCategoryStatusUrl(statusId));
       if (response.statusCode == 200) {
         locator<PupilManager>().updatePupilFromResponse(response.data);
         snackBarManager.showSnackBar(
@@ -164,7 +165,7 @@ class GoalManager {
     });
     try {
       final response = await client
-          .post(EndpointsLearningSupport().postGoal(pupilId), data: data);
+          .post(EndpointsLearningSupport().postGoalUrl(pupilId), data: data);
       if (response.statusCode == 200) {
         locator<PupilManager>().updatePupilFromResponse(response.data);
         snackBarManager.showSnackBar(
@@ -193,7 +194,7 @@ class GoalManager {
 
     try {
       final response =
-          await client.delete(EndpointsLearningSupport().deleteGoal(goalId));
+          await client.delete(EndpointsLearningSupport().deleteGoalUrl(goalId));
       if (response.statusCode == 200) {
         locator<PupilManager>().updatePupilFromResponse(response.data);
         snackBarManager.showSnackBar(NotificationType.success, 'Ziel gelöscht');
@@ -209,6 +210,7 @@ class GoalManager {
     }
   }
 
+  //- these functions do not call the API
   GoalCategory getGoalCategory(int categoryId) {
     final GoalCategory goalCategory = goalCategories.value
         .firstWhere((element) => element.categoryId == categoryId);
