@@ -32,7 +32,7 @@ class WorkbookManager {
 
   Future getWorkbooks() async {
     try {
-      final response = await client.get(EndpointsWorkbook.getWorkbooks);
+      final response = await client.get(EndpointsWorkbook.getWorkbooksUrl);
       final workbooks =
           (response.data as List).map((e) => Workbook.fromJson(e)).toList();
       debug.success(
@@ -58,7 +58,7 @@ class WorkbookManager {
       "amount": amount
     });
     final Response response = await client.post(
-      EndpointsWorkbook.postWorkbook,
+      EndpointsWorkbook.postWorkbookUrl,
       data: data,
     );
     if (response.statusCode != 200) {
@@ -80,8 +80,9 @@ class WorkbookManager {
       "level": level ?? workbook.level,
       "image_url": workbook.imageUrl
     });
-    final Response response = await client
-        .patch(EndpointsWorkbook().patchWorkbook((workbook.isbn)), data: data);
+    final Response response = await client.patch(
+        EndpointsWorkbook().patchWorkbookUrl((workbook.isbn)),
+        data: data);
     if (response.statusCode != 200) {
       // handle errors
     }
@@ -110,7 +111,7 @@ class WorkbookManager {
     });
     // send request
     final Response response = await client.patch(
-      EndpointsWorkbook().patchWorkbookWithImage(isbn),
+      EndpointsWorkbook().patchWorkbookWithImageUrl(isbn),
       data: formData,
     );
     // Handle errors.
@@ -123,6 +124,7 @@ class WorkbookManager {
     updateWorkbookInRepositoryWithResponse(workbook);
   }
 
+  //- this function is not calling the Api
   updateWorkbookInRepositoryWithResponse(Workbook workbook) {
     List<Workbook> workbooks = List.from(_workbooks.value);
     int index = workbooks.indexWhere((wb) => wb.isbn == workbook.isbn);
@@ -132,7 +134,7 @@ class WorkbookManager {
 
   deleteWorkbook(int isbn) async {
     final Response response =
-        await client.delete(EndpointsWorkbook().deleteWorkbook(isbn));
+        await client.delete(EndpointsWorkbook().deleteWorkbookUrl(isbn));
     if (response.statusCode != 200) {
       // handle errors
     }
@@ -161,6 +163,7 @@ class WorkbookManager {
     }
   }
 
+  //- this function is not calling the Api
   Workbook? getWorkbookByIsbn(int? isbn) {
     if (isbn == null) return null;
     final Workbook? workbook =
@@ -170,7 +173,7 @@ class WorkbookManager {
 
   newPupilWorkbook(int pupilId, int isbn) async {
     final Response response = await client
-        .post(EndpointsPupilWorkbook().newPupilWorkbook(pupilId, isbn));
+        .post(EndpointsPupilWorkbook().newPupilWorkbookUrl(pupilId, isbn));
     if (response.statusCode != 200) {
       // handle errors
     }
@@ -181,7 +184,7 @@ class WorkbookManager {
 
   deletePupilWorkbook(int pupilId, int isbn) async {
     final Response response = await client
-        .delete(EndpointsPupilWorkbook().deletePupilWorkbook(pupilId, isbn));
+        .delete(EndpointsPupilWorkbook().deletePupilWorkbookUrl(pupilId, isbn));
     if (response.statusCode != 200) {
       // handle errors
     }
