@@ -6,29 +6,27 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
-import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_bottom_navbar.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_content_view.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/pupil_profile_page_content.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_head_widget.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_navigation.dart';
 import 'package:watch_it/watch_it.dart';
 
-class PupilProfileView extends WatchingWidget {
-  final PupilProfileController controller;
-  const PupilProfileView(this.controller, {Key? key}) : super(key: key);
+class PupilProfilePage extends WatchingWidget {
+  final PupilProxy pupil;
+
+  const PupilProfilePage({required this.pupil, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    int pupilProfileNavState =
-        watchValue((BottomNavManager x) => x.pupilProfileNavState);
+    SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(
+        statusBarColor: backgroundColor,
+      ),
+    );
 
-    final PupilProxy pupil = watchValue((PupilManager x) => x.allPupils)
-        .firstWhere((element) =>
-            element.internalId == controller.widget.pupil.internalId);
-    // final pupil = findPupilById(controller.widget.pupil.internalId);
     final List<SchooldayEvent> schooldayEvents =
         List.from(pupil.schooldayEvents!);
     schooldayEvents
@@ -67,24 +65,22 @@ class PupilProfileView extends WatchingWidget {
                               collapseMode: CollapseMode.none,
                               titlePadding: const EdgeInsets.only(
                                   left: 5, top: 5, right: 5, bottom: 5),
-                              title: PupilProfileHeadWidget(
-                                  pupil: pupil,
-                                  pupilProfileController: controller),
+                              title: PupilProfileHeadWidget(pupil: pupil),
                             ),
                           ),
                           SliverToBoxAdapter(
-                            child: pupilProfileContentView(
-                                pupil, schooldayEvents, context, controller),
+                            child: PupilProfilePageContent(
+                              pupil: pupil,
+                              schooldayEvents: schooldayEvents,
+                            ),
                           ),
                           const SliverGap(60),
                         ],
                       ),
                     ),
-                    pupilProfileNavigation(
-                      controller,
-                      pupilProfileNavState,
-
-                      MediaQuery.of(context).size.width,
+                    PupilProfileNavigation(
+                      pupil: pupil,
+                      boxWidth: MediaQuery.of(context).size.width,
                       //MediaQuery.of(context).size.width / 5,
                     ),
                   ],

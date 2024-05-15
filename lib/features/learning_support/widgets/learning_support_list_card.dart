@@ -11,7 +11,8 @@ import 'package:schuldaten_hub/features/learning_support/widgets/dialogs/individ
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_goal_list.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_goals_batches.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
+
 import 'package:watch_it/watch_it.dart';
 
 class LearningSupportCard extends WatchingStatefulWidget {
@@ -61,13 +62,13 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
                                 locator<BottomNavManager>()
                                     .setPupilProfileNavPage(8);
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (ctx) => PupilProfile(
-                                    pupil,
+                                  builder: (ctx) => PupilProfilePage(
+                                    pupil: pupil,
                                   ),
                                 ));
                               },
                               child: Text(
-                                '${pupil.firstName!} ${pupil.lastName!}',
+                                '${pupil.firstName} ${pupil.lastName}',
                                 overflow: TextOverflow.fade,
                                 softWrap: false,
                                 textAlign: TextAlign.left,

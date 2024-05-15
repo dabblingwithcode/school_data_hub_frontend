@@ -1,48 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 
-Chip schooldayEventReasonChipWidget(String reason) {
-  return Chip(
-      padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
-      labelPadding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(30))),
-      backgroundColor: filterChipUnselectedColor,
-      label: Text(
-        reason,
-        style: const TextStyle(fontSize: emojiSize),
-      ));
+class SchooldayEventReasonChip extends StatelessWidget {
+  final String reason;
+  const SchooldayEventReasonChip({required this.reason, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Chip(
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+        labelPadding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(30))),
+        backgroundColor: filterChipUnselectedColor,
+        label: Text(
+          reason,
+          style: const TextStyle(fontSize: emojiSize),
+        ));
+  }
 }
 
 const double emojiSize = 20;
-List<Widget> schooldayEventReasonChip(String reason) {
+List<Widget> schooldayEventReasonChips(String reason) {
   List<Widget> chips = [];
   if (reason.contains('gm')) {
-    chips.add(schooldayEventReasonChipWidget('🤜🤕'));
+    chips.add(const SchooldayEventReasonChip(reason: '🤜🤕'));
   }
   if (reason.contains('gl')) {
-    chips.add(schooldayEventReasonChipWidget('🤜🎓️'));
+    chips.add(const SchooldayEventReasonChip(reason: '🤜🎓️'));
   }
   if (reason.contains('gs')) {
-    chips.add(schooldayEventReasonChipWidget('🤜🏫'));
+    chips.add(const SchooldayEventReasonChip(reason: '🤜🏫'));
   }
   if (reason.contains('ab')) {
-    chips.add(schooldayEventReasonChipWidget('🤬💔'));
+    chips.add(const SchooldayEventReasonChip(reason: '🤬💔'));
   }
   if (reason.contains('gv')) {
-    chips.add(schooldayEventReasonChipWidget('🚨😱'));
+    chips.add(const SchooldayEventReasonChip(reason: '🚨😱'));
   }
   if (reason.contains('äa')) {
-    chips.add(schooldayEventReasonChipWidget('😈😖'));
+    chips.add(const SchooldayEventReasonChip(reason: '😈😖'));
   }
   if (reason.contains('il')) {
-    chips.add(schooldayEventReasonChipWidget('🎓️🙉'));
+    chips.add(const SchooldayEventReasonChip(reason: '🎓️🙉'));
   }
   if (reason.contains('us')) {
-    chips.add(schooldayEventReasonChipWidget('🛑🎓️'));
+    chips.add(const SchooldayEventReasonChip(reason: '🛑🎓️'));
   }
   if (reason.contains('ss')) {
-    chips.add(schooldayEventReasonChipWidget('📝'));
+    chips.add(const SchooldayEventReasonChip(reason: '📝'));
   }
   return chips;
 }

@@ -72,6 +72,7 @@ class NewSchooldayEventPageState extends State<NewSchooldayEventPage> {
       schooldayEventReason = '${schooldayEventReason}ge*';
     }
     if (annoyOthers == true) {
+      // ignore: unnecessary_brace_in_string_interps
       schooldayEventReason = '${schooldayEventReason}äa*';
     }
     if (ignoreTeacherInstructions == true) {
@@ -159,22 +160,26 @@ class NewSchooldayEventPageState extends State<NewSchooldayEventPage> {
                     const Gap(5),
                     IconButton(
                       onPressed: () async {
-                        final DateTime newDate =
+                        final DateTime? newDate =
                             await selectDate(context, thisDate);
-                        setState(() {
-                          thisDate = newDate;
-                        });
+                        if (newDate != null) {
+                          setState(() {
+                            thisDate = newDate;
+                          });
+                        }
                       },
                       icon: const Icon(Icons.calendar_today_rounded,
                           color: backgroundColor),
                     ),
                     InkWell(
                       onTap: () async {
-                        final DateTime newDate =
+                        final DateTime? newDate =
                             await selectDate(context, thisDate);
-                        setState(() {
-                          thisDate = newDate;
-                        });
+                        if (newDate != null) {
+                          setState(() {
+                            thisDate = newDate;
+                          });
+                        }
                       },
                       child: Text(
                         thisDate.formatForUser(),

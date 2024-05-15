@@ -5,14 +5,11 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_set_avatar.dart';
 
 class PupilProfileHeadWidget extends StatelessWidget {
   final PupilProxy pupil;
-  final PupilProfileController pupilProfileController;
-  const PupilProfileHeadWidget(
-      {required this.pupil, required this.pupilProfileController, super.key});
+  const PupilProfileHeadWidget({required this.pupil, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +37,8 @@ class PupilProfileHeadWidget extends StatelessWidget {
                       PopupMenuItem(
                         child: const Text('Foto löschen'),
                         onTap: () async {
-                          await pupilProfileController.deleteAvatar();
+                          //- TODO: implement deleteAvatar
+                          // -await pupilProfileController.deleteAvatar();
                         },
                       ),
                   ],
@@ -61,7 +59,7 @@ class PupilProfileHeadWidget extends StatelessWidget {
                 children: [
                   Align(
                     child: Text(
-                      '${pupil.firstName}',
+                      pupil.firstName,
                       //textAlign: TextAlign.left,
                       style: const TextStyle(
                           fontSize: 20.0,
@@ -96,7 +94,7 @@ class PupilProfileHeadWidget extends StatelessWidget {
                   const Gap(15),
                   pupil.specialNeeds != null
                       ? Text(
-                          '${pupil.schoolyear}',
+                          pupil.schoolyear,
                           textAlign: TextAlign.left,
                           style: const TextStyle(
                               color: schoolyearColor,

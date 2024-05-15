@@ -10,7 +10,8 @@ import 'package:schuldaten_hub/features/ogs/controller/ogs_list_controller.dart'
 import 'package:schuldaten_hub/features/ogs/widgets/dialogs/ogs_pickup_time_dialog.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
+
 import 'package:watch_it/watch_it.dart';
 
 class OgsCard extends WatchingWidget {
@@ -57,13 +58,13 @@ class OgsCard extends WatchingWidget {
                                           .setPupilProfileNavPage(5);
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
-                                        builder: (ctx) => PupilProfile(
-                                          pupil,
+                                        builder: (ctx) => PupilProfilePage(
+                                          pupil: pupil,
                                         ),
                                       ));
                                     },
                                     child: Text(
-                                      '${pupil.firstName!} ${pupil.lastName!}',
+                                      '${pupil.firstName} ${pupil.lastName}',
                                       overflow: TextOverflow.fade,
                                       softWrap: false,
                                       textAlign: TextAlign.left,

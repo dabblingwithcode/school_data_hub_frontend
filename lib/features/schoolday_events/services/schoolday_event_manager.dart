@@ -18,12 +18,28 @@ import '../../../api/services/api_manager.dart';
 import '../../../common/services/locator.dart';
 
 enum SchooldayEventType {
-  isLate('late'),
-  isMissed('missed'),
-  notSet('none');
+  parentsMeeting('Eg'),
+  admonition('rk'),
+  afternoonCareAdmonition('rkogs'),
+  admonitionAndBanned('rkabh');
 
   final String value;
   const SchooldayEventType(this.value);
+}
+
+enum AdmonitionReason {
+  violenceAgainstPupils('gm'),
+  violenceAgainstTeachers('gl'),
+  violenceAgainstThings('gk'),
+  insultOthers('ab'),
+  dangerousBehaviour('gv'),
+  annoyOthers('äa'),
+  ignoreInstructions('il'),
+  disturbLesson('us'),
+  other('ss');
+
+  final String value;
+  const AdmonitionReason(this.value);
 }
 
 class SchooldayEventManager {

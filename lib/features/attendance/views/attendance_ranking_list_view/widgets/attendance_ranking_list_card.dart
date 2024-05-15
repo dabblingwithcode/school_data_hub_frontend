@@ -6,12 +6,12 @@ import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
 import 'package:schuldaten_hub/common/widgets/list_tile.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/controller/attendance_ranking_list_controller.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_stats_pupil.dart';
-import 'package:schuldaten_hub/features/attendance/views/widgets/pupil_attendance_content_list.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/widgets/pupil_attendance_content.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceRankingListCard extends WatchingStatefulWidget {
@@ -75,12 +75,12 @@ class _AttendanceRankingListCardState extends State<AttendanceRankingListCard> {
                                     Navigator.of(context).push(
                                       MaterialPageRoute(
                                         builder: (BuildContext context) =>
-                                            PupilProfile(pupil),
+                                            PupilProfilePage(pupil: pupil),
                                       ),
                                     );
                                   },
                                   child: Text(
-                                    '${pupil.firstName!} ${pupil.lastName!}',
+                                    '${pupil.firstName} ${pupil.lastName}',
                                     overflow: TextOverflow.ellipsis,
                                     softWrap: false,
                                     textAlign: TextAlign.left,

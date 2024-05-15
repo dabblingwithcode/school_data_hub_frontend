@@ -8,7 +8,7 @@ import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_list_card.dart';
 import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_list_page_bottom_navbar.dart';
-import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_list_search_bar.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_list_page_search_bar.dart';
 import 'package:watch_it/watch_it.dart';
 
 class SchooldayEventPage extends WatchingStatefulWidget {

@@ -10,14 +10,13 @@ import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_filter_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
-import 'package:schuldaten_hub/features/school_lists/views/school_lists_view/controller/school_lists_controller.dart';
-import 'package:schuldaten_hub/features/school_lists/views/school_lists_view/widgets/school_list_card.dart';
-import 'package:schuldaten_hub/features/school_lists/views/school_lists_view/widgets/school_lists_bottom_navbar.dart';
+import 'package:schuldaten_hub/features/school_lists/views/school_lists_page/widgets/school_list_card.dart';
+import 'package:schuldaten_hub/features/school_lists/views/school_lists_page/widgets/school_lists_bottom_navbar.dart';
+
 import 'package:watch_it/watch_it.dart';
 
-class SchoolListsView extends WatchingWidget {
-  final SchoolListsController controller;
-  const SchoolListsView(this.controller, {Key? key}) : super(key: key);
+class SchoolListsPage extends WatchingWidget {
+  const SchoolListsPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -139,8 +138,8 @@ class SchoolListsView extends WatchingWidget {
                               child: ListView.builder(
                                 itemCount: visibleSchoolLists.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return schoolListCard(
-                                      context, visibleSchoolLists[index]);
+                                  return SchoolListCard(
+                                      schoolList: visibleSchoolLists[index]);
                                 },
                               ),
                             ),
@@ -149,7 +148,7 @@ class SchoolListsView extends WatchingWidget {
                 ),
               ),
       ),
-      bottomNavigationBar: schoolListsBottomNavBar(context),
+      bottomNavigationBar: const SchoolListsBottomNavBar(),
     );
   }
 }

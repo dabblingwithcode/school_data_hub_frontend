@@ -45,8 +45,10 @@ Widget attendanceViewBottomNavBar(
             const Gap(30),
             InkWell(
               onTap: () async {
-                final DateTime newDate = await selectDate(context, thisDate);
-                locator<SchooldayManager>().setThisDate(newDate);
+                final DateTime? newDate = await selectDate(context, thisDate);
+                if (newDate != null) {
+                  locator<SchooldayManager>().setThisDate(newDate);
+                }
               },
               onLongPress: () => locator<SchooldayManager>().getThisDate(),
               child: const Icon(

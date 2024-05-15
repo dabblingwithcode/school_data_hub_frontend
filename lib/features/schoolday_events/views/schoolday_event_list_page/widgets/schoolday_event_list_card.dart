@@ -7,13 +7,14 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
 import 'package:schuldaten_hub/common/widgets/list_tile.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/pupil_schoolday_event_content_list.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+
 import 'package:watch_it/watch_it.dart';
 
 class SchooldayEventListCard extends WatchingStatefulWidget {
@@ -72,13 +73,13 @@ class _SchooldayEventListCardState extends State<SchooldayEventListCard> {
                                   locator<BottomNavManager>()
                                       .setPupilProfileNavPage(4);
                                   Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => PupilProfile(
-                                      pupil,
+                                    builder: (ctx) => PupilProfilePage(
+                                      pupil: pupil,
                                     ),
                                   ));
                                 },
                                 child: Text(
-                                  pupil.firstName!,
+                                  pupil.firstName,
                                   style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold),
@@ -98,13 +99,13 @@ class _SchooldayEventListCardState extends State<SchooldayEventListCard> {
                               child: InkWell(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => PupilProfile(
-                                      pupil,
+                                    builder: (ctx) => PupilProfilePage(
+                                      pupil: pupil,
                                     ),
                                   ));
                                 },
                                 child: Text(
-                                  pupil.lastName!,
+                                  pupil.lastName,
                                   style: const TextStyle(fontSize: 18),
                                 ),
                               ),

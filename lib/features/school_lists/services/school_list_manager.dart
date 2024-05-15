@@ -80,8 +80,8 @@ class SchoolListManager {
       jsonMap["visibility"] = '${schoolListToUpdate.visibility}*$visibility';
     }
     final String data = jsonEncode(jsonMap);
-    final Response response = await client.patch(
-        EndpointsSchoolList().updateSchoolListProperty(listId),
+    final Response response = await client.patch('',
+        //- EndpointsSchoolList().updateSchoolListProperty(listId),
         data: data);
     if (response.statusCode != 200) {
       //handle errors
@@ -154,7 +154,7 @@ class SchoolListManager {
     }
     final List<Pupil> responsePupils =
         (response.data as List).map((e) => Pupil.fromJson(e)).toList();
-    locator<PupilManager>().updatePupilsRepository(responsePupils);
+    //- locator<PupilManager>().updatePupilsRepository(responsePupils);
 
     // final SchoolList modifiedSchoolList = SchoolList.fromJson(response.data);
     // List<SchoolList> updatedSchoolLists = List.from(_schoolLists.value);
@@ -179,7 +179,7 @@ class SchoolListManager {
     }
     final List<PupilProxy> responsePupils =
         (response.data as List).map((e) => PupilProxy.fromJson(e)).toList();
-    locator<PupilManager>().updatePupilsRepository(responsePupils);
+    //- locator<PupilManager>().updatePupilsRepository(responsePupils);
     // final SchoolList modifiedSchoolList = SchoolList.fromJson(response.data);
     // List<SchoolList> updatedSchoolLists = List.from(_schoolLists.value);
     // final index = updatedSchoolLists

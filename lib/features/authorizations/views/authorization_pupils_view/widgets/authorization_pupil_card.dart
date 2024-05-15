@@ -18,7 +18,7 @@ import 'package:schuldaten_hub/features/authorizations/services/authorization_ma
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
@@ -62,8 +62,8 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                             locator<BottomNavManager>()
                                 .setPupilProfileNavPage(7);
                             Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => PupilProfile(
-                                pupil,
+                              builder: (ctx) => PupilProfilePage(
+                                pupil: pupil,
                               ),
                             ));
                           },
@@ -82,7 +82,7 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Text(
-                              pupil.firstName!,
+                              pupil.firstName,
                               overflow: TextOverflow.fade,
                               style: const TextStyle(
                                 fontSize: 18,
@@ -94,7 +94,7 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: Text(
-                            pupil.lastName!,
+                            pupil.lastName,
                             overflow: TextOverflow.fade,
                             style: const TextStyle(
                               fontSize: 18,

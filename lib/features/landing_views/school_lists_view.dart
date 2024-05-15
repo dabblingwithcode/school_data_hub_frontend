@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/controller/authorizations_controller.dart';
 
-import 'package:schuldaten_hub/features/school_lists/views/school_lists_view/controller/school_lists_controller.dart';
+import 'package:schuldaten_hub/features/school_lists/views/school_lists_page/school_lists_page.dart';
 
 import 'package:watch_it/watch_it.dart';
 
@@ -38,7 +38,7 @@ class CheckListsView extends WatchingWidget {
                 child: InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (ctx) => const SchoolLists(),
+                      builder: (ctx) => const SchoolListsPage(),
                     ));
                   },
                   child: Card(

@@ -18,9 +18,10 @@ import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/dialogues/returned_time_picker.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
+
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceCard extends WatchingWidget {
@@ -66,8 +67,8 @@ class AttendanceCard extends WatchingWidget {
                   onLongPress: () => createMissedClassList(context, pupil),
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                      builder: (ctx) => PupilProfile(
-                        pupil,
+                      builder: (ctx) => PupilProfilePage(
+                        pupil: pupil,
                       ),
                     ));
                   },
@@ -86,13 +87,13 @@ class AttendanceCard extends WatchingWidget {
                                         .setPupilProfileNavPage(3);
                                     Navigator.of(context)
                                         .pushReplacement(MaterialPageRoute(
-                                      builder: (ctx) => PupilProfile(
-                                        pupil,
+                                      builder: (ctx) => PupilProfilePage(
+                                        pupil: pupil,
                                       ),
                                     ));
                                   },
                                   child: Text(
-                                    '${pupil.firstName!} ${pupil.lastName!}',
+                                    '${pupil.firstName} ${pupil.lastName}',
                                     overflow: TextOverflow.fade,
                                     softWrap: false,
                                     textAlign: TextAlign.left,
@@ -320,8 +321,8 @@ class AttendanceCard extends WatchingWidget {
                 onLongPress: () => createMissedClassList(context, pupil),
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => PupilProfile(
-                      pupil,
+                    builder: (ctx) => PupilProfilePage(
+                      pupil: pupil,
                     ),
                   ));
                 },
@@ -340,13 +341,13 @@ class AttendanceCard extends WatchingWidget {
                                       .setPupilProfileNavPage(3);
                                   Navigator.of(context)
                                       .pushReplacement(MaterialPageRoute(
-                                    builder: (ctx) => PupilProfile(
-                                      pupil,
+                                    builder: (ctx) => PupilProfilePage(
+                                      pupil: pupil,
                                     ),
                                   ));
                                 },
                                 child: Text(
-                                  '${pupil.firstName!} ${pupil.lastName!}',
+                                  '${pupil.firstName} ${pupil.lastName}',
                                   overflow: TextOverflow.fade,
                                   softWrap: false,
                                   textAlign: TextAlign.left,

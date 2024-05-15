@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
 import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_view/controller/select_pupils_list_controller.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -34,8 +34,8 @@ class SelectPupilListCard extends WatchingWidget {
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => PupilProfile(
-                      pupil,
+                    builder: (ctx) => PupilProfilePage(
+                      pupil: pupil,
                     ),
                   ));
                 },

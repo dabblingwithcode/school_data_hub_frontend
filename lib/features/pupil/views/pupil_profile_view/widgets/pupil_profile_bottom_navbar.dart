@@ -33,33 +33,13 @@ class PupilProfileBottomNavBar extends StatelessWidget {
                 ),
                 const Spacer(),
                 IconButton(
-                    onPressed: () =>
-                        Navigator.popUntil(context, (route) => route.isFirst),
-                    icon: const Icon(
-                      Icons.home,
-                      size: 35,
-                    )),
-                // const Gap(10)
-
-                // IconButton(
-                //   onPressed: () {},
-                //   icon: const Icon(Icons.check_circle_rounded),
-                // ),
-                // IconButton(
-                //   tooltip: 'Search',
-                //   icon: const Icon(Icons.list_alt_rounded),
-                //   onPressed: () {},
-                // ),
-                // IconButton(
-                //   tooltip: 'Search',
-                //   icon: const Icon(Icons.translate_rounded),
-                //   onPressed: () {},
-                // ),
-                // IconButton(
-                //   tooltip: 'Favorite',
-                //   icon: const Icon(Icons.info_rounded),
-                //   onPressed: () {},
-                // ),
+                  onPressed: () =>
+                      Navigator.popUntil(context, (route) => route.isFirst),
+                  icon: const Icon(
+                    Icons.home,
+                    size: 35,
+                  ),
+                ),
               ],
             ),
           ),

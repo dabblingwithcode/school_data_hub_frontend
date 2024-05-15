@@ -9,8 +9,9 @@ import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/credit/controller/credit_list_controller.dart';
-import 'package:schuldaten_hub/features/credit/widgets/pupil_credit_content_list.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/widgets/pupil_credit_content.dart';
+
 import 'package:watch_it/watch_it.dart';
 
 class CreditListCard extends WatchingStatefulWidget {
@@ -67,13 +68,13 @@ class _CreditListCardState extends State<CreditListCard> {
                                 locator<BottomNavManager>()
                                     .setPupilProfileNavPage(2);
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (ctx) => PupilProfile(
-                                    pupil,
+                                  builder: (ctx) => PupilProfilePage(
+                                    pupil: pupil,
                                   ),
                                 ));
                               },
                               child: Text(
-                                '${pupil.firstName!} ${pupil.lastName!}',
+                                '${pupil.firstName} ${pupil.lastName}',
                                 overflow: TextOverflow.fade,
                                 softWrap: false,
                                 textAlign: TextAlign.left,

@@ -25,6 +25,15 @@ import 'package:schuldaten_hub/features/schoolday_events/views/new_schoolday_eve
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
+class SchooldayEventsContentList extends StatelessWidget {
+  const SchooldayEventsContentList({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
 List<Widget> schooldayEventsContentList(
   PupilProxy pupil,
   BuildContext context,
@@ -129,9 +138,10 @@ List<Widget> schooldayEventsContentList(
                                         ),
                                       ),
                                       const Gap(5),
-                                      schooldayEventTypeIcon(
-                                          filteredSchooldayEvents[index]
-                                              .schooldayEventType)
+                                      SchooldayEventTypeIcon(
+                                          category:
+                                              filteredSchooldayEvents[index]
+                                                  .schooldayEventType)
                                     ],
                                   ),
                                 ),
@@ -140,7 +150,7 @@ List<Widget> schooldayEventsContentList(
                                   direction: Axis.horizontal,
                                   spacing: 5,
                                   children: [
-                                    ...schooldayEventReasonChip(
+                                    ...schooldayEventReasonChips(
                                         filteredSchooldayEvents[index]
                                             .schooldayEventReason),
                                   ],
@@ -412,8 +422,9 @@ List<Widget> schooldayEventsContentList(
                             locator<SessionManager>().isAdmin.value
                                 ? InkWell(
                                     onTap: () async {
-                                      final DateTime newDate = await selectDate(
-                                          context, DateTime.now());
+                                      final DateTime? newDate =
+                                          await selectDate(
+                                              context, DateTime.now());
 
                                       if (newDate != null) {
                                         await locator<SchooldayEventManager>()

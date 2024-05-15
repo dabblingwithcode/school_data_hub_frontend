@@ -1,12 +1,57 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/paddings.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/controller/school_list_pupils_controller.dart';
+import 'package:schuldaten_hub/features/school_lists/views/school_lists_page/school_lists_page.dart';
+
+class PupilSchoolListsContent extends StatelessWidget {
+  final PupilProxy pupil;
+  const PupilSchoolListsContent({required this.pupil, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      color: pupilProfileCardColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Padding(
+        padding: pupilProfileCardPadding,
+        child: Column(children: [
+          Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
+            const Icon(
+              Icons.rule,
+              color: accentColor,
+              size: 24,
+            ),
+            const Gap(5),
+            InkWell(
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (ctx) => const SchoolListsPage(),
+                ));
+              },
+              child: const Text('Listen',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: backgroundColor,
+                  )),
+            )
+          ]),
+          const Gap(15),
+          ...pupilSchoolListContentList(pupil),
+        ]),
+      ),
+    );
+  }
+}
 
 List<Widget> pupilSchoolListContentList(PupilProxy pupil) {
   final schoolListLocator = locator<SchoolListManager>();

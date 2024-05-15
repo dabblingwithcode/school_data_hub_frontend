@@ -91,10 +91,13 @@ Future<void> createMissedClassList(
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
                           onTap: () async {
-                            final date = await selectDate(context, thisDate);
-                            setState(() {
-                              startDate = date;
-                            });
+                            final DateTime? date =
+                                await selectDate(context, thisDate);
+                            if (date != null) {
+                              setState(() {
+                                startDate = date;
+                              });
+                            }
                           },
                           child: Text(
                             'von ${startDate.formatForUser()}',
@@ -109,10 +112,13 @@ Future<void> createMissedClassList(
                       padding: const EdgeInsets.all(8.0),
                       child: InkWell(
                           onTap: () async {
-                            final date = await selectDate(context, thisDate);
-                            setState(() {
-                              endDate = date;
-                            });
+                            final DateTime? date =
+                                await selectDate(context, thisDate);
+                            if (date != null) {
+                              setState(() {
+                                endDate = date;
+                              });
+                            }
                           },
                           child: Text(
                             'bis ${endDate.formatForUser()}',
