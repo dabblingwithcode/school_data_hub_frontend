@@ -6,23 +6,23 @@ import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/date_picker.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/information_dialog.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 
-class NewAdmonitionView extends StatefulWidget {
+class NewSchooldayEventPage extends StatefulWidget {
   final int pupilId;
 
-  const NewAdmonitionView({
+  const NewSchooldayEventPage({
     super.key,
     required this.pupilId,
   });
 
   @override
-  NewAdmonitionViewState createState() => NewAdmonitionViewState();
+  NewSchooldayEventPageState createState() => NewSchooldayEventPageState();
 }
 
-class NewAdmonitionViewState extends State<NewAdmonitionView> {
-  String admonitionTypeDropdown = 'choose';
+class NewSchooldayEventPageState extends State<NewSchooldayEventPage> {
+  String schooldayEventTypeDropdown = 'choose';
   bool violenceAgainstPeople = false;
   bool violenceAgainstTeacher = false;
   bool violenceAgainstThings = false;
@@ -54,40 +54,40 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
     }
   }
 
-  void postAdmonition(BuildContext context) async {
-    String admonitionReason = '';
+  void postSchooldayEvent(BuildContext context) async {
+    String schooldayEventReason = '';
     if (violenceAgainstPeople == true) {
-      admonitionReason = '${admonitionReason}gm*';
+      schooldayEventReason = '${schooldayEventReason}gm*';
     }
     if (violenceAgainstTeacher == true) {
-      admonitionReason = '${admonitionReason}gl*';
+      schooldayEventReason = '${schooldayEventReason}gl*';
     }
     if (violenceAgainstThings == true) {
-      admonitionReason = '${admonitionReason}gs*';
+      schooldayEventReason = '${schooldayEventReason}gs*';
     }
     if (imminentDanger == true) {
-      admonitionReason = '${admonitionReason}gv*';
+      schooldayEventReason = '${schooldayEventReason}gv*';
     }
     if (insultOthers == true) {
-      admonitionReason = '${admonitionReason}ge*';
+      schooldayEventReason = '${schooldayEventReason}ge*';
     }
     if (annoyOthers == true) {
-      admonitionReason = '${admonitionReason}äa*';
+      schooldayEventReason = '${schooldayEventReason}äa*';
     }
     if (ignoreTeacherInstructions == true) {
-      admonitionReason = '${admonitionReason}il*';
+      schooldayEventReason = '${schooldayEventReason}il*';
     }
     if (disturbLesson == true) {
-      admonitionReason = '${admonitionReason}us*';
+      schooldayEventReason = '${schooldayEventReason}us*';
     }
     if (parentTalk == true) {
-      admonitionReason = '${admonitionReason}Eg*';
+      schooldayEventReason = '${schooldayEventReason}Eg*';
     }
     if (other == true) {
-      admonitionReason = '${admonitionReason}ss*';
+      schooldayEventReason = '${schooldayEventReason}ss*';
     }
-    await locator<AdmonitionManager>().postAdmonition(
-        widget.pupilId, thisDate, admonitionTypeDropdown, admonitionReason);
+    await locator<SchooldayEventManager>().postSchooldayEvent(widget.pupilId,
+        thisDate, schooldayEventTypeDropdown, schooldayEventReason);
   }
 
   @override
@@ -125,10 +125,10 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                   isDense: true,
                   underline: Container(),
                   style: subtitle,
-                  value: admonitionTypeDropdown,
+                  value: schooldayEventTypeDropdown,
                   onChanged: (String? newValue) {
                     setState(() {
-                      admonitionTypeDropdown = newValue!;
+                      schooldayEventTypeDropdown = newValue!;
                     });
                   },
                   items: <String>[
@@ -210,11 +210,11 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(30))),
                                 selectedColor:
-                                    admonitionReasonChipSelectedColor,
+                                    schooldayEventReasonChipSelectedColor,
                                 checkmarkColor:
-                                    admonitionReasonChipSelectedCheckColor,
+                                    schooldayEventReasonChipSelectedCheckColor,
                                 backgroundColor:
-                                    admonitionReasonChipUnselectedColor,
+                                    schooldayEventReasonChipUnselectedColor,
                                 label: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -248,11 +248,11 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(30))),
                                   selectedColor:
-                                      admonitionReasonChipSelectedColor,
+                                      schooldayEventReasonChipSelectedColor,
                                   checkmarkColor:
-                                      admonitionReasonChipSelectedCheckColor,
+                                      schooldayEventReasonChipSelectedCheckColor,
                                   backgroundColor:
-                                      admonitionReasonChipUnselectedColor,
+                                      schooldayEventReasonChipUnselectedColor,
                                   label: const Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
@@ -285,11 +285,11 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(30))),
                                 selectedColor:
-                                    admonitionReasonChipSelectedColor,
+                                    schooldayEventReasonChipSelectedColor,
                                 checkmarkColor:
-                                    admonitionReasonChipSelectedCheckColor,
+                                    schooldayEventReasonChipSelectedCheckColor,
                                 backgroundColor:
-                                    admonitionReasonChipUnselectedColor,
+                                    schooldayEventReasonChipUnselectedColor,
                                 label: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -323,11 +323,11 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(30))),
                                 selectedColor:
-                                    admonitionReasonChipSelectedColor,
+                                    schooldayEventReasonChipSelectedColor,
                                 checkmarkColor:
-                                    admonitionReasonChipSelectedCheckColor,
+                                    schooldayEventReasonChipSelectedCheckColor,
                                 backgroundColor:
-                                    admonitionReasonChipUnselectedColor,
+                                    schooldayEventReasonChipUnselectedColor,
                                 label: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -362,11 +362,11 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(30))),
                                 selectedColor:
-                                    admonitionReasonChipSelectedColor,
+                                    schooldayEventReasonChipSelectedColor,
                                 checkmarkColor:
-                                    admonitionReasonChipSelectedCheckColor,
+                                    schooldayEventReasonChipSelectedCheckColor,
                                 backgroundColor:
-                                    admonitionReasonChipUnselectedColor,
+                                    schooldayEventReasonChipUnselectedColor,
                                 label: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -401,11 +401,11 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(30))),
                                 selectedColor:
-                                    admonitionReasonChipSelectedColor,
+                                    schooldayEventReasonChipSelectedColor,
                                 checkmarkColor:
-                                    admonitionReasonChipSelectedCheckColor,
+                                    schooldayEventReasonChipSelectedCheckColor,
                                 backgroundColor:
-                                    admonitionReasonChipUnselectedColor,
+                                    schooldayEventReasonChipUnselectedColor,
                                 label: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -440,11 +440,11 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(30))),
                                 selectedColor:
-                                    admonitionReasonChipSelectedColor,
+                                    schooldayEventReasonChipSelectedColor,
                                 checkmarkColor:
-                                    admonitionReasonChipSelectedCheckColor,
+                                    schooldayEventReasonChipSelectedCheckColor,
                                 backgroundColor:
-                                    admonitionReasonChipUnselectedColor,
+                                    schooldayEventReasonChipUnselectedColor,
                                 label: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -479,11 +479,11 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(30))),
                                 selectedColor:
-                                    admonitionReasonChipSelectedColor,
+                                    schooldayEventReasonChipSelectedColor,
                                 checkmarkColor:
-                                    admonitionReasonChipSelectedCheckColor,
+                                    schooldayEventReasonChipSelectedCheckColor,
                                 backgroundColor:
-                                    admonitionReasonChipUnselectedColor,
+                                    schooldayEventReasonChipUnselectedColor,
                                 label: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -518,11 +518,11 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(30))),
                                 selectedColor:
-                                    admonitionReasonChipSelectedColor,
+                                    schooldayEventReasonChipSelectedColor,
                                 checkmarkColor:
-                                    admonitionReasonChipSelectedCheckColor,
+                                    schooldayEventReasonChipSelectedCheckColor,
                                 backgroundColor:
-                                    admonitionReasonChipUnselectedColor,
+                                    schooldayEventReasonChipUnselectedColor,
                                 label: const Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
@@ -558,7 +558,7 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                 ElevatedButton(
                   style: successButtonStyle,
                   onPressed: () {
-                    if (admonitionTypeDropdown == 'choose') {
+                    if (schooldayEventTypeDropdown == 'choose') {
                       informationDialog(context, 'Kein Ereignis ausgewählt',
                           'Bitte eine Ereignis-Art auswählen!');
                       return;
@@ -573,7 +573,7 @@ class NewAdmonitionViewState extends State<NewAdmonitionView> {
                           'Bitte mindestens einen Grund auswählen!');
                       return;
                     }
-                    postAdmonition(context);
+                    postSchooldayEvent(context);
                     Navigator.pop(context);
                   },
                   child: const Text('SENDEN', style: buttonTextStyle),

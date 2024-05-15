@@ -5,41 +5,45 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
-class AdmonitionFilterBottomSheet extends WatchingWidget {
-  const AdmonitionFilterBottomSheet({super.key});
+class SchooldayEventFilterBottomSheet extends WatchingWidget {
+  const SchooldayEventFilterBottomSheet({super.key});
   @override
   Widget build(BuildContext context) {
     Map<PupilFilter, bool> activeFilters =
         watchValue((PupilFilterManager x) => x.filterState);
     Map<PupilSortMode, bool> sortMode =
         watchValue((PupilFilterManager x) => x.sortMode);
-    final Map<AdmonitionFilter, bool> activeAdmonitionFilters =
-        watchValue((AdmonitionFilterManager x) => x.admonitionsFilterState);
+    final Map<SchooldayEventFilter, bool> activeSchooldayEventFilters =
+        watchValue(
+            (SchooldayEventFilterManager x) => x.schooldayEventsFilterState);
     bool valueLastSevenDays =
-        activeAdmonitionFilters[AdmonitionFilter.sevenDays]!;
+        activeSchooldayEventFilters[SchooldayEventFilter.sevenDays]!;
     // event type
-    bool valueProcessed = activeAdmonitionFilters[AdmonitionFilter.processed]!;
-    bool valueRedCard = activeAdmonitionFilters[AdmonitionFilter.redCard]!;
+    bool valueProcessed =
+        activeSchooldayEventFilters[SchooldayEventFilter.processed]!;
+    bool valueRedCard =
+        activeSchooldayEventFilters[SchooldayEventFilter.redCard]!;
     bool valueRedCardOgs =
-        activeAdmonitionFilters[AdmonitionFilter.redCardOgs]!;
+        activeSchooldayEventFilters[SchooldayEventFilter.redCardOgs]!;
     bool valueRedCardSentHome =
-        activeAdmonitionFilters[AdmonitionFilter.redCardsentHome]!;
+        activeSchooldayEventFilters[SchooldayEventFilter.redCardsentHome]!;
     bool valueParentsMeeting =
-        activeAdmonitionFilters[AdmonitionFilter.parentsMeeting]!;
+        activeSchooldayEventFilters[SchooldayEventFilter.parentsMeeting]!;
     bool valueOtherEvents =
-        activeAdmonitionFilters[AdmonitionFilter.otherEvent]!;
+        activeSchooldayEventFilters[SchooldayEventFilter.otherEvent]!;
 
     // sort mode
     bool valueSortByName = sortMode[PupilSortMode.sortByName]!;
-    bool valueSortByAdmonitions = sortMode[PupilSortMode.sortByAdmonitions]!;
-    bool valueSortByLastAdmonition =
-        sortMode[PupilSortMode.sortByLastAdmonition]!;
+    bool valueSortBySchooldayEvents =
+        sortMode[PupilSortMode.sortBySchooldayEvents]!;
+    bool valueSortByLastSchooldayEvent =
+        sortMode[PupilSortMode.sortByLastSchooldayEvent]!;
     final filterLocator = locator<PupilFilterManager>();
-    final admonitionFilterLocator = locator<AdmonitionFilterManager>();
+    final schooldayEventFilterLocator = locator<SchooldayEventFilterManager>();
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15, top: 5),
       child: Center(
@@ -79,12 +83,12 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                           ),
                           selected: valueLastSevenDays,
                           onSelected: (val) {
-                            admonitionFilterLocator.setFilter(
-                                AdmonitionFilter.sevenDays, val);
-                            valueLastSevenDays = admonitionFilterLocator
-                                .admonitionsFilterState
-                                .value[AdmonitionFilter.sevenDays]!;
-                            // valueLastSevenDays =  admonitionFilterLocator.
+                            schooldayEventFilterLocator.setFilter(
+                                SchooldayEventFilter.sevenDays, val);
+                            valueLastSevenDays = schooldayEventFilterLocator
+                                .schooldayEventsFilterState
+                                .value[SchooldayEventFilter.sevenDays]!;
+                            // valueLastSevenDays =  schooldayEventFilterLocator.
                             //     .sortMode.value[PupilSortMode.sortByName]!;
                             // filterLocator.sortPupils();
                           },
@@ -102,11 +106,11 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                           ),
                           selected: valueProcessed,
                           onSelected: (val) {
-                            admonitionFilterLocator.setFilter(
-                                AdmonitionFilter.processed, val);
-                            valueProcessed = admonitionFilterLocator
-                                .admonitionsFilterState
-                                .value[AdmonitionFilter.processed]!;
+                            schooldayEventFilterLocator.setFilter(
+                                SchooldayEventFilter.processed, val);
+                            valueProcessed = schooldayEventFilterLocator
+                                .schooldayEventsFilterState
+                                .value[SchooldayEventFilter.processed]!;
                           },
                         ),
                         FilterChip(
@@ -120,11 +124,11 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                               color: Colors.red),
                           selected: valueRedCard,
                           onSelected: (val) {
-                            admonitionFilterLocator.setFilter(
-                                AdmonitionFilter.redCard, val);
-                            valueRedCard = admonitionFilterLocator
-                                .admonitionsFilterState
-                                .value[AdmonitionFilter.redCard]!;
+                            schooldayEventFilterLocator.setFilter(
+                                SchooldayEventFilter.redCard, val);
+                            valueRedCard = schooldayEventFilterLocator
+                                .schooldayEventsFilterState
+                                .value[SchooldayEventFilter.redCard]!;
                           },
                         ),
                         FilterChip(
@@ -144,11 +148,11 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                           ),
                           selected: valueRedCardOgs,
                           onSelected: (val) {
-                            admonitionFilterLocator.setFilter(
-                                AdmonitionFilter.redCardOgs, val);
-                            valueRedCardOgs = admonitionFilterLocator
-                                .admonitionsFilterState
-                                .value[AdmonitionFilter.redCardOgs]!;
+                            schooldayEventFilterLocator.setFilter(
+                                SchooldayEventFilter.redCardOgs, val);
+                            valueRedCardOgs = schooldayEventFilterLocator
+                                .schooldayEventsFilterState
+                                .value[SchooldayEventFilter.redCardOgs]!;
                           },
                         ),
                         FilterChip(
@@ -168,11 +172,11 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                           ),
                           selected: valueRedCardSentHome,
                           onSelected: (val) {
-                            admonitionFilterLocator.setFilter(
-                                AdmonitionFilter.redCardsentHome, val);
-                            valueRedCardOgs = admonitionFilterLocator
-                                .admonitionsFilterState
-                                .value[AdmonitionFilter.redCardsentHome]!;
+                            schooldayEventFilterLocator.setFilter(
+                                SchooldayEventFilter.redCardsentHome, val);
+                            valueRedCardOgs = schooldayEventFilterLocator
+                                .schooldayEventsFilterState
+                                .value[SchooldayEventFilter.redCardsentHome]!;
                           },
                         ),
                       ],
@@ -222,12 +226,12 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                             'Anzahl',
                             style: filterItemsTextStyle,
                           ),
-                          selected: valueSortByAdmonitions,
+                          selected: valueSortBySchooldayEvents,
                           onSelected: (val) {
                             filterLocator.setSortMode(
-                                PupilSortMode.sortByAdmonitions, val);
-                            valueSortByAdmonitions = filterLocator.sortMode
-                                .value[PupilSortMode.sortByAdmonitions]!;
+                                PupilSortMode.sortBySchooldayEvents, val);
+                            valueSortBySchooldayEvents = filterLocator.sortMode
+                                .value[PupilSortMode.sortBySchooldayEvents]!;
                             filterLocator.sortPupils();
                           },
                         ),
@@ -242,12 +246,12 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
                             'zuletzt',
                             style: filterItemsTextStyle,
                           ),
-                          selected: valueSortByLastAdmonition,
+                          selected: valueSortByLastSchooldayEvent,
                           onSelected: (val) {
                             filterLocator.setSortMode(
-                                PupilSortMode.sortByLastAdmonition, val);
-                            valueSortByAdmonitions = filterLocator.sortMode
-                                .value[PupilSortMode.sortByLastAdmonition]!;
+                                PupilSortMode.sortByLastSchooldayEvent, val);
+                            valueSortBySchooldayEvents = filterLocator.sortMode
+                                .value[PupilSortMode.sortByLastSchooldayEvent]!;
                             filterLocator.sortPupils();
                           },
                         ),
@@ -265,13 +269,13 @@ class AdmonitionFilterBottomSheet extends WatchingWidget {
   }
 }
 
-showAdmonitionFilterBottomSheet(BuildContext context) {
+showSchooldayEventFilterBottomSheet(BuildContext context) {
   return showModalBottomSheet(
     constraints: const BoxConstraints(maxWidth: 800),
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(20.0),
     ),
     context: context,
-    builder: (_) => const AdmonitionFilterBottomSheet(),
+    builder: (_) => const SchooldayEventFilterBottomSheet(),
   );
 }

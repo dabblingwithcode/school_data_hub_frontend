@@ -5,6 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:schuldaten_hub/api/api.dart';
+import 'package:schuldaten_hub/api/endpoints/schoolday_event_endpoints.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
@@ -16,7 +17,16 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import '../../../api/services/api_manager.dart';
 import '../../../common/services/locator.dart';
 
-class AdmonitionManager {
+enum SchooldayEventType {
+  isLate('late'),
+  isMissed('missed'),
+  notSet('none');
+
+  final String value;
+  const SchooldayEventType(this.value);
+}
+
+class SchooldayEventManager {
   final pupilManager = locator<PupilManager>();
   final schooldayManager = locator<SchooldayManager>();
   final client = locator<ApiManager>().dioClient.value;
@@ -26,13 +36,13 @@ class AdmonitionManager {
 
   final _isRunning = ValueNotifier<bool>(false);
 
-  AdmonitionManager(
+  SchooldayEventManager(
       // this.session,
       );
 
   //- HELPER FUNCTIONS
 
-  //- HANDLE Admonition CARD
+  //- HANDLE SchooldayEvent CARD
 
   // PupilProxy? findPupilById(int pupilId) {
   //   final pupils = pupilManager.readPupils();
@@ -42,22 +52,22 @@ class AdmonitionManager {
   // }
 
   //-POST ADMONITION
-  Future<void> postAdmonition(
+  Future<void> postSchooldayEvent(
       int pupilId, DateTime date, String type, String reason) async {
     locator<NotificationManager>().isRunningValue(true);
 
     final data = jsonEncode({
       "admonished_day": date.formatForJson(),
       "admonished_pupil_id": pupilId,
-      "admonition_reason": reason,
-      "admonition_type": type,
+      "schooldayEvent_reason": reason,
+      "schooldayEvent_type": type,
       "file_url": null,
       "processed": false,
       "processed_at": null,
       "processed_by": null
     });
-    final Response response =
-        await client.post(EndpointsAdmonition.postAdmonitionUrl, data: data);
+    final Response response = await client
+        .post(EndpointsSchooldayEvent.postSchooldayEventUrl, data: data);
     final Map<String, dynamic> pupilResponse = response.data;
     if (response.statusCode == 200) {
       locator<NotificationManager>()
@@ -70,8 +80,8 @@ class AdmonitionManager {
 
   //- PATCH ADMONITION
 
-  patchAdmonition(
-      String admonitionId,
+  patchSchooldayEvent(
+      String schooldayEventId,
       String? admonisher,
       String? reason,
       bool? processed,
@@ -80,14 +90,14 @@ class AdmonitionManager {
       DateTime? processedAt) async {
     final data = jsonEncode({
       if (admonisher != null) "admonishing_user": admonisher,
-      if (reason != null) "admonition_reason": reason,
+      if (reason != null) "schooldayEvent_reason": reason,
       if (processed != null) "processed": processed,
       if (file != null) "file_url": file,
       if (processed != null) "processed_by": processedBy,
       if (processed != null) "processed_at": DateTime.now().formatForJson(),
     });
     final Response response = await client.patch(
-        EndpointsAdmonition().patchAdmonitionUrl(admonitionId),
+        EndpointsSchooldayEvent().patchSchooldayEventUrl(schooldayEventId),
         data: data);
     if (response.statusCode != 200) {
       // Handle errors.
@@ -99,7 +109,8 @@ class AdmonitionManager {
 
   //- THIS ONE IS NOT NEEDED ANY MORE
   //- TODO - SWITCH TO THE NEW PATCH ADMONITION FUNCTION
-  patchAdmonitionAsProcessed(String admonitionId, bool processed) async {
+  patchSchooldayEventAsProcessed(
+      String schooldayEventId, bool processed) async {
     locator<NotificationManager>().isRunningValue(true);
 
     String data;
@@ -115,7 +126,7 @@ class AdmonitionManager {
     }
     // send request
     final Response response = await client.patch(
-        EndpointsAdmonition().patchAdmonitionUrl(admonitionId),
+        EndpointsSchooldayEvent().patchSchooldayEventUrl(schooldayEventId),
         data: data);
     // Handle errors.
     if (response.statusCode != 200) {
@@ -133,8 +144,8 @@ class AdmonitionManager {
     locator<NotificationManager>().isRunningValue(false);
   }
 
-  patchAdmonitionWithFile(
-      File imageFile, String admonitionId, bool isProcessed) async {
+  patchSchooldayEventWithFile(
+      File imageFile, String schooldayEventId, bool isProcessed) async {
     locator<NotificationManager>().isRunningValue(true);
     final encryptedFile = await customEncrypter.encryptFile(imageFile);
     String endpoint;
@@ -148,10 +159,11 @@ class AdmonitionManager {
     });
     // choose endpoint depending on isProcessed
     if (isProcessed) {
-      endpoint =
-          EndpointsAdmonition().patchAdmonitionProcessedFileUrl(admonitionId);
+      endpoint = EndpointsSchooldayEvent()
+          .patchSchooldayEventProcessedFileUrl(schooldayEventId);
     } else {
-      endpoint = EndpointsAdmonition().patchAdmonitionFileUrl(admonitionId);
+      endpoint = EndpointsSchooldayEvent()
+          .patchSchooldayEventFileUrl(schooldayEventId);
     }
     // send request
     final Response response = await client.patch(
@@ -172,16 +184,17 @@ class AdmonitionManager {
     locator<NotificationManager>().isRunningValue(false);
   }
 
-  deleteAdmonitionFile(
-      String admonitionId, String cacheKey, bool isProcessed) async {
+  deleteSchooldayEventFile(
+      String schooldayEventId, String cacheKey, bool isProcessed) async {
     locator<NotificationManager>().isRunningValue(true);
     // choose endpoint depending on isProcessed
     String endpoint;
     if (isProcessed) {
-      endpoint =
-          EndpointsAdmonition().deleteAdmonitionProcessedFileUrl(admonitionId);
+      endpoint = EndpointsSchooldayEvent()
+          .deleteSchooldayEventProcessedFileUrl(schooldayEventId);
     } else {
-      endpoint = EndpointsAdmonition().deleteAdmonitionFileUrl(admonitionId);
+      endpoint = EndpointsSchooldayEvent()
+          .deleteSchooldayEventFileUrl(schooldayEventId);
     }
 
     // send request
@@ -204,12 +217,12 @@ class AdmonitionManager {
     locator<NotificationManager>().isRunningValue(false);
   }
 
-  deleteAdmonition(String admonitionId) async {
+  deleteSchooldayEvent(String schooldayEventId) async {
     locator<NotificationManager>().isRunningValue(true);
 
     // send request
-    Response response = await client
-        .delete(EndpointsAdmonition().deleteAdmonitionUrl(admonitionId));
+    Response response = await client.delete(
+        EndpointsSchooldayEvent().deleteSchooldayEventUrl(schooldayEventId));
 
     if (response.statusCode != 200) {
       locator<NotificationManager>().showSnackBar(NotificationType.warning,

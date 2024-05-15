@@ -40,11 +40,11 @@ For now, all stored images.
 
 - keep track of presence, minutes late, excused / unexcused, gone back home (e.g. for being sick), parents reached/not reached
 
-#### Incidents
+#### Schoolday Events
 
-- keep track of school incidents and document them with a picture of a document (or whatever you want to photograph). Incidents could be an admonition, an accident report, or a parents meeting (anything you need to document).
+- keep track of schoolday events and document them with a picture of a document (or whatever you want to photograph). Schoolday events could be an admoniton, an accident report, a parents meeting (anything you need to document) or any other incident associated with a pupil.
   
-#### Lists
+#### School Lists
 
 - create private (user) or public check lists to keep track of whatever you need to keep track of (paid money for a day trip, signed form from the parents, ...), including a field for comments.
   

@@ -17,20 +17,20 @@ import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart
 import 'package:schuldaten_hub/common/widgets/dialogues/short_textfield_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/document_image.dart';
 import 'package:schuldaten_hub/common/widgets/upload_image.dart';
-import 'package:schuldaten_hub/features/admonitions/models/admonition.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_manager.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_reason_chips.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_type_icon.dart';
-import 'package:schuldaten_hub/features/admonitions/views/new_admonition_view/new_admonition_view.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_reason_chips.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_type_icon.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/new_schoolday_event_page/new_schoolday_event_page.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
-List<Widget> pupilAdmonitionsContentList(
+List<Widget> schooldayEventsContentList(
   PupilProxy pupil,
   BuildContext context,
 ) {
-  final List<Admonition> filteredAdmonitions =
-      locator<AdmonitionFilterManager>().filteredAdmonitions(pupil);
+  final List<SchooldayEvent> filteredSchooldayEvents =
+      locator<SchooldayEventFilterManager>().filteredSchooldayEvents(pupil);
   return <Widget>[
     Padding(
       padding: const EdgeInsets.only(top: 10.0, bottom: 10),
@@ -42,7 +42,7 @@ List<Widget> pupilAdmonitionsContentList(
           style: actionButtonStyle,
           onPressed: () async {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (ctx) => NewAdmonitionView(
+              builder: (ctx) => NewSchooldayEventPage(
                 pupilId: pupil.internalId,
               ),
             ));
@@ -61,16 +61,16 @@ List<Widget> pupilAdmonitionsContentList(
       padding: const EdgeInsets.only(top: 5, bottom: 15),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: filteredAdmonitions.length,
+      itemCount: filteredSchooldayEvents.length,
       itemBuilder: (BuildContext context, int index) {
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 5.0),
           child: GestureDetector(
             onTap: () {
-              //- TO-DO: change admonition
+              //- TO-DO: change schooldayEvent
             },
             onLongPress: () async {
-              if (filteredAdmonitions[index].processed) {
+              if (filteredSchooldayEvents[index].processed) {
                 locator<NotificationManager>().showSnackBar(
                     NotificationType.error,
                     'Ereignis wurde bereits bearbeitet!');
@@ -80,8 +80,8 @@ List<Widget> pupilAdmonitionsContentList(
               bool? confirm = await confirmationDialog(
                   context, 'Ereignis löschen', 'Das Ereignis löschen?');
               if (confirm! == false) return;
-              await locator<AdmonitionManager>()
-                  .deleteAdmonition(filteredAdmonitions[index].admonitionId);
+              await locator<SchooldayEventManager>().deleteSchooldayEvent(
+                  filteredSchooldayEvents[index].schooldayEventId);
               locator<NotificationManager>().showSnackBar(
                   NotificationType.success, 'Das Ereignis wurde gelöscht!');
             },
@@ -92,7 +92,7 @@ List<Widget> pupilAdmonitionsContentList(
               ),
               child: Container(
                 decoration: BoxDecoration(
-                  border: filteredAdmonitions[index].processed
+                  border: filteredSchooldayEvents[index].processed
                       ? Border.all(
                           color: Colors
                               .green, // Specify the color of the border here
@@ -118,8 +118,9 @@ List<Widget> pupilAdmonitionsContentList(
                                     children: [
                                       Text(
                                         DateFormat('dd.MM.yyyy')
-                                            .format(filteredAdmonitions[index]
-                                                .admonishedDay)
+                                            .format(
+                                                filteredSchooldayEvents[index]
+                                                    .schooldayEventDate)
                                             .toString(),
                                         style: const TextStyle(
                                           color: Colors.black,
@@ -128,9 +129,9 @@ List<Widget> pupilAdmonitionsContentList(
                                         ),
                                       ),
                                       const Gap(5),
-                                      admonitionTypeIcon(
-                                          filteredAdmonitions[index]
-                                              .admonitionType)
+                                      schooldayEventTypeIcon(
+                                          filteredSchooldayEvents[index]
+                                              .schooldayEventType)
                                     ],
                                   ),
                                 ),
@@ -139,9 +140,9 @@ List<Widget> pupilAdmonitionsContentList(
                                   direction: Axis.horizontal,
                                   spacing: 5,
                                   children: [
-                                    ...admonitionReasonChip(
-                                        filteredAdmonitions[index]
-                                            .admonitionReason),
+                                    ...schooldayEventReasonChip(
+                                        filteredSchooldayEvents[index]
+                                            .schooldayEventReason),
                                   ],
                                 ),
                                 const Gap(10),
@@ -164,11 +165,11 @@ List<Widget> pupilAdmonitionsContentList(
                                                       obscureText: false);
                                               if (admonishingUser != null) {
                                                 await locator<
-                                                        AdmonitionManager>()
-                                                    .patchAdmonition(
-                                                        filteredAdmonitions[
+                                                        SchooldayEventManager>()
+                                                    .patchSchooldayEvent(
+                                                        filteredSchooldayEvents[
                                                                 index]
-                                                            .admonitionId,
+                                                            .schooldayEventId,
                                                         admonishingUser,
                                                         null,
                                                         null,
@@ -178,7 +179,7 @@ List<Widget> pupilAdmonitionsContentList(
                                               }
                                             },
                                             child: Text(
-                                              filteredAdmonitions[index]
+                                              filteredSchooldayEvents[index]
                                                   .admonishingUser,
                                               style: const TextStyle(
                                                   fontWeight: FontWeight.bold,
@@ -187,7 +188,7 @@ List<Widget> pupilAdmonitionsContentList(
                                             ),
                                           )
                                         : Text(
-                                            filteredAdmonitions[index]
+                                            filteredSchooldayEvents[index]
                                                 .admonishingUser,
                                             style: const TextStyle(
                                                 fontWeight: FontWeight.bold,
@@ -202,7 +203,7 @@ List<Widget> pupilAdmonitionsContentList(
                           ),
                           const Gap(10),
                           //- Image for event processing description
-                          if (filteredAdmonitions[index].fileUrl != null)
+                          if (filteredSchooldayEvents[index].fileUrl != null)
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -211,11 +212,11 @@ List<Widget> pupilAdmonitionsContentList(
                                     final File? file =
                                         await uploadImage(context);
                                     if (file == null) return;
-                                    await locator<AdmonitionManager>()
-                                        .patchAdmonitionWithFile(
+                                    await locator<SchooldayEventManager>()
+                                        .patchSchooldayEventWithFile(
                                             file,
-                                            filteredAdmonitions[index]
-                                                .admonitionId,
+                                            filteredSchooldayEvents[index]
+                                                .schooldayEventId,
                                             true);
                                     locator<NotificationManager>().showSnackBar(
                                         NotificationType.success,
@@ -229,24 +230,25 @@ List<Widget> pupilAdmonitionsContentList(
                                     if (confirm == null || confirm == false) {
                                       return;
                                     }
-                                    await locator<AdmonitionManager>()
-                                        .deleteAdmonitionFile(
-                                            filteredAdmonitions[index]
-                                                .admonitionId,
-                                            filteredAdmonitions[index].fileUrl!,
+                                    await locator<SchooldayEventManager>()
+                                        .deleteSchooldayEventFile(
+                                            filteredSchooldayEvents[index]
+                                                .schooldayEventId,
+                                            filteredSchooldayEvents[index]
+                                                .fileUrl!,
                                             true);
                                     locator<NotificationManager>().showSnackBar(
                                         NotificationType.success,
                                         'Dokument gelöscht!');
                                   },
-                                  child: filteredAdmonitions[index]
+                                  child: filteredSchooldayEvents[index]
                                               .processedFileUrl !=
                                           null
                                       ? DocumentImage(
                                           documentTag:
-                                              '${locator<EnvManager>().env.value.serverUrl}${EndpointsAdmonition().getAdmonitionFileUrl(filteredAdmonitions[index].admonitionId)}',
+                                              '${locator<EnvManager>().env.value.serverUrl}${EndpointsSchooldayEvent().getSchooldayEventFileUrl(filteredSchooldayEvents[index].schooldayEventId)}',
                                           documentUrl:
-                                              filteredAdmonitions[index]
+                                              filteredSchooldayEvents[index]
                                                   .fileUrl,
                                           size: 70)
                                       : SizedBox(
@@ -270,11 +272,11 @@ List<Widget> pupilAdmonitionsContentList(
                                 onTap: () async {
                                   final File? file = await uploadImage(context);
                                   if (file == null) return;
-                                  await locator<AdmonitionManager>()
-                                      .patchAdmonitionWithFile(
+                                  await locator<SchooldayEventManager>()
+                                      .patchSchooldayEventWithFile(
                                           file,
-                                          filteredAdmonitions[index]
-                                              .admonitionId,
+                                          filteredSchooldayEvents[index]
+                                              .schooldayEventId,
                                           false);
                                   locator<NotificationManager>().showSnackBar(
                                     NotificationType.success,
@@ -289,23 +291,25 @@ List<Widget> pupilAdmonitionsContentList(
                                   if (confirm == null || confirm == false) {
                                     return;
                                   }
-                                  await locator<AdmonitionManager>()
-                                      .deleteAdmonitionFile(
-                                          filteredAdmonitions[index]
-                                              .admonitionId,
-                                          filteredAdmonitions[index].fileUrl!,
+                                  await locator<SchooldayEventManager>()
+                                      .deleteSchooldayEventFile(
+                                          filteredSchooldayEvents[index]
+                                              .schooldayEventId,
+                                          filteredSchooldayEvents[index]
+                                              .fileUrl!,
                                           false);
                                   locator<NotificationManager>().showSnackBar(
                                       NotificationType.success,
                                       'Dokument gelöscht!');
                                 },
-                                child: filteredAdmonitions[index].fileUrl !=
+                                child: filteredSchooldayEvents[index].fileUrl !=
                                         null
                                     ? DocumentImage(
                                         documentTag:
-                                            '${locator<EnvManager>().env.value.serverUrl}${EndpointsAdmonition().getAdmonitionFileUrl(filteredAdmonitions[index].admonitionId)}',
+                                            '${locator<EnvManager>().env.value.serverUrl}${EndpointsSchooldayEvent().getSchooldayEventFileUrl(filteredSchooldayEvents[index].schooldayEventId)}',
                                         documentUrl:
-                                            filteredAdmonitions[index].fileUrl,
+                                            filteredSchooldayEvents[index]
+                                                .fileUrl,
                                         size: 70)
                                     : SizedBox(
                                         height: 70,
@@ -331,9 +335,10 @@ List<Widget> pupilAdmonitionsContentList(
                                   'Ereignis bearbeitet?',
                                   'Ereignis als bearbeitet markieren?');
                               if (confirm! == false) return;
-                              await locator<AdmonitionManager>()
-                                  .patchAdmonitionAsProcessed(
-                                      filteredAdmonitions[index].admonitionId,
+                              await locator<SchooldayEventManager>()
+                                  .patchSchooldayEventAsProcessed(
+                                      filteredSchooldayEvents[index]
+                                          .schooldayEventId,
                                       true);
                               locator<NotificationManager>().showSnackBar(
                                   NotificationType.success,
@@ -345,20 +350,22 @@ List<Widget> pupilAdmonitionsContentList(
                                   'Ereignis unbearbeitet?',
                                   'Ereignis als unbearbeitet markieren?');
                               if (confirm! == false) return;
-                              await locator<AdmonitionManager>()
-                                  .patchAdmonitionAsProcessed(
-                                      filteredAdmonitions[index].admonitionId,
+                              await locator<SchooldayEventManager>()
+                                  .patchSchooldayEventAsProcessed(
+                                      filteredSchooldayEvents[index]
+                                          .schooldayEventId,
                                       false);
                             },
                             child: Text(
-                                !filteredAdmonitions[index].processed
+                                !filteredSchooldayEvents[index].processed
                                     ? 'Nicht bearbeitet'
                                     : 'Bearbeitet von',
                                 style: const TextStyle(
                                     fontSize: 16, color: backgroundColor)),
                           ),
                           const Gap(10),
-                          if (filteredAdmonitions[index].processedBy != null)
+                          if (filteredSchooldayEvents[index].processedBy !=
+                              null)
                             locator<SessionManager>().isAdmin.value
                                 ? InkWell(
                                     onTap: () async {
@@ -370,10 +377,10 @@ List<Widget> pupilAdmonitionsContentList(
                                               hintText: 'Kürzel eingeben',
                                               obscureText: false);
                                       if (processingUser != null) {
-                                        await locator<AdmonitionManager>()
-                                            .patchAdmonition(
-                                                filteredAdmonitions[index]
-                                                    .admonitionId,
+                                        await locator<SchooldayEventManager>()
+                                            .patchSchooldayEvent(
+                                                filteredSchooldayEvents[index]
+                                                    .schooldayEventId,
                                                 null,
                                                 null,
                                                 null,
@@ -383,7 +390,8 @@ List<Widget> pupilAdmonitionsContentList(
                                       }
                                     },
                                     child: Text(
-                                      filteredAdmonitions[index].processedBy!,
+                                      filteredSchooldayEvents[index]
+                                          .processedBy!,
                                       style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
@@ -391,14 +399,16 @@ List<Widget> pupilAdmonitionsContentList(
                                     ),
                                   )
                                 : Text(
-                                    filteredAdmonitions[index].processedBy!,
+                                    filteredSchooldayEvents[index].processedBy!,
                                     style: const TextStyle(
                                         fontSize: 18,
                                         fontWeight: FontWeight.bold),
                                   ),
-                          if (filteredAdmonitions[index].processedAt != null)
+                          if (filteredSchooldayEvents[index].processedAt !=
+                              null)
                             const Gap(10),
-                          if (filteredAdmonitions[index].processedAt != null)
+                          if (filteredSchooldayEvents[index].processedAt !=
+                              null)
                             locator<SessionManager>().isAdmin.value
                                 ? InkWell(
                                     onTap: () async {
@@ -406,10 +416,10 @@ List<Widget> pupilAdmonitionsContentList(
                                           context, DateTime.now());
 
                                       if (newDate != null) {
-                                        await locator<AdmonitionManager>()
-                                            .patchAdmonition(
-                                                filteredAdmonitions[index]
-                                                    .admonitionId,
+                                        await locator<SchooldayEventManager>()
+                                            .patchSchooldayEvent(
+                                                filteredSchooldayEvents[index]
+                                                    .schooldayEventId,
                                                 null,
                                                 null,
                                                 null,
@@ -419,7 +429,7 @@ List<Widget> pupilAdmonitionsContentList(
                                       }
                                     },
                                     child: Text(
-                                      'am ${filteredAdmonitions[index].processedAt!.formatForUser()}',
+                                      'am ${filteredSchooldayEvents[index].processedAt!.formatForUser()}',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 18,
@@ -427,7 +437,7 @@ List<Widget> pupilAdmonitionsContentList(
                                     ),
                                   )
                                 : Text(
-                                    'am ${filteredAdmonitions[index].processedAt!.formatForUser()}',
+                                    'am ${filteredSchooldayEvents[index].processedAt!.formatForUser()}',
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 18),

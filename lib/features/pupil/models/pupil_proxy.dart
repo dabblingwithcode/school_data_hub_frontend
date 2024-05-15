@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:schuldaten_hub/features/admonitions/models/admonition.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
 import 'package:schuldaten_hub/features/books/models/pupil_book.dart';
@@ -98,7 +98,7 @@ class PupilProxy with ChangeNotifier {
   List<CompetenceCheck>? get competenceChecks => _pupil.competenceChecks;
   List<PupilCategoryStatus>? get pupilCategoryStatuses =>
       _pupil.pupilCategoryStatuses;
-  List<Admonition>? get pupilAdmonitions => _pupil.pupilAdmonitions;
+  List<SchooldayEvent>? get schooldayEvents => _pupil.schooldayEvents;
   List<PupilBook>? get pupilBooks => _pupil.pupilBooks;
   List<PupilList>? get pupilLists => _pupil.pupilLists;
   List<PupilGoal>? get pupilGoals => _pupil.pupilGoals;

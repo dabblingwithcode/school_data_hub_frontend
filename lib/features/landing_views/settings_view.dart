@@ -291,7 +291,7 @@ class SettingsView extends WatchingWidget {
                             final String? qr = await secureStorageRead('env');
 
                             if (qr != null && context.mounted) {
-                              await showQrCode(qr, context);
+                              showQrCode(qr, context);
                             }
                           }),
                       SettingsTile.navigation(
@@ -367,8 +367,7 @@ class SettingsView extends WatchingWidget {
                             await Navigator.of(context).push(MaterialPageRoute(
                           builder: (ctx) => SelectPupilList(
                               locator<PupilPersonalDataManager>()
-                                  .availablePupilIds
-                                  .value),
+                                  .availablePupilIds),
                         ));
                         if (pupilIds.isEmpty) {
                           return;
@@ -378,7 +377,7 @@ class SettingsView extends WatchingWidget {
                                 .generatePupilBaseQrData(pupilIds);
 
                         if (context.mounted) {
-                          await showQrCode(qr, context);
+                          showQrCode(qr, context);
                         }
                       }),
                   SettingsTile.navigation(
@@ -391,7 +390,7 @@ class SettingsView extends WatchingWidget {
                                 .generateAllPupilBaseQrData(12);
 
                         if (context.mounted) {
-                          await showQrCarousel(qrData, false, context);
+                          showQrCarousel(qrData, false, context);
                         }
                       }),
                   SettingsTile.navigation(
@@ -404,7 +403,7 @@ class SettingsView extends WatchingWidget {
                                 .generateAllPupilBaseQrData(8);
 
                         if (context.mounted) {
-                          await showQrCarousel(qrData, true, context);
+                          showQrCarousel(qrData, true, context);
                         }
                       }),
                 ],

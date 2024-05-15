@@ -7,6 +7,7 @@ import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
@@ -79,8 +80,9 @@ class SchoolListManager {
       jsonMap["visibility"] = '${schoolListToUpdate.visibility}*$visibility';
     }
     final String data = jsonEncode(jsonMap);
-    final Response response = await client
-        .patch(EndpointsSchoolList().patchSchoolList(listId), data: data);
+    final Response response = await client.patch(
+        EndpointsSchoolList().updateSchoolListProperty(listId),
+        data: data);
     if (response.statusCode != 200) {
       //handle errors
       debug.error(
@@ -150,8 +152,8 @@ class SchoolListManager {
       debug.error('addPupilToSchoolList error: ${response.data}');
       return;
     }
-    final List<PupilProxy> responsePupils =
-        (response.data as List).map((e) => PupilProxy.fromJson(e)).toList();
+    final List<Pupil> responsePupils =
+        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
     locator<PupilManager>().updatePupilsRepository(responsePupils);
 
     // final SchoolList modifiedSchoolList = SchoolList.fromJson(response.data);
@@ -231,7 +233,6 @@ class SchoolListManager {
   PupilList getPupilSchoolListEntry(int pupilId, String listId) {
     final PupilProxy pupil = locator<PupilManager>()
         .allPupils
-        .value
         .where((element) => element.internalId == pupilId)
         .first;
 
@@ -242,7 +243,7 @@ class SchoolListManager {
   }
 
   List<PupilProxy> getPupilsinSchoolList(String listId) {
-    final List<PupilProxy> pupils = locator<PupilManager>().allPupils.value;
+    final List<PupilProxy> pupils = locator<PupilManager>().allPupils;
     final List<PupilProxy> listedPupils = pupils
         .where((pupil) => pupil.pupilLists!
             .any((pupilList) => pupilList.originList == listId))

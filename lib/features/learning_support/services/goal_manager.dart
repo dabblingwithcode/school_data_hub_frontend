@@ -66,7 +66,7 @@ class GoalManager {
   //- this function does not call the API
   List<PupilGoal> getPupilGoalsForCategory(int categoryId) {
     List<PupilGoal> goals = [];
-    final List<PupilProxy> pupils = locator<PupilManager>().allPupils.value;
+    final List<PupilProxy> pupils = locator<PupilManager>().allPupils;
     for (PupilProxy pupil in pupils) {
       for (PupilGoal goal in pupil.pupilGoals!) {
         if (goal.goalCategoryId == categoryId) {

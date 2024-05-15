@@ -12,6 +12,7 @@ import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
@@ -76,8 +77,8 @@ class AuthorizationManager {
       snackBarManager.isRunningValue(false);
       return;
     }
-    final List<PupilProxy> responsePupils = (List<PupilProxy>.from(
-        (response.data as List).map((e) => PupilProxy.fromJson(e))));
+    final List<Pupil> responsePupils = (List<Pupil>.from(
+        (response.data as List).map((e) => Pupil.fromJson(e))));
     locator<PupilManager>().updatePupilsRepository(responsePupils);
     fetchAuthorizations();
     snackBarManager.showSnackBar(
@@ -108,7 +109,7 @@ class AuthorizationManager {
 
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
-    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>().updatePupilFromResponse(pupilResponse);
     snackBarManager.isRunningValue(false);
   }
 
@@ -127,8 +128,8 @@ class AuthorizationManager {
       snackBarManager.isRunningValue(false);
       return;
     }
-    final List<PupilProxy> responsePupils = (List<PupilProxy>.from(
-        (response.data as List).map((e) => PupilProxy.fromJson(e))));
+    final List<Pupil> responsePupils = (List<Pupil>.from(
+        (response.data as List).map((e) => Pupil.fromJson(e))));
     locator<PupilManager>().updatePupilsRepository(responsePupils);
     snackBarManager.showSnackBar(
         NotificationType.success, 'Einwilligungen erstellt');
@@ -147,7 +148,7 @@ class AuthorizationManager {
       snackBarManager.isRunningValue(false);
       return;
     }
-    final pupil = PupilProxy.fromJson(response.data);
+    final pupil = Pupil.fromJson(response.data);
     locator<PupilManager>().updatePupilInRepository(pupil);
     snackBarManager.showSnackBar(
         NotificationType.success, 'Einwilligung gelöscht');
@@ -179,7 +180,7 @@ class AuthorizationManager {
     }
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
-    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>().updatePupilFromResponse(pupilResponse);
     snackBarManager.showSnackBar(
         NotificationType.success, 'Einwilligung geändert');
     snackBarManager.isRunningValue(false);
@@ -210,7 +211,7 @@ class AuthorizationManager {
     }
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
-    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>().updatePupilFromResponse(pupilResponse);
     snackBarManager.showSnackBar(NotificationType.success, 'Datei hochgeladen');
   }
 
@@ -229,7 +230,7 @@ class AuthorizationManager {
     final cacheManager = DefaultCacheManager();
     await cacheManager.removeFile(cacheKey);
     // Then we patch the pupil with the data
-    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>().updatePupilFromResponse(pupilResponse);
     snackBarManager.showSnackBar(NotificationType.success, 'Datei gelöscht');
     snackBarManager.isRunningValue(false);
   }
@@ -245,7 +246,6 @@ class AuthorizationManager {
   PupilAuthorization getPupilAuthorization(int pupilId, String authId) {
     final PupilProxy pupil = locator<PupilManager>()
         .allPupils
-        .value
         .where((element) => element.internalId == pupilId)
         .first;
     final PupilAuthorization pupilAuthorization = pupil.authorizations!
@@ -257,7 +257,6 @@ class AuthorizationManager {
   List<PupilProxy> getPupilsInAuthorization(String authorizationId) {
     final List<PupilProxy> listedPupils = locator<PupilManager>()
         .allPupils
-        .value
         .where((pupil) => pupil.authorizations!.any((authorization) =>
             authorization.originAuthorization == authorizationId))
         .toList();

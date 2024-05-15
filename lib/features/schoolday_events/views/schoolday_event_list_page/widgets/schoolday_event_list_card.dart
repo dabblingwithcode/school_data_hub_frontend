@@ -7,24 +7,24 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
 import 'package:schuldaten_hub/common/widgets/list_tile.dart';
-import 'package:schuldaten_hub/features/admonitions/models/admonition.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/pupil_admonition_content_list.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/pupil_schoolday_event_content_list.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
 import 'package:watch_it/watch_it.dart';
 
-class AdmonitionListCard extends WatchingStatefulWidget {
+class SchooldayEventListCard extends WatchingStatefulWidget {
   final PupilProxy passedPupil;
-  const AdmonitionListCard(this.passedPupil, {super.key});
+  const SchooldayEventListCard(this.passedPupil, {super.key});
 
   @override
-  State<AdmonitionListCard> createState() => _AdmonitionListCardState();
+  State<SchooldayEventListCard> createState() => _SchooldayEventListCardState();
 }
 
-class _AdmonitionListCardState extends State<AdmonitionListCard> {
+class _SchooldayEventListCardState extends State<SchooldayEventListCard> {
   late CustomExpansionTileController _tileController;
 
   @override
@@ -37,13 +37,15 @@ class _AdmonitionListCardState extends State<AdmonitionListCard> {
   Widget build(BuildContext context) {
     List<PupilProxy> pupils =
         watchValue((PupilFilterManager x) => x.filteredPupils);
-    Map<AdmonitionFilter, bool> admonitionFilters =
-        watchValue((AdmonitionFilterManager x) => x.admonitionsFilterState);
+    Map<SchooldayEventFilter, bool> schooldayEventFilters = watchValue(
+        (SchooldayEventFilterManager x) => x.schooldayEventsFilterState);
     final PupilProxy pupil = pupils
         .where((element) => element.internalId == widget.passedPupil.internalId)
         .first;
-    final List<Admonition> admonitions = List.from(pupil.pupilAdmonitions!);
-    admonitions.sort((a, b) => b.admonishedDay.compareTo(a.admonishedDay));
+    final List<SchooldayEvent> schooldayEvents =
+        List.from(pupil.schooldayEvents!);
+    schooldayEvents
+        .sort((a, b) => b.schooldayEventDate.compareTo(a.schooldayEventDate));
 
     return Card(
         color: Colors.white,
@@ -116,9 +118,9 @@ class _AdmonitionListCardState extends State<AdmonitionListCard> {
                           const Text('zuletzt:'),
                           const Gap(10),
                           Text(
-                            pupil.pupilAdmonitions!.isEmpty
+                            pupil.schooldayEvents!.isEmpty
                                 ? ''
-                                : pupil.pupilAdmonitions!.last.admonishedDay
+                                : pupil.schooldayEvents!.last.schooldayEventDate
                                     .formatForUser(),
                             style: const TextStyle(
                               fontWeight: FontWeight.bold,
@@ -149,8 +151,8 @@ class _AdmonitionListCardState extends State<AdmonitionListCard> {
                         const Gap(5),
                         Center(
                           child: Text(
-                            locator<AdmonitionFilterManager>()
-                                .filteredAdmonitions(pupil)
+                            locator<SchooldayEventFilterManager>()
+                                .filteredSchooldayEvents(pupil)
                                 .length
                                 .toString(),
                             style: const TextStyle(
@@ -175,7 +177,7 @@ class _AdmonitionListCardState extends State<AdmonitionListCard> {
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
                   context,
                   _tileController,
-                  pupilAdmonitionsContentList(pupil, context),
+                  schooldayEventsContentList(pupil, context),
                 )),
           ],
         ));

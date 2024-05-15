@@ -18,7 +18,7 @@ class Statistics extends WatchingStatefulWidget {
 }
 
 class StatisticsController extends State<Statistics> {
-  final List<PupilProxy> pupils = locator<PupilManager>().allPupils.value;
+  final List<PupilProxy> pupils = locator<PupilManager>().allPupils;
   Map<String, int> languageOccurrences = {};
   Map<String, DateTime> enrollments = {};
   @override
@@ -30,7 +30,7 @@ class StatisticsController extends State<Statistics> {
 
   calculateLanguageOccurrences() {
     for (PupilProxy pupil in pupils) {
-      languageOccurrences[pupil.language!] =
+      languageOccurrences[pupil.language] =
           (languageOccurrences[pupil.language] ?? 0) + 1;
     }
   }
@@ -41,20 +41,20 @@ class StatisticsController extends State<Statistics> {
 
   List<PupilProxy> pupilsNotEnrolledOnDate(List<PupilProxy> givenPupils) {
     return givenPupils.where((pupil) {
-      return !(pupil.pupilSince!.month == 8 && pupil.pupilSince!.day == 1);
+      return !(pupil.pupilSince.month == 8 && pupil.pupilSince.day == 1);
     }).toList();
   }
 
   List<PupilProxy> pupilsEnrolledAfterDate(DateTime date) {
-    return pupils.where((pupil) => pupil.pupilSince!.isAfter(date)).toList();
+    return pupils.where((pupil) => pupil.pupilSince.isAfter(date)).toList();
   }
 
   List<PupilProxy> pupilsEnrolledBetweenDates(
       DateTime startDate, DateTime endDate) {
     return pupils
         .where((pupil) =>
-            pupil.pupilSince!.isAfter(startDate) &&
-            pupil.pupilSince!.isBefore(endDate))
+            pupil.pupilSince.isAfter(startDate) &&
+            pupil.pupilSince.isBefore(endDate))
         .toList();
   }
 

@@ -130,7 +130,7 @@ Widget pupilProfileNavigation(PupilProfileController controller,
                     ),
                   ),
                 ),
-                //- Admonition Button - bottom right border radius
+                //- SchooldayEvent Button - bottom right border radius
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(

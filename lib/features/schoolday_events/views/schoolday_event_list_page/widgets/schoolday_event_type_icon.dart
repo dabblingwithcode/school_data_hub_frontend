@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 
-Widget admonitionTypeIcon(String category) {
+Widget schooldayEventTypeIcon(String category) {
   switch (category) {
     case 'Eg':
       return const Row(

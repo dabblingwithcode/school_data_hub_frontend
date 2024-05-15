@@ -2,16 +2,16 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'admonition.g.dart';
+part 'schoolday_event.g.dart';
 
 @JsonSerializable()
-class Admonition  {
-  @JsonKey(name: 'admonition_id')
-  final String admonitionId;
-  @JsonKey(name: 'admonition_type')
-  final String admonitionType;
-  @JsonKey(name: 'admonition_reason')
-  final String admonitionReason;
+class SchooldayEvent {
+  @JsonKey(name: 'schooldayEvent_id')
+  final String schooldayEventId;
+  @JsonKey(name: 'schooldayEvent_type')
+  final String schooldayEventType;
+  @JsonKey(name: 'schooldayEvent_reason')
+  final String schooldayEventReason;
   @JsonKey(name: 'admonishing_user')
   final String admonishingUser;
   @JsonKey(name: 'processed')
@@ -25,23 +25,23 @@ class Admonition  {
   @JsonKey(name: 'processed_file_url')
   final String? processedFileUrl;
   @JsonKey(name: 'admonished_day')
-  final DateTime admonishedDay;
+  final DateTime schooldayEventDate;
   @JsonKey(name: 'admonished_pupil_id')
   final int admonishedPupilId;
 
-  Admonition(
-      {required this.admonitionId,
-      required this.admonitionType,
-      required this.admonitionReason,
+  SchooldayEvent(
+      {required this.schooldayEventId,
+      required this.schooldayEventType,
+      required this.schooldayEventReason,
       required this.admonishingUser,
       required this.processed,
       required this.processedBy,
       required this.processedAt,
       required this.fileUrl,
       required this.processedFileUrl,
-      required this.admonishedDay,
+      required this.schooldayEventDate,
       required this.admonishedPupilId});
 
-  factory Admonition.fromJson(Map<String, dynamic> json) =>
-      _$AdmonitionFromJson(json);
+  factory SchooldayEvent.fromJson(Map<String, dynamic> json) =>
+      _$SchooldayEventFromJson(json);
 }

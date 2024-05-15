@@ -3,29 +3,28 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_list_card.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_list_search_bar.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_list_view_bottom_navbar.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_list_card.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_list_page_bottom_navbar.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_list_search_bar.dart';
 import 'package:watch_it/watch_it.dart';
 
-class AdmonitionPage extends WatchingStatefulWidget {
-  const AdmonitionPage({Key? key}) : super(key: key);
+class SchooldayEventPage extends WatchingStatefulWidget {
+  const SchooldayEventPage({Key? key}) : super(key: key);
 
   @override
-  State<AdmonitionPage> createState() => _AdmonitionPageState();
+  State<SchooldayEventPage> createState() => _SchooldayEventPageState();
 }
 
-class _AdmonitionPageState extends State<AdmonitionPage> {
+class _SchooldayEventPageState extends State<SchooldayEventPage> {
   late final pupilsFilter = locator<PupilManager>().getPupilFilter();
 
   @override
   Widget build(BuildContext context) {
-    bool admonitionFiltersOn =
-        watchValue((AdmonitionFilterManager x) => x.admonitionsFiltersOn);
+    bool schooldayEventFiltersOn = watchValue(
+        (SchooldayEventFilterManager x) => x.schooldayEventsFiltersOn);
 
     List<PupilProxy> pupils = watch(pupilsFilter.filteredPupils).value;
     bool filtersOn =
@@ -76,7 +75,7 @@ class _AdmonitionPageState extends State<AdmonitionPage> {
                       titlePadding: const EdgeInsets.only(
                           left: 5, top: 5, right: 5, bottom: 5),
                       collapseMode: CollapseMode.none,
-                      title: AdmonitionListSearchBar(pupilsFilter)),
+                      title: SchooldayEventListSearchBar(pupilsFilter)),
                 ),
                 pupils.isEmpty
                     ? const SliverToBoxAdapter(
@@ -87,7 +86,7 @@ class _AdmonitionPageState extends State<AdmonitionPage> {
                     : SliverList(
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
-                            return AdmonitionListCard(pupils[index]);
+                            return SchooldayEventListCard(pupils[index]);
                           },
                           childCount: pupils.length,
                         ),
@@ -97,8 +96,8 @@ class _AdmonitionPageState extends State<AdmonitionPage> {
           ),
         ),
       ),
-      bottomNavigationBar: admonitionListViewBottomNavBar(
-          context, (filtersOn || admonitionFiltersOn) ? true : false),
+      bottomNavigationBar: SchooldayEventListPageBottomNavBar(
+          filtersOn: (filtersOn || schooldayEventFiltersOn) ? true : false),
     );
   }
 }

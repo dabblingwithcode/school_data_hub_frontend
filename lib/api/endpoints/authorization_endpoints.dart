@@ -28,7 +28,8 @@ class EndpointsAuthorization {
       notificationManager.showSnackBar(NotificationType.error,
           'Einwilligungen konnten nicht geladen werden');
       notificationManager.isRunningValue(false);
-      throw ApiException('Failed to delete admonition', response.statusCode);
+      throw ApiException(
+          'Failed to delete schooldayEvent', response.statusCode);
     }
     final authorizations =
         (response.data as List).map((e) => Authorization.fromJson(e)).toList();

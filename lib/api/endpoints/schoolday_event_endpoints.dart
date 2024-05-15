@@ -16,33 +16,34 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
-class EndpointsAdmonition {
+class EndpointsSchooldayEvent {
   final pupilManager = locator<PupilManager>();
   final schooldayManager = locator<SchooldayManager>();
   late final DioClient _client = locator<ApiManager>().dioClient.value;
 
-  //- post admonition
-  static const postAdmonitionUrl = '/admonitions/new';
-  Future<Pupil> postAdmonition(
+  //- post schooldayEvent
+  static const postSchooldayEventUrl = '/schooldayEvents/new';
+  Future<Pupil> postSchooldayEvent(
       int pupilId, DateTime date, String type, String reason) async {
     locator<NotificationManager>().isRunningValue(true);
 
     final data = jsonEncode({
       "admonished_day": date.formatForJson(),
       "admonished_pupil_id": pupilId,
-      "admonition_reason": reason,
-      "admonition_type": type,
+      "schooldayEvent_reason": reason,
+      "schooldayEvent_type": type,
       "file_url": null,
       "processed": false,
       "processed_at": null,
       "processed_by": null
     });
-    final Response response =
-        await _client.post(EndpointsAdmonition.postAdmonitionUrl, data: data);
+    final Response response = await _client
+        .post(EndpointsSchooldayEvent.postSchooldayEventUrl, data: data);
     final Map<String, dynamic> pupilResponse = response.data;
     //deserialize
     if (response.statusCode != 200) {
-      throw ApiException('Failed to post an admonition', response.statusCode);
+      throw ApiException(
+          'Failed to post an schooldayEvent', response.statusCode);
     }
 
     locator<NotificationManager>()
@@ -54,34 +55,34 @@ class EndpointsAdmonition {
   }
 
   //- GET
-  static const fetchAdmonitionsUrl = '/admonitions/all';
+  static const fetchSchooldayEventsUrl = '/schooldayEvents/all';
 
-  String getAdmonitionUrl(String id) {
-    return '/admonitions/$id';
+  String getSchooldayEventUrl(String id) {
+    return '/schooldayEvents/$id';
   }
 
-  String getAdmonitionFileUrl(String id) {
-    return '/admonitions/$id/file';
+  String getSchooldayEventFileUrl(String id) {
+    return '/schooldayEvents/$id/file';
   }
 
-  //- patch admonition
-  String patchAdmonitionUrl(String id) {
-    return '/admonitions/$id/patch';
+  //- patch schooldayEvent
+  String patchSchooldayEventUrl(String id) {
+    return '/schooldayEvents/$id/patch';
   }
 
-  Future<Pupil> patchAdmonition(
-      String admonitionId,
+  Future<Pupil> patchSchooldayEvent(
+      String schooldayEventId,
       String? admonisher,
       String? reason,
       bool? processed,
       String? file,
       String? processedBy,
       DateTime? processedAt) async {
-    // if the admonition is patched as processed,
+    // if the schooldayEvent is patched as processed,
     // processing user and processed date are automatically added
     final data = jsonEncode({
       if (admonisher != null) "admonishing_user": admonisher,
-      if (reason != null) "admonition_reason": reason,
+      if (reason != null) "schooldayEvent_reason": reason,
       if (processed != null) "processed": processed,
       if (file != null) "file_url": file,
       if (processedBy != null)
@@ -89,10 +90,11 @@ class EndpointsAdmonition {
       if (processedAt != null) "processed_at": processedAt.formatForJson()
     });
     final Response response = await _client.patch(
-        EndpointsAdmonition().patchAdmonitionUrl(admonitionId),
+        EndpointsSchooldayEvent().patchSchooldayEventUrl(schooldayEventId),
         data: data);
     if (response.statusCode != 200) {
-      throw ApiException('Failed to patch an admonition', response.statusCode);
+      throw ApiException(
+          'Failed to patch an schooldayEvent', response.statusCode);
     }
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
@@ -102,20 +104,20 @@ class EndpointsAdmonition {
     return responsePupil;
   }
 
-  //- upload file to document an admonition
-  //- an admonition can be documented with an image file of a document
+  //- upload file to document an schooldayEvent
+  //- an schooldayEvent can be documented with an image file of a document
   //- the file is encrypted before it is uploaded
-  //- there are two possible endpoints for the file upload, depending on whether the admonition is processed or not
-  String patchAdmonitionFileUrl(String id) {
-    return '/admonitions/$id/file';
+  //- there are two possible endpoints for the file upload, depending on whether the schooldayEvent is processed or not
+  String patchSchooldayEventFileUrl(String id) {
+    return '/schooldayEvents/$id/file';
   }
 
-  String patchAdmonitionProcessedFileUrl(String id) {
-    return '/admonitions/$id/processed_file';
+  String patchSchooldayEventProcessedFileUrl(String id) {
+    return '/schooldayEvents/$id/processed_file';
   }
 
-  Future<Pupil> patchAdmonitionWithFile(
-      File imageFile, String admonitionId, bool isProcessed) async {
+  Future<Pupil> patchSchooldayEventWithFile(
+      File imageFile, String schooldayEventId, bool isProcessed) async {
     locator<NotificationManager>().isRunningValue(true);
     final encryptedFile = await customEncrypter.encryptFile(imageFile);
     String endpoint;
@@ -129,10 +131,11 @@ class EndpointsAdmonition {
     });
     // choose endpoint depending on isProcessed
     if (isProcessed) {
-      endpoint =
-          EndpointsAdmonition().patchAdmonitionProcessedFileUrl(admonitionId);
+      endpoint = EndpointsSchooldayEvent()
+          .patchSchooldayEventProcessedFileUrl(schooldayEventId);
     } else {
-      endpoint = EndpointsAdmonition().patchAdmonitionFileUrl(admonitionId);
+      endpoint = EndpointsSchooldayEvent()
+          .patchSchooldayEventFileUrl(schooldayEventId);
     }
     // send request
     final Response response = await _client.patch(
@@ -145,7 +148,7 @@ class EndpointsAdmonition {
           NotificationType.warning, 'Fehler beim Patchen der Fehlzeit!');
       locator<NotificationManager>().isRunningValue(false);
       throw ApiException(
-          'Failed to upload admonition file', response.statusCode);
+          'Failed to upload schooldayEvent file', response.statusCode);
     }
     // Success! We have a pupil response - let's patch the pupil with the data
     locator<NotificationManager>().showSnackBar(
@@ -158,22 +161,23 @@ class EndpointsAdmonition {
     return responsePupil;
   }
 
-  //- delete admonition
-  String deleteAdmonitionUrl(String id) {
-    return '/admonitions/$id/delete';
+  //- delete schooldayEvent
+  String deleteSchooldayEventUrl(String id) {
+    return '/schooldayEvents/$id/delete';
   }
 
-  deleteAdmonition(String admonitionId) async {
+  deleteSchooldayEvent(String schooldayEventId) async {
     locator<NotificationManager>().isRunningValue(true);
 
-    Response response = await _client
-        .delete(EndpointsAdmonition().deleteAdmonitionUrl(admonitionId));
+    Response response = await _client.delete(
+        EndpointsSchooldayEvent().deleteSchooldayEventUrl(schooldayEventId));
 
     if (response.statusCode != 200) {
       locator<NotificationManager>().showSnackBar(
           NotificationType.warning, 'Fehler beim Löschen des Ereignisses!');
       locator<NotificationManager>().isRunningValue(false);
-      throw ApiException('Failed to delete admonition', response.statusCode);
+      throw ApiException(
+          'Failed to delete schooldayEvent', response.statusCode);
     }
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Fehlzeit gelöscht!');
@@ -182,26 +186,27 @@ class EndpointsAdmonition {
     return responsePupil;
   }
 
-//- delete admonition file
+//- delete schooldayEvent file
 //- depending on isProcessed, there are two possible endpoints for the file deletion
-  String deleteAdmonitionFileUrl(String id) {
-    return '/admonitions/$id/file';
+  String deleteSchooldayEventFileUrl(String id) {
+    return '/schooldayEvents/$id/file';
   }
 
-  String deleteAdmonitionProcessedFileUrl(String id) {
-    return '/admonitions/$id/processed_file';
+  String deleteSchooldayEventProcessedFileUrl(String id) {
+    return '/schooldayEvents/$id/processed_file';
   }
 
-  deleteAdmonitionFile(
-      String admonitionId, String cacheKey, bool isProcessed) async {
+  deleteSchooldayEventFile(
+      String schooldayEventId, String cacheKey, bool isProcessed) async {
     locator<NotificationManager>().isRunningValue(true);
     // choose endpoint depending on isProcessed
     String endpoint;
     if (isProcessed) {
-      endpoint =
-          EndpointsAdmonition().deleteAdmonitionProcessedFileUrl(admonitionId);
+      endpoint = EndpointsSchooldayEvent()
+          .deleteSchooldayEventProcessedFileUrl(schooldayEventId);
     } else {
-      endpoint = EndpointsAdmonition().deleteAdmonitionFileUrl(admonitionId);
+      endpoint = EndpointsSchooldayEvent()
+          .deleteSchooldayEventFileUrl(schooldayEventId);
     }
 
     // send request
@@ -211,7 +216,8 @@ class EndpointsAdmonition {
       locator<NotificationManager>().showSnackBar(
           NotificationType.warning, 'Fehler beim Löschen der Datei!');
       locator<NotificationManager>().isRunningValue(false);
-      throw ApiException('Failed to delete admonition', response.statusCode);
+      throw ApiException(
+          'Failed to delete schooldayEvent', response.statusCode);
     }
     // Success! We have a pupil response
     final Map<String, dynamic> pupilResponse = response.data;

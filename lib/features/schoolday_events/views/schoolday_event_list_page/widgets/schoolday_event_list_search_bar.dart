@@ -4,14 +4,15 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_helper_functions.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_filter_bottom_sheet.dart';
+
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_helper_functions.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_filter_bottom_sheet.dart';
 import 'package:watch_it/watch_it.dart';
 
-class AdmonitionListSearchBar extends WatchingWidget {
-  const AdmonitionListSearchBar(this.pupilsFilter, {super.key});
+class SchooldayEventListSearchBar extends WatchingWidget {
+  const SchooldayEventListSearchBar(this.pupilsFilter, {super.key});
 
   final PupilsFilter pupilsFilter;
 
@@ -58,7 +59,8 @@ class AdmonitionListSearchBar extends WatchingWidget {
                     ),
                     const Gap(10),
                     Text(
-                      SchoolEventHelper.getAdmonitionCount(pupils).toString(),
+                      SchoolEventHelper.getSchooldayEventCount(pupils)
+                          .toString(),
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,
@@ -75,7 +77,7 @@ class AdmonitionListSearchBar extends WatchingWidget {
                     ),
                     const Gap(10),
                     Text(
-                      SchoolEventHelper.getSchoolAdmonitionCount(pupils)
+                      SchoolEventHelper.getSchoolSchooldayEventCount(pupils)
                           .toString(),
                       style: const TextStyle(
                         color: Colors.black,
@@ -93,7 +95,7 @@ class AdmonitionListSearchBar extends WatchingWidget {
                     ),
                     const Gap(10),
                     Text(
-                        SchoolEventHelper.getOgsAdmonitionCount(pupils)
+                        SchoolEventHelper.getOgsSchooldayEventCount(pupils)
                             .toString(),
                         style: const TextStyle(
                           color: Colors.black,
@@ -116,7 +118,7 @@ class AdmonitionListSearchBar extends WatchingWidget {
                         refreshFunction: locator<PupilFilterManager>()
                             .refreshFilteredPupils)),
                 InkWell(
-                  onTap: () => showAdmonitionFilterBottomSheet(context),
+                  onTap: () => showSchooldayEventFilterBottomSheet(context),
                   onLongPress: () =>
                       locator<PupilFilterManager>().resetFilters(),
                   child: Padding(

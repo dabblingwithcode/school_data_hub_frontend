@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 
-Chip admonitionReasonChipWidget(String reason) {
+Chip schooldayEventReasonChipWidget(String reason) {
   return Chip(
       padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       labelPadding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
@@ -15,34 +15,34 @@ Chip admonitionReasonChipWidget(String reason) {
 }
 
 const double emojiSize = 20;
-List<Widget> admonitionReasonChip(String reason) {
+List<Widget> schooldayEventReasonChip(String reason) {
   List<Widget> chips = [];
   if (reason.contains('gm')) {
-    chips.add(admonitionReasonChipWidget('🤜🤕'));
+    chips.add(schooldayEventReasonChipWidget('🤜🤕'));
   }
   if (reason.contains('gl')) {
-    chips.add(admonitionReasonChipWidget('🤜🎓️'));
+    chips.add(schooldayEventReasonChipWidget('🤜🎓️'));
   }
   if (reason.contains('gs')) {
-    chips.add(admonitionReasonChipWidget('🤜🏫'));
+    chips.add(schooldayEventReasonChipWidget('🤜🏫'));
   }
   if (reason.contains('ab')) {
-    chips.add(admonitionReasonChipWidget('🤬💔'));
+    chips.add(schooldayEventReasonChipWidget('🤬💔'));
   }
   if (reason.contains('gv')) {
-    chips.add(admonitionReasonChipWidget('🚨😱'));
+    chips.add(schooldayEventReasonChipWidget('🚨😱'));
   }
   if (reason.contains('äa')) {
-    chips.add(admonitionReasonChipWidget('😈😖'));
+    chips.add(schooldayEventReasonChipWidget('😈😖'));
   }
   if (reason.contains('il')) {
-    chips.add(admonitionReasonChipWidget('🎓️🙉'));
+    chips.add(schooldayEventReasonChipWidget('🎓️🙉'));
   }
   if (reason.contains('us')) {
-    chips.add(admonitionReasonChipWidget('🛑🎓️'));
+    chips.add(schooldayEventReasonChipWidget('🛑🎓️'));
   }
   if (reason.contains('ss')) {
-    chips.add(admonitionReasonChipWidget('📝'));
+    chips.add(schooldayEventReasonChipWidget('📝'));
   }
   return chips;
 }

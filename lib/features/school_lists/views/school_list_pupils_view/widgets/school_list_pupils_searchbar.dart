@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/admonition_filter_bottom_sheet.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
@@ -89,7 +89,7 @@ Widget schoolListPupilsSearchBar(
                       refreshFunction:
                           locator<PupilFilterManager>().refreshFilteredPupils)),
               InkWell(
-                onTap: () => showAdmonitionFilterBottomSheet(context),
+                onTap: () => showSchooldayEventFilterBottomSheet(context),
                 onLongPress: () => locator<PupilFilterManager>().resetFilters(),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),

@@ -261,8 +261,8 @@ class AttendanceManager {
       id, startdate, enddate, missedType) async {
     locator<NotificationManager>().isRunningValue(true);
     List<Map<String, dynamic>> missedClasses = [];
-    final PupilProxy pupil = pupilManager.allPupils.value
-        .firstWhere((pupil) => pupil.internalId == id);
+    final PupilProxy pupil =
+        pupilManager.allPupils.firstWhere((pupil) => pupil.internalId == id);
     final List<DateTime> validSchooldays =
         locator<SchooldayManager>().availableDates.value;
     for (DateTime validSchoolday in validSchooldays) {
@@ -292,7 +292,7 @@ class AttendanceManager {
           NotificationType.error, 'Fehler: status code ${response.statusCode}');
       return;
     }
-    await pupilManager.updatePupilFromResponse(response.data);
+    pupilManager.updatePupilFromResponse(response.data);
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Einträge erfolgreich!');
     locator<NotificationManager>().isRunningValue(false);
@@ -336,7 +336,7 @@ class AttendanceManager {
         locator<NotificationManager>().isRunningValue(false);
         return;
       }
-      await pupilManager.updatePupilFromResponse(pupilResponse);
+      pupilManager.updatePupilFromResponse(pupilResponse);
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
       locator<NotificationManager>().isRunningValue(false);
@@ -358,7 +358,7 @@ class AttendanceManager {
       return;
     }
 
-    await pupilManager.updatePupilFromResponse(pupilResponse);
+    pupilManager.updatePupilFromResponse(pupilResponse);
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
     locator<NotificationManager>().isRunningValue(false);
@@ -384,7 +384,7 @@ class AttendanceManager {
       locator<NotificationManager>().isRunningValue(false);
       return;
     }
-    await pupilManager.updatePupilFromResponse(pupilResponse);
+    pupilManager.updatePupilFromResponse(pupilResponse);
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
     locator<NotificationManager>().isRunningValue(false);

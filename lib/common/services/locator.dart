@@ -4,8 +4,8 @@ import 'package:schuldaten_hub/common/services/search_textfield_manager.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_manager.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filters_manager.dart';
 import 'package:schuldaten_hub/features/competence/services/competence_filter_manager.dart';
@@ -156,9 +156,10 @@ Future registerDependentManagers(String token) async {
     dependsOn: [PupilManager, SchoolListManager],
   );
   locator.registerLazySingleton<AttendanceManager>(() => AttendanceManager());
-  locator.registerLazySingleton<AdmonitionManager>(() => AdmonitionManager());
-  locator.registerSingletonWithDependencies<AdmonitionFilterManager>(
-    () => AdmonitionFilterManager(),
+  locator.registerLazySingleton<SchooldayEventManager>(
+      () => SchooldayEventManager());
+  locator.registerSingletonWithDependencies<SchooldayEventFilterManager>(
+    () => SchooldayEventFilterManager(),
     dependsOn: [PupilManager, PupilFilterManager],
   );
   if (await secureStorageContains('matrix')) {
@@ -197,8 +198,8 @@ Future unregisterDependentManagers() async {
   locator.unregister<SchoolListFilterManager>();
   locator.unregister<AuthorizationManager>();
   locator.unregister<AttendanceManager>();
-  locator.unregister<AdmonitionManager>();
-  locator.unregister<AdmonitionFilterManager>();
+  locator.unregister<SchooldayEventManager>();
+  locator.unregister<SchooldayEventFilterManager>();
 
   if (locator.isRegistered<MatrixPolicyManager>()) {
     locator.unregister<MatrixPolicyManager>();

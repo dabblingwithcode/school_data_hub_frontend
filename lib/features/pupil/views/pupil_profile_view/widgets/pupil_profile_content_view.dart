@@ -4,9 +4,6 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/paddings.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/information_dialog.dart';
-import 'package:schuldaten_hub/features/admonitions/models/admonition.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/controller/admonition_list_controller.dart';
-import 'package:schuldaten_hub/features/admonitions/views/admonition_list_view/widgets/pupil_admonition_content_list.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/controller/attendance_ranking_list_controller.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_stats_pupil.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/pupil_attendance_content_list.dart';
@@ -26,9 +23,15 @@ import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/p
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_language_content_list.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/widgets/pupil_school_list_content_list.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_lists_view/controller/school_lists_controller.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/schoolday_event_page.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/pupil_schoolday_event_content_list.dart';
 
-Widget pupilProfileContentView(PupilProxy pupil, List<Admonition> admonitions,
-    BuildContext context, PupilProfileController controller) {
+Widget pupilProfileContentView(
+    PupilProxy pupil,
+    List<SchooldayEvent> schooldayEvents,
+    BuildContext context,
+    PupilProfileController controller) {
   return SingleChildScrollView(
     child: Column(
       children: <Widget>[
@@ -200,7 +203,7 @@ Widget pupilProfileContentView(PupilProxy pupil, List<Admonition> admonitions,
                   InkWell(
                     onTap: () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const AdmonitionList(),
+                        builder: (ctx) => const SchooldayEventPage(),
                       ));
                     },
                     child: const Text('Ereignisse',
@@ -212,7 +215,7 @@ Widget pupilProfileContentView(PupilProxy pupil, List<Admonition> admonitions,
                   )
                 ]),
                 const Gap(15),
-                ...pupilAdmonitionsContentList(pupil, context),
+                ...schooldayEventsContentList(pupil, context),
               ]),
             ),
           ),

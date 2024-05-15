@@ -1,6 +1,4 @@
-import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
-
-export 'endpoints/admonition_endpoints.dart';
+export 'endpoints/schoolday_event_endpoints.dart';
 export 'endpoints/authorization_endpoints.dart';
 export 'endpoints/competence_endpoints.dart';
 export 'endpoints/learning_support_endpoints.dart';

@@ -1,6 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:json_annotation/json_annotation.dart';
-import 'package:schuldaten_hub/features/admonitions/models/admonition.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
 import 'package:schuldaten_hub/features/books/models/pupil_book.dart';
@@ -50,8 +50,8 @@ class Pupil {
   List<CompetenceCheck> competenceChecks;
   @JsonKey(name: 'pupil_category_statuses')
   final List<PupilCategoryStatus> pupilCategoryStatuses;
-  @JsonKey(name: 'pupil_admonitions')
-  final List<Admonition> pupilAdmonitions;
+  @JsonKey(name: 'pupil_schooldayEvents')
+  final List<SchooldayEvent> schooldayEvents;
   @JsonKey(name: 'pupil_books')
   final List<PupilBook> pupilBooks;
   @JsonKey(name: 'pupil_lists')
@@ -87,7 +87,7 @@ class Pupil {
     required this.pickUpTime,
     required this.specialInformation,
     required this.pupilCategoryStatuses,
-    required this.pupilAdmonitions,
+    required this.schooldayEvents,
     required this.pupilBooks,
     required this.pupilLists,
     required this.pupilGoals,

@@ -11,6 +11,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
@@ -144,7 +145,7 @@ class WorkbookManager {
         (response.data as List).map((e) => Workbook.fromJson(e)).toList();
     _workbooks.value = workbooks;
     List<PupilProxy> pupils =
-        List<PupilProxy>.from(locator<PupilManager>().allPupils.value);
+        List<PupilProxy>.from(locator<PupilManager>().allPupils);
     for (PupilProxy pupil in pupils) {
       if (pupil.pupilWorkbooks != null) {
         final PupilWorkbook? pupilWorkbook = pupil.pupilWorkbooks!
@@ -154,7 +155,7 @@ class WorkbookManager {
             ...pupil.pupilWorkbooks!
           ];
           updatedPupilWorkbooks.remove(pupilWorkbook);
-          PupilProxy updatedPupil =
+          Pupil updatedPupil =
               pupil.copyWith(pupilWorkbooks: updatedPupilWorkbooks);
 
           locator<PupilManager>().updatePupilInRepository(updatedPupil);

@@ -3,7 +3,7 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/search_textfield_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_helper_functions.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_helper_functions.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_filters.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/learning_support/services/learning_support_filters.dart';
@@ -322,13 +322,13 @@ class PupilFilterManager {
     if (sortMode[PupilSortMode.sortByContacted] == true) {
       filteredPupils.sort((a, b) => contactedSum(b).compareTo(contactedSum(a)));
     }
-    // Sort by admonitions
-    if (sortMode[PupilSortMode.sortByAdmonitions] == true) {
-      filteredPupils.sort((a, b) => SchoolEventHelper.admonitionSum(b)!
-          .compareTo(SchoolEventHelper.admonitionSum(a)!));
+    // Sort by schooldayEvents
+    if (sortMode[PupilSortMode.sortBySchooldayEvents] == true) {
+      filteredPupils.sort((a, b) => SchoolEventHelper.schooldayEventSum(b)!
+          .compareTo(SchoolEventHelper.schooldayEventSum(a)!));
     }
-    // Sort by last admonition
-    if (sortMode[PupilSortMode.sortByLastAdmonition] == true) {
+    // Sort by last schooldayEvent
+    if (sortMode[PupilSortMode.sortByLastSchooldayEvent] == true) {
       filteredPupils.sort(comparePupilsByAdmonishedDate);
     }
 
@@ -337,29 +337,30 @@ class PupilFilterManager {
 
   int comparePupilsByAdmonishedDate(PupilProxy a, PupilProxy b) {
     // Handle potential null cases with null-aware operators
-    return (a.pupilAdmonitions?.isEmpty ?? true) ==
-            (b.pupilAdmonitions?.isEmpty ?? true)
+    return (a.schooldayEvents?.isEmpty ?? true) ==
+            (b.schooldayEvents?.isEmpty ?? true)
         ? compareLastAdmonishedDates(a, b) // Handle empty or both empty
-        : (a.pupilAdmonitions?.isEmpty ?? true)
+        : (a.schooldayEvents?.isEmpty ?? true)
             ? 1
             : -1; // Place empty after non-empty
   }
 
-  int comparePupilsByLastNonProcessedAdmonition(PupilProxy a, PupilProxy b) {
+  int comparePupilsByLastNonProcessedSchooldayEvent(
+      PupilProxy a, PupilProxy b) {
     // Handle potential null cases with null-aware operators
-    return (a.pupilAdmonitions?.isEmpty ?? true) ==
-            (b.pupilAdmonitions?.isEmpty ?? true)
+    return (a.schooldayEvents?.isEmpty ?? true) ==
+            (b.schooldayEvents?.isEmpty ?? true)
         ? compareLastAdmonishedDates(a, b) // Handle empty or both empty
-        : (a.pupilAdmonitions?.isEmpty ?? true)
+        : (a.schooldayEvents?.isEmpty ?? true)
             ? 1
             : -1; // Place empty after non-empty
   }
 
   int compareLastAdmonishedDates(PupilProxy a, PupilProxy b) {
     // Ensure non-empty lists before accessing elements
-    if (a.pupilAdmonitions!.isNotEmpty && b.pupilAdmonitions!.isNotEmpty) {
-      final admonishedDateA = a.pupilAdmonitions!.last.admonishedDay;
-      final admonishedDateB = b.pupilAdmonitions!.last.admonishedDay;
+    if (a.schooldayEvents!.isNotEmpty && b.schooldayEvents!.isNotEmpty) {
+      final admonishedDateA = a.schooldayEvents!.last.schooldayEventDate;
+      final admonishedDateB = b.schooldayEvents!.last.schooldayEventDate;
       return admonishedDateB
           .compareTo(admonishedDateA); // Reversed for descending order
     } else {

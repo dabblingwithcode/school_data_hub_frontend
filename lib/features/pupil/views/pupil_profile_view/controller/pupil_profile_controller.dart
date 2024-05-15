@@ -30,7 +30,7 @@ class PupilProfileController extends State<PupilProfile> {
       CustomExpansionTileController();
   final CustomExpansionTileController attendanceTileController =
       CustomExpansionTileController();
-  final CustomExpansionTileController admonitionTileController =
+  final CustomExpansionTileController schooldayEventTileController =
       CustomExpansionTileController();
   final CustomExpansionTileController ogsTileController =
       CustomExpansionTileController();
@@ -59,7 +59,7 @@ class PupilProfileController extends State<PupilProfile> {
       languageTileController,
       creditTileController,
       attendanceTileController,
-      admonitionTileController,
+      schooldayEventTileController,
       ogsTileController,
       learningSupportTileController,
       learningTileController,

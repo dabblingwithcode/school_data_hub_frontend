@@ -34,7 +34,7 @@ class SelectPupilListController extends State<SelectPupilList> {
     //locator<PupilFilterManager>().refreshFilteredPupils();
     setState(() {
       inheritedFilters = locator<PupilFilterManager>().filterState.value;
-      pupils = locator<PupilManager>().allPupils.value;
+      pupils = locator<PupilManager>().allPupils;
       //filteredPupils = List.from(pupils!);
     });
     super.initState();

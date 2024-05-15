@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
-import 'package:schuldaten_hub/features/admonitions/models/admonition.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
@@ -29,8 +29,10 @@ class PupilProfileView extends WatchingWidget {
         .firstWhere((element) =>
             element.internalId == controller.widget.pupil.internalId);
     // final pupil = findPupilById(controller.widget.pupil.internalId);
-    final List<Admonition> admonitions = List.from(pupil.pupilAdmonitions!);
-    admonitions.sort((a, b) => b.admonishedDay.compareTo(a.admonishedDay));
+    final List<SchooldayEvent> schooldayEvents =
+        List.from(pupil.schooldayEvents!);
+    schooldayEvents
+        .sort((a, b) => b.schooldayEventDate.compareTo(a.schooldayEventDate));
     return Scaffold(
       backgroundColor: canvasColor,
       body: RefreshIndicator(
@@ -72,7 +74,7 @@ class PupilProfileView extends WatchingWidget {
                           ),
                           SliverToBoxAdapter(
                             child: pupilProfileContentView(
-                                pupil, admonitions, context, controller),
+                                pupil, schooldayEvents, context, controller),
                           ),
                           const SliverGap(60),
                         ],
