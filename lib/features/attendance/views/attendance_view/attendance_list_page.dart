@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
@@ -5,7 +7,6 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_view/controller/attendance_list_controller.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/atendance_list_card.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/attendance_list_search_bar.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/attendance_view_bottom_navbar.dart';
@@ -13,9 +14,32 @@ import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
-class AttendanceListView extends WatchingWidget {
-  final AttendanceListController controller;
-  const AttendanceListView(this.controller, {Key? key}) : super(key: key);
+class AttendanceListPage extends StatefulWidget {
+  const AttendanceListPage({Key? key}) : super(key: key);
+  @override
+  State<AttendanceListPage> createState() => _AttendanceListPageState();
+}
+
+class _AttendanceListPageState extends State<AttendanceListPage> {
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    locator<AttendanceManager>().fetchMissedClassesOnASchoolday(
+        locator<SchooldayManager>().thisDate.value);
+
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      locator<AttendanceManager>().fetchMissedClassesOnASchoolday(
+          locator<SchooldayManager>().thisDate.value);
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +54,7 @@ class AttendanceListView extends WatchingWidget {
         centerTitle: true,
         backgroundColor: backgroundColor,
         title: InkWell(
-          onTap: () async => controller.setThisDate(context, thisDate),
+          onTap: () async => setThisDate(context, thisDate),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -44,7 +68,7 @@ class AttendanceListView extends WatchingWidget {
               ),
               const Gap(10),
               Text(
-                controller.thisDateAsString(context, thisDate),
+                thisDateAsString(context, thisDate),
                 style: const TextStyle(
                     fontSize: 25,
                     color: Colors.white,
@@ -79,8 +103,10 @@ class AttendanceListView extends WatchingWidget {
                     titlePadding: const EdgeInsets.only(
                         left: 5, top: 5, right: 5, bottom: 5),
                     collapseMode: CollapseMode.none,
-                    title: attendanceListSearchBar(
-                        context, pupils, controller, thisDate, filtersOn),
+                    title: AttendanceListSearchBar(
+                        pupils: pupils,
+                        thisDate: thisDate,
+                        filtersOn: filtersOn),
                   ),
                 ),
                 pupils.isEmpty
@@ -99,7 +125,7 @@ class AttendanceListView extends WatchingWidget {
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
                             // Your list view items go here
-                            return AttendanceCard(controller, pupils[index]);
+                            return AttendanceCard(pupils[index]);
                           },
                           childCount:
                               pupils.length, // Adjust this based on your data
@@ -110,8 +136,8 @@ class AttendanceListView extends WatchingWidget {
           ),
         ),
       ),
-      bottomNavigationBar:
-          attendanceViewBottomNavBar(context, filtersOn, thisDate),
+      bottomNavigationBar: AttendanceListPageBottomNavBar(
+          filtersOn: filtersOn, thisDate: thisDate),
     );
   }
 }

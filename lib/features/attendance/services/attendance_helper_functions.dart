@@ -1,6 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
+import 'package:schuldaten_hub/common/widgets/date_picker.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 
 int missedclassSum(PupilProxy pupil) {
@@ -139,4 +144,49 @@ String? setReturnedTime(int pupilId, DateTime date) {
   }
   final returnedTime = pupil.pupilMissedClasses![missedClass!].returnedAt;
   return returnedTime;
+}
+
+//- overview numbers functions
+
+int missedPupils(List<PupilProxy> filteredPupils, DateTime thisDate) {
+  List<PupilProxy> missedPupils = [];
+  if (filteredPupils.isNotEmpty) {
+    for (PupilProxy pupil in filteredPupils) {
+      if (pupil.pupilMissedClasses!.any((missedClass) =>
+          missedClass.missedDay == thisDate &&
+          (missedClass.missedType == 'missed' ||
+              missedClass.missedType == 'home' ||
+              missedClass.returned == true))) {
+        missedPupils.add(pupil);
+      }
+    }
+    return missedPupils.length;
+  }
+  return 0;
+}
+
+int unexcusedPupils(List<PupilProxy> filteredPupils, DateTime thisDate) {
+  List<PupilProxy> unexcusedPupils = [];
+
+  for (PupilProxy pupil in filteredPupils) {
+    if (pupil.pupilMissedClasses!.any((missedClass) =>
+        missedClass.missedDay == thisDate && missedClass.excused == true)) {
+      unexcusedPupils.add(pupil);
+    }
+  }
+
+  return unexcusedPupils.length;
+}
+
+//- Date functions
+
+Future<void> setThisDate(BuildContext context, DateTime thisDate) async {
+  final DateTime? newDate = await selectDate(context, thisDate);
+  if (newDate != null) {
+    locator<SchooldayManager>().setThisDate(newDate);
+  }
+}
+
+String thisDateAsString(BuildContext context, DateTime thisDate) {
+  return '${DateFormat('EEEE', Localizations.localeOf(context).toString()).format(thisDate)}, ${thisDate.formatForUser()}';
 }

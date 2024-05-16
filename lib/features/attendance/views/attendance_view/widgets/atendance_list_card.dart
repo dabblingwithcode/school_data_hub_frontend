@@ -11,7 +11,6 @@ import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_view/controller/attendance_list_controller.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/attendance_dropdown_menu_items.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/dialogues/late_in_minutes_dialog.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/dialogues/multiple_entries_dialog.dart';
@@ -19,22 +18,15 @@ import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
 
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceCard extends WatchingWidget {
-  final AttendanceListController controller;
-  final PupilProxy passedPupil;
-  const AttendanceCard(this.controller, this.passedPupil, {super.key});
+  final PupilProxy pupil;
+  const AttendanceCard(this.pupil, {super.key});
   @override
   Widget build(BuildContext context) {
-    List<PupilProxy> pupils =
-        watchValue((PupilFilterManager x) => x.filteredPupils);
-    final PupilProxy pupil = pupils
-        .where((element) => element.internalId == passedPupil.internalId)
-        .first;
     final attendanceManager = locator<AttendanceManager>();
     DateTime thisDate = watchValue((SchooldayManager x) => x.thisDate);
     String dropdownMissedValue = setMissedTypeValue(pupil.internalId, thisDate);
