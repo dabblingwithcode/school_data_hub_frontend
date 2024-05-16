@@ -3,20 +3,17 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/controller/attendance_ranking_list_controller.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/widgets/attendance_ranking_list_card.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/widgets/attendance_ranking_list_searchbar.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/widgets/attendance_ranking_list_view_bottom_navbar.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
-class AttendanceRankingListView extends WatchingWidget {
-  final AttendanceRankingListController controller;
-  const AttendanceRankingListView(this.controller, {Key? key})
-      : super(key: key);
+class AttendanceRankingListPage extends WatchingWidget {
+  //final AttendanceRankingListController controller;
+  const AttendanceRankingListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,8 +66,8 @@ class AttendanceRankingListView extends WatchingWidget {
                     titlePadding: const EdgeInsets.only(
                         left: 5, top: 5, right: 5, bottom: 5),
                     collapseMode: CollapseMode.none,
-                    title: attendanceRankingListSearchBar(
-                        context, pupils, controller, filtersOn),
+                    title: AttendanceRankingListSearchbar(
+                        pupils: pupils, filtersOn: filtersOn),
                   ),
                 ),
                 pupils.isEmpty
@@ -89,8 +86,7 @@ class AttendanceRankingListView extends WatchingWidget {
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
                             // Your list view items go here
-                            return AttendanceRankingListCard(
-                                controller, pupils[index]);
+                            return AttendanceRankingListCard(pupils[index]);
                           },
                           childCount:
                               pupils.length, // Adjust this based on your data
@@ -102,7 +98,7 @@ class AttendanceRankingListView extends WatchingWidget {
         ),
       ),
       bottomNavigationBar:
-          attendanceRankingListViewBottomNavBar(context, filtersOn),
+          AttendanceRankingListPageBottomNavBar(filtersOn: filtersOn),
     );
   }
 }

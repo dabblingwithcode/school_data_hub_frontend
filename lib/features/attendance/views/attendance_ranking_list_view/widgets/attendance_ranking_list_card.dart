@@ -4,21 +4,17 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
 import 'package:schuldaten_hub/common/widgets/list_tile.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/controller/attendance_ranking_list_controller.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_stats_pupil.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/widgets/pupil_attendance_content.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceRankingListCard extends WatchingStatefulWidget {
-  final AttendanceRankingListController controller;
-  final PupilProxy passedPupil;
-  const AttendanceRankingListCard(this.controller, this.passedPupil,
-      {super.key});
+  final PupilProxy pupil;
+  const AttendanceRankingListCard(this.pupil, {super.key});
 
   @override
   State<AttendanceRankingListCard> createState() =>
@@ -35,10 +31,7 @@ class _AttendanceRankingListCardState extends State<AttendanceRankingListCard> {
 
   @override
   Widget build(BuildContext context) {
-    PupilProxy pupil = watchValue((PupilFilterManager x) => x.filteredPupils)
-        .where((element) => element.internalId == widget.passedPupil.internalId)
-        .first;
-
+    final PupilProxy pupil = widget.pupil;
     return Card(
       color: Colors.white,
       surfaceTintColor: Colors.white,
