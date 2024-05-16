@@ -9,15 +9,13 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/widgets/authorization_list_bottom_navbar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
-import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/controller/authorizations_controller.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/widgets/authorization_card.dart';
 
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:watch_it/watch_it.dart';
 
-class AuthorizationsView extends WatchingWidget {
-  final AuthorizationsController controller;
-  const AuthorizationsView(this.controller, {Key? key}) : super(key: key);
+class AuthorizationsListPage extends WatchingWidget {
+  const AuthorizationsListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +23,8 @@ class AuthorizationsView extends WatchingWidget {
 
     List<Authorization> authorizations =
         watchValue((AuthorizationManager x) => x.authorizations);
+
+    //- TODO: implement slivers and separate the search bar from the list
 
     return Scaffold(
       backgroundColor: canvasColor,
@@ -133,8 +133,8 @@ class AuthorizationsView extends WatchingWidget {
                               child: ListView.builder(
                                 itemCount: authorizations.length,
                                 itemBuilder: (BuildContext context, int index) {
-                                  return authorizationCard(
-                                      context, authorizations[index]);
+                                  return AuthorizationCard(
+                                      authorization: authorizations[index]);
                                 },
                               ),
                             ),
@@ -143,7 +143,7 @@ class AuthorizationsView extends WatchingWidget {
                 ),
               ),
       ),
-      bottomNavigationBar: authorizationListBottomNavBar(context),
+      bottomNavigationBar: const AuthorizationListBottomNavBar(),
     );
   }
 }

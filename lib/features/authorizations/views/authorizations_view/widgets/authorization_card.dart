@@ -5,8 +5,13 @@ import 'package:schuldaten_hub/features/authorizations/models/authorization.dart
 
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/controller/authorization_pupils_controller.dart';
 
-Card authorizationCard(BuildContext context, Authorization authorization) {
-  return Card(
+class AuthorizationCard extends StatelessWidget {
+  final Authorization authorization;
+  const AuthorizationCard({required this.authorization, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
       color: Colors.white,
       surfaceTintColor: Colors.white,
       child: Padding(
@@ -51,5 +56,7 @@ Card authorizationCard(BuildContext context, Authorization authorization) {
             ],
           ),
         ),
-      ));
+      ),
+    );
+  }
 }
