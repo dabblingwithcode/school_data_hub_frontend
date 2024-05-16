@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
-import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/schoolday_event_list_page.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_page/controller/attendance_ranking_list_controller.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_view/controller/attendance_list_controller.dart';
+import 'package:schuldaten_hub/features/attendance/views/attendance_page/attendance_list_page.dart';
+import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/attendance_ranking_list_page.dart';
 import 'package:schuldaten_hub/features/credit/controller/credit_list_controller.dart';
-import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/controller/learning_support_list_controller.dart';
+import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/learning_support_list_page.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/controller/room_list_controller.dart';
 import 'package:schuldaten_hub/features/ogs/controller/ogs_list_controller.dart';
 import 'package:schuldaten_hub/features/pupil/views/special_info_view/controller/special_info_controller.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/schoolday_event_list_page.dart';
 
 double buttonSize = 150;
 List<Widget> pupilListButtons(
@@ -55,7 +55,7 @@ List<Widget> pupilListButtons(
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => const AttendanceRankingList(),
+            builder: (ctx) => const AttendanceRankingListPage(),
           ));
         },
         child: SizedBox(
@@ -91,7 +91,7 @@ List<Widget> pupilListButtons(
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => const AttendanceList(),
+            builder: (ctx) => const AttendanceListPage(),
           ));
         },
         child: SizedBox(
@@ -207,7 +207,7 @@ List<Widget> pupilListButtons(
           child: InkWell(
             onTap: () {
               Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => const LearningSupportList(),
+                builder: (ctx) => const LearningSupportListPage(),
               ));
             },
             child: const Column(

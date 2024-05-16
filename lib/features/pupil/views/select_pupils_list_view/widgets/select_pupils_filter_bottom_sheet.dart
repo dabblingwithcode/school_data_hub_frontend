@@ -12,9 +12,6 @@ class SelectPupilsFilterBottomSheet extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<PupilFilter, bool> activeFilters =
-        watchValue((PupilFilterManager x) => x.filterState);
-
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20, top: 8),
       child: Center(
@@ -40,7 +37,7 @@ class SelectPupilsFilterBottomSheet extends WatchingWidget {
                       icon: const Icon(Icons.restart_alt_rounded)),
                 ],
               ),
-              standardFilters(activeFilters),
+              const StandardFilters(),
               const Row(
                 children: [
                   Text(

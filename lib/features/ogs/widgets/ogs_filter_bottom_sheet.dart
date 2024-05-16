@@ -13,13 +13,13 @@ class OgsFilterBottomSheet extends WatchingWidget {
     Map<PupilFilter, bool> activeFilters =
         watchValue((PupilFilterManager x) => x.filterState);
 
-    return Padding(
-      padding: const EdgeInsets.only(left: 20.0, right: 20, top: 8),
+    return const Padding(
+      padding: EdgeInsets.only(left: 20.0, right: 20, top: 8),
       child: Column(
         children: [
-          filterHeading(),
-          standardFilters(activeFilters),
-          const Row(
+          FilterHeading(),
+          StandardFilters(),
+          Row(
             children: [
               Text(
                 'OGS-Filter',

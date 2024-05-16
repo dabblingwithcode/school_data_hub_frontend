@@ -4,7 +4,6 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
-
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_helper_functions.dart';
@@ -12,15 +11,12 @@ import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_l
 import 'package:watch_it/watch_it.dart';
 
 class SchooldayEventListSearchBar extends WatchingWidget {
-  const SchooldayEventListSearchBar(this.pupilsFilter, {super.key});
-
-  final PupilsFilter pupilsFilter;
+  const SchooldayEventListSearchBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final pupils = pupilsFilter.filteredPupils.value;
-    final filtersOn =
-        watchPropertyValue((f) => f.filtersOn, target: pupilsFilter);
+    final pupils = watchValue((PupilsFilter x) => x.filteredPupils);
+    final filtersOn = watchValue((PupilsFilter f) => f.filtersOn);
 
     return Container(
       decoration: BoxDecoration(
@@ -118,7 +114,14 @@ class SchooldayEventListSearchBar extends WatchingWidget {
                         refreshFunction: locator<PupilFilterManager>()
                             .refreshFilteredPupils)),
                 InkWell(
-                  onTap: () => showSchooldayEventFilterBottomSheet(context),
+                  onTap: () => showModalBottomSheet(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    context: context,
+                    builder: (_) => const SchooldayEventFilterBottomSheet(),
+                  ),
                   onLongPress: () =>
                       locator<PupilFilterManager>().resetFilters(),
                   child: Padding(

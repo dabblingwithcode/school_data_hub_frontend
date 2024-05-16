@@ -26,8 +26,8 @@ class PupilListFilterBottomSheet extends WatchingWidget {
       padding: const EdgeInsets.only(left: 20.0, right: 20, top: 8),
       child: Column(
         children: [
-          filterHeading(),
-          standardFilters(activeFilters),
+          const FilterHeading(),
+          const StandardFilters(),
           const Row(
             children: [
               Text(

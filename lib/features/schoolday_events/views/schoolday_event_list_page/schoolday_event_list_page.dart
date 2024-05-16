@@ -4,6 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_list_card.dart';
@@ -19,16 +20,18 @@ class SchooldayEventPage extends WatchingStatefulWidget {
 }
 
 class _SchooldayEventPageState extends State<SchooldayEventPage> {
-  late final pupilsFilter = locator<PupilManager>().getPupilFilter();
-
   @override
   Widget build(BuildContext context) {
+    pushScope(
+        init: (locator) => locator
+            .registerSingleton(locator<PupilManager>().getPupilFilter()));
+
     bool schooldayEventFiltersOn = watchValue(
         (SchooldayEventFilterManager x) => x.schooldayEventsFiltersOn);
 
-    List<PupilProxy> pupils = watch(pupilsFilter.filteredPupils).value;
+    List<PupilProxy> pupils = watchValue((PupilsFilter x) => x.filteredPupils);
     bool filtersOn =
-        watchPropertyValue((f) => f.filtersOn, target: pupilsFilter);
+        watchPropertyValue((PupilsFilter f) => f.filtersOn);
 
     return Scaffold(
       backgroundColor: canvasColor,
@@ -75,7 +78,7 @@ class _SchooldayEventPageState extends State<SchooldayEventPage> {
                       titlePadding: const EdgeInsets.only(
                           left: 5, top: 5, right: 5, bottom: 5),
                       collapseMode: CollapseMode.none,
-                      title: SchooldayEventListSearchBar(pupilsFilter)),
+                      title: SchooldayEventListSearchBar(),
                 ),
                 pupils.isEmpty
                     ? const SliverToBoxAdapter(

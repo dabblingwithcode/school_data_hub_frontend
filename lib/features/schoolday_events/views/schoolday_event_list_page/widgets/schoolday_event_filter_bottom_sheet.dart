@@ -52,11 +52,11 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              filterHeading(),
+              const FilterHeading(),
               Expanded(
                 child: SingleChildScrollView(
                   child: Column(children: [
-                    standardFilters(activeFilters),
+                    const StandardFilters(),
                     const Row(
                       children: [
                         Text(
@@ -267,15 +267,4 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
       ),
     );
   }
-}
-
-showSchooldayEventFilterBottomSheet(BuildContext context) {
-  return showModalBottomSheet(
-    constraints: const BoxConstraints(maxWidth: 800),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(20.0),
-    ),
-    context: context,
-    builder: (_) => const SchooldayEventFilterBottomSheet(),
-  );
 }

@@ -29,8 +29,8 @@ class CreditFilterBottomSheet extends WatchingWidget {
           constraints: const BoxConstraints(maxWidth: 800),
           child: Column(
             children: [
-              filterHeading(),
-              standardFilters(activeFilters),
+              const FilterHeading(),
+              const StandardFilters(),
               const Row(
                 children: [
                   Text(
