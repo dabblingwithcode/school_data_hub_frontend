@@ -3,8 +3,8 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/paddings.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/information_dialog.dart';
-import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/controller/learning_support_list_controller.dart';
-import 'package:schuldaten_hub/features/learning_support/views/pupil_profile_learning_support_content.dart';
+import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/learning_support_list_page.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/widgets/pupil_profile_learning_support_content.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 class PupilLearningSupportContent extends StatelessWidget {
@@ -31,7 +31,7 @@ class PupilLearningSupportContent extends StatelessWidget {
             InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => const LearningSupportList(),
+                  builder: (ctx) => const LearningSupportListPage(),
                 ));
               },
               child: const Text('Förderung',

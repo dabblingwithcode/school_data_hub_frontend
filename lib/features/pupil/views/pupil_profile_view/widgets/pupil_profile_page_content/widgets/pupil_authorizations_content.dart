@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/paddings.dart';
-import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/controller/authorizations_controller.dart';
+import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/authorizations_list_page.dart';
 import 'package:schuldaten_hub/features/authorizations/views/pupil_authorizations_content_list.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
@@ -30,7 +30,7 @@ class PupilAuthorizationsContent extends StatelessWidget {
             InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => const Authorizations(),
+                  builder: (ctx) => const AuthorizationsListPage(),
                 ));
               },
               child: const Text('Einwilligungen',

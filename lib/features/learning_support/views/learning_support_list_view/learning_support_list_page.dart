@@ -5,7 +5,6 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/learning_support/services/pupil_goal_filters.dart';
-import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/controller/learning_support_list_controller.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_list_card.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_list_search_bar.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_view_bottom_navbar.dart';
@@ -14,9 +13,8 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart'
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
-class LearningSupportListView extends WatchingWidget {
-  final LearningSupportListController controller;
-  const LearningSupportListView(this.controller, {Key? key}) : super(key: key);
+class LearningSupportListPage extends WatchingWidget {
+  const LearningSupportListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -72,8 +70,8 @@ class LearningSupportListView extends WatchingWidget {
                     titlePadding: const EdgeInsets.only(
                         left: 5, top: 5, right: 5, bottom: 5),
                     collapseMode: CollapseMode.none,
-                    title: learningSupportListSearchBar(
-                        context, pupils, controller, filtersOn),
+                    title: LearningSupportListSearchBar(
+                        pupils: pupils, filtersOn: filtersOn),
                   ),
                 ),
                 pupils.isEmpty
@@ -92,8 +90,7 @@ class LearningSupportListView extends WatchingWidget {
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
                             // Your list view items go here
-                            return LearningSupportCard(
-                                controller, pupils[index]);
+                            return LearningSupportCard(pupils[index]);
                           },
                           childCount:
                               pupils.length, // Adjust this based on your data
@@ -104,7 +101,8 @@ class LearningSupportListView extends WatchingWidget {
           ),
         ),
       ),
-      bottomNavigationBar: learningSupportViewBottomNavBar(context, filtersOn),
+      bottomNavigationBar:
+          LearningSupportListPageBottomNavBar(filtersOn: filtersOn),
     );
   }
 }
