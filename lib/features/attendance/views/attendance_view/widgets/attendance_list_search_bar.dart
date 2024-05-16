@@ -57,7 +57,8 @@ class AttendanceListSearchBar extends StatelessWidget {
                 ),
                 const Gap(5),
                 Text(
-                  (pupils.length - missedPupils(pupils, thisDate)).toString(),
+                  (pupils.length - missedPupilsSum(pupils, thisDate))
+                      .toString(),
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,
@@ -74,7 +75,7 @@ class AttendanceListSearchBar extends StatelessWidget {
                 ),
                 const Gap(5),
                 Text(
-                  unexcusedPupils(pupils, thisDate).toString(),
+                  unexcusedPupilsSum(pupils, thisDate).toString(),
                   style: const TextStyle(
                     color: Colors.black,
                     fontWeight: FontWeight.bold,

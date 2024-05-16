@@ -8,6 +8,49 @@ import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 
+//- lookup functions
+
+int? findMissedClassIndex(PupilProxy pupil, DateTime date) {
+  final int? foundMissedClassIndex = pupil.pupilMissedClasses
+      ?.indexWhere((datematch) => (datematch.missedDay.isSameDate(date)));
+  if (foundMissedClassIndex == null) {
+    return null;
+  }
+  return foundMissedClassIndex;
+}
+
+//- overview numbers functions
+
+int missedPupilsSum(List<PupilProxy> filteredPupils, DateTime thisDate) {
+  List<PupilProxy> missedPupils = [];
+  if (filteredPupils.isNotEmpty) {
+    for (PupilProxy pupil in filteredPupils) {
+      if (pupil.pupilMissedClasses!.any((missedClass) =>
+          missedClass.missedDay == thisDate &&
+          (missedClass.missedType == 'missed' ||
+              missedClass.missedType == 'home' ||
+              missedClass.returned == true))) {
+        missedPupils.add(pupil);
+      }
+    }
+    return missedPupils.length;
+  }
+  return 0;
+}
+
+int unexcusedPupilsSum(List<PupilProxy> filteredPupils, DateTime thisDate) {
+  List<PupilProxy> unexcusedPupils = [];
+
+  for (PupilProxy pupil in filteredPupils) {
+    if (pupil.pupilMissedClasses!.any((missedClass) =>
+        missedClass.missedDay == thisDate && missedClass.excused == true)) {
+      unexcusedPupils.add(pupil);
+    }
+  }
+
+  return unexcusedPupils.length;
+}
+
 int missedclassSum(PupilProxy pupil) {
   // count the number of missed classes - avoid null when missedClasses is empty
   int missedclassCount = 0;
@@ -51,6 +94,8 @@ int contactedSum(PupilProxy pupil) {
   return contactedCount;
 }
 
+//- check condition functions
+
 bool pupilIsMissedToday(PupilProxy pupil) {
   if (pupil.pupilMissedClasses!.isEmpty) return false;
   if (pupil.pupilMissedClasses!.any((element) =>
@@ -68,16 +113,7 @@ bool schooldayIsToday(DateTime schoolday) {
   return false;
 }
 
-int? findMissedClassIndex(PupilProxy pupil, DateTime date) {
-  final int? foundMissedClassIndex = pupil.pupilMissedClasses
-      ?.indexWhere((datematch) => (datematch.missedDay.isSameDate(date)));
-  if (foundMissedClassIndex == null) {
-    return null;
-  }
-  return foundMissedClassIndex;
-}
-
-//-VALUES
+//- set value functions
 setMissedTypeValue(int pupilId, DateTime date) {
   final PupilProxy pupil = findPupilById(pupilId);
   final int? missedClass = findMissedClassIndex(pupil, date);
@@ -144,38 +180,6 @@ String? setReturnedTime(int pupilId, DateTime date) {
   }
   final returnedTime = pupil.pupilMissedClasses![missedClass!].returnedAt;
   return returnedTime;
-}
-
-//- overview numbers functions
-
-int missedPupils(List<PupilProxy> filteredPupils, DateTime thisDate) {
-  List<PupilProxy> missedPupils = [];
-  if (filteredPupils.isNotEmpty) {
-    for (PupilProxy pupil in filteredPupils) {
-      if (pupil.pupilMissedClasses!.any((missedClass) =>
-          missedClass.missedDay == thisDate &&
-          (missedClass.missedType == 'missed' ||
-              missedClass.missedType == 'home' ||
-              missedClass.returned == true))) {
-        missedPupils.add(pupil);
-      }
-    }
-    return missedPupils.length;
-  }
-  return 0;
-}
-
-int unexcusedPupils(List<PupilProxy> filteredPupils, DateTime thisDate) {
-  List<PupilProxy> unexcusedPupils = [];
-
-  for (PupilProxy pupil in filteredPupils) {
-    if (pupil.pupilMissedClasses!.any((missedClass) =>
-        missedClass.missedDay == thisDate && missedClass.excused == true)) {
-      unexcusedPupils.add(pupil);
-    }
-  }
-
-  return unexcusedPupils.length;
 }
 
 //- Date functions
