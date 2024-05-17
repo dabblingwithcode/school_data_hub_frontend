@@ -38,7 +38,7 @@ class PupilProxy with ChangeNotifier {
     notifyListeners();
   }
 
-  void clearAvtar() {
+  void clearAvatar() {
     _avatarUrlOverride = null;
     _avatarUpdated = true;
     pupilIsDirty = true;
