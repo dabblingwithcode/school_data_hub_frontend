@@ -50,7 +50,7 @@ class Pupil {
   List<CompetenceCheck> competenceChecks;
   @JsonKey(name: 'pupil_category_statuses')
   final List<PupilCategoryStatus> pupilCategoryStatuses;
-  @JsonKey(name: 'pupil_schooldayEvents')
+  @JsonKey(name: 'pupil_admonitions')
   final List<SchooldayEvent> schooldayEvents;
   @JsonKey(name: 'pupil_books')
   final List<PupilBook> pupilBooks;

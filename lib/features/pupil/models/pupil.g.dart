@@ -25,7 +25,7 @@ Pupil _$PupilFromJson(Map<String, dynamic> json) => Pupil(
       pupilCategoryStatuses: (json['pupil_category_statuses'] as List<dynamic>)
           .map((e) => PupilCategoryStatus.fromJson(e as Map<String, dynamic>))
           .toList(),
-      schooldayEvents: (json['pupil_schooldayEvents'] as List<dynamic>)
+      schooldayEvents: (json['pupil_admonitions'] as List<dynamic>)
           .map((e) => SchooldayEvent.fromJson(e as Map<String, dynamic>))
           .toList(),
       pupilBooks: (json['pupil_books'] as List<dynamic>)
@@ -76,7 +76,7 @@ Map<String, dynamic> _$PupilToJson(Pupil instance) => <String, dynamic>{
       'special_information': instance.specialInformation,
       'competence_checks': instance.competenceChecks,
       'pupil_category_statuses': instance.pupilCategoryStatuses,
-      'pupil_schooldayEvents': instance.schooldayEvents,
+      'pupil_admonitions': instance.schooldayEvents,
       'pupil_books': instance.pupilBooks,
       'pupil_lists': instance.pupilLists,
       'pupil_goals': instance.pupilGoals,
