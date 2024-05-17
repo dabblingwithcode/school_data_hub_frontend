@@ -80,7 +80,7 @@ class PupilPersonalDataManager {
     }
   }
 
-  setNewPupilBase(List<PupilPersonalData> personalDataList) async {
+  void setNewPupilBase(List<PupilPersonalData> personalDataList) async {
     _pupilPersonalData.clear();
     for (PupilPersonalData pupil in personalDataList) {
       _pupilPersonalData[pupil.id] = pupil;
@@ -131,8 +131,9 @@ class PupilPersonalDataManager {
       }
     }
     debug.info('Pupilbase processed');
-    await secureStorageWrite(
-        'pupilBase', jsonEncode(_pupilPersonalData.values));
+    final List<PupilPersonalData> personalDataList =
+        _pupilPersonalData.values.toList();
+    await secureStorageWrite('pupilBase', jsonEncode(personalDataList));
     debug.success(
         'Pupilbase extended: $oldLenght pupils before, now ${_pupilPersonalData.length} | ${StackTrace.current}');
     await locator<PupilManager>().fetchAllPupils();
