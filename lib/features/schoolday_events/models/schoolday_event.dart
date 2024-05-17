@@ -6,11 +6,11 @@ part 'schoolday_event.g.dart';
 
 @JsonSerializable()
 class SchooldayEvent {
-  @JsonKey(name: 'schooldayEvent_id')
+  @JsonKey(name: 'admonition_id')
   final String schooldayEventId;
-  @JsonKey(name: 'schooldayEvent_type')
+  @JsonKey(name: 'admonition_type')
   final String schooldayEventType;
-  @JsonKey(name: 'schooldayEvent_reason')
+  @JsonKey(name: 'admonition_reason')
   final String schooldayEventReason;
   @JsonKey(name: 'admonishing_user')
   final String admonishingUser;

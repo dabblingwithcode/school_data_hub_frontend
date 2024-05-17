@@ -14,7 +14,7 @@ import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
-class AttendanceListPage extends StatefulWidget {
+class AttendanceListPage extends WatchingStatefulWidget {
   const AttendanceListPage({Key? key}) : super(key: key);
   @override
   State<AttendanceListPage> createState() => _AttendanceListPageState();

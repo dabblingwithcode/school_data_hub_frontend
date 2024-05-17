@@ -79,7 +79,10 @@ class AuthorizationManager {
     }
     final List<Pupil> responsePupils = (List<Pupil>.from(
         (response.data as List).map((e) => Pupil.fromJson(e))));
-    locator<PupilManager>().updatePupilsRepository(responsePupils);
+    for (Pupil pupil in responsePupils) {
+      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
+    }
+
     fetchAuthorizations();
     snackBarManager.showSnackBar(
         NotificationType.success, 'Einwilligung erstellt');
@@ -102,14 +105,16 @@ class AuthorizationManager {
       snackBarManager.isRunningValue(false);
       return;
     }
-    locator<PupilManager>().updatePupilFromResponse(response.data);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(response.data));
     snackBarManager.showSnackBar(
         NotificationType.success, 'Einwilligung erstellt');
     debug.success('list entry successful');
 
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
-    locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
     snackBarManager.isRunningValue(false);
   }
 
@@ -130,9 +135,11 @@ class AuthorizationManager {
     }
     final List<Pupil> responsePupils = (List<Pupil>.from(
         (response.data as List).map((e) => Pupil.fromJson(e))));
-    locator<PupilManager>().updatePupilsRepository(responsePupils);
-    snackBarManager.showSnackBar(
-        NotificationType.success, 'Einwilligungen erstellt');
+    for (Pupil pupil in responsePupils) {
+      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
+      snackBarManager.showSnackBar(
+          NotificationType.success, 'Einwilligungen erstellt');
+    }
   }
 
   Future deletePupilAuthorization(int pupilId, String authId) async {
@@ -149,7 +156,7 @@ class AuthorizationManager {
       return;
     }
     final pupil = Pupil.fromJson(response.data);
-    locator<PupilManager>().updatePupilInRepository(pupil);
+    locator<PupilManager>().updatePupilProxyWithPupil(pupil);
     snackBarManager.showSnackBar(
         NotificationType.success, 'Einwilligung gelöscht');
     snackBarManager.isRunningValue(false);
@@ -180,7 +187,8 @@ class AuthorizationManager {
     }
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
-    locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
     snackBarManager.showSnackBar(
         NotificationType.success, 'Einwilligung geändert');
     snackBarManager.isRunningValue(false);
@@ -211,7 +219,8 @@ class AuthorizationManager {
     }
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
-    locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
     snackBarManager.showSnackBar(NotificationType.success, 'Datei hochgeladen');
   }
 
@@ -230,7 +239,8 @@ class AuthorizationManager {
     final cacheManager = DefaultCacheManager();
     await cacheManager.removeFile(cacheKey);
     // Then we patch the pupil with the data
-    locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
     snackBarManager.showSnackBar(NotificationType.success, 'Datei gelöscht');
     snackBarManager.isRunningValue(false);
   }
@@ -242,7 +252,7 @@ class AuthorizationManager {
     return authorizations;
   }
 
-  //- diesie Funktionen haben keinen API-Call
+  //- diese Funktionen haben keinen API-Call
   PupilAuthorization getPupilAuthorization(int pupilId, String authId) {
     final PupilProxy pupil = locator<PupilManager>()
         .allPupils

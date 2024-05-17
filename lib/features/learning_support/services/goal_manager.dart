@@ -15,6 +15,7 @@ import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/learning_support/models/category/goal_category.dart';
 import 'package:schuldaten_hub/features/learning_support/models/goal/pupil_goal.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
@@ -88,7 +89,8 @@ class GoalManager {
               .postCategoryStatusUrl(pupil.internalId, goalCategoryId),
           data: data);
       if (response.statusCode == 200) {
-        locator<PupilManager>().updatePupilFromResponse(response.data);
+        final pupil = Pupil.fromJson(response.data);
+        locator<PupilManager>().updatePupilProxyWithPupil(pupil);
       }
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e);
@@ -125,7 +127,8 @@ class GoalManager {
     }
     snackBarManager.showSnackBar(
         NotificationType.success, 'Status aktualisiert');
-    locator<PupilManager>().updatePupilFromResponse(response.data);
+    final pupil = Pupil.fromJson(response.data);
+    locator<PupilManager>().updatePupilProxyWithPupil(pupil);
     snackBarManager.isRunningValue(false);
   }
 
@@ -135,7 +138,8 @@ class GoalManager {
       final response = await client
           .delete(EndpointsLearningSupport().deleteCategoryStatusUrl(statusId));
       if (response.statusCode == 200) {
-        locator<PupilManager>().updatePupilFromResponse(response.data);
+        final pupil = Pupil.fromJson(response.data);
+        locator<PupilManager>().updatePupilProxyWithPupil(pupil);
         snackBarManager.showSnackBar(
             NotificationType.success, 'Status gelöscht');
         snackBarManager.isRunningValue(false);
@@ -167,7 +171,8 @@ class GoalManager {
       final response = await client
           .post(EndpointsLearningSupport().postGoalUrl(pupilId), data: data);
       if (response.statusCode == 200) {
-        locator<PupilManager>().updatePupilFromResponse(response.data);
+        final pupil = Pupil.fromJson(response.data);
+        locator<PupilManager>().updatePupilProxyWithPupil(pupil);
         snackBarManager.showSnackBar(
             NotificationType.success, 'Ziel hinzugefügt');
       }
@@ -196,7 +201,8 @@ class GoalManager {
       final response =
           await client.delete(EndpointsLearningSupport().deleteGoalUrl(goalId));
       if (response.statusCode == 200) {
-        locator<PupilManager>().updatePupilFromResponse(response.data);
+        final pupil = Pupil.fromJson(response.data);
+        locator<PupilManager>().updatePupilProxyWithPupil(pupil);
         snackBarManager.showSnackBar(NotificationType.success, 'Ziel gelöscht');
         snackBarManager.isRunningValue(false);
       }

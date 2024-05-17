@@ -8,9 +8,9 @@ part of 'schoolday_event.dart';
 
 SchooldayEvent _$SchooldayEventFromJson(Map<String, dynamic> json) =>
     SchooldayEvent(
-      schooldayEventId: json['schooldayEvent_id'] as String,
-      schooldayEventType: json['schooldayEvent_type'] as String,
-      schooldayEventReason: json['schooldayEvent_reason'] as String,
+      schooldayEventId: json['admonition_id'] as String,
+      schooldayEventType: json['admonition_type'] as String,
+      schooldayEventReason: json['admonition_reason'] as String,
       admonishingUser: json['admonishing_user'] as String,
       processed: json['processed'] as bool,
       processedBy: json['processed_by'] as String?,
@@ -25,9 +25,9 @@ SchooldayEvent _$SchooldayEventFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$SchooldayEventToJson(SchooldayEvent instance) =>
     <String, dynamic>{
-      'schooldayEvent_id': instance.schooldayEventId,
-      'schooldayEvent_type': instance.schooldayEventType,
-      'schooldayEvent_reason': instance.schooldayEventReason,
+      'admonition_id': instance.schooldayEventId,
+      'admonition_type': instance.schooldayEventType,
+      'admonition_reason': instance.schooldayEventReason,
       'admonishing_user': instance.admonishingUser,
       'processed': instance.processed,
       'processed_by': instance.processedBy,

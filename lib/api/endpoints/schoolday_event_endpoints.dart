@@ -30,8 +30,8 @@ class EndpointsSchooldayEvent {
     final data = jsonEncode({
       "admonished_day": date.formatForJson(),
       "admonished_pupil_id": pupilId,
-      "schooldayEvent_reason": reason,
-      "schooldayEvent_type": type,
+      "admonition_reason": reason,
+      "admonition_type": type,
       "file_url": null,
       "processed": false,
       "processed_at": null,
@@ -82,7 +82,7 @@ class EndpointsSchooldayEvent {
     // processing user and processed date are automatically added
     final data = jsonEncode({
       if (admonisher != null) "admonishing_user": admonisher,
-      if (reason != null) "schooldayEvent_reason": reason,
+      if (reason != null) "admonition_reason": reason,
       if (processed != null) "processed": processed,
       if (file != null) "file_url": file,
       if (processedBy != null)

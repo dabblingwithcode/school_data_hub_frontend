@@ -3,7 +3,9 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/authorizations_list_page.dart';
+
 import 'package:schuldaten_hub/features/school_lists/views/school_lists_page/school_lists_page.dart';
+
 import 'package:watch_it/watch_it.dart';
 
 class CheckListsView extends WatchingWidget {

@@ -10,6 +10,7 @@ import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
@@ -78,14 +79,15 @@ class AttendanceManager {
     final data = jsonEncode({"excused": newValue});
     final Response response = await client
         .patch(endpoints.patchMissedClass(pupilId, date), data: data);
-    final Map<String, dynamic> pupilResponse = response.data;
+
     if (response.statusCode == 200) {
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
 
       debug.warning('Changed excused state to $newValue');
 
-      pupilManager.updatePupilFromResponse(pupilResponse);
+      final pupil = Pupil.fromJson(response.data);
+      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
     }
     locator<NotificationManager>().isRunningValue(false);
     return;
@@ -104,7 +106,8 @@ class AttendanceManager {
 
       return;
     }
-    pupilManager.updatePupilFromResponse(response.data);
+    final pupil = Pupil.fromJson(response.data);
+    locator<PupilManager>().updatePupilProxyWithPupil(pupil);
     locator<NotificationManager>().isRunningValue(false);
 
     return;
@@ -138,7 +141,7 @@ class AttendanceManager {
       // making the request
       final Response response =
           await client.post(EndpointsMissedClass.postMissedClass, data: data);
-      final Map<String, dynamic> pupilResponse = response.data;
+
       // handle errors
       if (response.statusCode != 200) {
         locator<NotificationManager>().showSnackBar(NotificationType.error,
@@ -148,7 +151,8 @@ class AttendanceManager {
       }
       // the request was successful -
       //we patch the pupil in the pupilmanager with the response
-      pupilManager.updatePupilFromResponse(pupilResponse);
+      final pupil = Pupil.fromJson(response.data);
+      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
       locator<NotificationManager>().isRunningValue(false);
       return;
     }
@@ -190,8 +194,8 @@ class AttendanceManager {
       }
       // the request was successful -
       //we patch the pupil in the pupilmanager with the response
-      final Map<String, dynamic> pupilResponse = response.data;
-      pupilManager.updatePupilFromResponse(pupilResponse);
+      final pupil = Pupil.fromJson(response.data);
+      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
       locator<NotificationManager>().isRunningValue(false);
@@ -221,14 +225,15 @@ class AttendanceManager {
 
       final Response response =
           await client.post(EndpointsMissedClass.postMissedClass, data: data);
-      final Map<String, dynamic> pupilResponse = response.data;
+
       if (response.statusCode != 200) {
         locator<NotificationManager>().showSnackBar(NotificationType.error,
             'Fehler: status code ${response.statusCode}');
         locator<NotificationManager>().isRunningValue(false);
         return;
       }
-      pupilManager.updatePupilFromResponse(pupilResponse);
+      final pupil = Pupil.fromJson(response.data);
+      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
       locator<NotificationManager>().isRunningValue(false);
@@ -240,7 +245,7 @@ class AttendanceManager {
         jsonEncode({"missed_type": dropdownValue, "minutes_late": minutesLate});
     final Response response = await client
         .patch(endpoints.patchMissedClass(pupilId, date), data: data);
-    final Map<String, dynamic> pupilResponse = response.data;
+
     if (response.statusCode != 200) {
       locator<NotificationManager>().showSnackBar(
           NotificationType.error, 'Fehler: status code ${response.statusCode}');
@@ -250,7 +255,9 @@ class AttendanceManager {
     }
     // the request was successful -
     //we patch the pupil in the pupilmanager with the response
-    pupilManager.updatePupilFromResponse(pupilResponse);
+
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(response.data));
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
     locator<NotificationManager>().isRunningValue(false);
@@ -292,7 +299,8 @@ class AttendanceManager {
           NotificationType.error, 'Fehler: status code ${response.statusCode}');
       return;
     }
-    pupilManager.updatePupilFromResponse(response.data);
+    final Pupil pupilResponse = Pupil.fromJson(response.data);
+    locator<PupilManager>().updatePupilProxyWithPupil(pupilResponse);
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Einträge erfolgreich!');
     locator<NotificationManager>().isRunningValue(false);
@@ -336,7 +344,7 @@ class AttendanceManager {
         locator<NotificationManager>().isRunningValue(false);
         return;
       }
-      pupilManager.updatePupilFromResponse(pupilResponse);
+      pupilManager.updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
       locator<NotificationManager>().isRunningValue(false);
@@ -358,7 +366,7 @@ class AttendanceManager {
       return;
     }
 
-    pupilManager.updatePupilFromResponse(pupilResponse);
+    pupilManager.updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
     locator<NotificationManager>().isRunningValue(false);
@@ -384,7 +392,8 @@ class AttendanceManager {
       locator<NotificationManager>().isRunningValue(false);
       return;
     }
-    pupilManager.updatePupilFromResponse(pupilResponse);
+    final pupil = Pupil.fromJson(response.data);
+    locator<PupilManager>().updatePupilProxyWithPupil(pupil);
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
     locator<NotificationManager>().isRunningValue(false);

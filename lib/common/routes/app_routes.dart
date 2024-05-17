@@ -1,4 +1,4 @@
-import 'package:schuldaten_hub/features/attendance/views/attendance_page/attendance_list_page.dart';
+import 'package:schuldaten_hub/features/attendance/views/attendance_view/attendance_list_page.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/landing_views/learn_list_view.dart';
 import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';

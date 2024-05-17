@@ -154,7 +154,7 @@ class SchoolListManager {
     }
     final List<Pupil> responsePupils =
         (response.data as List).map((e) => Pupil.fromJson(e)).toList();
-    //- locator<PupilManager>().updatePupilsRepository(responsePupils);
+    //- for (pupil in responsePupils) {locator<PupilManager>().updatePupilProxyWithPupil(pupil);
 
     // final SchoolList modifiedSchoolList = SchoolList.fromJson(response.data);
     // List<SchoolList> updatedSchoolLists = List.from(_schoolLists.value);
@@ -177,9 +177,12 @@ class SchoolListManager {
       debug.error('removePupilFromSchoolList error: ${response.data}');
       return;
     }
-    final List<PupilProxy> responsePupils =
-        (response.data as List).map((e) => PupilProxy.fromJson(e)).toList();
-    //- locator<PupilManager>().updatePupilsRepository(responsePupils);
+    final List<Pupil> responsePupils =
+        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+    for (Pupil pupil in responsePupils) {
+      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
+    }
+    //- for (pupil in responsePupils) {locator<PupilManager>().updatePupilProxyWithPupil(pupil);
     // final SchoolList modifiedSchoolList = SchoolList.fromJson(response.data);
     // List<SchoolList> updatedSchoolLists = List.from(_schoolLists.value);
     // final index = updatedSchoolLists
@@ -209,7 +212,8 @@ class SchoolListManager {
         EndpointsSchoolList().patchPupilSchoolList(pupilId, listId),
         data: data);
     if (response.statusCode == 200) {
-      locator<PupilManager>().updatePupilFromResponse(response.data);
+      locator<PupilManager>()
+          .updatePupilProxyWithPupil(Pupil.fromJson(response.data));
       debug.success('list entry successful');
     }
   }

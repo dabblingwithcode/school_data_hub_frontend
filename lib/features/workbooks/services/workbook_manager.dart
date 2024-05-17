@@ -150,16 +150,17 @@ class WorkbookManager {
       if (pupil.pupilWorkbooks != null) {
         final PupilWorkbook? pupilWorkbook = pupil.pupilWorkbooks!
             .firstWhereOrNull((element) => element.workbookIsbn == isbn);
-        if (pupilWorkbook != null) {
-          List<PupilWorkbook> updatedPupilWorkbooks = [
-            ...pupil.pupilWorkbooks!
-          ];
-          updatedPupilWorkbooks.remove(pupilWorkbook);
-          Pupil updatedPupil =
-              pupil.copyWith(pupilWorkbooks: updatedPupilWorkbooks);
+        // if (pupilWorkbook != null) {
+        //   List<PupilWorkbook> updatedPupilWorkbooks = [
+        //     ...pupil.pupilWorkbooks!
+        //   ];
+        //   updatedPupilWorkbooks.remove(pupilWorkbook);
 
-          locator<PupilManager>().updatePupilInRepository(updatedPupil);
-        }
+        //   Pupil updatedPupil =
+        //       pupil.copyWith(pupilWorkbooks: updatedPupilWorkbooks);
+
+        //   locator<PupilManager>().updatePupilInRepository(updatedPupil);
+        // }
       }
     }
   }
@@ -180,7 +181,8 @@ class WorkbookManager {
     }
     debug.success('Workbook created! | ${StackTrace.current}');
 
-    locator<PupilManager>().updatePupilFromResponse(response.data);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(response.data));
   }
 
   deletePupilWorkbook(int pupilId, int isbn) async {
@@ -190,6 +192,7 @@ class WorkbookManager {
       // handle errors
     }
     debug.success('Workbook deleted! | ${StackTrace.current}');
-    locator<PupilManager>().updatePupilFromResponse(response.data);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(response.data));
   }
 }

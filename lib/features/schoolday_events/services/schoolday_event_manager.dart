@@ -12,6 +12,7 @@ import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
 import '../../../api/services/api_manager.dart';
 import '../../../common/services/locator.dart';
@@ -74,8 +75,8 @@ class SchooldayEventManager {
     final data = jsonEncode({
       "admonished_day": date.formatForJson(),
       "admonished_pupil_id": pupilId,
-      "schooldayEvent_reason": reason,
-      "schooldayEvent_type": type,
+      "admonition_reason": reason,
+      "admonition_type": type,
       "file_url": null,
       "processed": false,
       "processed_at": null,
@@ -88,7 +89,7 @@ class SchooldayEventManager {
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
 
-      pupilManager.updatePupilFromResponse(pupilResponse);
+      pupilManager.updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
       locator<NotificationManager>().isRunningValue(false);
     }
   }
@@ -105,7 +106,7 @@ class SchooldayEventManager {
       DateTime? processedAt) async {
     final data = jsonEncode({
       if (admonisher != null) "admonishing_user": admonisher,
-      if (reason != null) "schooldayEvent_reason": reason,
+      if (reason != null) "admonition_reason": reason,
       if (processed != null) "processed": processed,
       if (file != null) "file_url": file,
       if (processed != null) "processed_by": processedBy,
@@ -119,7 +120,8 @@ class SchooldayEventManager {
     }
     // Success! We have a pupil response - let's patch the pupil with the data
     final Map<String, dynamic> pupilResponse = response.data;
-    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
   }
 
   //- THIS ONE IS NOT NEEDED ANY MORE
@@ -155,7 +157,8 @@ class SchooldayEventManager {
         .showSnackBar(NotificationType.success, 'Ereignis geändert!');
     final Map<String, dynamic> pupilResponse = response.data;
 
-    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
     locator<NotificationManager>().isRunningValue(false);
   }
 
@@ -195,7 +198,8 @@ class SchooldayEventManager {
     locator<NotificationManager>().showSnackBar(
         NotificationType.success, 'Datei erfolgreich hochgeladen!');
     final Map<String, dynamic> pupilResponse = response.data;
-    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
     locator<NotificationManager>().isRunningValue(false);
   }
 
@@ -226,7 +230,8 @@ class SchooldayEventManager {
     final cacheManager = DefaultCacheManager();
     await cacheManager.removeFile(cacheKey);
     // And patch the pupil with the data
-    await locator<PupilManager>().updatePupilFromResponse(pupilResponse);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Datei erfolgreich gelöscht!');
     locator<NotificationManager>().isRunningValue(false);
@@ -248,7 +253,8 @@ class SchooldayEventManager {
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Fehlzeit gelöscht!');
 
-    locator<PupilManager>().updatePupilFromResponse(response.data);
+    locator<PupilManager>()
+        .updatePupilProxyWithPupil(Pupil.fromJson(response.data));
     locator<NotificationManager>().isRunningValue(false);
   }
 }

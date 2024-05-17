@@ -136,13 +136,13 @@ class EndpointsPupil {
     return '/pupils/$internalId/avatar';
   }
 
-  Future<Pupil> deletePupilAvatar(int internalId) async {
+  Future<void> deletePupilAvatar({required int internalId}) async {
     final Response response =
         await _client.delete(deletePupilAvatarUrl(internalId));
     if (response.statusCode != 200) {
       throw ApiException(
           'Something went wrong deleting the avatar', response.statusCode);
     }
-    return Pupil.fromJson(response.data);
+    return;
   }
 }
