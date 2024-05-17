@@ -163,41 +163,41 @@ class PupilFilterManager {
     for (PupilProxy pupil in pupils) {
       bool isMatching = true;
       // first we make sure that common group and schoolyear filters work
-      if (((activeFilters[PupilFilter.E1]! && pupil.schoolyear == 'E1') ||
-              (activeFilters[PupilFilter.E2]! && pupil.schoolyear == 'E2') ||
-              (activeFilters[PupilFilter.E3]! && pupil.schoolyear == 'E3') ||
-              (activeFilters[PupilFilter.S3]! && pupil.schoolyear == 'S3') ||
-              (activeFilters[PupilFilter.S4]! && pupil.schoolyear == 'S4') ||
-              (!activeFilters[PupilFilter.E1]! &&
-                  !activeFilters[PupilFilter.E2]! &&
-                  !activeFilters[PupilFilter.E3]! &&
-                  !activeFilters[PupilFilter.S3]! &&
-                  !activeFilters[PupilFilter.S4]!)) &&
-          ((activeFilters[PupilFilter.A1]! && pupil.group == 'A1') ||
-              (activeFilters[PupilFilter.A2]! && pupil.group == 'A2') ||
-              (activeFilters[PupilFilter.A3]! && pupil.group == 'A3') ||
-              (activeFilters[PupilFilter.B1]! && pupil.group == 'B1') ||
-              (activeFilters[PupilFilter.B2]! && pupil.group == 'B2') ||
-              (activeFilters[PupilFilter.B3]! && pupil.group == 'B3') ||
-              (activeFilters[PupilFilter.B4]! && pupil.group == 'B4') ||
-              (activeFilters[PupilFilter.C1]! && pupil.group == 'C1') ||
-              (activeFilters[PupilFilter.C2]! && pupil.group == 'C2') ||
-              (activeFilters[PupilFilter.C3]! && pupil.group == 'C3') ||
-              (activeFilters[PupilFilter.A1] == false &&
-                  activeFilters[PupilFilter.A2] == false &&
-                  activeFilters[PupilFilter.A3] == false &&
-                  activeFilters[PupilFilter.B1] == false &&
-                  activeFilters[PupilFilter.B2] == false &&
-                  activeFilters[PupilFilter.B3] == false &&
-                  activeFilters[PupilFilter.B4] == false &&
-                  activeFilters[PupilFilter.C1] == false &&
-                  activeFilters[PupilFilter.C2] == false &&
-                  activeFilters[PupilFilter.C3] == false))) {
-        isMatching = true;
-      } else {
-        _filtersOn.value = true;
-        isMatching = false;
-      }
+      // if (((activeFilters[PupilFilter.E1]! && pupil.schoolyear == 'E1') ||
+      //         (activeFilters[PupilFilter.E2]! && pupil.schoolyear == 'E2') ||
+      //         (activeFilters[PupilFilter.E3]! && pupil.schoolyear == 'E3') ||
+      //         (activeFilters[PupilFilter.S3]! && pupil.schoolyear == 'S3') ||
+      //         (activeFilters[PupilFilter.S4]! && pupil.schoolyear == 'S4') ||
+      // (!activeFilters[PupilFilter.E1]! &&
+      //     !activeFilters[PupilFilter.E2]! &&
+      //     !activeFilters[PupilFilter.E3]! &&
+      //     !activeFilters[PupilFilter.S3]! &&
+      //     !activeFilters[PupilFilter.S4]!)) &&
+      // ((activeFilters[PupilFilter.A1]! && pupil.group == 'A1') ||
+      //     (activeFilters[PupilFilter.A2]! && pupil.group == 'A2') ||
+      //     (activeFilters[PupilFilter.A3]! && pupil.group == 'A3') ||
+      //     (activeFilters[PupilFilter.B1]! && pupil.group == 'B1') ||
+      //     (activeFilters[PupilFilter.B2]! && pupil.group == 'B2') ||
+      //     (activeFilters[PupilFilter.B3]! && pupil.group == 'B3') ||
+      //     (activeFilters[PupilFilter.B4]! && pupil.group == 'B4') ||
+      //     (activeFilters[PupilFilter.C1]! && pupil.group == 'C1') ||
+      //     (activeFilters[PupilFilter.C2]! && pupil.group == 'C2') ||
+      //     (activeFilters[PupilFilter.C3]! && pupil.group == 'C3') ||
+      //         // (activeFilters[PupilFilter.A1] == false &&
+      //         //     activeFilters[PupilFilter.A2] == false &&
+      //         //     activeFilters[PupilFilter.A3] == false &&
+      //         //     activeFilters[PupilFilter.B1] == false &&
+      //         //     activeFilters[PupilFilter.B2] == false &&
+      //         //     activeFilters[PupilFilter.B3] == false &&
+      //         //     activeFilters[PupilFilter.B4] == false &&
+      //         //     activeFilters[PupilFilter.C1] == false &&
+      //         //     activeFilters[PupilFilter.C2] == false &&
+      //         //     activeFilters[PupilFilter.C3] == false))) {
+      //   isMatching = true;
+      // } else {
+      //   _filtersOn.value = true;
+      //   isMatching = false;
+      // }
       // Now apply the rest of the filters!
 
       //- Attendance filters -//

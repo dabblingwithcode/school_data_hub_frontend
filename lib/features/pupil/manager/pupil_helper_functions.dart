@@ -125,6 +125,7 @@ List<PupilProxy> pupilsWithBirthdayInTheLastSevenDays() {
   final int currentMonth = now.month;
 
   for (PupilProxy pupil in pupils) {
+    /// TODO, das geht einfacher und wäre warhscheinlich besser als Filter  zu implementieren
     if (pupil.birthday != null) {
       // Extract day and month from birthday and current date
       final int pupilBirthDay = pupil.birthday!.day;

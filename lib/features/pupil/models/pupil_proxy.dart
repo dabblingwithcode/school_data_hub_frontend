@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
@@ -12,6 +14,53 @@ import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
+
+enum Jahrgangsstufe {
+  E1('E1'),
+  E2('E2'),
+  E3('E3'),
+  S3('S3'),
+  S4('S4');
+
+  static const stringToValue = {
+    'E1': Jahrgangsstufe.E1,
+    'E2': Jahrgangsstufe.E2,
+    'E3': Jahrgangsstufe.E3,
+    'S3': Jahrgangsstufe.S3,
+    'S4': Jahrgangsstufe.S4,
+  };
+  final String value;
+  const Jahrgangsstufe(this.value);
+}
+
+enum GroupId {
+  A1('A1'),
+  A2('A2'),
+  A3('A3'),
+  B1('B1'),
+  B2('B2'),
+  B3('B3'),
+  B4('B4'),
+  C1('C1'),
+  C2('C2'),
+  C3('C3');
+
+  static const stringToValue = {
+    'A1': GroupId.A1,
+    'A2': GroupId.A2,
+    'A3': GroupId.A3,
+    'B1': GroupId.B1,
+    'B2': GroupId.B2,
+    'B3': GroupId.B3,
+    'B4': GroupId.B4,
+    'C1': GroupId.C1,
+    'C2': GroupId.C2,
+    'C3': GroupId.C3,
+  };
+
+  final String value;
+  const GroupId(this.value);
+}
 
 class PupilProxy with ChangeNotifier {
   PupilProxy({required Pupil pupil, required PupilPersonalData personalData})
@@ -65,7 +114,13 @@ class PupilProxy with ChangeNotifier {
 
   String get firstName => _pupilPersonalData.name;
   String get lastName => _pupilPersonalData.lastName;
+
   String get group => _pupilPersonalData.group;
+  GroupId get groupId => GroupId.stringToValue[_pupilPersonalData.group]!;
+
+  Jahrgangsstufe get jahrgangsstufe =>
+      Jahrgangsstufe.stringToValue[_pupilPersonalData.schoolyear]!;
+
   String get schoolyear => _pupilPersonalData.schoolyear;
   String? get specialNeeds => _pupilPersonalData.specialNeeds;
   String get gender => _pupilPersonalData.gender;

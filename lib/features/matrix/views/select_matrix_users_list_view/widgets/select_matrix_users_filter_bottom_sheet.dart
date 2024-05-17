@@ -12,6 +12,7 @@ class SelectMatrixUsersFilterBottomSheet extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
+    /// TODO das ist der falsche Filter
     Map<PupilFilter, bool> activeFilters =
         watchValue((PupilFilterManager x) => x.filterState);
 
@@ -40,7 +41,7 @@ class SelectMatrixUsersFilterBottomSheet extends WatchingWidget {
                       icon: const Icon(Icons.restart_alt_rounded)),
                 ],
               ),
-              standardFilters(activeFilters),
+              const StandardFilters(),
               const Row(
                 children: [
                   Text(

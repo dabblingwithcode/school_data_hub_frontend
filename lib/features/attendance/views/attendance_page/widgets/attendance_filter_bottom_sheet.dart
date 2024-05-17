@@ -5,6 +5,7 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
+
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -26,8 +27,8 @@ class AttendanceFilterBottomSheet extends WatchingWidget {
       padding: const EdgeInsets.only(left: 20.0, right: 20, top: 8),
       child: Column(
         children: [
-          filterHeading(),
-          standardFilters(activeFilters),
+          const FilterHeading(),
+          const StandardFilters(),
           const Row(
             children: [
               Text(

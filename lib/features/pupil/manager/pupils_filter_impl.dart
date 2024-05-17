@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
@@ -25,8 +25,8 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   final PupilManager _pupilsManager;
 
   @override
-  bool get filtersOn => _filtersOn;
-  final _filtersOn = false;
+  ValueListenable<bool> get filtersOn => _filtersOn;
+  final _filtersOn = ValueNotifier<bool>(false);
 
   @override
   ValueListenable<List<PupilProxy>> get filteredPupils => _filteredPupils;
@@ -50,7 +50,24 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   // and sort mode
   @override
   void refreshs() {
-    throw UnimplementedError();
+    final List<PupilProxy> matching = [];
+
+    final allPupils = _pupilsManager.allPupils;
+
+    if (includedGroups.isEmpty && includedStufen.isEmpty) {
+      _filteredPupils.value = allPupils;
+      _filtersOn.value = false;
+      return;
+    }
+    for (final pupil in allPupils) {
+      if (includedStufen.contains(pupil.jahrgangsstufe) &&
+          includedGroups.contains(pupil.groupId)) {
+        matching.add(pupil);
+      }
+    }
+    _filteredPupils.value = matching;
+
+    _filtersOn.value = true;
   }
 
   // reset the filters to its initial state
@@ -81,5 +98,38 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
 
   void setTextFilter(String? text, {bool refresh = true}) {
     throw UnimplementedError();
+  }
+
+  @override
+  Set<Jahrgangsstufe> includedStufen = {};
+  @override
+  Set<GroupId> includedGroups = {};
+
+  @override
+  bool groupIdState(GroupId group) {
+    return includedGroups.contains(group);
+  }
+
+  @override
+  bool jahrgangsstufeState(Jahrgangsstufe stufe) {
+    return includedStufen.contains(stufe);
+  }
+
+  @override
+  void toggleGroupId(GroupId group) {
+    if (includedGroups.contains(group)) {
+      includedGroups.remove(group);
+    } else {
+      includedGroups.add(group);
+    }
+  }
+
+  @override
+  void toggleJahrgangsstufe(Jahrgangsstufe stufe) {
+    if (includedStufen.contains(stufe)) {
+      includedStufen.remove(stufe);
+    } else {
+      includedStufen.add(stufe);
+    }
   }
 }

@@ -11,10 +11,10 @@ import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/attendance_dropdown_menu_items.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/dialogues/late_in_minutes_dialog.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/dialogues/multiple_entries_dialog.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_view/widgets/dialogues/returned_time_picker.dart';
+import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/attendance_dropdown_menu_items.dart';
+import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/dialogues/late_in_minutes_dialog.dart';
+import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/dialogues/multiple_entries_dialog.dart';
+import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/dialogues/returned_time_picker.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
