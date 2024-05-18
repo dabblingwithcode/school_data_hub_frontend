@@ -19,10 +19,14 @@ import 'package:schuldaten_hub/features/authorizations/views/authorization_pupil
 
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
-List<Widget> pupilAuthorizationsContentList(PupilProxy pupil) {
-  final authorizationLocator = locator<AuthorizationManager>();
-  return [
-    ListView.builder(
+class PupilAuthorizationsContentList extends StatelessWidget {
+  final PupilProxy pupil;
+  const PupilAuthorizationsContentList({required this.pupil, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final authorizationLocator = locator<AuthorizationManager>();
+    return ListView.builder(
       padding: const EdgeInsets.all(0),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -254,6 +258,6 @@ List<Widget> pupilAuthorizationsContentList(PupilProxy pupil) {
               ),
             ));
       },
-    ),
-  ];
+    );
+  }
 }

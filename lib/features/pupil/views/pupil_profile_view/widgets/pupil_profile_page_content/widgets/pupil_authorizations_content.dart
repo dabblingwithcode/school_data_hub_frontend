@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/paddings.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/authorizations_list_page.dart';
-import 'package:schuldaten_hub/features/authorizations/views/pupil_authorizations_content_list.dart';
+import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/widgets/pupil_authorizations_content_list.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 class PupilAuthorizationsContent extends StatelessWidget {
@@ -42,7 +42,7 @@ class PupilAuthorizationsContent extends StatelessWidget {
             )
           ]),
           const Gap(15),
-          ...pupilAuthorizationsContentList(pupil),
+          PupilAuthorizationsContentList(pupil: pupil),
         ]),
       ),
     );

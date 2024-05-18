@@ -5,18 +5,36 @@ import 'package:schuldaten_hub/features/competence/models/competence.dart';
 import 'package:schuldaten_hub/features/competence/services/competence_filter_manager.dart';
 import 'package:schuldaten_hub/features/competence/services/competence_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/competence/views/competence_list_view/controller/competence_list_controller.dart';
+
 import 'package:schuldaten_hub/features/competence/views/competence_list_view/widgets/competence_list_view_bottom_navbar.dart';
 import 'package:schuldaten_hub/features/competence/views/competence_list_view/widgets/competence_tree.dart';
+import 'package:schuldaten_hub/features/competence/views/new_competence_view/new_competence_view.dart';
+import 'package:schuldaten_hub/features/competence/views/patch_competence_view/patch_competence_view.dart';
 
 import 'package:watch_it/watch_it.dart';
 
-class CompetenceListView extends WatchingWidget {
-  final CompetenceListController controller;
-  const CompetenceListView(this.controller, {Key? key}) : super(key: key);
+class CompetenceListPage extends WatchingWidget {
+  const CompetenceListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    //TODO: functions in the build method don't feel right
+    navigateToNewCompetenceview(int competenceId) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (ctx) => NewCompetenceView(
+          parentCompetence: competenceId,
+        ),
+      ));
+    }
+
+    navigateToPatchCompetenceView(Competence competence) {
+      Navigator.of(context).push(MaterialPageRoute(
+        builder: (ctx) => PatchCompetenceView(
+          competence: competence,
+        ),
+      ));
+    }
+
     List<Competence> competences =
         watchValue((CompetenceFilterManager x) => x.filteredCompetences);
     return Scaffold(
@@ -43,8 +61,8 @@ class CompetenceListView extends WatchingWidget {
                 ),
                 child: Column(children: [
                   ...buildCompetenceTree(
-                      controller.navigateToNewCompetenceview,
-                      controller.navigateToPatchCompetenceView,
+                      navigateToNewCompetenceview,
+                      navigateToPatchCompetenceView,
                       null,
                       0,
                       null,
@@ -55,7 +73,8 @@ class CompetenceListView extends WatchingWidget {
           ),
         ),
       ),
-      bottomNavigationBar: competenceListViewBottomNavBar(context, competences),
+      bottomNavigationBar:
+          CompetenceListPageBottomNavBar(competences: competences),
     );
   }
 }

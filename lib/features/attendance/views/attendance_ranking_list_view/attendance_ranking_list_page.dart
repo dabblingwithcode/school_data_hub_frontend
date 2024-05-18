@@ -12,7 +12,6 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceRankingListPage extends WatchingWidget {
-  //final AttendanceRankingListController controller;
   const AttendanceRankingListPage({Key? key}) : super(key: key);
 
   @override
