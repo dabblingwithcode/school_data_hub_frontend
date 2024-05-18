@@ -8,6 +8,16 @@ import 'package:schuldaten_hub/features/credit/widgets/credit_filter_bottom_shee
 
 import '../../pupil/manager/pupil_filter_manager.dart';
 
+class CreditListPageBottomNavBar extends StatelessWidget {
+  final bool filtersOn;
+  const CreditListPageBottomNavBar({required this.filtersOn, super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Placeholder();
+  }
+}
+
 Widget creditListViewBottomNavBar(BuildContext context, bool filtersOn) {
   return BottomNavBarLayout(
     bottomNavBar: BottomAppBar(

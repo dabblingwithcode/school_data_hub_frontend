@@ -7,17 +7,14 @@ import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
 import 'package:schuldaten_hub/common/widgets/list_tile.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/credit/controller/credit_list_controller.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/widgets/pupil_credit_content.dart';
 
 import 'package:watch_it/watch_it.dart';
 
 class CreditListCard extends WatchingStatefulWidget {
-  final CreditListController controller;
   final PupilProxy passedPupil;
-  const CreditListCard(this.controller, this.passedPupil, {super.key});
+  const CreditListCard(this.passedPupil, {super.key});
 
   @override
   State<CreditListCard> createState() => _CreditListCardState();
@@ -33,9 +30,7 @@ class _CreditListCardState extends State<CreditListCard> {
 
   @override
   Widget build(BuildContext context) {
-    PupilProxy pupil = watchValue((PupilFilterManager x) => x.filteredPupils)
-        .where((element) => element.internalId == widget.passedPupil.internalId)
-        .first;
+    PupilProxy pupil = widget.passedPupil;
 
     return Card(
       color: Colors.white,

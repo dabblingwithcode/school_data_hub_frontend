@@ -4,9 +4,10 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/attendance_list_page.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/attendance_ranking_list_page.dart';
+import 'package:schuldaten_hub/features/credit/credit_list_page.dart';
 import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/learning_support_list_page.dart';
 import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/schoolday_event_list_page.dart';
-import 'package:schuldaten_hub/features/credit/controller/credit_list_controller.dart';
+
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/controller/room_list_controller.dart';
 import 'package:schuldaten_hub/features/ogs/controller/ogs_list_controller.dart';
 import 'package:schuldaten_hub/features/pupil/views/special_info_view/controller/special_info_controller.dart';
@@ -128,7 +129,7 @@ List<Widget> pupilListButtons(
       child: InkWell(
         onTap: () {
           Navigator.of(context).push(MaterialPageRoute(
-            builder: (ctx) => const CreditList(),
+            builder: (ctx) => const CreditListPage(),
           ));
         },
         child: SizedBox(

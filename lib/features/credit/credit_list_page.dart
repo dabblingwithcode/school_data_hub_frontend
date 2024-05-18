@@ -4,30 +4,26 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/utils/debug_printer.dart';
+import 'package:schuldaten_hub/common/services/session_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-import 'package:schuldaten_hub/features/credit/controller/credit_list_controller.dart';
 import 'package:schuldaten_hub/features/credit/widgets/credit_list_card.dart';
 import 'package:schuldaten_hub/features/credit/widgets/credit_list_searchbar.dart';
 import 'package:schuldaten_hub/features/credit/widgets/credit_list_view_bottom_navbar.dart';
 
 import 'package:watch_it/watch_it.dart';
 
-class CreditListView extends WatchingWidget {
-  final CreditListController controller;
-  final int userCredit;
-  final bool filtersOn;
-  final List<PupilProxy> pupils;
-  const CreditListView(
-      this.controller, this.userCredit, this.filtersOn, this.pupils,
-      {Key? key})
-      : super(key: key);
+class CreditListPage extends WatchingWidget {
+  const CreditListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    debug.info('Widget Build started!');
+    bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
+    List<PupilProxy> pupils =
+        watchValue((PupilFilterManager x) => x.filteredPupils);
+    int userCredit = watchValue((SessionManager x) => x.credentials).credit!;
 
     return Scaffold(
       backgroundColor: canvasColor,
@@ -74,8 +70,8 @@ class CreditListView extends WatchingWidget {
                     titlePadding: const EdgeInsets.only(
                         left: 5, top: 5, right: 5, bottom: 5),
                     collapseMode: CollapseMode.none,
-                    title: creditListSearchBar(
-                        context, pupils, controller, filtersOn),
+                    title: CreditListSearchBar(
+                        pupils: pupils, filtersOn: filtersOn),
                   ),
                 ),
                 pupils.isEmpty
@@ -94,7 +90,7 @@ class CreditListView extends WatchingWidget {
                         delegate: SliverChildBuilderDelegate(
                           (BuildContext context, int index) {
                             // Your list view items go here
-                            return CreditListCard(controller, pupils[index]);
+                            return CreditListCard(pupils[index]);
                           },
                           childCount:
                               pupils.length, // Adjust this based on your data
