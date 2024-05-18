@@ -101,9 +101,10 @@ class PupilProxy with ChangeNotifier {
         _missedClasses[missed.missedDay] = missed;
       }
     }
+    var missedClassesValues = List.from(_missedClasses.values);
 
     /// remove missed classes that are no longer [allMissedClasses]
-    for (final pupilMissedClass in _missedClasses.values) {
+    for (final pupilMissedClass in missedClassesValues) {
       if (!allMissedClasses.contains(pupilMissedClass)) {
         _missedClasses.remove(pupilMissedClass.missedDay);
       }
