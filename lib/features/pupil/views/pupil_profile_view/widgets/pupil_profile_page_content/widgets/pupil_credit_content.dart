@@ -4,11 +4,11 @@ import 'package:intl/intl.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/paddings.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
-import 'package:schuldaten_hub/features/credit/credit_list_page.dart';
+import 'package:schuldaten_hub/features/credit/credit_list_page/credit_list_page.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/credit_history_log.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/credit/widgets/dialogues/change_credit_dialog.dart';
+import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/dialogues/change_credit_dialog.dart';
 
 class PupilCreditContent extends StatelessWidget {
   final PupilProxy pupil;

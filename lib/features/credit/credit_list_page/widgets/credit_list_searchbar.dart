@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/credit/services/credit_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/credit/widgets/credit_filter_bottom_sheet.dart';
+import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/credit_filter_bottom_sheet.dart';
 
 class CreditListSearchBar extends StatelessWidget {
   final List<PupilProxy> pupils;

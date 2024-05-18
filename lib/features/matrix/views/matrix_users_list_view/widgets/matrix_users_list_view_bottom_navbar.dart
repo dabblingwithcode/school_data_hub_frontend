@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
-import 'package:schuldaten_hub/features/credit/widgets/credit_filter_bottom_sheet.dart';
+import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/credit_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/matrix/views/new_matrix_user_view.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/controller/room_list_controller.dart';
 

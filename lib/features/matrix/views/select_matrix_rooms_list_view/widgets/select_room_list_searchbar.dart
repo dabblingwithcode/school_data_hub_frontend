@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filters_ma
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_rooms_list_view/controller/select_matrix_rooms_list_controller.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
-import 'package:schuldaten_hub/features/credit/widgets/credit_filter_bottom_sheet.dart';
+import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/credit_filter_bottom_sheet.dart';
 
 Widget selectRoomListSearchBar(
     BuildContext context,
