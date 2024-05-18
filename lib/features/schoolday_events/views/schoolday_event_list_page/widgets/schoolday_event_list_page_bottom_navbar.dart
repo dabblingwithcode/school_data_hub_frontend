@@ -7,6 +7,7 @@ import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_even
 
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_filter_bottom_sheet.dart';
 
 class SchooldayEventListPageBottomNavBar extends StatelessWidget {
   final bool filtersOn;
@@ -51,7 +52,7 @@ class SchooldayEventListPageBottomNavBar extends StatelessWidget {
                 ),
                 const Gap(30),
                 InkWell(
-                  onTap: () => showSchooldayEventFilterBottomSheet(context),
+                  onTap: () => const SchooldayEventFilterBottomSheet(),
                   onLongPress: () {
                     locator<SchooldayEventFilterManager>().resetFilters();
                     locator<PupilFilterManager>().resetFilters();

@@ -9,22 +9,20 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dar
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/school_lists/services/school_list_filter_manager.dart';
 
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
-import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/controller/school_list_pupils_controller.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/widgets/school_list_pupil_card.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/widgets/school_list_pupils_bottom_navbar.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/widgets/school_list_pupils_searchbar.dart';
 
 import 'package:watch_it/watch_it.dart';
 
-class SchoolListPupilsView extends WatchingWidget {
-  final SchoolListPupilsController controller;
+class SchoolListPupilsPage extends WatchingWidget {
   final SchoolList schoolList;
 
-  const SchoolListPupilsView(this.controller, this.schoolList, {Key? key})
-      : super(key: key);
+  const SchoolListPupilsPage(this.schoolList, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -33,11 +31,11 @@ class SchoolListPupilsView extends WatchingWidget {
         watchValue((PupilFilterManager x) => x.filteredPupils);
     List<PupilProxy> filteredPupilsInList = locator<SchoolListManager>()
         .pupilsInSchoolList(schoolList.listId, filteredPupils);
-    List<PupilProxy> pupilsInList =
-        controller.addPupilListFiltersToFilteredPupils(filteredPupilsInList);
 
-    // Map<PupilFilter, bool> activeFilters =
-    //     watchValue((PupilFilterManager x) => x.filterState);
+    List<PupilProxy> pupilsInList = locator<SchoolListFilterManager>()
+        .addPupilListFiltersToFilteredPupils(
+            filteredPupilsInList, schoolList.listId);
+
     return Scaffold(
       backgroundColor: canvasColor,
       appBar: AppBar(
@@ -85,8 +83,10 @@ class SchoolListPupilsView extends WatchingWidget {
                       titlePadding: const EdgeInsets.only(
                           left: 5, top: 5, right: 5, bottom: 5),
                       collapseMode: CollapseMode.none,
-                      title: schoolListPupilsSearchBar(context, pupilsInList,
-                          schoolList, controller, filtersOn),
+                      title: SchoolListPupilsPageSearchBar(
+                          pupils: pupilsInList,
+                          schoolList: schoolList,
+                          filtersOn: filtersOn),
                     ),
                   ),
                   pupilsInList.isEmpty
@@ -117,8 +117,10 @@ class SchoolListPupilsView extends WatchingWidget {
           ),
         ),
       ),
-      bottomNavigationBar: schoolListPupilsBottomNavBar(context,
-          schoolList.listId, filtersOn, pupilIdsFromPupils(pupilsInList)),
+      bottomNavigationBar: SchoolListPupilsPageBottomNavBar(
+          listId: schoolList.listId,
+          filtersOn: filtersOn,
+          pupilsInList: pupilIdsFromPupils(pupilsInList)),
     );
   }
 }

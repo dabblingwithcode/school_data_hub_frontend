@@ -30,8 +30,7 @@ class _SchooldayEventPageState extends State<SchooldayEventPage> {
         (SchooldayEventFilterManager x) => x.schooldayEventsFiltersOn);
 
     List<PupilProxy> pupils = watchValue((PupilsFilter x) => x.filteredPupils);
-    bool filtersOn =
-        watchPropertyValue((PupilsFilter f) => f.filtersOn);
+    bool filtersOn = watchPropertyValue((PupilsFilter f) => f.filtersOn).value;
 
     return Scaffold(
       backgroundColor: canvasColor,
@@ -63,22 +62,23 @@ class _SchooldayEventPageState extends State<SchooldayEventPage> {
             child: CustomScrollView(
               slivers: [
                 const SliverGap(5),
-                SliverAppBar(
+                const SliverAppBar(
                   pinned: false,
                   floating: true,
                   scrolledUnderElevation: null,
                   automaticallyImplyLeading: false,
-                  leading: const SizedBox.shrink(),
+                  leading: SizedBox.shrink(),
                   backgroundColor: Colors.transparent,
                   collapsedHeight: 110,
                   expandedHeight: 110.0,
                   stretch: false,
                   elevation: 0,
                   flexibleSpace: FlexibleSpaceBar(
-                      titlePadding: const EdgeInsets.only(
-                          left: 5, top: 5, right: 5, bottom: 5),
-                      collapseMode: CollapseMode.none,
-                      title: SchooldayEventListSearchBar(),
+                    titlePadding:
+                        EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
+                    collapseMode: CollapseMode.none,
+                    title: SchooldayEventListSearchBar(),
+                  ),
                 ),
                 pupils.isEmpty
                     ? const SliverToBoxAdapter(

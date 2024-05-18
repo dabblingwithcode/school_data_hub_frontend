@@ -40,7 +40,7 @@ class SelectMatrixUsersFilterBottomSheet extends WatchingWidget {
                       icon: const Icon(Icons.restart_alt_rounded)),
                 ],
               ),
-              standardFilters(activeFilters),
+              const StandardFilters(),
               const Row(
                 children: [
                   Text(

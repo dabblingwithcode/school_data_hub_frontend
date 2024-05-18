@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.da
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
-import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/controller/school_list_pupils_controller.dart';
+import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/school_list_pupils_page.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_lists_page/school_lists_page.dart';
 
 class PupilSchoolListsContent extends StatelessWidget {
@@ -98,7 +98,7 @@ List<Widget> pupilSchoolListContentList(PupilProxy pupil) {
                           InkWell(
                             onTap: () {
                               Navigator.of(context).push(MaterialPageRoute(
-                                builder: (ctx) => SchoolListPupils(
+                                builder: (ctx) => SchoolListPupilsPage(
                                   schoolList,
                                 ),
                               ));
