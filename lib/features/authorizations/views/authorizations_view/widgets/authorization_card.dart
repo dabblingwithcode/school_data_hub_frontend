@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
-
-import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/controller/authorization_pupils_controller.dart';
+import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/authorization_pupils_page.dart';
 
 class AuthorizationCard extends StatelessWidget {
   final Authorization authorization;
@@ -19,7 +18,7 @@ class AuthorizationCard extends StatelessWidget {
         child: InkWell(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (ctx) => AuthorizationPupils(
+              builder: (ctx) => AuthorizationPupilsPage(
                 authorization,
               ),
             ));

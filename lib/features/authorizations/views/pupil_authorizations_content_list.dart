@@ -15,7 +15,8 @@ import 'package:schuldaten_hub/common/widgets/upload_image.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
-import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/controller/authorization_pupils_controller.dart';
+import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/authorization_pupils_page.dart';
+
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 List<Widget> pupilAuthorizationsContentList(PupilProxy pupil) {
@@ -56,7 +57,8 @@ List<Widget> pupilAuthorizationsContentList(PupilProxy pupil) {
                                       onTap: () {
                                         Navigator.of(context)
                                             .push(MaterialPageRoute(
-                                          builder: (ctx) => AuthorizationPupils(
+                                          builder: (ctx) =>
+                                              AuthorizationPupilsPage(
                                             authorization,
                                           ),
                                         ));

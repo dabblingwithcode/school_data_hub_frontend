@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
+import 'package:schuldaten_hub/features/authorizations/services/authorization_pupil_filters.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/widgets/authorization_pupil_list_searchbar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/controller/authorization_pupils_controller.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/widgets/authorization_pupil_card.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/widgets/authorization_pupils_bottom_navbar.dart';
 
@@ -15,11 +15,10 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 import 'package:watch_it/watch_it.dart';
 
-class AuthorizationPupilsView extends WatchingWidget {
-  final AuthorizationPupilsController controller;
+class AuthorizationPupilsPage extends WatchingWidget {
   final Authorization authorization;
 
-  const AuthorizationPupilsView(this.controller, this.authorization, {Key? key})
+  const AuthorizationPupilsPage(this.authorization, {Key? key})
       : super(key: key);
 
   @override
@@ -29,7 +28,7 @@ class AuthorizationPupilsView extends WatchingWidget {
         watchValue((PupilFilterManager x) => x.filteredPupils);
 
     List<PupilProxy> pupilsInList =
-        controller.addAuthorizationFiltersToFilteredPupils(filteredPupils);
+        addAuthorizationFiltersToFilteredPupils(filteredPupils, authorization);
 
     return Scaffold(
       backgroundColor: canvasColor,
@@ -74,8 +73,8 @@ class AuthorizationPupilsView extends WatchingWidget {
                       titlePadding: const EdgeInsets.only(
                           left: 5, top: 5, right: 5, bottom: 5),
                       collapseMode: CollapseMode.none,
-                      title: authorizationPupilListSearchBar(
-                          context, pupilsInList, controller, filtersOn),
+                      title: AuthorizationPupilListSearchBar(
+                          filtersOn: filtersOn, pupils: pupilsInList),
                     ),
                   ),
                   pupilsInList.isEmpty
@@ -108,8 +107,11 @@ class AuthorizationPupilsView extends WatchingWidget {
           ),
         ),
       ),
-      bottomNavigationBar: authorizationPupilsBottomNavBar(
-          context, authorization, filtersOn, pupilIdsFromPupils(pupilsInList)),
+      bottomNavigationBar: AuthorizationPupilsBottomNavBar(
+        authorization: authorization,
+        filtersOn: filtersOn,
+        pupilsInAuthorization: pupilIdsFromPupils(pupilsInList),
+      ),
     );
   }
 }
