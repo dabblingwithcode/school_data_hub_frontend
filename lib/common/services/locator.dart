@@ -4,6 +4,7 @@ import 'package:schuldaten_hub/common/services/search_textfield_manager.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_manager.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
@@ -98,17 +99,6 @@ Future registerDependentManagers(String token) async {
     return workbookManager;
   }, dependsOn: [SessionManager, ApiManager]);
 
-  locator.registerSingletonAsync<SchoolListManager>(() async {
-    debug.info('Registering SchoolListManager');
-    final schoolListManager = SchoolListManager();
-    await schoolListManager.init();
-    debug.info('SchoolListManager initialized');
-    return schoolListManager;
-  }, dependsOn: [SessionManager, ApiManager]);
-  locator.registerSingletonWithDependencies<SchoolListFilterManager>(
-    () => SchoolListFilterManager(),
-    dependsOn: [SchoolListManager],
-  );
   locator.registerSingletonAsync<CompetenceManager>(() async {
     debug.info('Registering CompetenceManager');
     final competenceManager = CompetenceManager();
@@ -153,14 +143,34 @@ Future registerDependentManagers(String token) async {
 
   locator.registerSingletonWithDependencies<PupilFilterManager>(
     () => PupilFilterManager(),
-    dependsOn: [PupilManager, SchoolListManager],
+    dependsOn: [PupilManager],
   );
-  locator.registerLazySingleton<AttendanceManager>(() => AttendanceManager());
-  locator.registerLazySingleton<SchooldayEventManager>(
-      () => SchooldayEventManager());
+  locator.registerSingletonWithDependencies<PupilsFilterImplementation>(
+    () => PupilsFilterImplementation(
+      locator<PupilManager>(),
+    ),
+    dependsOn: [PupilManager],
+  );
+  locator.registerSingletonAsync<SchoolListManager>(() async {
+    debug.info('Registering SchoolListManager');
+    final schoolListManager = SchoolListManager();
+    await schoolListManager.init();
+    debug.info('SchoolListManager initialized');
+    return schoolListManager;
+  }, dependsOn: [SessionManager, ApiManager]);
+  locator.registerSingletonWithDependencies<SchoolListFilterManager>(
+    () => SchoolListFilterManager(),
+    dependsOn: [SchoolListManager, PupilFilterManager],
+  );
+  locator.registerSingletonWithDependencies<AttendanceManager>(
+      () => AttendanceManager(),
+      dependsOn: [SchooldayManager, PupilFilterManager]);
+  locator.registerSingletonWithDependencies<SchooldayEventManager>(
+      () => SchooldayEventManager(),
+      dependsOn: [SchooldayManager, PupilFilterManager]);
   locator.registerSingletonWithDependencies<SchooldayEventFilterManager>(
     () => SchooldayEventFilterManager(),
-    dependsOn: [PupilManager, PupilFilterManager],
+    dependsOn: [PupilFilterManager],
   );
   if (await secureStorageContains('matrix')) {
     await registerMatrixPolicyManager();

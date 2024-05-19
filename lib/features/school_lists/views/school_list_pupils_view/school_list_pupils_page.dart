@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 //import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
@@ -68,26 +69,12 @@ class SchoolListPupilsPage extends WatchingWidget {
               child: CustomScrollView(
                 slivers: [
                   const SliverGap(10),
-                  SliverAppBar(
-                    pinned: false,
-                    floating: true,
-                    scrolledUnderElevation: null,
-                    automaticallyImplyLeading: false,
-                    leading: const SizedBox.shrink(),
-                    backgroundColor: Colors.transparent,
-                    collapsedHeight: 140,
-                    expandedHeight: 140.0,
-                    stretch: false,
-                    elevation: 0,
-                    flexibleSpace: FlexibleSpaceBar(
-                      titlePadding: const EdgeInsets.only(
-                          left: 5, top: 5, right: 5, bottom: 5),
-                      collapseMode: CollapseMode.none,
-                      title: SchoolListPupilsPageSearchBar(
-                          pupils: pupilsInList,
-                          schoolList: schoolList,
-                          filtersOn: filtersOn),
-                    ),
+                  SliverSearchAppBar(
+                    height: 125,
+                    title: SchoolListPupilsPageSearchBar(
+                        pupils: pupilsInList,
+                        schoolList: schoolList,
+                        filtersOn: filtersOn),
                   ),
                   pupilsInList.isEmpty
                       ? const SliverToBoxAdapter(

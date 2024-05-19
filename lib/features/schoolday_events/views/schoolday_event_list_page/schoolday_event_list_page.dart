@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
-import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
+import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
+import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_list_card.dart';
@@ -22,38 +24,22 @@ class SchooldayEventPage extends WatchingStatefulWidget {
 class _SchooldayEventPageState extends State<SchooldayEventPage> {
   @override
   Widget build(BuildContext context) {
-    pushScope(
-        init: (locator) => locator
-            .registerSingleton(locator<PupilManager>().getPupilFilter()));
+    //TODO: This is not working
+    // pushScope(
+    //     init: (locator) => locator
+    //         .registerSingleton(locator<PupilManager>().getPupilFilter()));
 
     bool schooldayEventFiltersOn = watchValue(
         (SchooldayEventFilterManager x) => x.schooldayEventsFiltersOn);
 
-    List<PupilProxy> pupils = watchValue((PupilsFilter x) => x.filteredPupils);
-    bool filtersOn = watchPropertyValue((PupilsFilter f) => f.filtersOn).value;
+    List<PupilProxy> pupils =
+        watchValue((PupilsFilterImplementation x) => x.filteredPupils);
+    bool filtersOn = watchValue((PupilsFilterImplementation f) => f.filtersOn);
 
     return Scaffold(
       backgroundColor: canvasColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: backgroundColor,
-        title: const Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.warning_amber_rounded,
-              size: 25,
-              color: Colors.white,
-            ),
-            Gap(10),
-            Text(
-              'Ereignisse',
-              style: appBarTextStyle,
-            ),
-          ],
-        ),
-      ),
+      appBar: const GenericAppBar(
+          iconData: Icons.warning_amber_rounded, title: 'Ereignisse'),
       body: RefreshIndicator(
         onRefresh: () async => locator<PupilManager>().fetchAllPupils(),
         child: Center(
@@ -62,38 +48,13 @@ class _SchooldayEventPageState extends State<SchooldayEventPage> {
             child: CustomScrollView(
               slivers: [
                 const SliverGap(5),
-                const SliverAppBar(
-                  pinned: false,
-                  floating: true,
-                  scrolledUnderElevation: null,
-                  automaticallyImplyLeading: false,
-                  leading: SizedBox.shrink(),
-                  backgroundColor: Colors.transparent,
-                  collapsedHeight: 110,
-                  expandedHeight: 110.0,
-                  stretch: false,
-                  elevation: 0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    titlePadding:
-                        EdgeInsets.only(left: 5, top: 5, right: 5, bottom: 5),
-                    collapseMode: CollapseMode.none,
-                    title: SchooldayEventListSearchBar(),
-                  ),
+                const SliverSearchAppBar(
+                  height: 110,
+                  title: SchooldayEventListSearchBar(),
                 ),
-                pupils.isEmpty
-                    ? const SliverToBoxAdapter(
-                        child: Center(
-                          child: Text('Keine Ergebnisse'),
-                        ),
-                      )
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            return SchooldayEventListCard(pupils[index]);
-                          },
-                          childCount: pupils.length,
-                        ),
-                      ),
+                GenericSliverListWithEmptyListCheck(
+                    items: pupils,
+                    itemBuilder: (_, pupil) => SchooldayEventListCard(pupil)),
               ],
             ),
           ),

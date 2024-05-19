@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
-import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
-import 'package:schuldaten_hub/features/ogs/widgets/ogs_filter_bottom_sheet.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/views/special_info_view/widgets/special_info_reset_filter_button.dart';
 
-class OgsListPageBottomNavBar extends StatelessWidget {
+class SpecialInfoListPageBottomNavBar extends StatelessWidget {
   final bool filtersOn;
-  const OgsListPageBottomNavBar({required this.filtersOn, super.key});
+  const SpecialInfoListPageBottomNavBar({required this.filtersOn, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -46,21 +44,7 @@ class OgsListPageBottomNavBar extends StatelessWidget {
                 },
               ),
               const Gap(30),
-              InkWell(
-                onTap: () => showOgsFilterBottomSheet(context),
-                onLongPress: () {
-                  locator<PupilFilterManager>().resetFilters();
-
-                  locator<PupilFilterManager>()
-                      .setFilter(PupilFilter.ogs, true);
-                  locator<PupilFilterManager>().filtersOnSwitch(false);
-                },
-                child: Icon(
-                  Icons.filter_list,
-                  color: filtersOn ? Colors.deepOrange : Colors.white,
-                  size: 30,
-                ),
-              ),
+              specialInfoResetFilterButton(context, filtersOn),
               const Gap(10)
             ],
           ),

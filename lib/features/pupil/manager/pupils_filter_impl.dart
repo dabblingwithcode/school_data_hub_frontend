@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
@@ -12,6 +13,8 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   })  : _filterState = filterState ?? {},
         _sortMode = sortMode ?? {},
         _pupilsManager = pupilsManager {
+    debug.info('PupilsFilterImplementation created');
+    refreshs();
     _pupilsManager.addListener(refreshs);
   }
 
@@ -19,6 +22,7 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   void dispose() {
     _pupilsManager.removeListener(refreshs);
     _filteredPupils.dispose();
+
     super.dispose();
   }
 

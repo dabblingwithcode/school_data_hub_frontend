@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -5,7 +7,11 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
+import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
+import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
+import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
@@ -22,31 +28,16 @@ class CreditListPage extends WatchingWidget {
   Widget build(BuildContext context) {
     bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
     List<PupilProxy> pupils =
+        // watchValue((PupilsFilterImplementation x) => x.filteredPupils);
         watchValue((PupilFilterManager x) => x.filteredPupils);
     int userCredit = watchValue((SessionManager x) => x.credentials).credit!;
+    final List<PupilProxy> nonFilteredPupils =
+        watch(di<PupilManager>()).allPupils;
 
     return Scaffold(
       backgroundColor: canvasColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        backgroundColor: backgroundColor,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.credit_card,
-              size: 25,
-              color: Colors.white,
-            ),
-            const Gap(10),
-            Text(
-              'Guthaben: $userCredit',
-              style: appBarTextStyle,
-            ),
-          ],
-        ),
-      ),
+      appBar: GenericAppBar(
+          iconData: Icons.credit_card, title: 'Guthaben: $userCredit'),
       body: RefreshIndicator(
         onRefresh: () async => locator<PupilManager>().fetchAllPupils(),
         child: Center(
@@ -55,47 +46,14 @@ class CreditListPage extends WatchingWidget {
             child: CustomScrollView(
               slivers: [
                 const SliverGap(5),
-                SliverAppBar(
-                  pinned: false,
-                  floating: true,
-                  scrolledUnderElevation: null,
-                  automaticallyImplyLeading: false,
-                  leading: const SizedBox.shrink(),
-                  backgroundColor: Colors.transparent,
-                  collapsedHeight: 110,
-                  expandedHeight: 110.0,
-                  stretch: false,
-                  elevation: 0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    titlePadding: const EdgeInsets.only(
-                        left: 5, top: 5, right: 5, bottom: 5),
-                    collapseMode: CollapseMode.none,
-                    title: CreditListSearchBar(
-                        pupils: pupils, filtersOn: filtersOn),
-                  ),
+                SliverSearchAppBar(
+                  height: 110,
+                  title:
+                      CreditListSearchBar(pupils: pupils, filtersOn: filtersOn),
                 ),
-                pupils.isEmpty
-                    ? const SliverToBoxAdapter(
-                        child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Keine Ergebnisse',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      )
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            // Your list view items go here
-                            return CreditListCard(pupils[index]);
-                          },
-                          childCount:
-                              pupils.length, // Adjust this based on your data
-                        ),
-                      ),
+                GenericSliverListWithEmptyListCheck(
+                    items: pupils,
+                    itemBuilder: (_, pupil) => CreditListCard(pupil)),
               ],
             ),
           ),

@@ -36,13 +36,10 @@ class _SchooldayEventListCardState extends State<SchooldayEventListCard> {
 
   @override
   Widget build(BuildContext context) {
-    List<PupilProxy> pupils =
-        watchValue((PupilFilterManager x) => x.filteredPupils);
+    PupilProxy pupil = widget.passedPupil;
     Map<SchooldayEventFilter, bool> schooldayEventFilters = watchValue(
         (SchooldayEventFilterManager x) => x.schooldayEventsFilterState);
-    final PupilProxy pupil = pupils
-        .where((element) => element.internalId == widget.passedPupil.internalId)
-        .first;
+
     final List<SchooldayEvent> schooldayEvents =
         List.from(pupil.schooldayEvents!);
     schooldayEvents

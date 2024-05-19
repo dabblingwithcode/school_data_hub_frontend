@@ -5,6 +5,8 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
+import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
+import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/atendance_list_card.dart';
@@ -88,49 +90,15 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
             child: CustomScrollView(
               slivers: [
                 const SliverGap(5),
-                SliverAppBar(
-                  pinned: false,
-                  floating: true,
-                  scrolledUnderElevation: null,
-                  automaticallyImplyLeading: false,
-                  leading: const SizedBox.shrink(),
-                  backgroundColor: Colors.transparent,
-                  collapsedHeight: 110,
-                  expandedHeight: 110.0,
-                  stretch: false,
-                  elevation: 0,
-                  flexibleSpace: FlexibleSpaceBar(
-                    titlePadding: const EdgeInsets.only(
-                        left: 5, top: 5, right: 5, bottom: 5),
-                    collapseMode: CollapseMode.none,
+                SliverSearchAppBar(
+                    height: 110,
                     title: AttendanceListSearchBar(
                         pupils: pupils,
                         thisDate: thisDate,
-                        filtersOn: filtersOn),
-                  ),
-                ),
-                pupils.isEmpty
-                    ? const SliverToBoxAdapter(
-                        child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Keine Ergebnisse',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      )
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            // Your list view items go here
-                            return AttendanceCard(pupils[index]);
-                          },
-                          childCount:
-                              pupils.length, // Adjust this based on your data
-                        ),
-                      ),
+                        filtersOn: filtersOn)),
+                GenericSliverListWithEmptyListCheck(
+                    items: pupils,
+                    itemBuilder: (_, pupil) => AttendanceCard(pupil)),
               ],
             ),
           ),

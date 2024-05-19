@@ -213,7 +213,7 @@ class PupilPersonalDataManager {
     await secureStorageWrite(
         'pupilBase', jsonEncode(_pupilPersonalData.values.toList()));
     await locator<PupilManager>().fetchAllPupils();
-    locator<PupilFilterManager>().refreshFilteredPupils();
+    //locator<PupilFilterManager>().refreshFilteredPupils();
     locator<BottomNavManager>().setBottomNavPage(0);
   }
 

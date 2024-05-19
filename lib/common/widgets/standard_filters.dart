@@ -4,6 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -23,7 +24,7 @@ class FilterHeading extends StatelessWidget {
             iconSize: 35,
             color: interactiveColor,
             onPressed: () {
-              locator<PupilsFilter>().resetFilters();
+              locator<PupilsFilterImplementation>().resetFilters();
               //Navigator.pop(context);
             },
             icon: const Icon(Icons.restart_alt_rounded)),
@@ -37,7 +38,7 @@ class StandardFilters extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    final filter = watchIt<PupilsFilter>();
+    final filter = watchIt<PupilsFilterImplementation>();
     return Column(
       children: [
         const Row(

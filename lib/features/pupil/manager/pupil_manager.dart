@@ -36,7 +36,6 @@ class PupilManager extends ChangeNotifier {
     if (pupilsToFetch.isEmpty) {
       return;
     }
-    debug.warning('availablePupils im PupilManager $pupilsToFetch');
     await fetchPupilsByInternalId(pupilsToFetch);
   }
 

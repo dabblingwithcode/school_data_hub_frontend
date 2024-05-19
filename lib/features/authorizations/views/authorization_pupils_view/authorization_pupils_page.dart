@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_pupil_filters.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/widgets/authorization_pupil_list_searchbar.dart';
@@ -58,24 +59,10 @@ class AuthorizationPupilsPage extends WatchingWidget {
               child: CustomScrollView(
                 slivers: [
                   const SliverGap(5),
-                  SliverAppBar(
-                    pinned: false,
-                    floating: true,
-                    scrolledUnderElevation: null,
-                    automaticallyImplyLeading: false,
-                    leading: const SizedBox.shrink(),
-                    backgroundColor: Colors.transparent,
-                    collapsedHeight: 110,
-                    expandedHeight: 110.0,
-                    stretch: false,
-                    elevation: 0,
-                    flexibleSpace: FlexibleSpaceBar(
-                      titlePadding: const EdgeInsets.only(
-                          left: 5, top: 5, right: 5, bottom: 5),
-                      collapseMode: CollapseMode.none,
-                      title: AuthorizationPupilListSearchBar(
-                          filtersOn: filtersOn, pupils: pupilsInList),
-                    ),
+                  SliverSearchAppBar(
+                    height: 110,
+                    title: AuthorizationPupilListSearchBar(
+                        filtersOn: filtersOn, pupils: pupilsInList),
                   ),
                   pupilsInList.isEmpty
                       ? const SliverToBoxAdapter(

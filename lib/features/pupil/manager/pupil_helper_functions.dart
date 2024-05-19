@@ -54,6 +54,10 @@ String preschoolRevisionPredicate(int value) {
   }
 }
 
+String pickUpValue(String? value) {
+  return pickupTimePredicate(value);
+}
+
 String pickupTimePredicate(String? value) {
   switch (value) {
     case null:

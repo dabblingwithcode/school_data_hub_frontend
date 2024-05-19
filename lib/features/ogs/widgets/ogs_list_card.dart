@@ -6,8 +6,8 @@ import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
-import 'package:schuldaten_hub/features/ogs/controller/ogs_list_controller.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/dialogs/ogs_pickup_time_dialog.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
@@ -15,9 +15,8 @@ import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_pro
 import 'package:watch_it/watch_it.dart';
 
 class OgsCard extends WatchingWidget {
-  final OgsListController controller;
   final PupilProxy pupil;
-  const OgsCard(this.controller, this.pupil, {super.key});
+  const OgsCard(this.pupil, {super.key});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -102,7 +101,7 @@ class OgsCard extends WatchingWidget {
                               onTap: () => pickUpTimeDialog(
                                   context, pupil, pupil.pickUpTime),
                               child: Text(
-                                controller.pickUpValue(pupil.pickUpTime),
+                                pickUpValue(pupil.pickUpTime),
                                 style: const TextStyle(
                                     fontSize: 23,
                                     fontWeight: FontWeight.bold,

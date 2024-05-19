@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/dio/dio_interceptor.dart';
-import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 
 class DioClient {
   // dio instance

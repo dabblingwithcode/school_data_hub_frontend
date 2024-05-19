@@ -16,11 +16,7 @@ class LoadingPageState extends State<LoadingPage> {
   Widget build(BuildContext context) {
     final NotificationData snackBarData =
         watchValue((NotificationManager x) => x.notification);
-    // registerHandler(
-    //     select: (SnackBarManager x) => x.snackBar,
-    //     handler: (context, value, cancel) {
-    //       snackbar(context, value.type, value.message);
-    //     });
+
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,

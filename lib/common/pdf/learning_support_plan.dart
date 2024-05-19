@@ -10,7 +10,7 @@ Future generatePdf(int pupilId) async {
     pw.Page(
       build: (pw.Context context) => pw.Column(children: [
         pw.Row(children: [
-          pw.Text(pupil.firstName!),
+          pw.Text(pupil.firstName),
         ])
       ]),
     ),
