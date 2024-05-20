@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
@@ -6,6 +8,7 @@ import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
 import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filter_manager.dart';
+import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/widgets/matrix_user_list_card.dart';
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/widgets/matrix_user_list_searchbar.dart';
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/widgets/matrix_users_list_view_bottom_navbar.dart';
@@ -19,6 +22,7 @@ class MatrixUsersListPage extends WatchingWidget {
   Widget build(BuildContext context) {
     List<MatrixUser> matrixUsers =
         watchValue((MatrixPolicyFilterManager x) => x.filteredMatrixUsers);
+
     bool filtersOn = watchValue((MatrixPolicyFilterManager x) => x.filtersOn);
 
     return Scaffold(

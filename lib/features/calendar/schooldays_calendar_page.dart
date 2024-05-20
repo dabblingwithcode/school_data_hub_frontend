@@ -5,6 +5,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/information_dialog.dart';
+import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class SchooldaysCalendar extends StatefulWidget {
@@ -98,8 +99,8 @@ class _SchooldaysCalendarState extends State<SchooldaysCalendar> {
           }
         },
         onDayLongPressed: (selectedDay, focusedDay) {
-          informationDialog(context, 'test',
-              ' Selected day: $selectedDay, focused day: $focusedDay');
+          snackbarInfo(context,
+              ' Selected day: ${selectedDay.formatForUser()}, focused day: ${focusedDay.formatForUser()}');
         },
         onFormatChanged: (format) {
           if (_calendarFormat != format) {

@@ -119,18 +119,22 @@ class MatrixPolicyManager {
 
   //- MATRIX POLICY
   Future fetchMatrixPolicy() async {
+    // use a custom client with the right token to fetch the policy
     final client = matrixClient(_policyToken.value);
 
     final response = await client.get(
       '${_matrixUrl}_matrix/corporal/policy',
     );
-    debug.success('Response: ${response.data}');
 
     if (response.statusCode == 200) {
       final Policy policy = Policy.fromJson(response.data['policy']);
       List<MatrixRoom> rooms = [];
       locator<ApiManager>().setCustomDioClientOptions(
           _matrixUrl, 'Authorization', 'Bearer ${_matrixToken.value}', false);
+
+      for (MatrixUser user in policy.matrixUsers!) {
+        _matrixUsers.add(user);
+      }
 
       for (String roomId in policy.managedRoomIds) {
         MatrixRoom namedRoom = await _fetchAdditionalRoomInfos(roomId);
