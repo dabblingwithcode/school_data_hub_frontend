@@ -14,6 +14,7 @@ import 'package:schuldaten_hub/common/utils/secure_storage.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/short_textfield_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/qr_views.dart';
+import 'package:schuldaten_hub/features/calendar/schooldays_calendar_page.dart';
 import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_helper_functions.dart';
 import 'package:schuldaten_hub/features/matrix/views/set_matrix_environment_values_view.dart';
@@ -331,6 +332,17 @@ class SettingsView extends WatchingWidget {
                               locator<NotificationManager>().showSnackBar(
                                   NotificationType.error, 'Datei generiert');
                             }
+                          }),
+                      SettingsTile.navigation(
+                          leading: const Icon(
+                            Icons.calendar_month_rounded,
+                            color: Colors.white,
+                          ),
+                          title: const Text('Schultage-Kalender'),
+                          onPressed: (context) async {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const SchooldaysCalendar(),
+                            ));
                           }),
                     ]),
               SettingsSection(
