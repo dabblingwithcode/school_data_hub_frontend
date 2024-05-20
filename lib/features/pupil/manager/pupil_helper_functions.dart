@@ -28,7 +28,7 @@ List<int> pupilIdsFromPupils(List<PupilProxy> pupils) {
   return pupilIds;
 }
 
-List<int> restOfPupils(List<int> pupilIds) {
+List<PupilProxy> restOfPupils(List<int> pupilIds) {
   List<int> restOfPupils = [];
   final pupils = locator<PupilManager>().allPupils;
   for (PupilProxy pupil in pupils) {
@@ -36,7 +36,7 @@ List<int> restOfPupils(List<int> pupilIds) {
       restOfPupils.add(pupil.internalId);
     }
   }
-  return restOfPupils;
+  return pupilsFromPupilIds(restOfPupils);
 }
 
 String preschoolRevisionPredicate(int value) {

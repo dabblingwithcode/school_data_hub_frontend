@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/special_info_view/widgets/special_info_reset_filter_button.dart';
+import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/special_info_reset_filter_button.dart';
 
 class SpecialInfoListPageBottomNavBar extends StatelessWidget {
   final bool filtersOn;

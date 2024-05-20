@@ -8,8 +8,7 @@ import 'package:schuldaten_hub/features/authorizations/services/authorization_ma
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
-
-import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_view/controller/select_pupils_list_controller.dart';
+import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/select_pupils_list_page.dart';
 
 class NewAuthorizationView extends StatefulWidget {
   const NewAuthorizationView({super.key});
@@ -177,8 +176,9 @@ class NewAuthorizationViewState extends State<NewAuthorizationView> {
                   onPressed: () async {
                     final List<int> selectedPupilIds =
                         await Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => SelectPupilList(
-                                  restOfPupils(pupilIds.toList())),
+                              builder: (ctx) => SelectPupilsListPage(
+                                  selectablePupils:
+                                      restOfPupils(pupilIds.toList())),
                             )) ??
                             [];
                     if (selectedPupilIds.isNotEmpty) {

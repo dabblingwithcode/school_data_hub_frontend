@@ -8,9 +8,9 @@ import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/special_info_view/widgets/special_info_card.dart';
-import 'package:schuldaten_hub/features/pupil/views/special_info_view/widgets/special_info_list_search_bar.dart';
-import 'package:schuldaten_hub/features/pupil/views/special_info_view/widgets/special_info_list_page_bottom_navbar.dart';
+import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/special_info_card.dart';
+import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/special_info_list_search_bar.dart';
+import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/special_info_list_page_bottom_navbar.dart';
 import 'package:watch_it/watch_it.dart';
 
 class SpecialInfoListPage extends WatchingWidget {

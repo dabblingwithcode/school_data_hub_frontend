@@ -8,8 +8,8 @@ import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
+import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/select_pupils_list_page.dart';
 
-import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_view/controller/select_pupils_list_controller.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 
 class NewSchoolListView extends StatefulWidget {
@@ -210,8 +210,9 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
                   onPressed: () async {
                     final List<int> selectedPupilIds =
                         await Navigator.of(context).push(MaterialPageRoute(
-                              builder: (ctx) => SelectPupilList(
-                                  restOfPupils(pupilIds.toList())),
+                              builder: (ctx) => SelectPupilsListPage(
+                                  selectablePupils:
+                                      restOfPupils(pupilIds.toList())),
                             )) ??
                             [];
                     if (selectedPupilIds.isNotEmpty) {

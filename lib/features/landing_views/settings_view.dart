@@ -17,8 +17,9 @@ import 'package:schuldaten_hub/common/widgets/qr_views.dart';
 import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_helper_functions.dart';
 import 'package:schuldaten_hub/features/matrix/views/set_matrix_environment_values_view.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_view/controller/select_pupils_list_controller.dart';
+import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/select_pupils_list_page.dart';
 import 'package:schuldaten_hub/features/statistics/birthdays_view.dart';
 import 'package:schuldaten_hub/features/statistics/statistics_view/controller/statistics.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -365,9 +366,10 @@ class SettingsView extends WatchingWidget {
                       onPressed: (context) async {
                         final List<int> pupilIds =
                             await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => SelectPupilList(
-                              locator<PupilPersonalDataManager>()
-                                  .availablePupilIds),
+                          builder: (ctx) => SelectPupilsListPage(
+                              selectablePupils: pupilsFromPupilIds(
+                                  locator<PupilPersonalDataManager>()
+                                      .availablePupilIds)),
                         ));
                         if (pupilIds.isEmpty) {
                           return;

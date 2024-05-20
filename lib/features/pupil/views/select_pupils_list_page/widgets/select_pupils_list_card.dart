@@ -1,31 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
-import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_view/controller/select_pupils_list_controller.dart';
 import 'package:watch_it/watch_it.dart';
 
-class SelectPupilListCard extends WatchingWidget {
-  final SelectPupilListController controller;
-  final PupilProxy passedPupil;
+typedef OnCardPressCallback = void Function(int id);
 
-  const SelectPupilListCard(this.controller, this.passedPupil, {super.key});
+class SelectPupilListCard extends WatchingWidget {
+  final PupilProxy passedPupil;
+  final OnCardPressCallback onCardPress;
+  final bool isSelectMode;
+  final bool isSelected;
+  const SelectPupilListCard(
+      {required this.passedPupil,
+      required this.onCardPress,
+      required this.isSelectMode,
+      required this.isSelected,
+      super.key});
+
   @override
   Widget build(BuildContext context) {
-    List<PupilProxy> pupils =
-        watchValue((PupilFilterManager x) => x.filteredPupils);
-    final PupilProxy pupil = pupils
-        .where((element) => element.internalId == passedPupil.internalId)
-        .first;
+    final PupilProxy pupil = passedPupil;
 
     return GestureDetector(
-      onLongPress: () => controller.onCardPress(pupil.internalId),
-      onTap: () => controller.isSelectMode
-          ? controller.onCardPress(pupil.internalId)
-          : {},
+      onLongPress: () => onCardPress(pupil.internalId),
+      onTap: () => isSelectMode ? onCardPress(pupil.internalId) : {},
       child: Card(
-          color: controller.selectedPupilIds.contains(pupil.internalId)
+          color: isSelected
               ? const Color.fromARGB(255, 197, 212, 255)
               : Colors.white,
           child: Row(
@@ -49,7 +51,7 @@ class SelectPupilListCard extends WatchingWidget {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Text(
-                                '${pupil.firstName!} ${pupil.lastName!}',
+                                '${pupil.firstName} ${pupil.lastName}',
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),

@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/short_textfield_dialog.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_view/controller/select_pupils_list_controller.dart';
+import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/select_pupils_list_page.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/widgets/pupil_list_filter_bottom_sheet.dart';
 
@@ -80,8 +80,8 @@ class SchoolListPupilsPageBottomNavBar extends StatelessWidget {
                 onPressed: () async {
                   final List<int> selectedPupilIds =
                       await Navigator.of(context).push(MaterialPageRoute(
-                            builder: (ctx) =>
-                                SelectPupilList(restOfPupils(pupilsInList)),
+                            builder: (ctx) => SelectPupilsListPage(
+                                selectablePupils: restOfPupils(pupilsInList)),
                           )) ??
                           [];
                   if (selectedPupilIds.isNotEmpty) {

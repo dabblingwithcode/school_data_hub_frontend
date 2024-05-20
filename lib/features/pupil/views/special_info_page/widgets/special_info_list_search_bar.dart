@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/special_info_view/widgets/special_info_reset_filter_button.dart';
+import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/special_info_reset_filter_button.dart';
 
 class SpecialInfoListSearchBar extends StatelessWidget {
   final List<PupilProxy> pupils;
