@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/widgets/pupil_attendance_content.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/widgets/pupil_authorizations_content.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/widgets/pupil_credit_content.dart';
@@ -13,40 +12,30 @@ import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/p
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/widgets/pupil_ogs_content.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/widgets/pupil_school_lists_content.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_page_content/widgets/pupil_schoolday_events_content.dart';
-import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
+import 'package:watch_it/watch_it.dart';
 
-class PupilProfilePageContent extends StatelessWidget {
+class PupilProfilePageContent extends WatchingWidget {
   final PupilProxy pupil;
-  final List<SchooldayEvent> schooldayEvents;
 
-  const PupilProfilePageContent(
-      {required this.pupil, required this.schooldayEvents, super.key});
+  const PupilProfilePageContent({required this.pupil, super.key});
 
   @override
   Widget build(BuildContext context) {
+    int navState = watchValue((BottomNavManager x) => x.pupilProfileNavState);
+
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[
-          if (locator<BottomNavManager>().pupilProfileNavState.value == 0)
-            PupilInfosContent(pupil: pupil),
-          if (locator<BottomNavManager>().pupilProfileNavState.value == 1)
-            PupilCommunicationContent(pupil: pupil),
-          if (locator<BottomNavManager>().pupilProfileNavState.value == 2)
-            PupilCreditContent(pupil: pupil),
-          if (locator<BottomNavManager>().pupilProfileNavState.value == 3)
-            PupilAttendanceContent(pupil: pupil),
-          if (locator<BottomNavManager>().pupilProfileNavState.value == 4)
-            PupilSchooldayEventsContent(pupil: pupil),
-          if (locator<BottomNavManager>().pupilProfileNavState.value == 5)
-            PupilOgsContent(pupil: pupil),
-          if (locator<BottomNavManager>().pupilProfileNavState.value == 6)
-            PupilSchoolListsContent(pupil: pupil),
-          if (locator<BottomNavManager>().pupilProfileNavState.value == 7)
-            PupilAuthorizationsContent(pupil: pupil),
-          if (locator<BottomNavManager>().pupilProfileNavState.value == 8)
-            PupilLearningSupportContent(pupil: pupil),
-          if (locator<BottomNavManager>().pupilProfileNavState.value == 9)
-            PupilLearningContent(pupil: pupil),
+          if (navState == 0) PupilInfosContent(pupil: pupil),
+          if (navState == 1) PupilCommunicationContent(pupil: pupil),
+          if (navState == 2) PupilCreditContent(pupil: pupil),
+          if (navState == 3) PupilAttendanceContent(pupil: pupil),
+          if (navState == 4) PupilSchooldayEventsContent(pupil: pupil),
+          if (navState == 5) PupilOgsContent(pupil: pupil),
+          if (navState == 6) PupilSchoolListsContent(pupil: pupil),
+          if (navState == 7) PupilAuthorizationsContent(pupil: pupil),
+          if (navState == 8) PupilLearningSupportContent(pupil: pupil),
+          if (navState == 9) PupilLearningContent(pupil: pupil),
           const Gap(20),
         ],
       ),

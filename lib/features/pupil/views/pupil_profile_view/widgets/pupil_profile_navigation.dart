@@ -2,17 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:watch_it/watch_it.dart';
 
 class PupilProfileNavigation extends WatchingStatefulWidget {
-  final PupilProxy pupil;
   final double boxWidth;
-  const PupilProfileNavigation(
-      {required this.pupil, required this.boxWidth, super.key});
+  const PupilProfileNavigation({required this.boxWidth, super.key});
 
   @override
   State<PupilProfileNavigation> createState() => _PupilProfileNavigationState();
@@ -74,11 +69,6 @@ class _PupilProfileNavigationState extends State<PupilProfileNavigation> {
   //     tileControllers[i].collapse();
   //   }
   // }
-
-  deleteAvatar() async {
-    await locator<PupilManager>().deleteAvatarImage(
-        widget.pupil.internalId, widget.pupil.internalId.toString());
-  }
 
   @override
   Widget build(BuildContext context) {

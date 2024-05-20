@@ -4,6 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_set_avatar.dart';
 
@@ -37,8 +38,8 @@ class PupilProfileHeadWidget extends StatelessWidget {
                       PopupMenuItem(
                         child: const Text('Foto löschen'),
                         onTap: () async {
-                          //- TODO: implement deleteAvatar
-                          // -await pupilProfileController.deleteAvatar();
+                          await locator<PupilManager>().deleteAvatarImage(
+                              pupil.internalId, pupil.internalId.toString());
                         },
                       ),
                   ],

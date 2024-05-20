@@ -5,7 +5,6 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
-import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/widgets/pupil_profile_bottom_navbar.dart';
@@ -27,10 +26,6 @@ class PupilProfilePage extends WatchingWidget {
       ),
     );
 
-    final List<SchooldayEvent> schooldayEvents =
-        List.from(pupil.schooldayEvents!);
-    schooldayEvents
-        .sort((a, b) => b.schooldayEventDate.compareTo(a.schooldayEventDate));
     return Scaffold(
       backgroundColor: canvasColor,
       body: RefreshIndicator(
@@ -71,7 +66,6 @@ class PupilProfilePage extends WatchingWidget {
                           SliverToBoxAdapter(
                             child: PupilProfilePageContent(
                               pupil: pupil,
-                              schooldayEvents: schooldayEvents,
                             ),
                           ),
                           const SliverGap(60),
@@ -79,7 +73,6 @@ class PupilProfilePage extends WatchingWidget {
                       ),
                     ),
                     PupilProfileNavigation(
-                      pupil: pupil,
                       boxWidth: MediaQuery.of(context).size.width,
                       //MediaQuery.of(context).size.width / 5,
                     ),
