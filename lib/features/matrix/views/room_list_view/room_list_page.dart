@@ -4,10 +4,10 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/utils/debug_printer.dart';
+import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
-import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
-import 'package:schuldaten_hub/features/matrix/views/room_list_view/controller/room_list_controller.dart';
+import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filter_manager.dart';
+import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/room_list_card.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/room_list_searchbar.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/room_list_view_bottom_navbar.dart';
@@ -16,21 +16,14 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 import 'package:watch_it/watch_it.dart';
 
-class RoomListView extends WatchingWidget {
-  final RoomListController controller;
-
-  final bool filtersOn;
-
-  final List<MatrixUser> matrixUsers;
-  final List<MatrixRoom> matrixRooms;
-  const RoomListView(
-      this.controller, this.filtersOn, this.matrixUsers, this.matrixRooms,
-      {Key? key})
-      : super(key: key);
+class RoomListPage extends WatchingWidget {
+  const RoomListPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    debug.info('Widget Build started!');
+    List<MatrixRoom> matrixRooms =
+        watchValue((MatrixPolicyManager x) => x.matrixRooms);
+    bool filtersOn = watchValue((MatrixPolicyFilterManager x) => x.filtersOn);
 
     return Scaffold(
       backgroundColor: canvasColor,
@@ -77,38 +70,20 @@ class RoomListView extends WatchingWidget {
                     titlePadding: const EdgeInsets.only(
                         left: 5, top: 5, right: 5, bottom: 5),
                     collapseMode: CollapseMode.none,
-                    title: roomListSearchBar(
-                        context, matrixRooms, controller, filtersOn),
+                    title: RoomListSearchBar(
+                        matrixRooms: matrixRooms, filtersOn: filtersOn),
                   ),
                 ),
-                matrixUsers.isEmpty
-                    ? const SliverToBoxAdapter(
-                        child: Center(
-                          child: Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              'Keine Ergebnisse',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ),
-                        ),
-                      )
-                    : SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (BuildContext context, int index) {
-                            // Your list view items go here
-                            return RoomListCard(controller, matrixRooms[index]);
-                          },
-                          childCount: matrixRooms
-                              .length, // Adjust this based on your data
-                        ),
-                      ),
+                GenericSliverListWithEmptyListCheck(
+                  items: matrixRooms,
+                  itemBuilder: (_, room) => RoomListCard(room),
+                ),
               ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: roomListViewBottomNavBar(context, filtersOn),
+      bottomNavigationBar: RoomListPageBottomNavBar(filtersOn: filtersOn),
     );
   }
 }

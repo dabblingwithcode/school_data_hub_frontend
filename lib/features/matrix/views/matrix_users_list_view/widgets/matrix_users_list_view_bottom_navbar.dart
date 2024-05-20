@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/credit_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/matrix/views/new_matrix_user_view.dart';
-import 'package:schuldaten_hub/features/matrix/views/room_list_view/controller/room_list_controller.dart';
+import 'package:schuldaten_hub/features/matrix/views/room_list_view/room_list_page.dart';
 
 import '../../../../pupil/manager/pupil_filter_manager.dart';
 
@@ -57,7 +57,7 @@ Widget matrixUsersListViewBottomNavBar(
                 ),
                 onPressed: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => const RoomList(),
+                    builder: (ctx) => const RoomListPage(),
                   ));
                 },
               ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
-import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filters_manager.dart';
+import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filter_manager.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_helper_functions.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_rooms_list_view/select_matrix_rooms_list_view.dart';

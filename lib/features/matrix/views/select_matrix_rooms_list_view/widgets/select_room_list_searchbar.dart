@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
-import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filters_manager.dart';
+import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filter_manager.dart';
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_rooms_list_view/controller/select_matrix_rooms_list_controller.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 

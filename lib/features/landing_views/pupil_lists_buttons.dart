@@ -6,11 +6,10 @@ import 'package:schuldaten_hub/features/attendance/views/attendance_page/attenda
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_view/attendance_ranking_list_page.dart';
 import 'package:schuldaten_hub/features/credit/credit_list_page/credit_list_page.dart';
 import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/learning_support_list_page.dart';
+import 'package:schuldaten_hub/features/matrix/views/room_list_view/room_list_page.dart';
 import 'package:schuldaten_hub/features/ogs/ogs_list_page.dart';
 import 'package:schuldaten_hub/features/pupil/views/special_info_page/special_info_list_page.dart';
 import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/schoolday_event_list_page.dart';
-
-import 'package:schuldaten_hub/features/matrix/views/room_list_view/controller/room_list_controller.dart';
 
 double buttonSize = 150;
 List<Widget> pupilListButtons(
@@ -312,7 +311,7 @@ List<Widget> pupilListButtons(
         child: InkWell(
           onTap: () {
             Navigator.of(context).push(MaterialPageRoute(
-              builder: (ctx) => const RoomList(),
+              builder: (ctx) => const RoomListPage(),
             ));
           },
           child: SizedBox(

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filters_manager.dart';
+import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filter_manager.dart';
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_users_list_view/controller/select_matrix_users_list_controller.dart';
 import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/widgets/select_pupils_filter_bottom_sheet.dart';
 

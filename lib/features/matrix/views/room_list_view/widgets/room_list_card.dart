@@ -6,14 +6,12 @@ import 'package:schuldaten_hub/common/widgets/list_tile.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_helper_functions.dart';
-import 'package:schuldaten_hub/features/matrix/views/room_list_view/controller/room_list_controller.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/users_in_room_list.dart';
 import 'package:watch_it/watch_it.dart';
 
 class RoomListCard extends WatchingStatefulWidget {
-  final RoomListController controller;
   final MatrixRoom matrixRoom;
-  const RoomListCard(this.controller, this.matrixRoom, {super.key});
+  const RoomListCard(this.matrixRoom, {super.key});
 
   @override
   State<RoomListCard> createState() => _RoomListCardState();

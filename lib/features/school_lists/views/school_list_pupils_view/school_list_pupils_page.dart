@@ -5,6 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 //import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
 import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
@@ -39,26 +40,7 @@ class SchoolListPupilsPage extends WatchingWidget {
 
     return Scaffold(
       backgroundColor: canvasColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: backgroundColor,
-        centerTitle: true,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.list,
-              color: Colors.white,
-            ),
-            const Gap(10),
-            Text(schoolList.listName,
-                style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold)),
-          ],
-        ),
-      ),
+      appBar: GenericAppBar(iconData: Icons.list, title: schoolList.listName),
       body: RefreshIndicator(
         onRefresh: () async => locator<PupilManager>().fetchAllPupils(),
         child: Padding(
@@ -70,7 +52,7 @@ class SchoolListPupilsPage extends WatchingWidget {
                 slivers: [
                   const SliverGap(10),
                   SliverSearchAppBar(
-                    height: 125,
+                    height: 130,
                     title: SchoolListPupilsPageSearchBar(
                         pupils: pupilsInList,
                         schoolList: schoolList,

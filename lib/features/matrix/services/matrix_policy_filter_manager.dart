@@ -11,11 +11,13 @@ class MatrixPolicyFilterManager {
   ValueListenable<List<MatrixRoom>> get filteredMatrixRooms =>
       _filteredMatrixRooms;
   ValueListenable<String> get searchText => _searchText;
+  ValueListenable<bool> get filtersOn => _filtersOn;
   final _filteredMatrixUsers = ValueNotifier<List<MatrixUser>>(
       locator<MatrixPolicyManager>().matrixUsers.value);
   final _filteredMatrixRooms = ValueNotifier<List<MatrixRoom>>(
       locator<MatrixPolicyManager>().matrixRooms.value);
   final _searchText = ValueNotifier<String>('');
+  final _filtersOn = ValueNotifier<bool>(false);
 
   MatrixPolicyFilterManager() {
     debug.warning('MatrixPolicyFilterManager says hello!');

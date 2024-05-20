@@ -3,15 +3,13 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
 import 'package:schuldaten_hub/common/widgets/list_tile.dart';
-import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/controller/matrix_user_list_controller.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/widgets/pupil_rooms_list.dart';
 import 'package:watch_it/watch_it.dart';
 
 class MatrixUsersListCard extends WatchingStatefulWidget {
-  final MatrixUsersListController controller;
   final MatrixUser matrixUser;
-  const MatrixUsersListCard(this.controller, this.matrixUser, {super.key});
+  const MatrixUsersListCard(this.matrixUser, {super.key});
 
   @override
   State<MatrixUsersListCard> createState() => _MatrixUsersListCardState();
@@ -121,7 +119,7 @@ class _MatrixUsersListCardState extends State<MatrixUsersListCard> {
                     const Text('Räume'),
                     Center(
                       child: Text(
-                        widget.matrixUser.matrixRooms?.length.toString() ?? '0',
+                        widget.matrixUser.matrixRooms.length.toString(),
                         style: const TextStyle(
                           fontSize: 23,
                           fontWeight: FontWeight.bold,
@@ -135,13 +133,13 @@ class _MatrixUsersListCardState extends State<MatrixUsersListCard> {
               const Gap(20),
             ],
           ),
-          widget.matrixUser.matrixRooms?.isEmpty ?? true
+          widget.matrixUser.matrixRooms.isEmpty
               ? const SizedBox.shrink()
               : listTiles(
                   null,
                   context,
                   _tileController,
-                  roomsList(widget.matrixUser, widget.matrixUser.matrixRooms!,
+                  roomsList(widget.matrixUser, widget.matrixUser.matrixRooms,
                       context)),
         ],
       ),
