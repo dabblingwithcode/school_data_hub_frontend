@@ -19,11 +19,13 @@ class ApiAuthorizationService {
   //- AUTHORIZATIONS -------------------------------------------
 
   //- getAuthorizations
-  static const String getAuthorizationsUrl = '/authorizations/all';
+
+  static const String _getAuthorizationsUrl = '/authorizations/all';
+
   Future<List<Authorization>> fetchAuthorizations() async {
     notificationManager.isRunningValue(true);
 
-    final Response response = await _client.get(getAuthorizationsUrl);
+    final Response response = await _client.get(_getAuthorizationsUrl);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,
@@ -43,8 +45,10 @@ class ApiAuthorizationService {
   }
 
   //- post authorization with a list of pupils as members
-  static const String postAuthorizationWithPupilsFromListUrl =
+
+  static const String _postAuthorizationWithPupilsFromListUrl =
       '/authorizations/new/list';
+
   Future<List<Pupil>> postAuthorizationWithPupils(
       String name, String description, List<int> pupilIds) async {
     notificationManager.isRunningValue(true);
@@ -56,7 +60,7 @@ class ApiAuthorizationService {
     });
 
     final Response response =
-        await _client.post(postAuthorizationWithPupilsFromListUrl, data: data);
+        await _client.post(_postAuthorizationWithPupilsFromListUrl, data: data);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,
@@ -78,9 +82,8 @@ class ApiAuthorizationService {
   //-PUPIL AUTHORIZATIONS -------------------------------------------
 
   //- add pupil to authorization
-  // generates an association between a pupil and an authorization
-  // through the object pupil authorization
-  String postPupilAuthorizationUrl(int pupilId, String authorizationId) {
+
+  String _postPupilAuthorizationUrl(int pupilId, String authorizationId) {
     return '/pupil_authorizations/$pupilId/$authorizationId/new';
   }
 
@@ -91,7 +94,7 @@ class ApiAuthorizationService {
         jsonEncode({"comment": null, "file_url": null, "status": null});
 
     final response = await _client
-        .post(postPupilAuthorizationUrl(pupilId, authId), data: data);
+        .post(_postPupilAuthorizationUrl(pupilId, authId), data: data);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
@@ -109,7 +112,8 @@ class ApiAuthorizationService {
   }
 
   //- post pupil authorizations for a list of pupils as members of an authorization
-  String postPupilAuthorizationsUrl(String authorizationId) {
+
+  String _postPupilAuthorizationsUrl(String authorizationId) {
     return '/pupil_authorizations/$authorizationId/list';
   }
 
@@ -120,7 +124,7 @@ class ApiAuthorizationService {
     final data = jsonEncode({"pupils": pupilIds});
 
     final response =
-        await _client.post(postPupilAuthorizationsUrl(authId), data: data);
+        await _client.post(_postPupilAuthorizationsUrl(authId), data: data);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,
@@ -141,7 +145,8 @@ class ApiAuthorizationService {
   }
 
   //- delete pupil authorization
-  String deletePupilAuthorizationUrl(int pupilId, String authorizationId) {
+
+  String _deletePupilAuthorizationUrl(int pupilId, String authorizationId) {
     return '/pupil_authorizations/$pupilId/$authorizationId';
   }
 
@@ -149,7 +154,7 @@ class ApiAuthorizationService {
     notificationManager.isRunningValue(true);
 
     final response =
-        await _client.delete(deletePupilAuthorizationUrl(pupilId, authId));
+        await _client.delete(_deletePupilAuthorizationUrl(pupilId, authId));
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,
@@ -169,7 +174,8 @@ class ApiAuthorizationService {
   }
 
   //- patch pupil authorization
-  String patchPupilAuthorizationUrl(int pupilId, String authorizationId) {
+
+  String _patchPupilAuthorizationUrl(int pupilId, String authorizationId) {
     return '/pupil_authorizations/$pupilId/$authorizationId';
   }
 
@@ -187,7 +193,7 @@ class ApiAuthorizationService {
     }
 
     final response = await _client
-        .patch(patchPupilAuthorizationUrl(pupilId, listId), data: data);
+        .patch(_patchPupilAuthorizationUrl(pupilId, listId), data: data);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
@@ -202,11 +208,12 @@ class ApiAuthorizationService {
     final pupil = Pupil.fromJson(response.data);
 
     notificationManager.isRunningValue(false);
+
     return pupil;
   }
 
   // - patch pupil authorization with file
-  String patchPupilAuthorizationWithFileUrl(
+  String _patchPupilAuthorizationWithFileUrl(
       int pupilId, String authorizationId) {
     return '/pupil_authorizations/$pupilId/$authorizationId/file';
   }
@@ -222,7 +229,7 @@ class ApiAuthorizationService {
     String fileName = encryptedFile.path.split('/').last;
 
     final Response response = await _client.patch(
-      patchPupilAuthorizationWithFileUrl(pupilId, authId),
+      _patchPupilAuthorizationWithFileUrl(pupilId, authId),
       data: FormData.fromMap(
         {
           "file": await MultipartFile.fromFile(encryptedFile.path,
@@ -249,7 +256,8 @@ class ApiAuthorizationService {
   }
 
 //- delete pupil authorization file
-  String deletePupilAuthorizationFileUrl(int pupilId, String authorizationId) {
+
+  String _deletePupilAuthorizationFileUrl(int pupilId, String authorizationId) {
     return '/pupil_authorizations/$pupilId/$authorizationId/file';
   }
 
@@ -258,7 +266,7 @@ class ApiAuthorizationService {
     notificationManager.isRunningValue(true);
 
     final Response response =
-        await _client.delete(deletePupilAuthorizationFileUrl(pupilId, authId));
+        await _client.delete(_deletePupilAuthorizationFileUrl(pupilId, authId));
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(

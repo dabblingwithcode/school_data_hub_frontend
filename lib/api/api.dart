@@ -1,9 +1,9 @@
 export 'endpoints/schoolday_event_endpoints.dart';
-export 'endpoints/authorization_endpoints.dart';
-export 'endpoints/competence_endpoints.dart';
-export 'endpoints/learning_support_endpoints.dart';
+export 'endpoints/api_authorization_service.dart';
+export 'endpoints/api_competence_service.dart';
+export 'endpoints/api_learning_support_service.dart';
 export 'endpoints/missed_class_endpoints.dart';
-export 'endpoints/pupil_endpoints.dart';
+export 'endpoints/api_pupil_service.dart';
 export 'endpoints/pupil_workbook_endpoints.dart';
 export 'endpoints/school_list_endpoints.dart';
 export 'endpoints/schooldays_endpoints.dart';

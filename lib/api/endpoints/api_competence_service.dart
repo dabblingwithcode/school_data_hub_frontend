@@ -115,12 +115,11 @@ class ApiCompetenceService {
     return patchedCompetence;
   }
 
-  //- this endpoint is not implemented
+  //- all endpoints below are not implemented
+
   String deleteCompetence(int id) {
     return '/competences/$id/delete';
   }
-
-  //- all endpoints below are not implemented
   //- COMPETENCE CHECKS ------------------------------------------------
 
   //- GET

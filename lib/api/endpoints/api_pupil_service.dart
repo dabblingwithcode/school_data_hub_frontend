@@ -12,11 +12,12 @@ import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
 class ApiPupilService {
   late final DioClient _client = locator<ApiManager>().dioClient.value;
+
   final notificationManager = locator<NotificationManager>();
 
   //- This one is in PupilPersonalDataManager, have to review that one
 
-  static const updateBackendPupilsDatabaseUrl = '/import/pupils/txt';
+  static const _updateBackendPupilsDatabaseUrl = '/import/pupils/txt';
 
   Future<List<Pupil>> updateBackendPupilsDatabase({required File file}) async {
     notificationManager.isRunningValue(true);
@@ -30,7 +31,7 @@ class ApiPupilService {
     });
 
     final response = await _client.post(
-      updateBackendPupilsDatabaseUrl,
+      _updateBackendPupilsDatabaseUrl,
       data: formData,
     );
 
@@ -61,7 +62,7 @@ class ApiPupilService {
 
   //- fetch list of pupils
 
-  static const fetchPupilsUrl = '/pupils/list';
+  static const _fetchPupilsUrl = '/pupils/list';
 
   Future<List<Pupil>> fetchListOfPupils({
     required List<int> internalPupilIds,
@@ -71,7 +72,7 @@ class ApiPupilService {
     final pupilIdsListToJson = jsonEncode({"pupils": internalPupilIds});
 
     final response =
-        await _client.post(fetchPupilsUrl, data: pupilIdsListToJson);
+        await _client.post(_fetchPupilsUrl, data: pupilIdsListToJson);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,
@@ -107,7 +108,7 @@ class ApiPupilService {
   /// diese funktionen lassen sich dann auch testen
   //- update pupil property
 
-  String updatePupilPropertyUrl(int id) {
+  String _updatePupilPropertyUrl(int id) {
     return '/pupils/$id';
   }
 
@@ -120,7 +121,7 @@ class ApiPupilService {
 
     final Map<String, dynamic> data = {property: value};
     final response =
-        await _client.patch(updatePupilPropertyUrl(id), data: data);
+        await _client.patch(_updatePupilPropertyUrl(id), data: data);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,
@@ -144,7 +145,7 @@ class ApiPupilService {
 
   //- patch siblings
 
-  static const patchSiblingsUrl = '/pupils/patch_siblings';
+  static const String _patchSiblingsUrl = '/pupils/patch_siblings';
   Future<List<Pupil>> updateSiblingsProperty({
     required List<int> siblingsPupilIds,
     required String property,
@@ -157,7 +158,7 @@ class ApiPupilService {
       property: value,
     });
 
-    final response = await _client.patch(patchSiblingsUrl, data: data);
+    final response = await _client.patch(_patchSiblingsUrl, data: data);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,
@@ -177,7 +178,7 @@ class ApiPupilService {
 
   //- post / patch pupil avatar
 
-  String updatePupilhWithAvatarUrl(int id) {
+  String _updatePupilhWithAvatarUrl(int id) {
     return '/pupils/$id/avatar';
   }
 
@@ -188,7 +189,7 @@ class ApiPupilService {
     notificationManager.isRunningValue(true);
 
     final Response response =
-        await _client.patch(updatePupilhWithAvatarUrl(id), data: formData);
+        await _client.patch(_updatePupilhWithAvatarUrl(id), data: formData);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,
@@ -206,7 +207,7 @@ class ApiPupilService {
 
   //- delete pupil avatar
 
-  String deletePupilAvatarUrl(int internalId) {
+  String _deletePupilAvatarUrl(int internalId) {
     return '/pupils/$internalId/avatar';
   }
 
@@ -214,7 +215,7 @@ class ApiPupilService {
     notificationManager.isRunningValue(true);
 
     final Response response =
-        await _client.delete(deletePupilAvatarUrl(internalId));
+        await _client.delete(_deletePupilAvatarUrl(internalId));
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,

@@ -280,7 +280,7 @@ Widget statusEntry(
                               await longTextFieldDialog('Status korrigieren',
                                   status.comment, context);
                           if (correctedStatus != null) {
-                            locator<GoalManager>().patchCategoryStatus(
+                            locator<GoalManager>().updateCategoryStatusProperty(
                                 pupil,
                                 status.statusId,
                                 correctedStatus,

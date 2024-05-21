@@ -12,66 +12,85 @@ import 'package:schuldaten_hub/features/learning_support/models/category/goal_ca
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
-class EndpointsLearningSupport {
+class ApiLearningSupportService {
   late final DioClient _client = locator<ApiManager>().dioClient.value;
+
   final notificationManager = locator<NotificationManager>();
 
   //- GOAL CATEGORIES --------------------------------------------------
 
   //- fetch goal categories
-  String fetchGoalCategoriesUrl = '/goal_categories/all/flat';
+  static const String _fetchGoalCategoriesUrl = '/goal_categories/all/flat';
+
   Future<List<GoalCategory>> fetchGoalCategories() async {
     notificationManager.isRunningValue(true);
-    final response =
-        await _client.get(EndpointsLearningSupport().fetchGoalCategoriesUrl);
+
+    final response = await _client.get(_fetchGoalCategoriesUrl);
+
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Fehler beim Laden der Kategorien');
+
       notificationManager.isRunningValue(false);
+
       throw ApiException(
           'Failed to fetch goal categories', response.statusCode);
     }
+
     final List<GoalCategory> goalCategories =
         (response.data as List).map((e) => GoalCategory.fromJson(e)).toList();
-    notificationManager.showSnackBar(
-        NotificationType.success, 'Katgorien geladen');
+
     notificationManager.isRunningValue(false);
+
     return goalCategories;
   }
 
   //- this endpoint is not used in the app
-  String fetchGoalCategoriesWithChildren = '/goal_categories/all';
+  static const String fetchGoalCategoriesWithChildren = '/goal_categories/all';
 
   //- STATUSES ---------------------------------------------------------
 
-  String postCategoryStatusUrl(int pupilId, int categoryId) {
+  String _postCategoryStatusUrl(int pupilId, int categoryId) {
     return '/category/statuses/$pupilId/$categoryId';
   }
 
-  Future postCategoryStatus(int pupilInternalId, int goalCategoryId,
-      String state, String comment) async {
+  Future<Pupil> postCategoryStatus(
+    int pupilInternalId,
+    int goalCategoryId,
+    String state,
+    String comment,
+  ) async {
     notificationManager.isRunningValue(true);
-    final data =
-        jsonEncode({"state": state, "file_url": null, "comment": comment});
+
+    final data = jsonEncode({
+      "state": state,
+      "file_url": null,
+      "comment": comment,
+    });
+
     final response = await _client.post(
-        EndpointsLearningSupport()
-            .postCategoryStatusUrl(pupilInternalId, goalCategoryId),
+        _postCategoryStatusUrl(pupilInternalId, goalCategoryId),
         data: data);
+
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Fehler beim Posten des Status');
+
       notificationManager.isRunningValue(false);
+
       throw ApiException('Failed to post category status', response.statusCode);
     }
     final Pupil pupil = Pupil.fromJson(response.data);
+
     notificationManager.showSnackBar(
         NotificationType.success, 'Status erfolgreich gepostet');
     notificationManager.isRunningValue(false);
+
     return pupil;
   }
 
   //- update category status
-  String patchCategoryStatusUrl(String categoryStatusId) {
+  String _patchCategoryStatusUrl(String categoryStatusId) {
     return '/category/statuses/$categoryStatusId';
   }
 
@@ -83,28 +102,31 @@ class EndpointsLearningSupport {
       String? createdBy,
       String? createdAt) async {
     notificationManager.isRunningValue(true);
+
     final data = jsonEncode({
       if (state != null) "state": state,
       if (comment != null) "comment": comment,
       if (createdBy != null) "created_by": createdBy,
       if (createdAt != null) "created_at": createdAt
     });
-    final response = await _client.patch(
-        EndpointsLearningSupport().patchCategoryStatusUrl(statusId),
-        data: data);
+
+    final response =
+        await _client.patch(_patchCategoryStatusUrl(statusId), data: data);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Fehler beim Aktualisieren des Status');
+
       notificationManager.isRunningValue(false);
+
       throw ApiException(
           'Failed to update category status', response.statusCode);
     }
 
     final Pupil pupil = Pupil.fromJson(response.data);
-    notificationManager.showSnackBar(
-        NotificationType.success, 'Status aktualisiert');
+
     notificationManager.isRunningValue(false);
+
     return pupil;
   }
 
@@ -112,25 +134,29 @@ class EndpointsLearningSupport {
     return '/category/statuses/$categoryStatusId/file';
   }
 
-  String deleteCategoryStatusUrl(String categoryStatusId) {
+  String _deleteCategoryStatusUrl(String categoryStatusId) {
     return '/pupil/category/statuses/$categoryStatusId/delete';
   }
 
   Future deleteCategoryStatus(String statusId) async {
     notificationManager.isRunningValue(true);
-    final response = await _client
-        .delete(EndpointsLearningSupport().deleteCategoryStatusUrl(statusId));
+
+    final response = await _client.delete(_deleteCategoryStatusUrl(statusId));
+
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Fehler beim Löschen des Status');
+
       notificationManager.isRunningValue(false);
+
       throw ApiException(
           'Failed to delete category status', response.statusCode);
     }
+
     final Pupil pupil = Pupil.fromJson(response.data);
-    notificationManager.showSnackBar(
-        NotificationType.success, 'Status gelöscht');
+
     notificationManager.isRunningValue(false);
+
     return pupil;
   }
 
@@ -138,11 +164,11 @@ class EndpointsLearningSupport {
 
   //- post category goal
 
-  String postGoalUrl(int pupilId) {
+  String _postGoalUrl(int pupilId) {
     return '/category_goals/$pupilId/new';
   }
 
-  Future postNewCategoryGoal(int goalCategoryId, int pupilId,
+  Future<Pupil> postNewCategoryGoal(int goalCategoryId, int pupilId,
       String description, String strategies) async {
     notificationManager.isRunningValue(true);
 
@@ -154,52 +180,58 @@ class EndpointsLearningSupport {
       "description": description,
       "strategies": strategies
     });
-    final Response response = await _client
-        .post(EndpointsLearningSupport().postGoalUrl(pupilId), data: data);
+
+    final Response response =
+        await _client.post(_postGoalUrl(pupilId), data: data);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Fehler beim Hinzufügen des Ziels');
+
       notificationManager.isRunningValue(false);
+
       throw ApiException('Failed to post category goal', response.statusCode);
     }
+
     final Pupil pupil = Pupil.fromJson(response.data);
-    notificationManager.showSnackBar(
-        NotificationType.success, 'Ziel hinzugefügt');
+
     notificationManager.isRunningValue(false);
+
     return pupil;
-  }
-
-  //- PATCH
-
-  String patchgoal(String goalId) {
-    return '/categor_goals/$goalId';
   }
 
   //- delete category goal
 
-  String deleteGoalUrl(String goalId) {
+  String _deleteGoalUrl(String goalId) {
     return '/category_goals/$goalId/delete';
   }
 
   Future deleteGoal(String goalId) async {
     notificationManager.isRunningValue(true);
 
-    final Response response =
-        await _client.delete(EndpointsLearningSupport().deleteGoalUrl(goalId));
+    final Response response = await _client.delete(_deleteGoalUrl(goalId));
+
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Fehler beim Löschen des Ziels');
+
       notificationManager.isRunningValue(false);
+
       throw ApiException('Failed to delete category goal', response.statusCode);
     }
+
     final Pupil pupil = Pupil.fromJson(response.data);
-    notificationManager.showSnackBar(NotificationType.success, 'Ziel gelöscht');
+
     notificationManager.isRunningValue(false);
+
     return pupil;
   }
 
-  //- GOAL CHECKS ------------------------------------------------------
+  //- NOT IMPLEMENTED ------------------------------------------------------
+
+  String patchgoal(String goalId) {
+    return '/category_goals/$goalId';
+  }
 
   String postGoalCheck(int id) {
     return '/category_goals/$id/check/new';
