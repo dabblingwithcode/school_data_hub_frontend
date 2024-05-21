@@ -50,7 +50,7 @@ class SelectMatrixUserCard extends WatchingWidget {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Text(
-                                '${pupil.firstName!} ${pupil.lastName!}',
+                                '${pupil.firstName} ${pupil.lastName}',
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),

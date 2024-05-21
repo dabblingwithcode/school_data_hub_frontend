@@ -1,9 +1,6 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';

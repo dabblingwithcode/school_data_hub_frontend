@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
-import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
 
 List<Widget> usersInRoomList(
     List<MatrixUser> matrixUsers, BuildContext context) {
-  List<MatrixRoom> namedMatrixRooms =
-      locator<MatrixPolicyManager>().matrixRooms.value;
+  // List<MatrixRoom> namedMatrixRooms =
+  //     locator<MatrixPolicyManager>().matrixRooms.value;
 
   return [
     Padding(

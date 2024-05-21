@@ -13,8 +13,8 @@ class CreditFilterBottomSheet extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<PupilFilter, bool> activeFilters =
-        watchValue((PupilFilterManager x) => x.filterState);
+    // Map<PupilFilter, bool> activeFilters =
+    //     watchValue((PupilFilterManager x) => x.filterState);
     Map<PupilSortMode, bool> sortMode =
         watchValue((PupilFilterManager x) => x.sortMode);
     bool valueSortByName = sortMode[PupilSortMode.sortByName]!;

@@ -1,7 +1,3 @@
-import 'dart:convert';
-
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';

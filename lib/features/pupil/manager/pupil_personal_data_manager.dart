@@ -17,7 +17,6 @@ import 'package:schuldaten_hub/common/utils/secure_storage.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 class PupilPersonalDataManager {

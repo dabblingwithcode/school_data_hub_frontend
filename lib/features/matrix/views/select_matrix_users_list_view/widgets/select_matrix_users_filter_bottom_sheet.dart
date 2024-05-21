@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
@@ -13,8 +12,8 @@ class SelectMatrixUsersFilterBottomSheet extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     /// TODO das ist der falsche Filter
-    Map<PupilFilter, bool> activeFilters =
-        watchValue((PupilFilterManager x) => x.filterState);
+    // Map<PupilFilter, bool> activeFilters =
+    //     watchValue((PupilFilterManager x) => x.filterState);
 
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20, top: 8),

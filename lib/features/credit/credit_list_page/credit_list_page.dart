@@ -27,8 +27,8 @@ class CreditListPage extends WatchingWidget {
         // watchValue((PupilsFilterImplementation x) => x.filteredPupils);
         watchValue((PupilFilterManager x) => x.filteredPupils);
     int userCredit = watchValue((SessionManager x) => x.credentials).credit!;
-    final List<PupilProxy> nonFilteredPupils =
-        watch(di<PupilManager>()).allPupils;
+    // final List<PupilProxy> nonFilteredPupils =
+    //     watch(di<PupilManager>()).allPupils;
 
     return Scaffold(
       backgroundColor: canvasColor,

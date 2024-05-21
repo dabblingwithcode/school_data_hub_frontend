@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/models/schoolday_models/schoolday.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
-import 'package:schuldaten_hub/common/widgets/dialogues/information_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -12,10 +10,10 @@ class SchooldaysCalendar extends StatefulWidget {
   const SchooldaysCalendar({super.key});
 
   @override
-  _SchooldaysCalendarState createState() => _SchooldaysCalendarState();
+  SchooldaysCalendarState createState() => SchooldaysCalendarState();
 }
 
-class _SchooldaysCalendarState extends State<SchooldaysCalendar> {
+class SchooldaysCalendarState extends State<SchooldaysCalendar> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -60,7 +58,7 @@ class _SchooldaysCalendarState extends State<SchooldaysCalendar> {
                 borderRadius: BorderRadius.circular(20.0)),
             child: Text(
               date.day.toString(),
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
             ),
           ),
           // selectedBuilder: (context, day, focusedDay) => Container(
@@ -81,7 +79,7 @@ class _SchooldaysCalendarState extends State<SchooldaysCalendar> {
                   borderRadius: BorderRadius.circular(10.0)),
               child: Text(
                 date.day.toString(),
-                style: TextStyle(color: Colors.white),
+                style: const TextStyle(color: Colors.white),
               )),
         ),
         firstDay: kFirstDay,

@@ -26,8 +26,7 @@ List<MatrixUser> usersInRoom(String roomId) {
   final List<MatrixUser> users =
       List.from(locator<MatrixPolicyManager>().matrixUsers.value);
   final usersInRoom = users
-      .where(
-          (user) => user.matrixRooms?.any((room) => room.id == roomId) ?? false)
+      .where((user) => user.matrixRooms.any((room) => room.id == roomId))
       .toList();
   return usersInRoom;
 }

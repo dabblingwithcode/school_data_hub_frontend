@@ -92,8 +92,8 @@ class SelectMatrixRoomsListController extends State<SelectMatrixRoomsList> {
 
   @override
   Widget build(BuildContext context) {
-    List<MatrixRoom> rooms =
-        watchValue((MatrixPolicyManager x) => x.matrixRooms);
+    // List<MatrixRoom> rooms =
+    //     watchValue((MatrixPolicyManager x) => x.matrixRooms);
     List<MatrixRoom> filteredRooms =
         watchValue((MatrixPolicyFilterManager x) => x.filteredMatrixRooms);
 
