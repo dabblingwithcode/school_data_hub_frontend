@@ -41,63 +41,88 @@ class SchooldayManager {
     return this;
   }
 
-  Future getSchooldays() async {
-    locator<NotificationManager>().isRunningValue(true);
-    try {
-      final response = await client.get(EndpointsSchoolday.getSchooldays);
-      final schooldays =
-          (response.data as List).map((e) => Schoolday.fromJson(e)).toList();
-      locator<NotificationManager>().showSnackBar(
-          NotificationType.success, '${schooldays.length} Schultage geladen!');
+  final apiSchooldayService = locator<ApiSchooldayService>();
 
-      _schooldays.value = schooldays;
-      setAvailableDates();
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
+  Future<void> getSchooldays() async {
+    final List<Schoolday> responseSchooldays =
+        await apiSchooldayService.getSchooldaysFromServer();
 
-      rethrow;
-    }
-    locator<NotificationManager>().isRunningValue(false);
+    locator<NotificationManager>().showSnackBar(NotificationType.success,
+        '${responseSchooldays.length} Schultage geladen!');
+
+    _schooldays.value = responseSchooldays;
+    setAvailableDates();
+
+    return;
   }
 
-  setAvailableDates() {
-    locator<NotificationManager>().isRunningValue(true);
+  Future<void> postSchoolday(DateTime schoolday) async {
+    final Schoolday newSchoolday =
+        await apiSchooldayService.postSchoolday(schoolday);
+
+    _schooldays.value = [..._schooldays.value, newSchoolday];
+
+    locator<NotificationManager>().showSnackBar(
+        NotificationType.success, 'Schultag erfolgreich erstellt');
+
+    setAvailableDates();
+
+    return;
+  }
+
+  Future<void> deleteSchoolday(Schoolday schoolday) async {
+    final bool isDeleted = await apiSchooldayService.deleteSchoolday(schoolday);
+
+    if (isDeleted) {
+      _schooldays.value =
+          _schooldays.value.where((day) => day != schoolday).toList();
+
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.success, 'Schultag erfolgreich gelöscht');
+      return;
+    }
+
+    setAvailableDates();
+
+    return;
+  }
+
+  void setAvailableDates() {
     List<DateTime> processedAvailableDates = [];
+
     for (Schoolday day in _schooldays.value) {
       DateTime validDate = day.schoolday;
       processedAvailableDates.add(validDate);
     }
+
     _availableDates.value = processedAvailableDates;
-    debug.success(
-        '${_availableDates.value.length} selectableDates | ${StackTrace.current}');
 
     getThisDate();
-    // locator<SnackBarManager>().isRunningValue(false);
   }
 
-  getThisDate() {
+  void getThisDate() {
     final schooldays = _schooldays.value;
+
     final closestSchooldayToNow = schooldays.reduce((value, element) =>
         value.schoolday.difference(DateTime.now()).abs() <
                 element.schoolday.difference(DateTime.now()).abs()
             ? value
             : element);
+
     _thisDate.value = closestSchooldayToNow.schoolday;
-    debug.success(
-        'This day is ${_thisDate.value.formatForUser()} | ${StackTrace.current}');
+
+    return;
   }
 
-  setThisDate(DateTime date) {
+  void setThisDate(DateTime date) {
     _thisDate.value = date;
   }
 
-  setStartDate(DateTime date) {
+  void setStartDate(DateTime date) {
     _startDate.value = date;
   }
 
-  setEndDate(DateTime date) {
+  void setEndDate(DateTime date) {
     _endDate.value = date;
   }
 }
