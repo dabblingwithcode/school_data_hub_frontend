@@ -9,64 +9,77 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/features/competence/models/competence.dart';
 
-class EndpointsCompetence {
+class ApiCompetenceService {
   late final DioClient _client = locator<ApiManager>().dioClient.value;
+
   final notificationManager = locator<NotificationManager>();
 
   //- fetch list of competences
-  String fetchCompetencesUrl = '/competences/all/flat';
+
+  static const String _fetchCompetencesUrl = '/competences/all/flat';
+
   Future<List<Competence>> fetchCompetences() async {
     notificationManager.isRunningValue(true);
 
-    final response =
-        await _client.get(EndpointsCompetence().fetchCompetencesUrl);
+    final response = await _client.get(_fetchCompetencesUrl);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Failed to fetch competences');
+
       notificationManager.isRunningValue(false);
+
       throw ApiException('Failed to fetch competences', response.statusCode);
     }
-    final competences =
+
+    final List<Competence> competences =
         (response.data as List).map((e) => Competence.fromJson(e)).toList();
 
-    notificationManager.showSnackBar(
-        NotificationType.success, 'Kompetenzen geladen');
     notificationManager.isRunningValue(false);
+
     return competences;
   }
 
   //- post new competence
-  String postNewCompetenceUrl = '/competences/new';
+
+  static const String _postNewCompetenceUrl = '/competences/new';
+
   Future<Competence> postNewCompetence(
       int? parentCompetence,
       String competenceName,
       String? competenceLevel,
       String? indicators) async {
     notificationManager.isRunningValue(true);
+
     final data = jsonEncode({
       "parent_competence": parentCompetence,
       "competence_name": competenceName,
       "competence_level": competenceLevel == '' ? null : competenceLevel,
       "indicators": indicators == '' ? null : indicators
     });
-    final Response response = await _client
-        .post(EndpointsCompetence().postNewCompetenceUrl, data: data);
+
+    final Response response =
+        await _client.post(_postNewCompetenceUrl, data: data);
+
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Failed to post a competence');
+
       notificationManager.isRunningValue(false);
+
       throw ApiException('Failed to post a competence', response.statusCode);
     }
+
     final Competence newCompetence = Competence.fromJson(response.data);
-    notificationManager.showSnackBar(
-        NotificationType.success, 'Kompetenz erstellt');
+
     notificationManager.isRunningValue(false);
+
     return newCompetence;
   }
 
   //- update competence property
-  String patchCompetenceUrl(int competenceId) {
+
+  String _patchCompetenceUrl(int competenceId) {
     return '/competences/$competenceId/patch';
   }
 
@@ -76,24 +89,29 @@ class EndpointsCompetence {
       String? competenceLevel,
       String? indicators) async {
     notificationManager.isRunningValue(true);
+
     final data = jsonEncode({
       "competence_name": competenceName,
       "competence_level": competenceLevel,
       "indicators": indicators
     });
-    final Response response = await _client.patch(
-        EndpointsCompetence().patchCompetenceUrl(competenceId),
-        data: data);
+
+    final Response response =
+        await _client.patch(_patchCompetenceUrl(competenceId), data: data);
+
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Failed to patch a competence');
+
       notificationManager.isRunningValue(false);
+
       throw ApiException('Failed to patch a competence', response.statusCode);
     }
+
     final patchedCompetence = Competence.fromJson(response.data);
-    notificationManager.showSnackBar(
-        NotificationType.success, 'Kompetenz aktualisiert');
+
     notificationManager.isRunningValue(false);
+
     return patchedCompetence;
   }
 
@@ -107,7 +125,7 @@ class EndpointsCompetence {
 
   //- GET
 
-  String getCompetenceCheckFile(String fileId) {
+  String _getCompetenceCheckFileUrl(String fileId) {
     return '/competence_checks/$fileId';
   }
 

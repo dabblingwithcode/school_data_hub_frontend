@@ -23,8 +23,8 @@ class PatchCompetenceViewState extends State<PatchCompetenceView> {
     String text1 = textField1Controller.text;
     String text2 = textField2Controller.text;
     String text3 = textField3Controller.text;
-    await locator<CompetenceManager>()
-        .patchCompetence(widget.competence.competenceId, text1, text2, text3);
+    await locator<CompetenceManager>().updateCompetenceProperty(
+        widget.competence.competenceId, text1, text2, text3);
     // ignore: use_build_context_synchronously
     Navigator.pop(context);
   }
