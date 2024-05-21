@@ -4,7 +4,7 @@ export 'endpoints/api_competence_service.dart';
 export 'endpoints/api_learning_support_service.dart';
 export 'endpoints/api_attendance_service.dart';
 export 'endpoints/api_pupil_service.dart';
-export 'endpoints/pupil_workbook_endpoints.dart';
+export 'endpoints/api_pupil_workbook_service.dart';
 export 'endpoints/api_school_list_service.dart';
 export 'endpoints/api_schoolday_service.dart';
 export 'endpoints/user_endpoints.dart';
