@@ -1,0 +1,260 @@
+import 'dart:convert';
+
+import 'package:dio/dio.dart';
+import 'package:schuldaten_hub/api/api.dart';
+import 'package:schuldaten_hub/api/services/api_manager.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
+import 'package:schuldaten_hub/common/services/session_manager.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
+
+class ApiSchoolListService {
+  final _client = locator<ApiManager>().dioClient.value;
+  final notificationManager = locator<NotificationManager>();
+
+  //- get school lists
+
+  static const _getSchoolListsUrl = '/school_lists/all/flat';
+
+  Future<List<SchoolList>> fetchSchoolLists() async {
+    notificationManager.isRunningValue(true);
+
+    final response = await _client.get(_getSchoolListsUrl);
+
+    if (response.statusCode != 200) {
+      notificationManager.showSnackBar(
+          NotificationType.error, 'Fehler beim Laden der Schullisten');
+
+      notificationManager.isRunningValue(false);
+
+      throw ApiException('Failed to fetch school lists', response.statusCode);
+    }
+
+    final List<SchoolList> schoolLists =
+        (response.data as List).map((e) => SchoolList.fromJson(e)).toList();
+
+    notificationManager.isRunningValue(false);
+
+    return schoolLists;
+  }
+
+  //- POST
+  static const _postSchoolListWithGroupUrl = '/school_lists/list';
+
+  Future<SchoolList> postSchoolListWithGroup(
+      {required String name,
+      required String description,
+      required List<int> pupilIds,
+      required String visibility}) async {
+    notificationManager.isRunningValue(true);
+
+    final String data = jsonEncode({
+      "list_name": name,
+      "list_description": description,
+      "pupils": pupilIds,
+      "visibility": visibility
+    });
+
+    final response =
+        await _client.post(_postSchoolListWithGroupUrl, data: data);
+
+    notificationManager.isRunningValue(false);
+
+    if (response.statusCode != 200) {
+      notificationManager.showSnackBar(
+          NotificationType.error, 'Fehler beim Erstellen der Schulliste');
+
+      throw ApiException('Failed to create school list', response.statusCode);
+    }
+
+    final newList = SchoolList.fromJson(response.data);
+
+    //- TODO: hier kommt nur schoollist zurück, es fehlen die pupil lists der SuS,
+    //- die jetzt dirty sind
+    return newList;
+  }
+
+  static const postSchoolList = '/school_lists/all';
+
+  //- patch school list
+  String _patchSchoolListUrl(String listId) {
+    return '/school_lists/$listId/patch';
+  }
+
+  Future<SchoolList> updateSchoolListProperty(
+      {required SchoolList schoolListToUpdate,
+      String? name,
+      String? description,
+      String? visibility}) async {
+    assert(name != null || description != null || visibility != null);
+    notificationManager.isRunningValue(true);
+    Map<String, String> jsonMap = {};
+
+    if (name != null) {
+      jsonMap["list_name"] = name;
+    }
+    if (description != null) {
+      jsonMap["list_description"] = description;
+    }
+    if (visibility != null) {
+      jsonMap["visibility"] = '${schoolListToUpdate.visibility}*$visibility';
+    }
+
+    final String data = jsonEncode(jsonMap);
+
+    final Response response = await _client
+        .patch(_patchSchoolListUrl(schoolListToUpdate.listId), data: data);
+
+    //- isRunning direkt nach dem Response überall setzen, zweiten braucht man nicht
+    notificationManager.isRunningValue(false);
+
+    if (response.statusCode != 200) {
+      notificationManager.showSnackBar(
+          NotificationType.error, 'Fehler beim Aktualisieren der Schulliste');
+      throw ApiException('Failed to update school list', response.statusCode);
+    }
+    return SchoolList.fromJson(response.data);
+  }
+
+  //- delete school list
+
+  String _deleteSchoolListUrl(String listId) {
+    return '/school_lists/$listId';
+  }
+
+  Future<List<SchoolList>> deleteSchoolList(String listId) async {
+    notificationManager.isRunningValue(true);
+
+    final Response response =
+        await _client.delete(_deleteSchoolListUrl(listId));
+    notificationManager.isRunningValue(false);
+
+    if (response.statusCode != 200) {
+      notificationManager.showSnackBar(
+          NotificationType.error, 'Fehler beim Löschen der Schulliste');
+
+      throw ApiException('Failed to delete school list', response.statusCode);
+    }
+    final List<SchoolList> schoolLists =
+        (response.data as List).map((e) => SchoolList.fromJson(e)).toList();
+
+    notificationManager.isRunningValue(false);
+
+    return schoolLists;
+  }
+
+  //- PUPIL LISTS -//
+
+  //- POST
+
+  String _addPupilsToSchoolList(String listId) {
+    return '/school_lists/$listId/pupils';
+  }
+
+  Future<List<Pupil>> addPupilsToSchoolList(
+      String listId, List<int> pupilIds) async {
+    notificationManager.isRunningValue(true);
+
+    final data = jsonEncode({"pupils": pupilIds});
+
+    final response =
+        await _client.post(_addPupilsToSchoolList(listId), data: data);
+
+    notificationManager.isRunningValue(false);
+
+    if (response.statusCode != 200) {
+      notificationManager.showSnackBar(
+          NotificationType.error, 'Fehler beim Hinzufügen zur Schulliste');
+
+      throw ApiException('Failed to delete school list', response.statusCode);
+    }
+
+    final List<Pupil> responsePupils =
+        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+
+    return responsePupils;
+  }
+
+  //- update pupil list property
+
+  String _patchPupilSchoolList(int pupilId, String listId) {
+    return '/pupil_lists/$pupilId/$listId';
+  }
+
+  Future<Pupil> patchSchoolListPupil({
+    required int pupilId,
+    required String listId,
+    bool? value,
+    String? comment,
+  }) async {
+    notificationManager.isRunningValue(true);
+
+    String data;
+
+    if (value != null) {
+      data = jsonEncode({
+        "pupil_list_status": value,
+        "pupil_list_entry_by":
+            locator<SessionManager>().credentials.value.username
+      });
+    } else {
+      data = jsonEncode({
+        "pupil_list_comment": comment,
+        "pupil_list_entry_by":
+            locator<SessionManager>().credentials.value.username
+      });
+    }
+
+    final response =
+        await _client.patch(_patchPupilSchoolList(pupilId, listId), data: data);
+
+    notificationManager.isRunningValue(false);
+
+    if (response.statusCode != 200) {
+      notificationManager.showSnackBar(
+          NotificationType.error, 'Fehler beim Aktualisieren der Schulliste');
+
+      throw ApiException('Failed to patch school list', response.statusCode);
+    }
+
+    final Pupil responsePupil = Pupil.fromJson(response.data);
+
+    return responsePupil;
+  }
+
+  //-DELETE
+  String _deletePupilsFromSchoolList(String listId) {
+    return '/pupil_lists/$listId/delete_pupils';
+  }
+
+  Future deletePupilsFromSchoolList({
+    required List<int> pupilIds,
+    required String listId,
+  }) async {
+    notificationManager.isRunningValue(true);
+
+    final data = jsonEncode({"pupils": pupilIds});
+
+    final response =
+        await _client.post(_deletePupilsFromSchoolList(listId), data: data);
+
+    if (response.statusCode != 200) {
+      notificationManager.showSnackBar(
+          NotificationType.error, 'Fehler beim Löschen von der Schulliste');
+
+      throw ApiException(
+          'Failed to delete pupils from school list', response.statusCode);
+    }
+    // The response are the updated pupils whose pupil list was deleted
+
+    final List<Pupil> responsePupils =
+        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+
+    return responsePupils;
+  }
+
+  //- this endpoint is not used in the app
+  static const getSchoolListWithPupils = '/school_lists/all';
+}

@@ -29,14 +29,17 @@ class AttendanceCard extends WatchingWidget {
   Widget build(BuildContext context) {
     final attendanceManager = locator<AttendanceManager>();
     DateTime thisDate = watchValue((SchooldayManager x) => x.thisDate);
-    String dropdownMissedValue = setMissedTypeValue(pupil.internalId, thisDate);
+    MissedType dropdownMissedValue =
+        setMissedTypeValue(pupil.internalId, thisDate);
     bool? excusedValue = setExcusedValue(pupil.internalId, thisDate);
-    String dropdownContactedValue =
+    ContactedType dropdownContactedValue =
         setContactedValue(pupil.internalId, thisDate);
     bool? returnedValue = setReturnedValue(pupil.internalId, thisDate);
     String? createdModifiedValue(pupilId) {
       return setCreatedModifiedValue(pupilId, thisDate);
     }
+
+    //- TODO: This widget is a mess, should be refactored!
 
     if (Platform.isAndroid) {
       return Container(
@@ -105,7 +108,7 @@ class AttendanceCard extends WatchingWidget {
                           children: [
                             const Gap(20),
                             DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
+                              child: DropdownButton<MissedType>(
                                 icon: const Visibility(
                                     visible: false,
                                     child: Icon(Icons.arrow_downward)),
@@ -119,7 +122,7 @@ class AttendanceCard extends WatchingWidget {
                                   if (dropdownMissedValue == newValue) {
                                     return;
                                   }
-                                  if (newValue == 'late') {
+                                  if (newValue == MissedType.isLate) {
                                     final int minutesLate =
                                         await minutesLateDialog(context);
                                     attendanceManager.changeLateTypeValue(
@@ -145,12 +148,13 @@ class AttendanceCard extends WatchingWidget {
                               },
                             ),
                             const Gap(4),
-                            (dropdownMissedValue == 'missed' &&
+                            (dropdownMissedValue == MissedType.isMissed &&
                                         excusedValue == true) ||
-                                    dropdownContactedValue != '0' ||
+                                    dropdownContactedValue !=
+                                        ContactedType.notSet ||
                                     returnedValue == true
                                 ? DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
+                                    child: DropdownButton<ContactedType>(
                                         icon: const Visibility(
                                             visible: false,
                                             child: Icon(Icons.arrow_downward)),
@@ -185,7 +189,8 @@ class AttendanceCard extends WatchingWidget {
                               activeColor: goneHomeColor,
                               value: returnedValue ?? false,
                               onChanged: (bool? newValue) async {
-                                if (dropdownMissedValue == 'missed') {
+                                if (dropdownMissedValue ==
+                                    MissedType.isMissed) {
                                   return;
                                 }
                                 if (newValue == true) {
@@ -362,7 +367,7 @@ class AttendanceCard extends WatchingWidget {
                             children: [
                               const Gap(2),
                               DropdownButtonHideUnderline(
-                                child: DropdownButton<String>(
+                                child: DropdownButton<MissedType>(
                                   icon: const Visibility(
                                       visible: false,
                                       child: Icon(Icons.arrow_downward)),
@@ -378,7 +383,7 @@ class AttendanceCard extends WatchingWidget {
                                     if (dropdownMissedValue == newValue) {
                                       return;
                                     }
-                                    if (newValue == 'missed' &&
+                                    if (newValue == MissedType.isMissed &&
                                         returnedValue == true) {
                                       locator<NotificationManager>().showSnackBar(
                                           NotificationType.error,
@@ -386,7 +391,7 @@ class AttendanceCard extends WatchingWidget {
 
                                       return;
                                     }
-                                    if (newValue == 'late') {
+                                    if (newValue == MissedType.isLate) {
                                       final int minutesLate =
                                           await minutesLateDialog(context);
                                       attendanceManager.changeLateTypeValue(
@@ -458,12 +463,13 @@ class AttendanceCard extends WatchingWidget {
                           ),
                           const Gap(5),
                           Column(children: [
-                            (dropdownMissedValue == 'missed' &&
+                            (dropdownMissedValue == MissedType.isMissed &&
                                         excusedValue == true) ||
-                                    dropdownContactedValue != '0' ||
+                                    dropdownContactedValue !=
+                                        ContactedType.notSet ||
                                     returnedValue == true
                                 ? DropdownButtonHideUnderline(
-                                    child: DropdownButton<String>(
+                                    child: DropdownButton<ContactedType>(
                                         icon: const Visibility(
                                             visible: false,
                                             child: Icon(Icons.arrow_downward)),
@@ -522,7 +528,8 @@ class AttendanceCard extends WatchingWidget {
                                   value: returnedValue ?? false,
                                   onChanged: (bool? newValue) async {
                                     if (newValue == true) {
-                                      if (dropdownMissedValue == 'missed') {
+                                      if (dropdownMissedValue ==
+                                          MissedType.isMissed) {
                                         locator<NotificationManager>().showSnackBar(
                                             NotificationType.error,
                                             'Ein fehlendes Kind kann nicht abgeholt werden!');

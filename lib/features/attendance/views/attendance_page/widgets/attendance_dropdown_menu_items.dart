@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
 
 // items for the missedType dropdown
-List<DropdownMenuItem<String>> missedTypeMenuItems = [
+List<DropdownMenuItem<MissedType>> missedTypeMenuItems = [
   DropdownMenuItem(
-      value: 'none',
+      value: MissedType.notSet,
       child: Container(
         width: 30.0,
         height: 30.0,
@@ -23,7 +24,7 @@ List<DropdownMenuItem<String>> missedTypeMenuItems = [
         ),
       )),
   DropdownMenuItem(
-      value: 'late',
+      value: MissedType.isLate,
       child: Container(
         width: 30.0,
         height: 30.0,
@@ -42,7 +43,7 @@ List<DropdownMenuItem<String>> missedTypeMenuItems = [
         ),
       )),
   DropdownMenuItem(
-      value: 'missed',
+      value: MissedType.isMissed,
       child: Container(
         width: 30.0,
         height: 30.0,
@@ -60,30 +61,11 @@ List<DropdownMenuItem<String>> missedTypeMenuItems = [
               )),
         ),
       )),
-  // DropdownMenuItem(
-  //     value: 'home',
-  //     child: Container(
-  //       width: 30.0,
-  //       height: 30.0,
-  //       decoration: const BoxDecoration(
-  //         color: homeColor,
-  //         shape: BoxShape.circle,
-  //       ),
-  //       child: const Center(
-  //         child: Text("H",
-  //             textAlign: TextAlign.center,
-  //             style: TextStyle(
-  //               color: Colors.white,
-  //               fontWeight: FontWeight.bold,
-  //               fontSize: 18,
-  //             )),
-  //       ),
-  //     )),
 ];
 
-List<DropdownMenuItem<String>> dropdownContactedMenuItems = [
+List<DropdownMenuItem<ContactedType>> dropdownContactedMenuItems = [
   DropdownMenuItem(
-      value: '0',
+      value: ContactedType.notSet,
       child: Container(
         width: 30.0,
         height: 30.0,
@@ -102,7 +84,7 @@ List<DropdownMenuItem<String>> dropdownContactedMenuItems = [
         ),
       )),
   DropdownMenuItem(
-      value: '1',
+      value: ContactedType.contacted,
       child: Container(
         width: 30.0,
         height: 30.0,
@@ -115,7 +97,7 @@ List<DropdownMenuItem<String>> dropdownContactedMenuItems = [
         ),
       )),
   DropdownMenuItem(
-      value: '2',
+      value: ContactedType.calledBack,
       child: Container(
         width: 30.0,
         height: 30.0,
@@ -130,7 +112,7 @@ List<DropdownMenuItem<String>> dropdownContactedMenuItems = [
         ),
       )),
   DropdownMenuItem(
-      value: '3',
+      value: ContactedType.notReached,
       child: Container(
         width: 30.0,
         height: 30.0,

@@ -4,6 +4,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/date_picker.dart';
+import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
@@ -114,25 +115,29 @@ bool schooldayIsToday(DateTime schoolday) {
 }
 
 //- set value functions
-setMissedTypeValue(int pupilId, DateTime date) {
+MissedType setMissedTypeValue(int pupilId, DateTime date) {
   final PupilProxy pupil = findPupilById(pupilId);
   final int? missedClass = findMissedClassIndex(pupil, date);
   if (missedClass == -1 || missedClass == null) {
-    return 'none';
+    return MissedType.notSet;
   }
   final dropdownvalue = pupil.pupilMissedClasses![missedClass].missedType;
-  return dropdownvalue;
+
+  final MissedType missedType =
+      MissedType.values.firstWhere((e) => e.value == dropdownvalue);
+  return missedType;
 }
 
-String setContactedValue(int pupilId, DateTime date) {
+ContactedType setContactedValue(int pupilId, DateTime date) {
   final PupilProxy pupil = findPupilById(pupilId);
   final int? missedClass = findMissedClassIndex(pupil, date);
   if (missedClass == -1) {
-    return '0';
+    return ContactedType.notSet;
   } else {
-    final contactedIndex = pupil.pupilMissedClasses![missedClass!].contacted;
+    final contactedType = ContactedType.values.firstWhere(
+        (e) => e.value == pupil.pupilMissedClasses![missedClass!].contacted);
 
-    return contactedIndex!;
+    return contactedType;
   }
 }
 

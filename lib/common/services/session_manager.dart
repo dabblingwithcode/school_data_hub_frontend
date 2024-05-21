@@ -25,17 +25,13 @@ class SessionManager {
   ValueListenable<Session> get credentials => _credentials;
   ValueListenable<bool> get isAuthenticated => _isAuthenticated;
   ValueListenable<bool> get isAdmin => _isAdmin;
-  //ValueListenable<int> get credit => _credit;
-
-  ValueListenable<bool> get isRunning => _isRunning;
+  // ValueListenable<int> get credit => _credit;
 
   final _matrixPolicyManagerRegistrationStatus = ValueNotifier<bool>(false);
   final _credentials = ValueNotifier<Session>(Session());
   final _isAuthenticated = ValueNotifier<bool>(false);
   final _isAdmin = ValueNotifier<bool>(false);
-  //final _credit = ValueNotifier<int>(0);
-
-  final _isRunning = ValueNotifier<bool>(false);
+  // final _credit = ValueNotifier<int>(0);
 
   late final Dio _dio = Dio(
     BaseOptions(
@@ -53,13 +49,13 @@ class SessionManager {
     return this;
   }
 
-  authenticate(Session session) {
+  void authenticate(Session session) {
     _credentials.value = session;
     _isAdmin.value = _credentials.value.isAdmin!;
     _isAuthenticated.value = true;
   }
 
-  changeSessionCredit(int value) async {
+  void changeSessionCredit(int value) async {
     int oldCreditValue = _credentials.value.credit!;
     Session newSession =
         _credentials.value.copyWith(credit: oldCreditValue + value);

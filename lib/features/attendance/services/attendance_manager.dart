@@ -3,22 +3,20 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/api.dart';
+import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
+import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
-
-import '../../../api/services/api_manager.dart';
-import '../../../common/services/locator.dart';
 
 enum MissedType {
   isLate('late'),
@@ -29,374 +27,294 @@ enum MissedType {
   const MissedType(this.value);
 }
 
+enum ContactedType {
+  notSet('0'),
+  contacted('1'),
+  calledBack('2'),
+  notReached('3');
+
+  final String value;
+  const ContactedType(this.value);
+}
+
 class AttendanceManager {
   final pupilManager = locator<PupilManager>();
   final schooldayManager = locator<SchooldayManager>();
+  final notificationManager = locator<NotificationManager>();
   final client = locator<ApiManager>().dioClient.value;
-  final endpoints = EndpointsMissedClass();
+  final apiAttendanceService = ApiAttendanceService();
 
-  ValueListenable<bool> get isRunning => _isRunning;
+  AttendanceManager();
 
-  final _isRunning = ValueNotifier<bool>(false);
-
-  AttendanceManager(
-      // this.session,
-      );
   Future init() async {
     // await fetchMissedClassesOnASchoolday(schooldayManager.thisDate.value);
     return;
   }
 
   Future<void> fetchMissedClassesOnASchoolday(DateTime schoolday) async {
-    // This one is called every 10 seconds, isRunning would be annoying
-    final Response response = await client
-        .get(EndpointsMissedClass().getMissedClassesOnDate(schoolday));
-    if (response.statusCode == 404) {
-      debug.info('No missed classes found on $schoolday');
-      return;
-    }
-    if (response.statusCode != 200) {
-      locator<NotificationManager>().showSnackBar(
-          NotificationType.error, 'Fehler: status code ${response.statusCode}');
+    final List<MissedClass> missedClasses =
+        await apiAttendanceService.fetchMissedClassesOnASchoolday(schoolday);
 
-      return;
-    }
-    final List<MissedClass> missedClasses = response.data
-        .map<MissedClass>((missedClass) => MissedClass.fromJson(missedClass))
-        .toList();
     pupilManager.updatePupilsFromMissedClasses(missedClasses);
+
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Fehlzeiten erfolgreich geladen!');
 
     return;
   }
 
-  void changeExcusedValue(int pupilId, DateTime date, bool newValue) async {
-    locator<NotificationManager>().isRunningValue(true);
+  Future<void> changeExcusedValue(
+      int pupilId, DateTime date, bool newValue) async {
     final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     if (missedClass == null || missedClass == -1) {
       return;
     }
-    final data = jsonEncode({"excused": newValue});
-    final Response response = await client
-        .patch(endpoints.patchMissedClass(pupilId, date), data: data);
+    final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+        pupilId: pupilId, date: date, excused: newValue);
 
-    if (response.statusCode == 200) {
-      locator<NotificationManager>()
-          .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
+    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
 
-      debug.warning('Changed excused state to $newValue');
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Eintrag erfolgreich!');
 
-      final pupil = Pupil.fromJson(response.data);
-      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
-    }
-    locator<NotificationManager>().isRunningValue(false);
     return;
   }
 
   Future<void> deleteMissedClass(int pupilId, DateTime date) async {
-    locator<NotificationManager>().isRunningValue(true);
-    final response = await client
-        .delete(EndpointsMissedClass().deleteMissedClass(pupilId, date));
+    final Pupil responsePupil = await apiAttendanceService.deleteMissedClass(
+      pupilId,
+      date,
+    );
 
-    if (response.statusCode != 200) {
-      locator<NotificationManager>().showSnackBar(
-          NotificationType.error, 'Fehler: status code ${response.statusCode}');
+    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
 
-      //- TO-DO: delete the missed class in the manager too! E.g. make the server respond with the pupil?
-
-      return;
-    }
-    final pupil = Pupil.fromJson(response.data);
-    locator<PupilManager>().updatePupilProxyWithPupil(pupil);
-    locator<NotificationManager>().isRunningValue(false);
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Fehlzeit erfolgreich gelöscht!');
 
     return;
   }
 
-  void changeReturnedValue(
+  Future<void> changeReturnedValue(
       int pupilId, bool newValue, DateTime date, String? time) async {
     locator<NotificationManager>().isRunningValue(true);
     final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
-    final List<int> pupilBaseIds =
-        locator<PupilPersonalDataManager>().availablePupilIds;
+
     // pupils gone home during class for whatever reason
     //are marked as returned with a time stamp
-    //* Case create a new missed class
-    //- make missedType enum
-    // if the missed class does not exist we have to create one with the type "none"
-    if (missedClass == -1) {
-      debug.info('This missed class is new');
-      final data = jsonEncode({
-        "missed_pupil_id": pupilId,
-        "missed_day": date.formatForJson(),
-        "missed_type": 'none',
-        "excused": false,
-        "contacted": '0',
-        "returned": true,
-        "returned_at": time,
-        "minutes_late": null,
-        "written_excuse": null
-      });
-      // making the request
-      final Response response =
-          await client.post(EndpointsMissedClass.postMissedClass, data: data);
 
-      // handle errors
-      if (response.statusCode != 200) {
-        locator<NotificationManager>().showSnackBar(NotificationType.error,
-            'Fehler: status code ${response.statusCode}');
-        locator<NotificationManager>().isRunningValue(false);
-        return;
-      }
-      // the request was successful -
-      //we patch the pupil in the pupilmanager with the response
-      final pupil = Pupil.fromJson(response.data);
-      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
-      locator<NotificationManager>().isRunningValue(false);
+    //- Case create a new missed class
+    // if the missed class does not exist we have to create one with the type "none"
+
+    if (missedClass == -1) {
+      // This missed class is new
+      final Pupil responsePupil = await apiAttendanceService.postMissedClass(
+        pupilId: pupilId,
+        missedType: MissedType.notSet,
+        date: date,
+        excused: false,
+        contactedType: ContactedType.notSet,
+        returned: true,
+        returnedAt: time,
+      );
+
+      locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+
       return;
     }
-    //* Case delete 'none' + 'returned' missed class *//
+
+    //- Case delete 'none' + 'returned' missed class
     // The only way to delete a missed class with 'none' and 'returned' entries
     // is if we uncheck 'return' - let's check that
+
     if (newValue == false &&
-        pupil.pupilMissedClasses![missedClass!].missedType == 'none') {
-      final response = await client
-          .delete(EndpointsMissedClass().deleteMissedClass(pupilId, date));
-      await pupilManager.fetchPupilsByInternalId(pupilBaseIds);
-      if (response.statusCode != 200) {
-        locator<NotificationManager>().showSnackBar(NotificationType.error,
-            'Fehler: status code ${response.statusCode}');
-        locator<NotificationManager>().isRunningValue(false);
-        return;
-      }
-      locator<PupilFilterManager>().refreshFilteredPupils();
-      locator<NotificationManager>()
-          .showSnackBar(NotificationType.success, 'Fehlzeit gelöscht!');
+        pupil.pupilMissedClasses![missedClass!].missedType ==
+            MissedType.notSet.value) {
+      final Pupil responsePupil = await apiAttendanceService.deleteMissedClass(
+        pupilId,
+        date,
+      );
+
+      locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
 
       return;
     }
-    //* Case patch an existing missed class entry
-    // The only way to create a 'return' entry in a 'none' missed class slot
-    // is to check 'returned' - let's check that
-    if (newValue == true) {
-      final data = jsonEncode({"returned": newValue, "returned_at": time});
-      // send the request
-      final Response response = await client
-          .patch(endpoints.patchMissedClass(pupilId, date), data: data);
-      // handle errors
-      if (response.statusCode != 200) {
-        locator<NotificationManager>().showSnackBar(NotificationType.error,
-            'Fehler: status code ${response.statusCode}');
-        locator<NotificationManager>().isRunningValue(false);
 
-        return;
-      }
-      // the request was successful -
-      //we patch the pupil in the pupilmanager with the response
-      final pupil = Pupil.fromJson(response.data);
-      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
-      locator<NotificationManager>()
-          .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
-      locator<NotificationManager>().isRunningValue(false);
+    //- Case patch an existing missed class entry
+
+    if (newValue == true) {
+      final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+        pupilId: pupilId,
+        returned: newValue,
+        date: date,
+        returnedAt: time,
+      );
+
+      locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+
+      return;
+    } else {
+      final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+        pupilId: pupilId,
+        returned: newValue,
+        date: date,
+        returnedAt: null,
+      );
+
+      locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+
+      return;
     }
   }
 
-  Future<void> changeLateTypeValue(
-      int pupilId, String dropdownValue, DateTime date, int minutesLate) async {
-    locator<NotificationManager>().isRunningValue(true);
+  Future<void> changeLateTypeValue(int pupilId, MissedType dropdownValue,
+      DateTime date, int minutesLate) async {
     // Let's look for an existing missed class - if pupil and date match, there is one
+
     final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     if (missedClass == -1) {
       // The missed class does not exist - let's create one
-      debug.info('This missed class is new');
-      final data = jsonEncode({
-        "missed_pupil_id": pupilId,
-        "missed_day": date.formatForJson(),
-        "missed_type": dropdownValue,
-        "excused": false,
-        "contacted": '0',
-        "returned": false,
-        "returned_at": null,
-        "minutes_late": minutesLate,
-        "written_excuse": null
-      });
 
-      final Response response =
-          await client.post(EndpointsMissedClass.postMissedClass, data: data);
+      final Pupil responsePupil = await apiAttendanceService.postMissedClass(
+        pupilId: pupilId,
+        missedType: dropdownValue,
+        date: date,
+        minutesLate: minutesLate,
+        excused: false,
+        contactedType: ContactedType.notSet,
+        returned: false,
+        returnedAt: null,
+        writtenExcuse: null,
+      );
 
-      if (response.statusCode != 200) {
-        locator<NotificationManager>().showSnackBar(NotificationType.error,
-            'Fehler: status code ${response.statusCode}');
-        locator<NotificationManager>().isRunningValue(false);
-        return;
-      }
-      final pupil = Pupil.fromJson(response.data);
-      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
-      locator<NotificationManager>()
-          .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
-      locator<NotificationManager>().isRunningValue(false);
+      locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+
       return;
     }
+
     // The missed class exists already - patching it
-    debug.info('This missed class exists - patching');
-    final data =
-        jsonEncode({"missed_type": dropdownValue, "minutes_late": minutesLate});
-    final Response response = await client
-        .patch(endpoints.patchMissedClass(pupilId, date), data: data);
 
-    if (response.statusCode != 200) {
-      locator<NotificationManager>().showSnackBar(
-          NotificationType.error, 'Fehler: status code ${response.statusCode}');
-      locator<NotificationManager>().isRunningValue(false);
+    final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+      pupilId: pupilId,
+      missedType: dropdownValue,
+      date: date,
+      minutesLate: minutesLate,
+    );
 
-      return;
-    }
-    // the request was successful -
-    //we patch the pupil in the pupilmanager with the response
+    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
 
-    locator<PupilManager>()
-        .updatePupilProxyWithPupil(Pupil.fromJson(response.data));
-    locator<NotificationManager>()
-        .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
-    locator<NotificationManager>().isRunningValue(false);
     return;
   }
 
   Future<void> createManyMissedClasses(
       id, startdate, enddate, missedType) async {
-    locator<NotificationManager>().isRunningValue(true);
-    List<Map<String, dynamic>> missedClasses = [];
+    List<MissedClass> missedClasses = [];
+
     final PupilProxy pupil =
         pupilManager.allPupils.firstWhere((pupil) => pupil.internalId == id);
+
     final List<DateTime> validSchooldays =
         locator<SchooldayManager>().availableDates.value;
+
     for (DateTime validSchoolday in validSchooldays) {
+      // if the date is the same as the startdate or enddate or in between
       if (validSchoolday.isSameDate(startdate) ||
           validSchoolday.isSameDate(enddate) ||
           (validSchoolday.isAfterDate(startdate) &&
               validSchoolday.isBeforeDate(enddate))) {
-        Map<String, dynamic> data = {
-          "missed_pupil_id": pupil.internalId,
-          "missed_day": validSchoolday.formatForJson(),
-          "missed_type": missedType,
-          "excused": false,
-          "contacted": '0',
-          "returned": false,
-          "returned_at": null,
-          "minutes_late": null,
-          "written_excuse": null
-        };
-        missedClasses.add(data);
+        missedClasses.add(MissedClass(
+          createdBy: locator<SessionManager>().credentials.value.username!,
+          missedPupilId: pupil.internalId,
+          missedDay: validSchoolday,
+          missedType: missedType,
+          excused: false,
+          contacted: '0',
+          returned: false,
+          returnedAt: null,
+          minutesLate: null,
+          writtenExcuse: null,
+        ));
       }
     }
-    final listData = jsonEncode(missedClasses);
-    final response = await client.post(EndpointsMissedClass.postMissedClassList,
-        data: listData);
-    if (response.statusCode != 200) {
-      locator<NotificationManager>().showSnackBar(
-          NotificationType.error, 'Fehler: status code ${response.statusCode}');
-      return;
-    }
-    final Pupil pupilResponse = Pupil.fromJson(response.data);
-    locator<PupilManager>().updatePupilProxyWithPupil(pupilResponse);
+
+    final Pupil responsePupil = await apiAttendanceService.postMissedClassList(
+        missedClasses: missedClasses);
+
+    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Einträge erfolgreich!');
-    locator<NotificationManager>().isRunningValue(false);
+
     return;
   }
 
-  void changeMissedTypeValue(
-      int pupilId, String dropdownValue, DateTime date) async {
-    locator<NotificationManager>().isRunningValue(true);
+  Future<void> changeMissedTypeValue(
+      int pupilId, MissedType missedType, DateTime date) async {
+    if (missedType == MissedType.notSet) {
+      // change value to 'notSet' means there was a missed class that has to be deleted
 
-    if (dropdownValue == 'none') {
-      // change value to 'none' means there was a missed class that has to be deleted
       await deleteMissedClass(pupilId, date);
+
       locator<NotificationManager>().isRunningValue(false);
+
       return;
     }
+
     // Let's look for an existing missed class - if pupil and date match, there is one
+
     final PupilProxy pupil = findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     if (missedClass == -1) {
       // The missed class does not exist - let's create one
-      debug.info('This missed class is new');
-      final data = jsonEncode({
-        "missed_pupil_id": pupilId,
-        "missed_day": date.formatForJson(),
-        "missed_type": dropdownValue,
-        "excused": false,
-        "contacted": '0',
-        "returned": false,
-        "returned_at": null,
-        "minutes_late": null,
-        "written_excuse": null
-      });
 
-      final Response response =
-          await client.post(EndpointsMissedClass.postMissedClass, data: data);
-      final Map<String, dynamic> pupilResponse = response.data;
-      if (response.statusCode != 200) {
-        locator<NotificationManager>().showSnackBar(NotificationType.error,
-            'Fehler: status code ${response.statusCode}');
-        locator<NotificationManager>().isRunningValue(false);
-        return;
-      }
-      pupilManager.updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
+      debug.info('This missed class is new');
+
+      final Pupil responsePupil = await apiAttendanceService.postMissedClass(
+        pupilId: pupilId,
+        missedType: missedType,
+        date: date,
+      );
+
+      pupilManager.updatePupilProxyWithPupil(responsePupil);
+
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
-      locator<NotificationManager>().isRunningValue(false);
+
       return;
     }
     // The missed class exists already - patching it
-    debug.info('This missed class exists - patching');
-
     // we make sure that incidentally stored minutes_late values are deleted
-    final data =
-        jsonEncode({"missed_type": dropdownValue, "minutes_late": null});
-    final Response response = await client
-        .patch(endpoints.patchMissedClass(pupilId, date), data: data);
-    final Map<String, dynamic> pupilResponse = response.data;
-    if (response.statusCode != 200) {
-      locator<NotificationManager>().showSnackBar(
-          NotificationType.error, 'Fehler: status code ${response.statusCode}');
-      locator<NotificationManager>().isRunningValue(false);
-      return;
-    }
+    final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+      pupilId: pupilId,
+      missedType: missedType,
+      date: date,
+      minutesLate: null,
+    );
 
-    pupilManager.updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
+    pupilManager.updatePupilProxyWithPupil(responsePupil);
+
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
-    locator<NotificationManager>().isRunningValue(false);
+
     return;
   }
 
-  void changeContactedValue(
-      int pupilId, String dropdownValue, DateTime date) async {
-    locator<NotificationManager>().isRunningValue(true);
-
-    debug.info('Changing contacted value');
-    debug.info('pupilId $pupilId, dropdownValue $dropdownValue, date $date');
-
+  Future<void> changeContactedValue(
+      int pupilId, ContactedType contactedType, DateTime date) async {
     // The missed class exists alreade - patching it
-    debug.info('This missed class exists - patching');
-    final data = jsonEncode({"contacted": dropdownValue});
-    final Response response = await client
-        .patch(endpoints.patchMissedClass(pupilId, date), data: data);
-    final Map<String, dynamic> pupilResponse = response.data;
-    if (response.statusCode != 200) {
-      locator<NotificationManager>().showSnackBar(
-          NotificationType.error, 'Fehler: status code ${response.statusCode}');
-      locator<NotificationManager>().isRunningValue(false);
-      return;
-    }
-    final pupil = Pupil.fromJson(response.data);
-    locator<PupilManager>().updatePupilProxyWithPupil(pupil);
+    final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+      pupilId: pupilId,
+      contactedType: contactedType,
+      date: date,
+    );
+
+    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
-    locator<NotificationManager>().isRunningValue(false);
+
     return;
   }
 }

@@ -1,14 +1,10 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 
-import 'package:schuldaten_hub/common/utils/debug_printer.dart';
-import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/models/schoolday_models/schoolday.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
@@ -21,15 +17,11 @@ class SchooldayManager {
   ValueListenable<DateTime> get startDate => _startDate;
   ValueListenable<DateTime> get endDate => _endDate;
 
-  ValueListenable<bool> get isRunning => _isRunning;
-
   final _schooldays = ValueNotifier<List<Schoolday>>([]);
   final _availableDates = ValueNotifier<List<DateTime>>([]);
   final _thisDate = ValueNotifier<DateTime>(DateTime.now());
   final _startDate = ValueNotifier<DateTime>(DateTime.now());
   final _endDate = ValueNotifier<DateTime>(DateTime.now());
-
-  final _isRunning = ValueNotifier<bool>(false);
 
   SchooldayManager();
 
@@ -102,6 +94,8 @@ class SchooldayManager {
 
   void getThisDate() {
     final schooldays = _schooldays.value;
+
+    // we look for the closest schoolday to now and set it as thisDate
 
     final closestSchooldayToNow = schooldays.reduce((value, element) =>
         value.schoolday.difference(DateTime.now()).abs() <

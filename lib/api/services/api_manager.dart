@@ -13,13 +13,12 @@ class ApiManager {
   ValueListenable<String> get tokenKey => _tokenKey;
   ValueListenable<String> get token => _token;
   ValueListenable<DioClient> get dioClient => _dioClient;
-  ValueListenable<bool> get isRunning => _isRunning;
 
   final _tokenKey = ValueNotifier<String>('x-access-token');
   final _token = ValueNotifier<String>('');
   final _dioClient = ValueNotifier<DioClient>(
       DioClient(Dio(), '', 'x-access-token', '', null));
-  final _isRunning = ValueNotifier<bool>(false);
+
   ApiManager();
   Future<ApiManager> init(String token) async {
     refreshToken(token);

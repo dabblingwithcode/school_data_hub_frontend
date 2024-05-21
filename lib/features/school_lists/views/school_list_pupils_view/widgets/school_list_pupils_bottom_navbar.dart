@@ -62,8 +62,8 @@ class SchoolListPupilsPageBottomNavBar extends StatelessWidget {
                           hintText: 'Kürzel eingeben',
                           obscureText: false);
                       if (visibility != null) {
-                        locator<SchoolListManager>()
-                            .patchSchoolList(listId, null, null, visibility);
+                        locator<SchoolListManager>().updateSchoolListProperty(
+                            listId, null, null, visibility);
                       }
                     },
                     icon: const Icon(
