@@ -90,14 +90,25 @@ Future registerDependentManagers(String token) async {
     debug.info('SchooldayManager initialized');
     return schooldayManager;
   }, dependsOn: [SessionManager, ApiManager]);
-
+  locator.registerSingletonAsync<PupilManager>(() async {
+    debug.info('Registering PupilManager');
+    final pupilManager = PupilManager();
+    await pupilManager.init();
+    debug.info('PupilManager initialized');
+    return pupilManager;
+  }, dependsOn: [
+    EnvManager,
+    ApiManager,
+    SessionManager,
+    PupilPersonalDataManager
+  ]);
   locator.registerSingletonAsync<WorkbookManager>(() async {
     debug.info('Registering WorkbookManager');
     final workbookManager = WorkbookManager();
     await workbookManager.init();
     debug.info('WorkbookManager initialized');
     return workbookManager;
-  }, dependsOn: [SessionManager, ApiManager]);
+  }, dependsOn: [PupilManager, SessionManager, ApiManager]);
 
   locator.registerSingletonAsync<CompetenceManager>(() async {
     debug.info('Registering CompetenceManager');
@@ -127,19 +138,6 @@ Future registerDependentManagers(String token) async {
     debug.warning('AuthorizationManager initialized');
     return authorizationManager;
   }, dependsOn: [SessionManager, ApiManager]);
-
-  locator.registerSingletonAsync<PupilManager>(() async {
-    debug.info('Registering PupilManager');
-    final pupilManager = PupilManager();
-    await pupilManager.init();
-    debug.info('PupilManager initialized');
-    return pupilManager;
-  }, dependsOn: [
-    EnvManager,
-    ApiManager,
-    SessionManager,
-    PupilPersonalDataManager
-  ]);
 
   locator.registerSingletonWithDependencies<PupilFilterManager>(
     () => PupilFilterManager(),
