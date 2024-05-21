@@ -121,7 +121,7 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                                     : true,
                                 onChanged: (value) async {
                                   await schoolListLocator
-                                      .patchPupilAuthorization(
+                                      .updatePupilAuthorizationProperty(
                                     pupil.internalId,
                                     authorizationId,
                                     false,
@@ -146,7 +146,7 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                                     : true,
                                 onChanged: (value) async {
                                   await schoolListLocator
-                                      .patchPupilAuthorization(
+                                      .updatePupilAuthorizationProperty(
                                     pupil.internalId,
                                     authorizationId,
                                     true,
@@ -199,7 +199,7 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                       child: pupilAuthorization.fileUrl != null
                           ? DocumentImage(
                               documentTag:
-                                  '${locator<EnvManager>().env.value.serverUrl}${EndpointsAuthorization().getPupilAuthorizationFile(pupil.internalId, authorizationId)}',
+                                  '${locator<EnvManager>().env.value.serverUrl}${ApiAuthorizationService().getPupilAuthorizationFile(pupil.internalId, authorizationId)}',
                               documentUrl: pupilAuthorization.fileUrl,
                               size: 70)
                           : SizedBox(
@@ -238,7 +238,7 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                       if (authorizationComment == null) return;
                       if (authorizationComment == '') {}
                       await locator<AuthorizationManager>()
-                          .patchPupilAuthorization(
+                          .updatePupilAuthorizationProperty(
                         pupil.internalId,
                         authorizationId,
                         null,

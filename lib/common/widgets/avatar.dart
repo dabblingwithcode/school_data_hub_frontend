@@ -28,7 +28,7 @@ class AvatarImage extends StatelessWidget {
                   heroAnimationTag: pupil.internalId,
                   zoomWidget: FutureBuilder<Widget>(
                     future: downloadOrCachedAndDecryptImage(
-                      '${locator<EnvManager>().env.value.serverUrl}${EndpointsPupil().getPupilAvatar(pupil.internalId)}',
+                      '${locator<EnvManager>().env.value.serverUrl}${ApiPupilService().getPupilAvatar(pupil.internalId)}',
                       pupil.internalId.toString(),
                     ),
                     builder: (context, snapshot) {

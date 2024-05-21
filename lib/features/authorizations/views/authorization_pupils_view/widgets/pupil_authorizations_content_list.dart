@@ -133,7 +133,7 @@ class PupilAuthorizationsContentList extends StatelessWidget {
                                     child: pupilAuthorization.fileUrl != null
                                         ? DocumentImage(
                                             documentTag:
-                                                '${locator<EnvManager>().env.value.serverUrl}${EndpointsAuthorization().getPupilAuthorizationFile(pupil.internalId, authorization.authorizationId)}',
+                                                '${locator<EnvManager>().env.value.serverUrl}${ApiAuthorizationService().getPupilAuthorizationFile(pupil.internalId, authorization.authorizationId)}',
                                             documentUrl:
                                                 pupilAuthorization.fileUrl,
                                             size: 70)
@@ -183,7 +183,7 @@ class PupilAuthorizationsContentList extends StatelessWidget {
                                         : true,
                                     onChanged: (value) async {
                                       await authorizationLocator
-                                          .patchPupilAuthorization(
+                                          .updatePupilAuthorizationProperty(
                                               pupil.internalId,
                                               pupil.authorizations![index]
                                                   .originAuthorization,
@@ -205,7 +205,7 @@ class PupilAuthorizationsContentList extends StatelessWidget {
                                     value: pupilAuthorization.status ?? false,
                                     onChanged: (value) async {
                                       await authorizationLocator
-                                          .patchPupilAuthorization(
+                                          .updatePupilAuthorizationProperty(
                                               pupil.internalId,
                                               pupil.authorizations![index]
                                                   .originAuthorization,
@@ -230,7 +230,7 @@ class PupilAuthorizationsContentList extends StatelessWidget {
                                     return;
                                   }
                                   await locator<AuthorizationManager>()
-                                      .patchPupilAuthorization(
+                                      .updatePupilAuthorizationProperty(
                                           pupil.internalId,
                                           pupilAuthorization
                                               .originAuthorization,

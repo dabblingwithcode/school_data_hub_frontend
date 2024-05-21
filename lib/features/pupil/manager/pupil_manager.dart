@@ -48,7 +48,7 @@ class PupilManager extends ChangeNotifier {
     locator<NotificationManager>().isRunningValue(true);
 
     // fetch the pupils from the backend
-    final fetchedPupils = await EndpointsPupil()
+    final fetchedPupils = await ApiPupilService()
         .fetchListOfPupils(internalPupilIds: internalPupilIds);
 
     // check if we did not get a pupil response for some ids
@@ -136,7 +136,7 @@ class PupilManager extends ChangeNotifier {
 
     // send the Api request
 
-    final Pupil pupilUpdate = await EndpointsPupil().updatePupilWithAvatar(
+    final Pupil pupilUpdate = await ApiPupilService().updatePupilWithAvatar(
       id: pupilProxy.internalId,
       formData: formData,
     );
@@ -155,7 +155,7 @@ class PupilManager extends ChangeNotifier {
 
   Future<void> deleteAvatarImage(int pupilId, String cacheKey) async {
     // send the Api request
-    await EndpointsPupil().deletePupilAvatar(
+    await ApiPupilService().deletePupilAvatar(
       internalId: pupilId,
     );
 
@@ -188,7 +188,7 @@ class PupilManager extends ChangeNotifier {
 
         // call the endpoint to update the siblings
 
-        final List<Pupil> siblingsUpdate = await EndpointsPupil()
+        final List<Pupil> siblingsUpdate = await ApiPupilService()
             .updateSiblingsProperty(
                 siblingsPupilIds: pupilIdsWithSameFamily,
                 property: jsonKey,
@@ -208,7 +208,7 @@ class PupilManager extends ChangeNotifier {
 
     // The pupil is no sibling. Make the api call for the single pupil
 
-    final Pupil pupilUpdate = await EndpointsPupil()
+    final Pupil pupilUpdate = await ApiPupilService()
         .updatePupilProperty(id: pupilId, property: jsonKey, value: value);
 
     // now update the pupil in the repository

@@ -15,6 +15,7 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
@@ -189,21 +190,12 @@ class PupilPersonalDataManager {
     // The server will
     final textFile = File('temp.txt')
       ..writeAsStringSync(pupilListTxtFileContentForBackendUpdate);
-    EndpointsPupil().updateBackendPupilsDatabase(file: textFile);
-    // final client = locator.get<ApiManager>().dioClient.value;
-    // String fileName = textFile.path.split('/').last;
-    // // Prepare the form data for the request.
-    // var formData = FormData.fromMap({
-    //   'file': await MultipartFile.fromFile(
-    //     textFile.path,
-    //     filename: fileName,
-    //   ),
-    // });
-    // final response = await client.post(
-    //   EndpointsPupil.exportPupilsTxt,
-    //   data: formData,
-    // );
-    // debug.warning('RESPONSE is ${response.data}');
+    final List<Pupil> updatedRepository =
+        await ApiPupilService().updateBackendPupilsDatabase(file: textFile);
+    for (Pupil pupil in updatedRepository) {
+      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
+    }
+    // We don't need the temp file any more, let's delete it
     textFile.delete();
 
     for (PupilPersonalData element in importedPupilPersonalDataList) {
@@ -213,8 +205,9 @@ class PupilPersonalDataManager {
     await secureStorageWrite(
         'pupilBase', jsonEncode(_pupilPersonalData.values.toList()));
     await locator<PupilManager>().fetchAllPupils();
-    //locator<PupilFilterManager>().refreshFilteredPupils();
+
     locator<BottomNavManager>().setBottomNavPage(0);
+    return;
   }
 
   Future<String> generatePupilBaseQrData(List<int> pupilIds) async {
