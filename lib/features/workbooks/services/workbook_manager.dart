@@ -28,7 +28,7 @@ class WorkbookManager {
     return this;
   }
 
-  final apiWorkbookService = locator<ApiWorkbookService>();
+  final apiWorkbookService = ApiWorkbookService();
   final notificationManager = locator<NotificationManager>();
 
   Future<void> getWorkbooks() async {

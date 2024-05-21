@@ -1,16 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
-import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
-import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
-import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 
@@ -48,213 +41,125 @@ class SchooldayEventManager {
   final client = locator<ApiManager>().dioClient.value;
   final endpoints = ApiSettings();
 
-  ValueListenable<bool> get isRunning => _isRunning;
+  final apiSchooldayEventService = ApiSchooldayEventService();
+  final notificationManager = locator<NotificationManager>();
 
-  final _isRunning = ValueNotifier<bool>(false);
+  SchooldayEventManager();
 
-  SchooldayEventManager(
-      // this.session,
-      );
+  //- post schoolday event
 
-  //- HELPER FUNCTIONS
-
-  //- HANDLE SchooldayEvent CARD
-
-  // PupilProxy? findPupilById(int pupilId) {
-  //   final pupils = pupilManager.readPupils();
-  //   final PupilProxy pupil =
-  //       pupils.singleWhere((element) => element.internalId == pupilId);
-  //   return pupil;
-  // }
-
-  //-POST ADMONITION
   Future<void> postSchooldayEvent(
-      int pupilId, DateTime date, String type, String reason) async {
-    locator<NotificationManager>().isRunningValue(true);
+    int pupilId,
+    DateTime date,
+    String type,
+    String reason,
+  ) async {
+    final Pupil responsePupil = await apiSchooldayEventService
+        .postSchooldayEvent(pupilId, date, type, reason);
 
-    final data = jsonEncode({
-      "admonished_day": date.formatForJson(),
-      "admonished_pupil_id": pupilId,
-      "admonition_reason": reason,
-      "admonition_type": type,
-      "file_url": null,
-      "processed": false,
-      "processed_at": null,
-      "processed_by": null
-    });
-    final Response response = await client
-        .post(EndpointsSchooldayEvent.postSchooldayEventUrl, data: data);
-    final Map<String, dynamic> pupilResponse = response.data;
-    if (response.statusCode == 200) {
-      locator<NotificationManager>()
-          .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
+    pupilManager.updatePupilProxyWithPupil(responsePupil);
 
-      pupilManager.updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
-      locator<NotificationManager>().isRunningValue(false);
-    }
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Eintrag erfolgreich!');
+
+    return;
   }
 
-  //- PATCH ADMONITION
+  //- patch admonition
 
-  patchSchooldayEvent(
-      String schooldayEventId,
+  Future<void> patchSchooldayEvent(
+      {required String schooldayEventId,
       String? admonisher,
       String? reason,
       bool? processed,
       String? file,
       String? processedBy,
-      DateTime? processedAt) async {
-    final data = jsonEncode({
-      if (admonisher != null) "admonishing_user": admonisher,
-      if (reason != null) "admonition_reason": reason,
-      if (processed != null) "processed": processed,
-      if (file != null) "file_url": file,
-      if (processed != null) "processed_by": processedBy,
-      if (processed != null) "processed_at": DateTime.now().formatForJson(),
-    });
-    final Response response = await client.patch(
-        EndpointsSchooldayEvent().patchSchooldayEventUrl(schooldayEventId),
-        data: data);
-    if (response.statusCode != 200) {
-      // Handle errors.
-    }
-    // Success! We have a pupil response - let's patch the pupil with the data
-    final Map<String, dynamic> pupilResponse = response.data;
-    locator<PupilManager>()
-        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
+      DateTime? processedAt}) async {
+    final Pupil responsePupil =
+        await apiSchooldayEventService.patchSchooldayEvent(schooldayEventId,
+            admonisher, reason, processed, file, processedBy, processedAt);
+
+    pupilManager.updatePupilProxyWithPupil(responsePupil);
+
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Eintrag erfolgreich geändert!');
+
+    return;
   }
 
   //- THIS ONE IS NOT NEEDED ANY MORE
   //- TODO - SWITCH TO THE NEW PATCH ADMONITION FUNCTION
-  patchSchooldayEventAsProcessed(
-      String schooldayEventId, bool processed) async {
-    locator<NotificationManager>().isRunningValue(true);
+  // patchSchooldayEventAsProcessed(
+  //     String schooldayEventId, bool processed) async {
+  //   locator<NotificationManager>().isRunningValue(true);
 
-    String data;
-    if (processed) {
-      data = jsonEncode({
-        "processed": processed,
-        "processed_at": DateTime.now().formatForJson(),
-        "processed_by": locator<SessionManager>().credentials.value.username
-      });
-    } else {
-      data = jsonEncode(
-          {"processed": processed, "processed_at": null, "processed_by": null});
-    }
-    // send request
-    final Response response = await client.patch(
-        EndpointsSchooldayEvent().patchSchooldayEventUrl(schooldayEventId),
-        data: data);
-    // Handle errors.
-    if (response.statusCode != 200) {
-      locator<NotificationManager>().showSnackBar(
-          NotificationType.warning, 'Fehler beim Patchen der Fehlzeit!');
-      locator<NotificationManager>().isRunningValue(false);
-      return;
-    }
-    // Success! We have a pupil response - let's patch the pupil with the data
-    locator<NotificationManager>()
-        .showSnackBar(NotificationType.success, 'Ereignis geändert!');
-    final Map<String, dynamic> pupilResponse = response.data;
+  //   String data;
+  //   if (processed) {
+  //     data = jsonEncode({
+  //       "processed": processed,
+  //       "processed_at": DateTime.now().formatForJson(),
+  //       "processed_by": locator<SessionManager>().credentials.value.username
+  //     });
+  //   } else {
+  //     data = jsonEncode(
+  //         {"processed": processed, "processed_at": null, "processed_by": null});
+  //   }
+  //   // send request
+  //   final Response response = await client.patch(
+  //       ApiSchooldayEventService().patchSchooldayEventUrl(schooldayEventId),
+  //       data: data);
+  //   // Handle errors.
+  //   if (response.statusCode != 200) {
+  //     locator<NotificationManager>().showSnackBar(
+  //         NotificationType.warning, 'Fehler beim Patchen der Fehlzeit!');
+  //     locator<NotificationManager>().isRunningValue(false);
+  //     return;
+  //   }
+  //   // Success! We have a pupil response - let's patch the pupil with the data
+  //   locator<NotificationManager>()
+  //       .showSnackBar(NotificationType.success, 'Ereignis geändert!');
+  //   final Map<String, dynamic> pupilResponse = response.data;
 
-    locator<PupilManager>()
-        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
-    locator<NotificationManager>().isRunningValue(false);
-  }
+  //   pupilManager
+  //       .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
+  //   locator<NotificationManager>().isRunningValue(false);
+  // }
 
-  patchSchooldayEventWithFile(
+  Future<void> patchSchooldayEventWithFile(
       File imageFile, String schooldayEventId, bool isProcessed) async {
-    locator<NotificationManager>().isRunningValue(true);
-    final encryptedFile = await customEncrypter.encryptFile(imageFile);
-    String endpoint;
-    String fileName = encryptedFile.path.split('/').last;
-    // Prepare the form data for the request.
-    var formData = FormData.fromMap({
-      'file': await MultipartFile.fromFile(
-        encryptedFile.path,
-        filename: fileName,
-      ),
-    });
-    // choose endpoint depending on isProcessed
-    if (isProcessed) {
-      endpoint = EndpointsSchooldayEvent()
-          .patchSchooldayEventProcessedFileUrl(schooldayEventId);
-    } else {
-      endpoint = EndpointsSchooldayEvent()
-          .patchSchooldayEventFileUrl(schooldayEventId);
-    }
-    // send request
-    final Response response = await client.patch(
-      endpoint,
-      data: formData,
-    );
-    // Handle errors.
-    if (response.statusCode != 200) {
-      locator<NotificationManager>().showSnackBar(
-          NotificationType.warning, 'Fehler beim Patchen der Fehlzeit!');
-      locator<NotificationManager>().isRunningValue(false);
-    }
-    // Success! We have a pupil response - let's patch the pupil with the data
+    final Pupil responsePupil = await apiSchooldayEventService
+        .patchSchooldayEventWithFile(imageFile, schooldayEventId, isProcessed);
+
+    pupilManager.updatePupilProxyWithPupil(responsePupil);
+
     locator<NotificationManager>().showSnackBar(
         NotificationType.success, 'Datei erfolgreich hochgeladen!');
-    final Map<String, dynamic> pupilResponse = response.data;
-    locator<PupilManager>()
-        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
-    locator<NotificationManager>().isRunningValue(false);
+
+    return;
   }
 
-  deleteSchooldayEventFile(
+  Future<void> deleteSchooldayEventFile(
       String schooldayEventId, String cacheKey, bool isProcessed) async {
-    locator<NotificationManager>().isRunningValue(true);
-    // choose endpoint depending on isProcessed
-    String endpoint;
-    if (isProcessed) {
-      endpoint = EndpointsSchooldayEvent()
-          .deleteSchooldayEventProcessedFileUrl(schooldayEventId);
-    } else {
-      endpoint = EndpointsSchooldayEvent()
-          .deleteSchooldayEventFileUrl(schooldayEventId);
-    }
+    final Pupil responsePupil = await apiSchooldayEventService
+        .deleteSchooldayEventFile(schooldayEventId, cacheKey, isProcessed);
 
-    // send request
-    final Response response = await client.delete(endpoint);
-    // Handle errors.
-    if (response.statusCode != 200) {
-      locator<NotificationManager>().showSnackBar(
-          NotificationType.warning, 'Fehler beim Löschen der Datei!');
-      locator<NotificationManager>().isRunningValue(false);
-    }
-    // Success! We have a pupil response
-    final Map<String, dynamic> pupilResponse = response.data;
-    // Delete the file from the cache
-    final cacheManager = DefaultCacheManager();
-    await cacheManager.removeFile(cacheKey);
-    // And patch the pupil with the data
-    locator<PupilManager>()
-        .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
+    pupilManager.updatePupilProxyWithPupil(responsePupil);
+
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Datei erfolgreich gelöscht!');
-    locator<NotificationManager>().isRunningValue(false);
+
+    return;
   }
 
-  deleteSchooldayEvent(String schooldayEventId) async {
-    locator<NotificationManager>().isRunningValue(true);
+  Future<void> deleteSchooldayEvent(String schooldayEventId) async {
+    final Pupil responsePupil =
+        await apiSchooldayEventService.deleteSchooldayEvent(schooldayEventId);
 
-    // send request
-    Response response = await client.delete(
-        EndpointsSchooldayEvent().deleteSchooldayEventUrl(schooldayEventId));
+    pupilManager.updatePupilProxyWithPupil(responsePupil);
 
-    if (response.statusCode != 200) {
-      locator<NotificationManager>().showSnackBar(NotificationType.warning,
-          'Fehler - statuscode ${response.statusCode}!');
-      locator<NotificationManager>().isRunningValue(false);
-      return;
-    }
-    locator<NotificationManager>()
-        .showSnackBar(NotificationType.success, 'Fehlzeit gelöscht!');
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Ereignis gelöscht!');
 
-    locator<PupilManager>()
-        .updatePupilProxyWithPupil(Pupil.fromJson(response.data));
-    locator<NotificationManager>().isRunningValue(false);
+    return;
   }
 }

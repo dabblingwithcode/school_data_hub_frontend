@@ -41,7 +41,7 @@ class SchooldayManager {
     return this;
   }
 
-  final apiSchooldayService = locator<ApiSchooldayService>();
+  final apiSchooldayService = ApiSchooldayService();
 
   Future<void> getSchooldays() async {
     final List<Schoolday> responseSchooldays =

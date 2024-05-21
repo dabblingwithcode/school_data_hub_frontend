@@ -34,8 +34,8 @@ class ApiSchooldayService {
       throw ApiException('Failed to fetch schooldays', response.statusCode);
     }
 
-    final List<Schoolday> schooldays =
-        (response as List).map((e) => Schoolday.fromJson(e)).toList();
+    final List<Schoolday> schooldays = List<Schoolday>.from(
+        (response.data as List).map((e) => Schoolday.fromJson(e)));
 
     notificationManager.isRunningValue(false);
 

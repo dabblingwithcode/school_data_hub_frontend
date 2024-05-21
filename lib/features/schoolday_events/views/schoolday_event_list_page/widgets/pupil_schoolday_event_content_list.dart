@@ -177,15 +177,13 @@ List<Widget> schooldayEventsContentList(
                                                 await locator<
                                                         SchooldayEventManager>()
                                                     .patchSchooldayEvent(
-                                                        filteredSchooldayEvents[
-                                                                index]
-                                                            .schooldayEventId,
-                                                        admonishingUser,
-                                                        null,
-                                                        null,
-                                                        null,
-                                                        null,
-                                                        null);
+                                                  schooldayEventId:
+                                                      filteredSchooldayEvents[
+                                                              index]
+                                                          .schooldayEventId,
+                                                  admonisher: admonishingUser,
+                                                  processed: null,
+                                                );
                                               }
                                             },
                                             child: Text(
@@ -256,7 +254,7 @@ List<Widget> schooldayEventsContentList(
                                           null
                                       ? DocumentImage(
                                           documentTag:
-                                              '${locator<EnvManager>().env.value.serverUrl}${EndpointsSchooldayEvent().getSchooldayEventFileUrl(filteredSchooldayEvents[index].schooldayEventId)}',
+                                              '${locator<EnvManager>().env.value.serverUrl}${ApiSchooldayEventService().getSchooldayEventFileUrl(filteredSchooldayEvents[index].schooldayEventId)}',
                                           documentUrl:
                                               filteredSchooldayEvents[index]
                                                   .fileUrl,
@@ -316,7 +314,7 @@ List<Widget> schooldayEventsContentList(
                                         null
                                     ? DocumentImage(
                                         documentTag:
-                                            '${locator<EnvManager>().env.value.serverUrl}${EndpointsSchooldayEvent().getSchooldayEventFileUrl(filteredSchooldayEvents[index].schooldayEventId)}',
+                                            '${locator<EnvManager>().env.value.serverUrl}${ApiSchooldayEventService().getSchooldayEventFileUrl(filteredSchooldayEvents[index].schooldayEventId)}',
                                         documentUrl:
                                             filteredSchooldayEvents[index]
                                                 .fileUrl,
@@ -346,10 +344,11 @@ List<Widget> schooldayEventsContentList(
                                   'Ereignis als bearbeitet markieren?');
                               if (confirm! == false) return;
                               await locator<SchooldayEventManager>()
-                                  .patchSchooldayEventAsProcessed(
-                                      filteredSchooldayEvents[index]
-                                          .schooldayEventId,
-                                      true);
+                                  .patchSchooldayEvent(
+                                      schooldayEventId:
+                                          filteredSchooldayEvents[index]
+                                              .schooldayEventId,
+                                      processed: true);
                               locator<NotificationManager>().showSnackBar(
                                   NotificationType.success,
                                   'Ereignis als bearbeitet markiert!');
@@ -361,10 +360,11 @@ List<Widget> schooldayEventsContentList(
                                   'Ereignis als unbearbeitet markieren?');
                               if (confirm! == false) return;
                               await locator<SchooldayEventManager>()
-                                  .patchSchooldayEventAsProcessed(
-                                      filteredSchooldayEvents[index]
-                                          .schooldayEventId,
-                                      false);
+                                  .patchSchooldayEvent(
+                                schooldayEventId: filteredSchooldayEvents[index]
+                                    .schooldayEventId,
+                                processed: false,
+                              );
                             },
                             child: Text(
                                 !filteredSchooldayEvents[index].processed
@@ -389,14 +389,11 @@ List<Widget> schooldayEventsContentList(
                                       if (processingUser != null) {
                                         await locator<SchooldayEventManager>()
                                             .patchSchooldayEvent(
-                                                filteredSchooldayEvents[index]
-                                                    .schooldayEventId,
-                                                null,
-                                                null,
-                                                null,
-                                                null,
-                                                processingUser,
-                                                null);
+                                          schooldayEventId:
+                                              filteredSchooldayEvents[index]
+                                                  .schooldayEventId,
+                                          admonisher: processingUser,
+                                        );
                                       }
                                     },
                                     child: Text(
@@ -429,14 +426,11 @@ List<Widget> schooldayEventsContentList(
                                       if (newDate != null) {
                                         await locator<SchooldayEventManager>()
                                             .patchSchooldayEvent(
-                                                filteredSchooldayEvents[index]
-                                                    .schooldayEventId,
-                                                null,
-                                                null,
-                                                null,
-                                                null,
-                                                null,
-                                                newDate);
+                                                schooldayEventId:
+                                                    filteredSchooldayEvents[
+                                                            index]
+                                                        .schooldayEventId,
+                                                processedAt: newDate);
                                       }
                                     },
                                     child: Text(
