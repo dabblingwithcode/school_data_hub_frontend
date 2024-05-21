@@ -48,7 +48,7 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
     String workbookSubject = subjectTextFieldController.text;
     String workbookLevel = level.text;
 
-    await locator<WorkbookManager>().patchWorkbook(
+    await locator<WorkbookManager>().updateWorkbookProperty(
         workbookName, workbookIsbn, workbookSubject, workbookLevel);
   }
 

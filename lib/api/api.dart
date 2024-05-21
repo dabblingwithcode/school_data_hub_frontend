@@ -8,7 +8,7 @@ export 'endpoints/pupil_workbook_endpoints.dart';
 export 'endpoints/school_list_endpoints.dart';
 export 'endpoints/schooldays_endpoints.dart';
 export 'endpoints/user_endpoints.dart';
-export 'endpoints/workbook_endpoints.dart';
+export 'endpoints/api_workbook_service.dart';
 
 class ApiSettings {
   // dev environment urls:
