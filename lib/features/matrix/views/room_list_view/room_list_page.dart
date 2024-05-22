@@ -7,7 +7,6 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filter_manager.dart';
-import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/room_list_card.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/room_list_searchbar.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_view/widgets/room_list_view_bottom_navbar.dart';
@@ -22,7 +21,8 @@ class RoomListPage extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     List<MatrixRoom> matrixRooms =
-        watchValue((MatrixPolicyManager x) => x.matrixRooms);
+        watchValue((MatrixPolicyFilterManager x) => x.filteredMatrixRooms);
+
     bool filtersOn = watchValue((MatrixPolicyFilterManager x) => x.filtersOn);
 
     return Scaffold(
