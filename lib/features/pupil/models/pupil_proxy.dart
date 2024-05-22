@@ -1,7 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/foundation.dart';
-import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
+import 'package:schuldaten_hub/common/filters/filters.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
 import 'package:schuldaten_hub/features/books/models/pupil_book.dart';
@@ -13,7 +13,13 @@ import 'package:schuldaten_hub/features/pupil/models/credit_history_log.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
+
+class StufenFilter extends SelectorFilter<PupilProxy, Jahrgangsstufe> {
+  StufenFilter(Jahrgangsstufe stufe)
+      : super(name: stufe.value, selector: (proxy) => proxy.jahrgangsstufe);
+}
 
 enum Jahrgangsstufe {
   E1('E1'),
@@ -62,11 +68,36 @@ enum GroupId {
   const GroupId(this.value);
 }
 
+class GroupFilter extends SelectorFilter<PupilProxy, GroupId> {
+  GroupFilter(GroupId group)
+      : super(name: group.value, selector: (proxy) => proxy.groupId);
+}
+
 class PupilProxy with ChangeNotifier {
   PupilProxy({required Pupil pupil, required PupilPersonalData personalData})
       : _pupilPersonalData = personalData {
     updatePupil(pupil);
   }
+
+  static List<GroupFilter> groupFilters = [
+    GroupFilter(GroupId.A1),
+    GroupFilter(GroupId.A2),
+    GroupFilter(GroupId.A3),
+    GroupFilter(GroupId.B1),
+    GroupFilter(GroupId.B2),
+    GroupFilter(GroupId.B3),
+    GroupFilter(GroupId.B4),
+    GroupFilter(GroupId.C1),
+    GroupFilter(GroupId.C2),
+    GroupFilter(GroupId.C3),
+  ];
+  static List<StufenFilter> jahrgangsStufenFilters = [
+    StufenFilter(Jahrgangsstufe.E1),
+    StufenFilter(Jahrgangsstufe.E2),
+    StufenFilter(Jahrgangsstufe.E3),
+    StufenFilter(Jahrgangsstufe.S3),
+    StufenFilter(Jahrgangsstufe.S4),
+  ];
 
   late Pupil _pupil;
   PupilPersonalData _pupilPersonalData;

@@ -2,6 +2,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/filters/filters.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 enum AttendanceStatus {
@@ -54,15 +55,57 @@ enum PupilProperties {
   supportAreaLearning,
 }
 
+class RadioButtonFilter extends Filter<PupilProxy> {
+  RadioButtonFilter({required super.name});
+
+  bool _isActive1 = false;
+  bool _isActive2 = false;
+
+  bool get isActive1 => _isActive1;
+  bool get isActive2 => _isActive2;
+
+  void toggle1() {
+    if (_isActive1) {
+      _isActive1 = false;
+    } else {
+      _isActive1 = true;
+      _isActive2 = false;
+    }
+
+    notifyListeners();
+  }
+
+  void toggle2() {
+    if (_isActive2) {
+      _isActive2 = false;
+    } else {
+      _isActive2 = true;
+      _isActive1 = false;
+    }
+
+    notifyListeners();
+  }
+
+  @override
+  void reset() {
+    _isActive1 = false;
+    _isActive2 = false;
+    notifyListeners();
+  }
+
+  @override
+  bool matches(PupilProxy item) {
+    // TODO: implement matches
+    throw UnimplementedError();
+  }
+}
+
 abstract class PupilsFilter implements Listenable {
   ValueListenable<bool> get filtersOn;
   ValueListenable<List<PupilProxy>> get filteredPupils;
 
-  void toggleJahrgangsstufe(Jahrgangsstufe stufe);
-  void toggleGroupId(GroupId group);
-
-  bool jahrgangsstufeState(Jahrgangsstufe stufe);
-  bool groupIdState(GroupId group);
+  List<Filter> get groupFilters;
+  List<Filter> get stufenFilters;
 
   /// must be called when this object is no longer needed
   void dispose();

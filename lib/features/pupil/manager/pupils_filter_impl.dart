@@ -1,17 +1,43 @@
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/filters/filters.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
+class PupilTextFilter extends Filter<PupilProxy> {
+  PupilTextFilter({
+    required super.name,
+  });
+
+  String _text = '';
+  String get text => _text;
+
+  void setFilterText(String text) {
+    _text = text;
+    notifyListeners();
+  }
+
+  @override
+  void reset() {
+    _text = '';
+    super.reset();
+  }
+
+  @override
+  bool matches(PupilProxy item) {
+    return item.internalId.toString().contains(text) ||
+        item.firstName.toLowerCase().contains(text.toLowerCase()) ||
+        item.lastName.toLowerCase().contains(text.toLowerCase());
+  }
+}
+
 class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   PupilsFilterImplementation(
     PupilManager pupilsManager, {
-    Map<PupilFilter, bool>? filterState,
     Map<PupilSortMode, bool>? sortMode,
-  })  : _filterState = filterState ?? {},
-        _sortMode = sortMode ?? {},
+  })  : _sortMode = sortMode ?? {},
         _pupilsManager = pupilsManager {
     debug.info('PupilsFilterImplementation created');
     refreshs();
@@ -37,18 +63,16 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   final ValueNotifier<List<PupilProxy>> _filteredPupils = ValueNotifier([]);
 
   @override
-  Map<PupilFilter, bool> get filterState => _filterState;
-  final Map<PupilFilter, bool> _filterState;
-
-  @override
   Map<PupilSortMode, bool> get sortMode => _sortMode;
   final Map<PupilSortMode, bool> _sortMode;
 
-  @override
-  bool getFilterState(PupilFilter filter) {
-    assert(_filterState.containsKey(filter));
-    return _filterState[filter] ?? false;
-  }
+  final PupilTextFilter _textFilter = PupilTextFilter(name: 'Text Filter');
+
+  late List<Filter> allFilters = [
+    ...stufenFilters,
+    ...groupFilters,
+    _textFilter,
+  ];
 
   // updates the filtered pupils with current filters
   // and sort mode
@@ -58,37 +82,34 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
 
     final allPupils = _pupilsManager.allPupils;
 
-    if (includedGroups.isEmpty && includedStufen.isEmpty) {
+    if (!allFilters.any((x) => x.isActive)) {
       _filteredPupils.value = allPupils;
       _filtersOn.value = false;
       return;
     }
     for (final pupil in allPupils) {
-      if (includedStufen.contains(pupil.jahrgangsstufe) &&
-          includedGroups.contains(pupil.groupId)) {
-        matching.add(pupil);
+      for (final filter in allFilters) {
+        if (filter.isActive && filter.matches(pupil)) {
+          matching.add(pupil);
+          break;
+        }
       }
-    }
-    _filteredPupils.value = matching;
 
-    _filtersOn.value = true;
+      _filteredPupils.value = matching;
+
+      _filtersOn.value = true;
+    }
   }
 
   // reset the filters to its initial state
   @override
   void resetFilters() {
-    throw UnimplementedError();
+    for (final filter in allFilters) {
+      filter.reset();
+    }
   }
 
   // Set modified filter value
-  @override
-  void setFilter(PupilFilter filter, bool isActive, {bool refresh = true}) {
-    _filterState[filter] = isActive;
-    if (refresh) {
-      refreshs();
-    }
-    notifyListeners();
-  }
 
   @override
   void setSortMode(PupilSortMode sortMode, bool isActive,
@@ -100,40 +121,17 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
     notifyListeners();
   }
 
+  @override
   void setTextFilter(String? text, {bool refresh = true}) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Set<Jahrgangsstufe> includedStufen = {};
-  @override
-  Set<GroupId> includedGroups = {};
-
-  @override
-  bool groupIdState(GroupId group) {
-    return includedGroups.contains(group);
-  }
-
-  @override
-  bool jahrgangsstufeState(Jahrgangsstufe stufe) {
-    return includedStufen.contains(stufe);
-  }
-
-  @override
-  void toggleGroupId(GroupId group) {
-    if (includedGroups.contains(group)) {
-      includedGroups.remove(group);
-    } else {
-      includedGroups.add(group);
+    _textFilter.setFilterText(text ?? '');
+    if (refresh) {
+      refreshs();
     }
   }
 
   @override
-  void toggleJahrgangsstufe(Jahrgangsstufe stufe) {
-    if (includedStufen.contains(stufe)) {
-      includedStufen.remove(stufe);
-    } else {
-      includedStufen.add(stufe);
-    }
-  }
+  List<Filter> get groupFilters => PupilProxy.groupFilters;
+
+  @override
+  List<Filter> get stufenFilters => PupilProxy.jahrgangsStufenFilters;
 }

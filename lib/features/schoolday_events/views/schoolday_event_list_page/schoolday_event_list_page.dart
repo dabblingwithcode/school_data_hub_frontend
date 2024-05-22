@@ -24,10 +24,10 @@ class SchooldayEventPage extends WatchingStatefulWidget {
 class _SchooldayEventPageState extends State<SchooldayEventPage> {
   @override
   Widget build(BuildContext context) {
-    //TODO: This is not working
-    // pushScope(
-    //     init: (locator) => locator
-    //         .registerSingleton(locator<PupilManager>().getPupilFilter()));
+    // TODO: This is not working
+    pushScope(
+        init: (locator) => locator
+            .registerSingleton(locator<PupilManager>().getPupilFilter()));
 
     bool schooldayEventFiltersOn = watchValue(
         (SchooldayEventFilterManager x) => x.schooldayEventsFiltersOn);

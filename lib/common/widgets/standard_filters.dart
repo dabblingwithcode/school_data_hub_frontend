@@ -4,7 +4,6 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:watch_it/watch_it.dart';
 
 class FilterHeading extends StatelessWidget {
@@ -53,7 +52,7 @@ class StandardFilters extends WatchingWidget {
           spacing: 5,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            for (final stufe in Jahrgangsstufe.values)
+            for (final stufenFilter in filter.stufenFilters)
               FilterChip(
                 padding: filterChipPadding,
                 labelPadding: filterChipLabelPadding,
@@ -62,14 +61,23 @@ class StandardFilters extends WatchingWidget {
                 checkmarkColor: filterChipSelectedCheckColor,
                 backgroundColor: filterChipUnselectedColor,
                 label: Text(
-                  stufe.value,
+                  stufenFilter.displayName,
                   style: filterItemsTextStyle,
                 ),
-                selected: filter.jahrgangsstufeState(stufe),
+                selected: stufenFilter.isActive,
                 onSelected: (val) {
-                  filter.toggleJahrgangsstufe(stufe);
+                  stufenFilter.toggle();
                 },
               ),
+            // just an example how it could be done with radio buttons
+            // if (filter is RadioButtonsFilter)
+            //   RadioButtonWidget(
+            //     value: stufenFilter,
+            //     groupValue: filter.selectedStufeFilter,
+            //     onChanged: (val) {
+            //       filter.selectedStufeFilter = stufenFilter;
+            //     },
+            //   )
           ],
         ),
         const Row(
@@ -85,7 +93,7 @@ class StandardFilters extends WatchingWidget {
           spacing: 5,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            for (final groupId in GroupId.values)
+            for (final groupFilter in filter.groupFilters)
               FilterChip(
                 padding: filterChipPadding,
                 labelPadding: filterChipLabelPadding,
@@ -94,12 +102,12 @@ class StandardFilters extends WatchingWidget {
                 checkmarkColor: filterChipSelectedCheckColor,
                 backgroundColor: filterChipUnselectedColor,
                 label: Text(
-                  groupId.value,
+                  groupFilter.displayName,
                   style: filterItemsTextStyle,
                 ),
-                selected: filter.groupIdState(groupId),
+                selected: groupFilter.isActive,
                 onSelected: (val) {
-                  filter.toggleGroupId(groupId);
+                  groupFilter.toggle();
                 },
               ),
           ],

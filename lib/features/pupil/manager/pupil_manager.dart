@@ -219,10 +219,8 @@ class PupilManager extends ChangeNotifier {
   }
 
   PupilsFilter getPupilFilter({
-    Map<PupilFilter, bool>? filterState,
     Map<PupilSortMode, bool>? sortMode,
   }) {
-    return PupilsFilterImplementation(this,
-        filterState: filterState, sortMode: sortMode);
+    return PupilsFilterImplementation(this, sortMode: sortMode);
   }
 }

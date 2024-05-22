@@ -12,6 +12,7 @@ import 'package:schuldaten_hub/features/attendance/services/attendance_manager.d
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/atendance_list_card.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/attendance_list_search_bar.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/attendance_view_bottom_navbar.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
@@ -48,8 +49,7 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
   Widget build(BuildContext context) {
     DateTime thisDate = watchValue((SchooldayManager x) => x.thisDate);
     bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
-    List<PupilProxy> pupils =
-        watchValue((PupilsFilterImplementation x) => x.filteredPupils);
+    List<PupilProxy> pupils = watchValue((PupilsFilter x) => x.filteredPupils);
 
     return Scaffold(
       backgroundColor: canvasColor,
