@@ -12,10 +12,18 @@ class LoadingPage extends WatchingStatefulWidget {
 }
 
 class LoadingPageState extends State<LoadingPage> {
+  String actualNotificationMessage = "";
+  String lastNotificationMessage = "";
   @override
   Widget build(BuildContext context) {
     final NotificationData snackBarData =
         watchValue((NotificationManager x) => x.notification);
+    String newValue = snackBarData.message;
+
+    if (newValue != actualNotificationMessage) {
+      lastNotificationMessage = actualNotificationMessage;
+      actualNotificationMessage = newValue;
+    }
 
     return Scaffold(
       body: Container(
@@ -48,7 +56,13 @@ class LoadingPageState extends State<LoadingPage> {
                   ),
                 ),
                 const Spacer(),
-                Text(snackBarData.message,
+                Text(lastNotificationMessage,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold)),
+                const Gap(5),
+                Text(actualNotificationMessage,
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,

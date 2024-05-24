@@ -24,6 +24,8 @@ class AuthorizationManager {
   }
 
   Future<AuthorizationManager> init() async {
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Einwilligungen werden geladen');
     await fetchAuthorizations();
     return this;
   }
@@ -34,8 +36,8 @@ class AuthorizationManager {
   Future<void> fetchAuthorizations() async {
     final authorizations = await apiAuthorizationService.fetchAuthorizations();
 
-    notificationManager.showSnackBar(
-        NotificationType.success, 'Einwilligungen geladen');
+    notificationManager.showSnackBar(NotificationType.success,
+        '${authorizations.length} Einwilligungen geladen');
 
     _authorizations.value = authorizations;
     return;

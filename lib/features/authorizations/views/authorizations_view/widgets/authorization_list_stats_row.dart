@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
+import 'package:schuldaten_hub/features/authorizations/services/authorization_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
-import 'package:schuldaten_hub/features/school_lists/services/school_list_helper_functions.dart';
 
-Widget schoolListStatsRow(SchoolList schoolList, List<PupilProxy> pupils) {
-  final Map<String, int> stats = schoolListStats(
-    schoolList,
+Widget authorizationStatsRow(
+    Authorization authorization, List<PupilProxy> pupils) {
+  final Map<String, int> stats = authorizationStats(
+    authorization,
     pupils,
   );
   return Row(

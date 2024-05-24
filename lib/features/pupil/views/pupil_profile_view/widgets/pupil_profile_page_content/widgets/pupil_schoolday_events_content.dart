@@ -42,7 +42,7 @@ class PupilSchooldayEventsContent extends StatelessWidget {
             )
           ]),
           const Gap(15),
-          ...schooldayEventsContentList(pupil, context),
+          SchooldayEventsContentList(pupil: pupil),
         ]),
       ),
     );

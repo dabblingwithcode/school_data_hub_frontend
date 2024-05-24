@@ -33,22 +33,6 @@ List<Widget> roomsList(
       ),
     ),
     const Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Text(
-          'Räume:',
-          style: TextStyle(fontSize: 18.0),
-          textAlign: TextAlign.left,
-        ),
-        Gap(5),
-        // Text(pupil.creditEarned.toString(),
-        //     style:
-        //         const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold)),
-      ],
-    ),
-    const Gap(10),
-    const Row(
       children: [
         Padding(
           padding: EdgeInsets.only(left: 22),
@@ -56,7 +40,7 @@ List<Widget> roomsList(
             'Räume:',
             style: TextStyle(
               color: Colors.black,
-              fontSize: 16,
+              fontSize: 18,
             ),
           ),
         ),

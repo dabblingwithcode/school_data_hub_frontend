@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
-import 'package:schuldaten_hub/common/widgets/list_tile.dart';
+import 'package:schuldaten_hub/common/widgets/custom_list_tiles.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/learning_support/services/learning_support_helper_functions.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/dialogs/individual_development_plan_dialog.dart';
@@ -159,11 +159,10 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
           ),
           Padding(
             padding: const EdgeInsets.all(5),
-            child: listTiles(
-                null,
-                context,
-                _tileController,
-                learningSupportGoalList(
+            child: CustomListTiles(
+                title: null,
+                tileController: _tileController,
+                widgetList: learningSupportGoalList(
                   context,
                   pupil,
                 )),

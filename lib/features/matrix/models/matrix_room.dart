@@ -21,10 +21,10 @@ class MatrixRoom {
 
   MatrixRoom(
       {required this.id,
-      required this.name,
-      required this.powerLevelReactions,
-      required this.eventsDefault,
-      required this.roomAdmins});
+      this.name,
+      this.powerLevelReactions,
+      this.eventsDefault,
+      this.roomAdmins});
 }
 
 @JsonSerializable()

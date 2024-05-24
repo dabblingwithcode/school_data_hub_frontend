@@ -336,7 +336,6 @@ class SettingsView extends WatchingWidget {
                       SettingsTile.navigation(
                           leading: const Icon(
                             Icons.calendar_month_rounded,
-                            color: Colors.white,
                           ),
                           title: const Text('Schultage-Kalender'),
                           onPressed: (context) async {

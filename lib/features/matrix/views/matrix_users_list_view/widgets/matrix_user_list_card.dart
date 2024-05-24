@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
-import 'package:schuldaten_hub/common/widgets/list_tile.dart';
+import 'package:schuldaten_hub/common/widgets/custom_list_tiles.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_view/widgets/pupil_rooms_list.dart';
 import 'package:watch_it/watch_it.dart';
@@ -103,6 +103,7 @@ class _MatrixUsersListCardState extends State<MatrixUsersListCard> {
                         ),
                       ],
                     ),
+                    const Gap(10),
                   ],
                 ),
               ),
@@ -135,12 +136,11 @@ class _MatrixUsersListCardState extends State<MatrixUsersListCard> {
           ),
           widget.matrixUser.matrixRooms.isEmpty
               ? const SizedBox.shrink()
-              : listTiles(
-                  null,
-                  context,
-                  _tileController,
-                  roomsList(widget.matrixUser, widget.matrixUser.matrixRooms,
-                      context)),
+              : CustomListTiles(
+                  title: null,
+                  tileController: _tileController,
+                  widgetList: roomsList(widget.matrixUser,
+                      widget.matrixUser.matrixRooms, context)),
         ],
       ),
     );

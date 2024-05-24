@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
-import 'package:schuldaten_hub/common/widgets/list_tile.dart';
+import 'package:schuldaten_hub/common/widgets/custom_list_tiles.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
@@ -168,13 +168,12 @@ class _SchooldayEventListCardState extends State<SchooldayEventListCard> {
             Padding(
                 padding:
                     const EdgeInsets.only(left: 5.0, right: 5.0, bottom: 5.0),
-                child: listTiles(
-                  const Text('Vorfälle',
+                child: CustomListTiles(
+                  title: const Text('Vorfälle',
                       style:
                           TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-                  context,
-                  _tileController,
-                  schooldayEventsContentList(pupil, context),
+                  tileController: _tileController,
+                  widgetList: [SchooldayEventsContentList(pupil: pupil)],
                 )),
           ],
         ));

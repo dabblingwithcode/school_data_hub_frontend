@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
-import 'package:schuldaten_hub/common/widgets/list_tile.dart';
+import 'package:schuldaten_hub/common/widgets/custom_list_tiles.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_helper_functions.dart';
@@ -218,8 +218,10 @@ class _RoomListCardState extends State<RoomListCard> {
               const Gap(20),
             ],
           ),
-          listTiles(null, context, _tileController,
-              usersInRoomList(matrixUsersInRoom, context))
+          CustomListTiles(
+              title: null,
+              tileController: _tileController,
+              widgetList: usersInRoomList(matrixUsersInRoom, context))
         ],
       ),
     );

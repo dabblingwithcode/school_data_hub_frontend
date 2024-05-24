@@ -142,8 +142,8 @@ class PupilFilterManager {
     filteredPupils = filteredPupilsState
         .where((PupilProxy pupil) =>
             pupil.internalId.toString().contains(text) ||
-            pupil.firstName!.toLowerCase().contains(text.toLowerCase()) ||
-            pupil.lastName!.toLowerCase().contains(text.toLowerCase()))
+            pupil.firstName.toLowerCase().contains(text.toLowerCase()) ||
+            pupil.lastName.toLowerCase().contains(text.toLowerCase()))
         .toList();
     _filteredPupils.value = filteredPupils;
   }
@@ -293,7 +293,7 @@ class PupilFilterManager {
 
     // Sort by first Name
     if (sortMode[PupilSortMode.sortByName] == true) {
-      filteredPupils.sort((a, b) => a.firstName!.compareTo(b.firstName!));
+      filteredPupils.sort((a, b) => a.firstName.compareTo(b.firstName));
     }
     // Sort by credit
     if (sortMode[PupilSortMode.sortByCredit] == true) {

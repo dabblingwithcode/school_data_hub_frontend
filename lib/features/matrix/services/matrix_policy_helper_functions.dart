@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
+import 'package:schuldaten_hub/features/matrix/models/policy.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
 
 Future<bool> generatePolicyJsonFile() async {
@@ -15,10 +16,12 @@ Future<bool> generatePolicyJsonFile() async {
   if (file.existsSync()) {
     file.deleteSync();
   }
-  final String jsonString =
-      jsonEncode(locator<MatrixPolicyManager>().matrixPolicy.value);
+  final Policy policy = locator<MatrixPolicyManager>().matrixPolicy.value!;
+  final Map<String, dynamic> jsonString = policy.toJson();
+  // transform the map into a json string
+  final String policyJson = jsonEncode(jsonString);
 
-  file.writeAsStringSync(jsonString);
+  file.writeAsStringSync(policyJson);
   return true;
 }
 

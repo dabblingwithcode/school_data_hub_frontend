@@ -3,13 +3,17 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_view/authorization_pupils_page.dart';
+import 'package:schuldaten_hub/features/authorizations/views/authorizations_view/widgets/authorization_list_stats_row.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:watch_it/watch_it.dart';
 
-class AuthorizationCard extends StatelessWidget {
+class AuthorizationCard extends WatchingWidget {
   final Authorization authorization;
   const AuthorizationCard({required this.authorization, super.key});
 
   @override
   Widget build(BuildContext context) {
+    final pupils = watchValue((PupilFilterManager x) => x.filteredPupils);
     return Card(
       color: Colors.white,
       surfaceTintColor: Colors.white,
@@ -47,9 +51,8 @@ class AuthorizationCard extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const Column(
-                    children: [],
-                  )
+                  const Gap(5),
+                  authorizationStatsRow(authorization, pupils),
                 ],
               ),
             ],

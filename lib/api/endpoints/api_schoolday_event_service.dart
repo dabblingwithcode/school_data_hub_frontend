@@ -208,11 +208,11 @@ class ApiSchooldayEventService {
 //- delete schooldayEvent file
 //- depending on isProcessed, there are two possible endpoints for the file deletion
   String _deleteSchooldayEventFileUrl(String id) {
-    return '/schooldayEvents/$id/file';
+    return '/admonitions/$id/file';
   }
 
   String _deleteSchooldayEventProcessedFileUrl(String id) {
-    return '/schooldayEvents/$id/processed_file';
+    return '/admonitions/$id/processed_file';
   }
 
   deleteSchooldayEventFile(
