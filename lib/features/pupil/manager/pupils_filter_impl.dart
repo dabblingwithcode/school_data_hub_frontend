@@ -78,8 +78,6 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   // and sort mode
   @override
   void refreshs() {
-    final List<PupilProxy> matching = [];
-
     final allPupils = _pupilsManager.allPupils;
 
     if (!allFilters.any((x) => x.isActive)) {
@@ -87,16 +85,39 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
       _filtersOn.value = false;
       return;
     }
+
+    List<PupilProxy> thisFilteredPupils = [];
+
+    bool isAnyGroupFilterActive = groupFilters.any((filter) => filter.isActive);
+
+    bool isAnyStufenFilterActive =
+        stufenFilters.any((filter) => filter.isActive);
+
     for (final pupil in allPupils) {
-      for (final filter in allFilters) {
-        if (filter.isActive && filter.matches(pupil)) {
-          matching.add(pupil);
-          break;
-        }
+      bool toList = false;
+
+      // matches if no group filter is active or if the group matches the pupil's group
+      bool isMatchedByGroupFilter = !isAnyGroupFilterActive ||
+          groupFilters
+              .any((filter) => filter.isActive && filter.matches(pupil));
+      // matches if no stufen filter is active or if the stufen matches the pupil's stufe
+      bool isMatchedByStufenFilter = !isAnyStufenFilterActive ||
+          stufenFilters
+              .any((filter) => filter.isActive && filter.matches(pupil));
+
+      // If a pupil matches both groupFilter and stufenFilter conditions, add it to the list
+      if (isMatchedByGroupFilter && isMatchedByStufenFilter) {
+        toList = true;
       }
 
-      _filteredPupils.value = matching;
+      if (toList) {
+        thisFilteredPupils.add(pupil);
+      }
+    }
 
+    _filteredPupils.value = thisFilteredPupils;
+
+    if (isAnyStufenFilterActive || isAnyGroupFilterActive) {
       _filtersOn.value = true;
     }
   }
@@ -107,6 +128,7 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
     for (final filter in allFilters) {
       filter.reset();
     }
+    _filtersOn.value = false;
   }
 
   // Set modified filter value

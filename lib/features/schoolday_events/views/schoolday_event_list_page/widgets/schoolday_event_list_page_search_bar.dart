@@ -5,7 +5,8 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_helper_functions.dart';
 import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_filter_bottom_sheet.dart';
 import 'package:watch_it/watch_it.dart';
@@ -15,9 +16,8 @@ class SchooldayEventListSearchBar extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pupils =
-        watchValue((PupilsFilterImplementation x) => x.filteredPupils);
-    final filtersOn = watchValue((PupilsFilterImplementation f) => f.filtersOn);
+    final pupils = watchValue((PupilsFilter x) => x.filteredPupils);
+    final filtersOn = watchValue((PupilsFilter f) => f.filtersOn);
 
     return Container(
       decoration: BoxDecoration(

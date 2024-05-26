@@ -78,6 +78,8 @@ class PupilManager extends ChangeNotifier {
 
     // remove the outdated pupilbase elements that
     // did not get a response from the backend
+    // because this means they are outdated
+    // and we do not need them anymore
 
     if (outdatedPupilPersonalDataIds.isNotEmpty) {
       final deletedPupils = await personalDataManager

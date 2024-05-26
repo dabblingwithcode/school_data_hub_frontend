@@ -19,6 +19,11 @@ import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 class StufenFilter extends SelectorFilter<PupilProxy, Jahrgangsstufe> {
   StufenFilter(Jahrgangsstufe stufe)
       : super(name: stufe.value, selector: (proxy) => proxy.jahrgangsstufe);
+
+  @override
+  bool matches(PupilProxy item) {
+    return selector(item).value == name;
+  }
 }
 
 enum Jahrgangsstufe {
@@ -71,6 +76,12 @@ enum GroupId {
 class GroupFilter extends SelectorFilter<PupilProxy, GroupId> {
   GroupFilter(GroupId group)
       : super(name: group.value, selector: (proxy) => proxy.groupId);
+
+  @override
+  bool matches(PupilProxy item) {
+    //debugger();
+    return selector(item).value == name;
+  }
 }
 
 class PupilProxy with ChangeNotifier {

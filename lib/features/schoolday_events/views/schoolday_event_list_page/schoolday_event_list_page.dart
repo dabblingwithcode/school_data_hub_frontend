@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
 import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
 import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_list_card.dart';
@@ -25,16 +25,15 @@ class _SchooldayEventPageState extends State<SchooldayEventPage> {
   @override
   Widget build(BuildContext context) {
     // TODO: This is not working
-    // pushScope(
-    //     init: (locator) => locator
-    //         .registerSingleton(locator<PupilManager>().getPupilFilter()));
+    pushScope(
+        init: (locator) => locator.registerSingleton<PupilsFilter>(
+            locator<PupilManager>().getPupilFilter()));
 
     bool schooldayEventFiltersOn = watchValue(
         (SchooldayEventFilterManager x) => x.schooldayEventsFiltersOn);
 
-    List<PupilProxy> pupils =
-        watchValue((PupilsFilterImplementation x) => x.filteredPupils);
-    bool filtersOn = watchValue((PupilsFilterImplementation f) => f.filtersOn);
+    List<PupilProxy> pupils = watchValue((PupilsFilter x) => x.filteredPupils);
+    bool filtersOn = watchValue((PupilsFilter f) => f.filtersOn);
 
     return Scaffold(
       backgroundColor: canvasColor,

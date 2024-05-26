@@ -144,7 +144,7 @@ Future registerDependentManagers(String token) async {
     () => PupilFilterManager(),
     dependsOn: [PupilManager],
   );
-  locator.registerSingletonWithDependencies<PupilsFilterImplementation>(
+  locator.registerSingletonWithDependencies<PupilsFilter>(
     () => PupilsFilterImplementation(
       locator<PupilManager>(),
     ),

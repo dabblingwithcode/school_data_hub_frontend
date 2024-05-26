@@ -148,7 +148,7 @@ class MatrixPolicyManager {
         _matrixUrl, 'Authorization', 'Bearer ${_matrixToken.value}', false);
 
     notificationManager.showSnackBar(
-        NotificationType.success, 'Räume werden geladen...');
+        NotificationType.success, 'Matrix-Räume werden geladen...');
     for (MatrixUser user in policy.matrixUsers!) {
       _matrixUsers.add(user);
     }

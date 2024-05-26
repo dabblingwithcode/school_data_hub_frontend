@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
 import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
 import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
@@ -22,10 +22,8 @@ class CreditListPage extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
-    List<PupilProxy> pupils =
-        // watchValue((PupilsFilterImplementation x) => x.filteredPupils);
-        watchValue((PupilFilterManager x) => x.filteredPupils);
+    bool filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
+    List<PupilProxy> pupils = watchValue((PupilsFilter x) => x.filteredPupils);
     int userCredit = watchValue((SessionManager x) => x.credentials).credit!;
     // final List<PupilProxy> nonFilteredPupils =
     //     watch(di<PupilManager>()).allPupils;
