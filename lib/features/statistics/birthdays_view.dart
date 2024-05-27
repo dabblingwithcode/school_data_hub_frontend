@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
 
 import 'package:watch_it/watch_it.dart';
 

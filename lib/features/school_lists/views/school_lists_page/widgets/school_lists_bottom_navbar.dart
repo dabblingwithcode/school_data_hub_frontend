@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
-import 'package:schuldaten_hub/features/school_lists/views/new_list_view/new_list_view.dart';
+import 'package:schuldaten_hub/features/school_lists/views/new_list_page/new_list_view.dart';
 
 class SchoolListsBottomNavBar extends StatelessWidget {
   const SchoolListsBottomNavBar({super.key});

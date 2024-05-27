@@ -10,8 +10,8 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 
-import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/school_list_pupils_page.dart';
-import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_view/widgets/school_list_stats_row.dart';
+import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_page/school_list_pupils_page.dart';
+import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_page/widgets/school_list_stats_row.dart';
 
 class SchoolListCard extends StatelessWidget {
   final SchoolList schoolList;

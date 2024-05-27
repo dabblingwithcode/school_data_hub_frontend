@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
-import 'package:schuldaten_hub/features/competence/views/competence_list_view/competence_list_page.dart';
-import 'package:schuldaten_hub/features/learning_support/views/goal_category_list_view/controller/category_list_controller.dart';
-import 'package:schuldaten_hub/features/workbooks/views/workbook_list_view/controller/workbook_controller.dart';
+import 'package:schuldaten_hub/features/competence/views/competence_list_page/competence_list_page.dart';
+import 'package:schuldaten_hub/features/learning_support/views/goal_category_list_page/controller/category_list_controller.dart';
+import 'package:schuldaten_hub/features/workbooks/views/workbook_list_page/controller/workbook_controller.dart';
 
 import 'package:watch_it/watch_it.dart';
 

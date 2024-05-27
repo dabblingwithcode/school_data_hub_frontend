@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/pupil_profile_page.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
 import 'package:watch_it/watch_it.dart';
 
 typedef OnCardPressCallback = void Function(int id);

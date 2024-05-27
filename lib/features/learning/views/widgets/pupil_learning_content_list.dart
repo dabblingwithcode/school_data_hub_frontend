@@ -12,7 +12,7 @@ import 'package:schuldaten_hub/features/learning_support/services/goal_manager.d
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
-import 'package:schuldaten_hub/features/workbooks/views/workbook_list_view/widgets/pupil_workbook_card.dart';
+import 'package:schuldaten_hub/features/workbooks/views/workbook_list_page/widgets/pupil_workbook_card.dart';
 
 List<Widget> pupilLearningContentList(PupilProxy pupil, BuildContext context) {
   return [

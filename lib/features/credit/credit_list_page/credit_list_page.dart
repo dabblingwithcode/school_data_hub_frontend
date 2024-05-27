@@ -13,7 +13,7 @@ import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/credit_list_card.dart';
 import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/credit_list_searchbar.dart';
-import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/credit_list_view_bottom_navbar.dart';
+import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/credit_list_page_bottom_navbar.dart';
 
 import 'package:watch_it/watch_it.dart';
 

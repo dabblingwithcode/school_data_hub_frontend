@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/dialogs/category_status_dialog.dart';
 import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
 
-import 'package:schuldaten_hub/features/learning_support/views/new_category_item_view/controller/new_category_item_controller.dart';
+import 'package:schuldaten_hub/features/learning_support/views/new_category_item_page/controller/new_category_item_controller.dart';
 
 List<Widget> buildPupilCompetenceTree(PupilProxy pupil, int? parentId,
     double indentation, Color? passedBackGroundColor, BuildContext context) {
