@@ -6,6 +6,7 @@ import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:watch_it/watch_it.dart';
 
 class CreditFilterBottomSheet extends WatchingWidget {
@@ -15,13 +16,14 @@ class CreditFilterBottomSheet extends WatchingWidget {
   Widget build(BuildContext context) {
     // Map<PupilFilter, bool> activeFilters =
     //     watchValue((PupilFilterManager x) => x.filterState);
-    Map<PupilSortMode, bool> sortMode =
-        watchValue((PupilFilterManager x) => x.sortMode);
-    bool valueSortByName = sortMode[PupilSortMode.sortByName]!;
-    bool valueSortByCredit = sortMode[PupilSortMode.sortByCredit]!;
-    bool valueSortByCreditEarned = sortMode[PupilSortMode.sortByCreditEarned]!;
+    // Map<PupilSortMode, bool> sortMode =
+    //     watchValue((PupilFilterManager x) => x.sortMode);
+    // bool valueSortByName = sortMode[PupilSortMode.sortByName]!;
+    // bool valueSortByCredit = sortMode[PupilSortMode.sortByCredit]!;
+    // bool valueSortByCreditEarned = sortMode[PupilSortMode.sortByCreditEarned]!;
 
     final filterLocator = locator<PupilFilterManager>();
+    final sortModeValue = watch(locator<PupilsFilter>().sortMode).value;
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20, top: 8),
       child: Center(
@@ -55,12 +57,12 @@ class CreditFilterBottomSheet extends WatchingWidget {
                       'alphabetisch',
                       style: filterItemsTextStyle,
                     ),
-                    selected: valueSortByName,
+                    selected: sortModeValue == PupilSortMode.sortByName
+                        ? true
+                        : false,
                     onSelected: (val) {
-                      filterLocator.setSortMode(PupilSortMode.sortByName, val);
-                      valueSortByName = filterLocator
-                          .sortMode.value[PupilSortMode.sortByName]!;
-                      filterLocator.sortPupils();
+                      locator<PupilsFilter>()
+                          .setSortMode(PupilSortMode.sortByName);
                     },
                   ),
                   FilterChip(
@@ -74,13 +76,13 @@ class CreditFilterBottomSheet extends WatchingWidget {
                       'nach Guthaben',
                       style: filterItemsTextStyle,
                     ),
-                    selected: valueSortByCredit,
+                    selected: sortModeValue == PupilSortMode.sortByCredit
+                        ? true
+                        : false,
                     onSelected: (val) {
-                      filterLocator.setSortMode(
-                          PupilSortMode.sortByCredit, val);
-                      valueSortByCredit = filterLocator
-                          .sortMode.value[PupilSortMode.sortByCredit]!;
-                      filterLocator.sortPupils();
+                      locator<PupilsFilter>().setSortMode(
+                        PupilSortMode.sortByCredit,
+                      );
                     },
                   ),
                   FilterChip(
@@ -94,13 +96,13 @@ class CreditFilterBottomSheet extends WatchingWidget {
                       'nach Verdienst',
                       style: filterItemsTextStyle,
                     ),
-                    selected: valueSortByCreditEarned,
+                    selected: sortModeValue == PupilSortMode.sortByCreditEarned
+                        ? true
+                        : false,
                     onSelected: (val) {
-                      filterLocator.setSortMode(
-                          PupilSortMode.sortByCreditEarned, val);
-                      valueSortByCreditEarned = filterLocator
-                          .sortMode.value[PupilSortMode.sortByCreditEarned]!;
-                      filterLocator.sortPupils();
+                      locator<PupilsFilter>().setSortMode(
+                        PupilSortMode.sortByCreditEarned,
+                      );
                     },
                   ),
                 ],

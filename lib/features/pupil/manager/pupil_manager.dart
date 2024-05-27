@@ -220,9 +220,8 @@ class PupilManager extends ChangeNotifier {
     locator<NotificationManager>().isRunningValue(false);
   }
 
-  PupilsFilter getPupilFilter({
-    Map<PupilSortMode, bool>? sortMode,
-  }) {
-    return PupilsFilterImplementation(this, sortMode: sortMode);
+  PupilsFilter getPupilFilter() {
+    //return PupilsFilterImplementation(this, sortMode: sortMode);
+    return PupilsFilterImplementation(this);
   }
 }

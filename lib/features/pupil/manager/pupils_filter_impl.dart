@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
+
 import 'package:schuldaten_hub/common/filters/filters.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
@@ -35,10 +36,11 @@ class PupilTextFilter extends Filter<PupilProxy> {
 
 class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   PupilsFilterImplementation(
-    PupilManager pupilsManager, {
-    Map<PupilSortMode, bool>? sortMode,
-  })  : _sortMode = sortMode ?? {},
-        _pupilsManager = pupilsManager {
+    PupilManager pupilsManager,
+    //   {
+    //  PupilSortMode? sortMode,
+    // }
+  ) : _pupilsManager = pupilsManager {
     debug.info('PupilsFilterImplementation created');
     refreshs();
     _pupilsManager.addListener(refreshs);
@@ -63,8 +65,8 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   final ValueNotifier<List<PupilProxy>> _filteredPupils = ValueNotifier([]);
 
   @override
-  Map<PupilSortMode, bool> get sortMode => _sortMode;
-  final Map<PupilSortMode, bool> _sortMode;
+  ValueListenable<PupilSortMode> get sortMode => _sortMode;
+  final _sortMode = ValueNotifier<PupilSortMode>(PupilSortMode.sortByName);
 
   final PupilTextFilter _textFilter = PupilTextFilter(name: 'Text Filter');
 
@@ -79,10 +81,10 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   @override
   void refreshs() {
     final allPupils = _pupilsManager.allPupils;
-
     if (!allFilters.any((x) => x.isActive)) {
       _filteredPupils.value = allPupils;
       _filtersOn.value = false;
+      sortPupils();
       return;
     }
 
@@ -115,11 +117,11 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
       }
     }
 
-    _filteredPupils.value = thisFilteredPupils;
-
     if (isAnyStufenFilterActive || isAnyGroupFilterActive) {
       _filtersOn.value = true;
     }
+    _filteredPupils.value = thisFilteredPupils;
+    sortPupils();
   }
 
   // reset the filters to its initial state
@@ -134,12 +136,28 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   // Set modified filter value
 
   @override
-  void setSortMode(PupilSortMode sortMode, bool isActive,
-      {bool refresh = true}) {
-    _sortMode[sortMode] = isActive;
-    if (refresh) {
-      refreshs();
+  void setSortMode(PupilSortMode sortMode) {
+    _sortMode.value = sortMode;
+    refreshs();
+    notifyListeners();
+  }
+
+  @override
+  void sortPupils() {
+    PupilSortMode sortMode = _sortMode.value;
+    List<PupilProxy> thisFilteredPupils = _filteredPupils.value;
+    switch (sortMode) {
+      case PupilSortMode.sortByName:
+        thisFilteredPupils.sort((a, b) => a.firstName.compareTo(b.firstName));
+      case PupilSortMode.sortByCredit:
+        thisFilteredPupils.sort((b, a) => a.credit.compareTo(b.credit));
+      case PupilSortMode.sortByCreditEarned:
+        thisFilteredPupils
+            .sort((b, a) => a.creditEarned.compareTo(b.creditEarned));
+      default:
+        PupilSortMode.sortByName;
     }
+    _filteredPupils.value = thisFilteredPupils;
     notifyListeners();
   }
 

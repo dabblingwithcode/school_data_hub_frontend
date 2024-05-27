@@ -1,6 +1,7 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/foundation.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/filters/filters.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';

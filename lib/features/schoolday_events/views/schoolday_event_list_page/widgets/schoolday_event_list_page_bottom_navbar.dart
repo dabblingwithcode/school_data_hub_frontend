@@ -52,7 +52,14 @@ class SchooldayEventListPageBottomNavBar extends StatelessWidget {
                 ),
                 const Gap(30),
                 InkWell(
-                  onTap: () => const SchooldayEventFilterBottomSheet(),
+                  onTap: () => showModalBottomSheet(
+                    constraints: const BoxConstraints(maxWidth: 800),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    context: context,
+                    builder: (_) => const SchooldayEventFilterBottomSheet(),
+                  ),
                   onLongPress: () {
                     locator<SchooldayEventFilterManager>().resetFilters();
                     locator<PupilFilterManager>().resetFilters();

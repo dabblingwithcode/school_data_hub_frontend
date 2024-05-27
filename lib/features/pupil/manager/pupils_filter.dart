@@ -106,6 +106,7 @@ abstract class PupilsFilter implements Listenable {
 
   List<Filter> get groupFilters;
   List<Filter> get stufenFilters;
+  ValueListenable<PupilSortMode> get sortMode;
 
   /// must be called when this object is no longer needed
   void dispose();
@@ -117,8 +118,7 @@ abstract class PupilsFilter implements Listenable {
   // reset the filters to its initial state
   void resetFilters();
 
-  void setSortMode(PupilSortMode sortMode, bool isActive,
-      {bool refresh = true});
-
+  void setSortMode(PupilSortMode sortMode);
+  void sortPupils();
   void setTextFilter(String? text, {bool refresh = true});
 }
