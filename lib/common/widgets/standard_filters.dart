@@ -70,7 +70,7 @@ class StandardFilters extends WatchingWidget {
                 ),
                 selected: watch(stufenFilter).isActive,
                 onSelected: (val) {
-                  stufenFilter.toggle();
+                  stufenFilter.toggle(val);
                 },
               ),
             // just an example how it could be done with radio buttons
@@ -111,7 +111,7 @@ class StandardFilters extends WatchingWidget {
                 ),
                 selected: watch(groupFilter).isActive,
                 onSelected: (val) {
-                  groupFilter.toggle();
+                  groupFilter.toggle(val);
                 },
               ),
           ],

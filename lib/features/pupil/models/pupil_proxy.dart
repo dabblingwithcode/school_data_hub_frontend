@@ -1,7 +1,6 @@
 // ignore_for_file: constant_identifier_names
 
 import 'package:flutter/foundation.dart';
-import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/filters/filters.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
@@ -16,16 +15,6 @@ import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
-
-class StufenFilter extends SelectorFilter<PupilProxy, Jahrgangsstufe> {
-  StufenFilter(Jahrgangsstufe stufe)
-      : super(name: stufe.value, selector: (proxy) => proxy.jahrgangsstufe);
-
-  @override
-  bool matches(PupilProxy item) {
-    return selector(item).value == name;
-  }
-}
 
 enum Jahrgangsstufe {
   E1('E1'),
@@ -72,6 +61,16 @@ enum GroupId {
 
   final String value;
   const GroupId(this.value);
+}
+
+class StufenFilter extends SelectorFilter<PupilProxy, Jahrgangsstufe> {
+  StufenFilter(Jahrgangsstufe stufe)
+      : super(name: stufe.value, selector: (proxy) => proxy.jahrgangsstufe);
+
+  @override
+  bool matches(PupilProxy item) {
+    return selector(item).value == name;
+  }
 }
 
 class GroupFilter extends SelectorFilter<PupilProxy, GroupId> {

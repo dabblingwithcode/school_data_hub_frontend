@@ -5,6 +5,7 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
@@ -15,8 +16,7 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
   Widget build(BuildContext context) {
     Map<PupilFilter, bool> activeFilters =
         watchValue((PupilFilterManager x) => x.filterState);
-    Map<PupilSortMode, bool> sortMode =
-        watchValue((PupilFilterManager x) => x.sortMode);
+    PupilSortMode sortMode = watchValue((PupilsFilter x) => x.sortMode);
     final Map<SchooldayEventFilter, bool> activeSchooldayEventFilters =
         watchValue(
             (SchooldayEventFilterManager x) => x.schooldayEventsFilterState);
@@ -36,12 +36,6 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
     bool valueOtherEvents =
         activeSchooldayEventFilters[SchooldayEventFilter.otherEvent]!;
 
-    // sort mode
-    bool valueSortByName = sortMode[PupilSortMode.sortByName]!;
-    bool valueSortBySchooldayEvents =
-        sortMode[PupilSortMode.sortBySchooldayEvents]!;
-    bool valueSortByLastSchooldayEvent =
-        sortMode[PupilSortMode.sortByLastSchooldayEvent]!;
     final filterLocator = locator<PupilFilterManager>();
     final schooldayEventFilterLocator = locator<SchooldayEventFilterManager>();
     return Padding(
@@ -206,13 +200,10 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
                             'A-Z',
                             style: filterItemsTextStyle,
                           ),
-                          selected: valueSortByName,
+                          selected: sortMode == PupilSortMode.sortByName,
                           onSelected: (val) {
-                            filterLocator.setSortMode(
-                                PupilSortMode.sortByName, val);
-                            valueSortByName = filterLocator
-                                .sortMode.value[PupilSortMode.sortByName]!;
-                            filterLocator.sortPupils();
+                            locator<PupilsFilter>()
+                                .setSortMode(PupilSortMode.sortByName);
                           },
                         ),
                         FilterChip(
@@ -226,13 +217,11 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
                             'Anzahl',
                             style: filterItemsTextStyle,
                           ),
-                          selected: valueSortBySchooldayEvents,
+                          selected:
+                              sortMode == PupilSortMode.sortBySchooldayEvents,
                           onSelected: (val) {
-                            filterLocator.setSortMode(
-                                PupilSortMode.sortBySchooldayEvents, val);
-                            valueSortBySchooldayEvents = filterLocator.sortMode
-                                .value[PupilSortMode.sortBySchooldayEvents]!;
-                            filterLocator.sortPupils();
+                            locator<PupilsFilter>().setSortMode(
+                                PupilSortMode.sortBySchooldayEvents);
                           },
                         ),
                         FilterChip(
@@ -246,13 +235,11 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
                             'zuletzt',
                             style: filterItemsTextStyle,
                           ),
-                          selected: valueSortByLastSchooldayEvent,
+                          selected: sortMode ==
+                              PupilSortMode.sortByLastSchooldayEvent,
                           onSelected: (val) {
-                            filterLocator.setSortMode(
-                                PupilSortMode.sortByLastSchooldayEvent, val);
-                            valueSortBySchooldayEvents = filterLocator.sortMode
-                                .value[PupilSortMode.sortByLastSchooldayEvent]!;
-                            filterLocator.sortPupils();
+                            locator<PupilsFilter>().setSortMode(
+                                PupilSortMode.sortByLastSchooldayEvent);
                           },
                         ),
                       ],

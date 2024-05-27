@@ -6,6 +6,7 @@ import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceRankingFilterBottomSheet extends WatchingWidget {
@@ -15,16 +16,7 @@ class AttendanceRankingFilterBottomSheet extends WatchingWidget {
   Widget build(BuildContext context) {
     // Map<PupilFilter, bool> activeFilters =
     //     watchValue((PupilFilterManager x) => x.filterState);
-    Map<PupilSortMode, bool> sortMode =
-        watchValue((PupilFilterManager x) => x.sortMode);
-    bool valueSortByName = sortMode[PupilSortMode.sortByName]!;
-
-    bool valueSortByMissedExcused =
-        sortMode[PupilSortMode.sortByMissedExcused]!;
-    bool valueSortByMissedUnexcused =
-        sortMode[PupilSortMode.sortByMissedUnexcused]!;
-    bool valueSortByContacted = sortMode[PupilSortMode.sortByContacted]!;
-    bool valueSortByLate = sortMode[PupilSortMode.sortByLate]!;
+    PupilSortMode sortMode = watchValue((PupilsFilter x) => x.sortMode);
 
     final filterLocator = locator<PupilFilterManager>();
     return Padding(
@@ -57,15 +49,13 @@ class AttendanceRankingFilterBottomSheet extends WatchingWidget {
                     checkmarkColor: filterChipSelectedCheckColor,
                     backgroundColor: filterChipUnselectedColor,
                     label: const Text(
-                      'alphabetisch',
+                      'A-Z',
                       style: filterItemsTextStyle,
                     ),
-                    selected: valueSortByName,
+                    selected: sortMode == PupilSortMode.sortByName,
                     onSelected: (val) {
-                      filterLocator.setSortMode(PupilSortMode.sortByName, val);
-                      valueSortByMissedExcused = filterLocator
-                          .sortMode.value[PupilSortMode.sortByName]!;
-                      filterLocator.sortPupils();
+                      locator<PupilsFilter>()
+                          .setSortMode(PupilSortMode.sortByName);
                     },
                   ),
                   FilterChip(
@@ -79,13 +69,10 @@ class AttendanceRankingFilterBottomSheet extends WatchingWidget {
                       'entschuldigt',
                       style: filterItemsTextStyle,
                     ),
-                    selected: valueSortByMissedExcused,
+                    selected: sortMode == PupilSortMode.sortByMissedExcused,
                     onSelected: (val) {
-                      filterLocator.setSortMode(
-                          PupilSortMode.sortByMissedExcused, val);
-                      valueSortByMissedExcused = filterLocator
-                          .sortMode.value[PupilSortMode.sortByMissedExcused]!;
-                      filterLocator.sortPupils();
+                      locator<PupilsFilter>()
+                          .setSortMode(PupilSortMode.sortByMissedExcused);
                     },
                   ),
                   FilterChip(
@@ -99,13 +86,10 @@ class AttendanceRankingFilterBottomSheet extends WatchingWidget {
                       'unentschuldigt',
                       style: filterItemsTextStyle,
                     ),
-                    selected: valueSortByMissedUnexcused,
+                    selected: sortMode == PupilSortMode.sortByMissedUnexcused,
                     onSelected: (val) {
-                      filterLocator.setSortMode(
-                          PupilSortMode.sortByMissedUnexcused, val);
-                      valueSortByMissedUnexcused = filterLocator
-                          .sortMode.value[PupilSortMode.sortByMissedExcused]!;
-                      filterLocator.sortPupils();
+                      locator<PupilsFilter>()
+                          .setSortMode(PupilSortMode.sortByMissedUnexcused);
                     },
                   ),
                   FilterChip(
@@ -119,12 +103,10 @@ class AttendanceRankingFilterBottomSheet extends WatchingWidget {
                       'verspätet',
                       style: filterItemsTextStyle,
                     ),
-                    selected: valueSortByLate,
+                    selected: sortMode == PupilSortMode.sortByLate,
                     onSelected: (val) {
-                      filterLocator.setSortMode(PupilSortMode.sortByLate, val);
-                      valueSortByLate = filterLocator
-                          .sortMode.value[PupilSortMode.sortByLate]!;
-                      filterLocator.sortPupils();
+                      locator<PupilsFilter>()
+                          .setSortMode(PupilSortMode.sortByLate);
                     },
                   ),
                   FilterChip(
@@ -138,13 +120,10 @@ class AttendanceRankingFilterBottomSheet extends WatchingWidget {
                       'kontaktiert',
                       style: filterItemsTextStyle,
                     ),
-                    selected: valueSortByContacted,
+                    selected: sortMode == PupilSortMode.sortByContacted,
                     onSelected: (val) {
-                      filterLocator.setSortMode(
-                          PupilSortMode.sortByContacted, val);
-                      valueSortByContacted = filterLocator
-                          .sortMode.value[PupilSortMode.sortByContacted]!;
-                      filterLocator.sortPupils();
+                      locator<PupilsFilter>()
+                          .setSortMode(PupilSortMode.sortByContacted);
                     },
                   ),
                 ],

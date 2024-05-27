@@ -3,8 +3,8 @@ import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 class SchoolEventHelper {
-  static int? schooldayEventSum(PupilProxy pupil) {
-    return pupil.schooldayEvents?.length;
+  static int schooldayEventSum(PupilProxy pupil) {
+    return pupil.schooldayEvents?.length ?? 0;
   }
 
   static int? findSchooldayEventIndex(PupilProxy pupil, DateTime date) {

@@ -26,8 +26,8 @@ abstract class Filter<T extends Object> with ChangeNotifier {
     notifyListeners();
   }
 
-  void toggle() {
-    _isActive = !_isActive;
+  void toggle(bool isActive) {
+    _isActive = isActive;
     notifyListeners();
     locator<PupilsFilter>().refreshs();
   }
