@@ -9,6 +9,7 @@ import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/ogs_list_card.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/ogs_list_search_bar.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/ogs_view_bottom_navbar.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
@@ -21,8 +22,7 @@ class OgsListPage extends WatchingWidget {
   Widget build(BuildContext context) {
     bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
 
-    List<PupilProxy> pupils =
-        watchValue((PupilFilterManager x) => x.filteredPupils);
+    List<PupilProxy> pupils = watchValue((PupilsFilter x) => x.filteredPupils);
 
     return Scaffold(
       backgroundColor: canvasColor,

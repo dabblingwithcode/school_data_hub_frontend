@@ -5,8 +5,8 @@ import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
 import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/special_info_card.dart';
 import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/special_info_list_search_bar.dart';
@@ -18,9 +18,8 @@ class SpecialInfoListPage extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
-    List<PupilProxy> pupils =
-        watchValue((PupilFilterManager x) => x.filteredPupils);
+    bool filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
+    List<PupilProxy> pupils = watchValue((PupilsFilter x) => x.filteredPupils);
 
     return Scaffold(
       backgroundColor: canvasColor,

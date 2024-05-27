@@ -10,8 +10,8 @@ import 'package:schuldaten_hub/features/learning_support/services/pupil_goal_fil
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_list_card.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_list_search_bar.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_view_bottom_navbar.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -20,10 +20,10 @@ class LearningSupportListPage extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
+    bool filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
     // These come from the PupilFilterManager
     List<PupilProxy> filteredPupils =
-        watchValue((PupilFilterManager x) => x.filteredPupils);
+        watchValue((PupilsFilter x) => x.filteredPupils);
     // We want them to go through the learning support filters first
     final List<PupilProxy> pupils = categoryGoalFilteredPupils(filteredPupils);
 

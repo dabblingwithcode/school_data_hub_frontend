@@ -43,8 +43,11 @@ List<Widget> pupilCategoryStatusesList(PupilProxy pupil, BuildContext context) {
           Card(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
-                side: const BorderSide(
-                  color: accentColor,
+                side: BorderSide(
+                  color: pupil.pupilCategoryStatuses!.any((element) =>
+                          element.goalCategoryId == status.goalCategoryId)
+                      ? Colors.green
+                      : accentColor,
                   width: 2,
                 )),
             child: Column(
@@ -148,8 +151,11 @@ List<Widget> pupilCategoryStatusesList(PupilProxy pupil, BuildContext context) {
           Card(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
-                side: const BorderSide(
-                  color: accentColor,
+                side: BorderSide(
+                  color: pupil.pupilCategoryStatuses!
+                          .any((element) => element.goalCategoryId == key)
+                      ? Colors.green
+                      : accentColor,
                   width: 2,
                 )),
             child: Column(children: [
