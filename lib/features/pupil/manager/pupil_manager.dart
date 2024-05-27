@@ -101,6 +101,7 @@ class PupilManager extends ChangeNotifier {
     final proxy = _pupils[pupil.internalId];
     if (proxy != null) {
       proxy.updatePupil(pupil);
+      notifyListeners();
     }
   }
 

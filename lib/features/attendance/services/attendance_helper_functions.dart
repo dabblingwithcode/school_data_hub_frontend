@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
@@ -134,10 +135,10 @@ ContactedType setContactedValue(int pupilId, DateTime date) {
   if (missedClass == -1) {
     return ContactedType.notSet;
   } else {
-    final contactedType = ContactedType.values.firstWhere(
+    final contactedType = ContactedType.values.firstWhereOrNull(
         (e) => e.value == pupil.pupilMissedClasses![missedClass!].contacted);
 
-    return contactedType;
+    return contactedType ?? ContactedType.notSet;
   }
 }
 

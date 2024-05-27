@@ -53,8 +53,8 @@ class AttendanceManager {
 
     pupilManager.updatePupilsFromMissedClasses(missedClasses);
 
-    notificationManager.showSnackBar(
-        NotificationType.success, 'Fehlzeiten erfolgreich geladen!');
+    // notificationManager.showSnackBar(
+    //     NotificationType.success, 'Fehlzeiten erfolgreich geladen!');
 
     return;
   }
