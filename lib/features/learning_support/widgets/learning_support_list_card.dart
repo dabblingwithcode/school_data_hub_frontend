@@ -4,20 +4,20 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
-import 'package:schuldaten_hub/common/widgets/list_tile.dart';
+import 'package:schuldaten_hub/common/widgets/custom_list_tiles.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
-import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_view/controller/learning_support_list_controller.dart';
+import 'package:schuldaten_hub/features/learning_support/services/learning_support_helper_functions.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/dialogs/individual_development_plan_dialog.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_goal_list.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_goals_batches.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
+
 import 'package:watch_it/watch_it.dart';
 
 class LearningSupportCard extends WatchingStatefulWidget {
-  final LearningSupportListController controller;
-  final PupilProxy passedPupil;
-  const LearningSupportCard(this.controller, this.passedPupil, {super.key});
+  final PupilProxy pupil;
+  const LearningSupportCard(this.pupil, {super.key});
 
   @override
   State<LearningSupportCard> createState() => _LearningSupportCardState();
@@ -28,7 +28,7 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
       CustomExpansionTileController();
   @override
   Widget build(BuildContext context) {
-    PupilProxy pupil = widget.passedPupil;
+    final PupilProxy pupil = widget.pupil;
 
     return Card(
       color: Colors.white,
@@ -44,7 +44,7 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              avatarWithBadges(pupil, 80),
+              AvatarWithBadges(pupil: pupil, size: 80),
               Expanded(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -61,13 +61,13 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
                                 locator<BottomNavManager>()
                                     .setPupilProfileNavPage(8);
                                 Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (ctx) => PupilProfile(
-                                    pupil,
+                                  builder: (ctx) => PupilProfilePage(
+                                    pupil: pupil,
                                   ),
                                 ));
                               },
                               child: Text(
-                                '${pupil.firstName!} ${pupil.lastName!}',
+                                '${pupil.firstName} ${pupil.lastName}',
                                 overflow: TextOverflow.fade,
                                 softWrap: false,
                                 textAlign: TextAlign.left,
@@ -88,8 +88,7 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
                         const Text('ärztl. U.:'),
                         const Gap(10),
                         Text(
-                          widget.controller
-                              .preschoolRevision(pupil.preschoolRevision!),
+                          preschoolRevision(pupil.preschoolRevision!),
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 14,
@@ -160,11 +159,10 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
           ),
           Padding(
             padding: const EdgeInsets.all(5),
-            child: listTiles(
-                null,
-                context,
-                _tileController,
-                learningSupportGoalList(
+            child: CustomListTiles(
+                title: null,
+                tileController: _tileController,
+                widgetList: learningSupportGoalList(
                   context,
                   pupil,
                 )),

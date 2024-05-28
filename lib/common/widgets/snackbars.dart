@@ -5,16 +5,16 @@ import 'package:top_snackbar_flutter/top_snack_bar.dart';
 
 snackbar(BuildContext context, snackbarType, message) {
   switch (snackbarType) {
-    case SnackBarType.error:
+    case NotificationType.error:
       snackbarError(context, message);
       break;
-    case SnackBarType.warning:
+    case NotificationType.warning:
       snackbarWarning(context, message);
       break;
-    case SnackBarType.info:
+    case NotificationType.info:
       snackbarInfo(context, message);
       break;
-    case SnackBarType.success:
+    case NotificationType.success:
       snackbarSuccess(context, message);
       break;
   }

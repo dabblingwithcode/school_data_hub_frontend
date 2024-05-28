@@ -5,8 +5,8 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
 
 String tokenLifetimeLeft(String token) {
   Duration remainingTime = JwtDecoder.getRemainingTime(token);
@@ -20,18 +20,18 @@ String tokenLifetimeLeft(String token) {
 
 void logout(BuildContext context) async {
   await locator<SessionManager>().logout();
-  locator<SnackBarManager>()
-      .showSnackBar(SnackBarType.success, 'Zugangsdaten und QR-Ids gelöscht!');
+  locator<NotificationManager>().showSnackBar(
+      NotificationType.success, 'Zugangsdaten und QR-Ids gelöscht!');
 }
 
 void logoutAndDeleteAllData(BuildContext context) async {
-  await locator<PupilBaseManager>().deleteData();
+  await locator<PupilPersonalDataManager>().deleteData();
   await locator<EnvManager>().deleteEnv();
   await locator<SessionManager>().logout();
   final cacheManager = DefaultCacheManager();
 
   await cacheManager.emptyCache();
 
-  locator<SnackBarManager>()
-      .showSnackBar(SnackBarType.success, 'Alle Daten gelöscht!');
+  locator<NotificationManager>()
+      .showSnackBar(NotificationType.success, 'Alle Daten gelöscht!');
 }

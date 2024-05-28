@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
-import 'package:schuldaten_hub/common/widgets/snackbars.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class LoadingPage extends WatchingStatefulWidget {
@@ -13,15 +12,19 @@ class LoadingPage extends WatchingStatefulWidget {
 }
 
 class LoadingPageState extends State<LoadingPage> {
+  String actualNotificationMessage = "";
+  String lastNotificationMessage = "";
   @override
   Widget build(BuildContext context) {
-    final SnackBarData snackBarData =
-        watchValue((SnackBarManager x) => x.snackBar);
-    // registerHandler(
-    //     select: (SnackBarManager x) => x.snackBar,
-    //     handler: (context, value, cancel) {
-    //       snackbar(context, value.type, value.message);
-    //     });
+    final NotificationData snackBarData =
+        watchValue((NotificationManager x) => x.notification);
+    String newValue = snackBarData.message;
+
+    if (newValue != actualNotificationMessage) {
+      lastNotificationMessage = actualNotificationMessage;
+      actualNotificationMessage = newValue;
+    }
+
     return Scaffold(
       body: Container(
         height: MediaQuery.of(context).size.height,
@@ -53,7 +56,13 @@ class LoadingPageState extends State<LoadingPage> {
                   ),
                 ),
                 const Spacer(),
-                Text(snackBarData.message,
+                Text(lastNotificationMessage,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold)),
+                const Gap(5),
+                Text(actualNotificationMessage,
                     style: const TextStyle(
                         color: Colors.white,
                         fontSize: 18,

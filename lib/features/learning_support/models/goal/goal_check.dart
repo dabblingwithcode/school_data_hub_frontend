@@ -20,4 +20,6 @@ class GoalCheck {
 
   factory GoalCheck.fromJson(Map<String, dynamic> json) =>
       _$GoalCheckFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GoalCheckToJson(this);
 }

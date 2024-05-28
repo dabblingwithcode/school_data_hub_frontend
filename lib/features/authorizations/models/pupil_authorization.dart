@@ -20,6 +20,8 @@ class PupilAuthorization {
   factory PupilAuthorization.fromJson(Map<String, dynamic> json) =>
       _$PupilAuthorizationFromJson(json);
 
+  Map<String, dynamic> toJson() => _$PupilAuthorizationToJson(this);
+
   PupilAuthorization(
       {required this.comment,
       required this.createdBy,

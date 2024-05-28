@@ -1,5 +1,6 @@
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 
@@ -33,33 +34,34 @@ String shareList(String teacher, SchoolList schoolList) {
   return visibility;
 }
 
-int totalShownPupilsMarkedWithYesNoOrNull(
-    SchoolList schoolList, List<PupilProxy> pupilsInList, bool? yesNoOrNull) {
-  int count = 0;
-  for (PupilProxy pupil in pupilsInList) {
-    if (pupil.pupilLists != null) {
-      if (pupil.pupilLists!.any((element) =>
-          element.originList == schoolList.listId &&
-          element.pupilListStatus == yesNoOrNull)) {
-        count++;
-      }
-    }
-  }
-  return count;
-}
-
-int totalShownPupilsWithComment(
+Map<String, int> schoolListStats(
     SchoolList schoolList, List<PupilProxy> pupilsInList) {
-  int count = 0;
+  int countYes = 0;
+  int countNo = 0;
+  int countNull = 0;
+  int countComment = 0;
   for (PupilProxy pupil in pupilsInList) {
+    // if the pupil has a list with the same id as the current list
     if (pupil.pupilLists != null) {
-      if (pupil.pupilLists!.any((element) =>
-          element.originList == schoolList.listId &&
-          element.pupilListComment != null &&
-          element.pupilListComment!.isNotEmpty)) {
-        count++;
+      PupilList? listMatch = pupil.pupilLists
+          ?.firstWhere((element) => element.originList == schoolList.listId);
+      if (listMatch != null) {
+        listMatch.pupilListStatus == true
+            ? countYes++
+            : listMatch.pupilListStatus == false
+                ? countNo++
+                : countNull++;
       }
+      listMatch!.pupilListComment != null &&
+              listMatch.pupilListComment!.isNotEmpty
+          ? countComment++
+          : countComment;
     }
   }
-  return count;
+  return {
+    'yes': countYes,
+    'no': countNo,
+    'null': countNull,
+    'comment': countComment
+  };
 }

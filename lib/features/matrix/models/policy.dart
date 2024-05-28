@@ -1,7 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:json_annotation/json_annotation.dart';
-import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 
 import 'flags.dart';
 import 'matrix_user.dart';

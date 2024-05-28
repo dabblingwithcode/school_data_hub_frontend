@@ -23,4 +23,6 @@ class Workbook {
 
   factory Workbook.fromJson(Map<String, dynamic> json) =>
       _$WorkbookFromJson(json);
+
+  Map<String, dynamic> toJson() => _$WorkbookToJson(this);
 }

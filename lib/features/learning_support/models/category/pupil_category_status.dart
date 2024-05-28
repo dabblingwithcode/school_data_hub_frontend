@@ -28,4 +28,6 @@ class PupilCategoryStatus {
 
   factory PupilCategoryStatus.fromJson(Map<String, dynamic> json) =>
       _$PupilCategoryStatusFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PupilCategoryStatusToJson(this);
 }

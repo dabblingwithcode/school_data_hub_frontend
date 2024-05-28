@@ -3,16 +3,16 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
 import 'package:schuldaten_hub/features/competence/models/competence_goal.dart';
 import 'package:schuldaten_hub/features/learning/views/widgets/pupil_competence_tree.dart';
 import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
-import 'package:schuldaten_hub/features/workbooks/views/workbook_list_view/widgets/pupil_workbook_card.dart';
+import 'package:schuldaten_hub/features/workbooks/views/workbook_list_page/widgets/pupil_workbook_card.dart';
 
 List<Widget> pupilLearningContentList(PupilProxy pupil, BuildContext context) {
   return [
@@ -34,7 +34,7 @@ List<Widget> pupilLearningContentList(PupilProxy pupil, BuildContext context) {
               .workbooks
               .value
               .any((element) => element.isbn == int.parse(scanResult))) {
-            locator<SnackBarManager>().showSnackBar(SnackBarType.error,
+            locator<NotificationManager>().showSnackBar(NotificationType.error,
                 'Das Arbeitsheft wurde noch nicht erfasst. Bitte zuerst unter "Arbeitshefte" hinzufügen.');
 
             return;
@@ -42,8 +42,8 @@ List<Widget> pupilLearningContentList(PupilProxy pupil, BuildContext context) {
           if (pupil.pupilWorkbooks!.isNotEmpty) {
             if (pupil.pupilWorkbooks!.any(
                 (element) => element.workbookIsbn == int.parse(scanResult))) {
-              locator<SnackBarManager>().showSnackBar(
-                  SnackBarType.error, 'Dieses Arbeitsheft gibt es schon!');
+              locator<NotificationManager>().showSnackBar(
+                  NotificationType.error, 'Dieses Arbeitsheft gibt es schon!');
 
               return;
             }
@@ -52,8 +52,8 @@ List<Widget> pupilLearningContentList(PupilProxy pupil, BuildContext context) {
               .newPupilWorkbook(pupil.internalId, int.parse(scanResult));
           return;
         }
-        locator<SnackBarManager>()
-            .showSnackBar(SnackBarType.error, 'Fehler beim Scannen');
+        locator<NotificationManager>()
+            .showSnackBar(NotificationType.error, 'Fehler beim Scannen');
       },
       child: const Text(
         "NEUES ARBEITSHEFT",

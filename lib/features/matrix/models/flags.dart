@@ -14,6 +14,8 @@ class Flags {
 
   factory Flags.fromJson(Map<String, dynamic> json) => _$FlagsFromJson(json);
 
+  Map<String, dynamic> toJson() => _$FlagsToJson(this);
+
   Flags(
       {required this.allowCustomUserDisplayNames,
       required this.allowCustomUserAvatars,

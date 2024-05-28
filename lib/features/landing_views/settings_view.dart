@@ -9,16 +9,18 @@ import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_helper_functions.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/short_textfield_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/qr_views.dart';
+import 'package:schuldaten_hub/features/calendar/schooldays_calendar_page.dart';
 import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_helper_functions.dart';
 import 'package:schuldaten_hub/features/matrix/views/set_matrix_environment_values_view.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_view/controller/select_pupils_list_controller.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/select_pupils_list_page.dart';
 import 'package:schuldaten_hub/features/statistics/birthdays_view.dart';
 import 'package:schuldaten_hub/features/statistics/statistics_view/controller/statistics.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -116,16 +118,17 @@ class SettingsView extends WatchingWidget {
                                 .refreshToken(password);
 
                             if (success == 401) {
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.error, 'Falsches Passwort');
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.error, 'Falsches Passwort');
                               return;
                             } else if (success == 200) {
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.success, 'Token erneuert!');
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.success, 'Token erneuert!');
                             }
                           } catch (e) {
-                            locator<SnackBarManager>().showSnackBar(
-                                SnackBarType.error, 'Unbekannter Fehler: $e');
+                            locator<NotificationManager>().showSnackBar(
+                                NotificationType.error,
+                                'Unbekannter Fehler: $e');
                           }
                         },
                         child: const Icon(Icons.password_rounded)),
@@ -138,8 +141,8 @@ class SettingsView extends WatchingWidget {
                               context, 'Ausloggen', 'Wirklich ausloggen?');
                           if (confirm == true && context.mounted) {
                             logout(context);
-                            locator<SnackBarManager>().showSnackBar(
-                                SnackBarType.success,
+                            locator<NotificationManager>().showSnackBar(
+                                NotificationType.success,
                                 'Erfolgreich ausgeloggt!');
                           }
                         },
@@ -157,9 +160,9 @@ class SettingsView extends WatchingWidget {
                           'Lokale ID-Schlüssel löschen',
                           'Lokale ID-Schlüssel löschen?');
                       if (confirm == true && context.mounted) {
-                        locator.get<PupilBaseManager>().deleteData();
-                        locator<SnackBarManager>().showSnackBar(
-                            SnackBarType.success, 'ID-Schlüssel gelöscht');
+                        locator.get<PupilPersonalDataManager>().deleteData();
+                        locator<NotificationManager>().showSnackBar(
+                            NotificationType.success, 'ID-Schlüssel gelöscht');
                       }
                       return;
                     },
@@ -177,8 +180,8 @@ class SettingsView extends WatchingWidget {
                           'Instanz-ID-Schlüssel löschen?');
                       if (confirm == true && context.mounted) {
                         await locator<EnvManager>().deleteEnv();
-                        locator<SnackBarManager>().showSnackBar(
-                            SnackBarType.success,
+                        locator<NotificationManager>().showSnackBar(
+                            NotificationType.success,
                             'Instanz-ID-Schlüssel gelöscht');
                         final cacheManager = DefaultCacheManager();
                         await cacheManager.emptyCache();
@@ -206,8 +209,8 @@ class SettingsView extends WatchingWidget {
                           if (confirm == true && context.mounted) {
                             final cacheManager = DefaultCacheManager();
                             await cacheManager.emptyCache();
-                            locator<SnackBarManager>().showSnackBar(
-                                SnackBarType.success,
+                            locator<NotificationManager>().showSnackBar(
+                                NotificationType.success,
                                 'der Bilder-Cache wurde gelöscht');
                           }
                           return;
@@ -272,12 +275,12 @@ class SettingsView extends WatchingWidget {
                               .increaseUsersCredit();
                           if (context.mounted) {
                             if (success) {
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.success,
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.success,
                                   'Transaktion erfolgreich!');
                             } else {
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.error,
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.error,
                                   'Fehler bei der Überweisung');
                             }
                           }
@@ -290,7 +293,7 @@ class SettingsView extends WatchingWidget {
                             final String? qr = await secureStorageRead('env');
 
                             if (qr != null && context.mounted) {
-                              await showQrCode(qr, context);
+                              showQrCode(qr, context);
                             }
                           }),
                       SettingsTile.navigation(
@@ -326,9 +329,19 @@ class SettingsView extends WatchingWidget {
                             final bool confirmed =
                                 await generatePolicyJsonFile();
                             if (confirmed) {
-                              locator<SnackBarManager>().showSnackBar(
-                                  SnackBarType.error, 'Datei generiert');
+                              locator<NotificationManager>().showSnackBar(
+                                  NotificationType.error, 'Datei generiert');
                             }
+                          }),
+                      SettingsTile.navigation(
+                          leading: const Icon(
+                            Icons.calendar_month_rounded,
+                          ),
+                          title: const Text('Schultage-Kalender'),
+                          onPressed: (context) async {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const SchooldaysCalendar(),
+                            ));
                           }),
                     ]),
               SettingsSection(
@@ -364,19 +377,20 @@ class SettingsView extends WatchingWidget {
                       onPressed: (context) async {
                         final List<int> pupilIds =
                             await Navigator.of(context).push(MaterialPageRoute(
-                          builder: (ctx) => SelectPupilList(
-                              locator<PupilBaseManager>()
-                                  .availablePupilIds
-                                  .value),
+                          builder: (ctx) => SelectPupilsListPage(
+                              selectablePupils: pupilsFromPupilIds(
+                                  locator<PupilPersonalDataManager>()
+                                      .availablePupilIds)),
                         ));
                         if (pupilIds.isEmpty) {
                           return;
                         }
-                        final String qr = await locator<PupilBaseManager>()
-                            .generatePupilBaseQrData(pupilIds);
+                        final String qr =
+                            await locator<PupilPersonalDataManager>()
+                                .generatePupilBaseQrData(pupilIds);
 
                         if (context.mounted) {
-                          await showQrCode(qr, context);
+                          showQrCode(qr, context);
                         }
                       }),
                   SettingsTile.navigation(
@@ -385,11 +399,11 @@ class SettingsView extends WatchingWidget {
                           const Text('Alle vorhandenen Gruppen-QR-Ids zeigen'),
                       onPressed: (context) async {
                         final Map<String, String> qrData =
-                            await locator<PupilBaseManager>()
+                            await locator<PupilPersonalDataManager>()
                                 .generateAllPupilBaseQrData(12);
 
                         if (context.mounted) {
-                          await showQrCarousel(qrData, false, context);
+                          showQrCarousel(qrData, false, context);
                         }
                       }),
                   SettingsTile.navigation(
@@ -398,11 +412,11 @@ class SettingsView extends WatchingWidget {
                           'Alle vorhandenen Gruppen-QR-Ids zeigen (autoplay)'),
                       onPressed: (context) async {
                         final Map<String, String> qrData =
-                            await locator<PupilBaseManager>()
+                            await locator<PupilPersonalDataManager>()
                                 .generateAllPupilBaseQrData(8);
 
                         if (context.mounted) {
-                          await showQrCarousel(qrData, true, context);
+                          showQrCarousel(qrData, true, context);
                         }
                       }),
                 ],

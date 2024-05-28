@@ -6,8 +6,8 @@ import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart
 
 import 'package:schuldaten_hub/features/learning_support/models/category/goal_category.dart';
 import 'package:schuldaten_hub/features/learning_support/models/category/pupil_category_status.dart';
-import 'package:schuldaten_hub/features/learning_support/views/selectable_category_tree_view/controller/selectable_category_tree_controller.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/learning_support/views/selectable_category_tree_page/controller/selectable_category_tree_controller.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 

@@ -3,10 +3,13 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:listenable_collections/listenable_collections.dart';
+import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/dio/dio_client.dart';
 import 'package:schuldaten_hub/api/endpoints/matrix_endpoints.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
@@ -61,9 +64,12 @@ class MatrixPolicyManager {
   final _matrixRooms = ListNotifier<MatrixRoom>();
   late final String _matrixUrl;
   final _policyToken = ValueNotifier<String>('');
+
   MatrixPolicyManager() {
     debug.warning('MatrixPolicyManager initializing! | ${StackTrace.current}');
   }
+
+  final notificationManager = locator<NotificationManager>();
 
   Future<MatrixPolicyManager> init() async {
     if (locator<SessionManager>().isAdmin.value == true) {
@@ -78,6 +84,8 @@ class MatrixPolicyManager {
           _matrixUrl = credentials.url;
           _matrixToken.value = credentials.matrixToken;
           _policyToken.value = credentials.policyToken;
+          notificationManager.showSnackBar(NotificationType.success,
+              'Matrix-Räumeverwaltung wird geladen...');
           await fetchMatrixPolicy();
         } catch (e) {
           debug.error(
@@ -118,29 +126,44 @@ class MatrixPolicyManager {
   }
 
   //- MATRIX POLICY
-  Future fetchMatrixPolicy() async {
+  Future<void> fetchMatrixPolicy() async {
+    // use a custom client with the right token to fetch the policy
     final client = matrixClient(_policyToken.value);
 
     final response = await client.get(
       '${_matrixUrl}_matrix/corporal/policy',
     );
-    debug.success('Response: ${response.data}');
 
-    if (response.statusCode == 200) {
-      final Policy policy = Policy.fromJson(response.data['policy']);
-      List<MatrixRoom> rooms = [];
-      locator<ApiManager>().setCustomDioClientOptions(
-          _matrixUrl, 'Authorization', 'Bearer ${_matrixToken.value}', false);
-
-      for (String roomId in policy.managedRoomIds) {
-        MatrixRoom namedRoom = await _fetchAdditionalRoomInfos(roomId);
-        rooms.add(namedRoom);
-      }
-      _matrixRooms.addAll(rooms);
-      _matrixPolicy.value = policy;
-
-      debug.success('Fetched Matrix policy! | ${StackTrace.current}');
+    if (response.statusCode != 200) {
+      notificationManager.showSnackBar(
+          NotificationType.error, 'Fehler: status code ${response.statusCode}');
+      throw ApiException('Fehler beim Laden der Policy', response.statusCode);
     }
+    final Policy policy = Policy.fromJson(response.data['policy']);
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Matrix-Räumeverwaltung geladen');
+
+    List<MatrixRoom> rooms = [];
+    locator<ApiManager>().setCustomDioClientOptions(
+        _matrixUrl, 'Authorization', 'Bearer ${_matrixToken.value}', false);
+
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Matrix-Räume werden geladen...');
+    for (MatrixUser user in policy.matrixUsers!) {
+      _matrixUsers.add(user);
+    }
+
+    for (String roomId in policy.managedRoomIds) {
+      MatrixRoom namedRoom = await _fetchAdditionalRoomInfos(roomId);
+      rooms.add(namedRoom);
+    }
+    _matrixRooms.addAll(rooms);
+    _matrixPolicy.value = policy;
+
+    notificationManager.showSnackBar(NotificationType.success, 'Räume geladen');
+
+    debug.success('Fetched Matrix policy! | ${StackTrace.current}');
+
     locator<SessionManager>().changeMatrixPolicyManagerRegistrationStatus(true);
     locator.get<ApiManager>().setDefaultDioClientOptions();
     return;

@@ -25,17 +25,21 @@ class MissedClass {
   @JsonKey(name: 'written_excuse')
   final bool? writtenExcuse;
 
-  MissedClass(
-      {required this.contacted,
-      required this.createdBy,
-      required this.missedDay,
-      required this.missedPupilId,
-      required this.missedType,
-      required this.modifiedBy,
-      required this.returned,
-      required this.returnedAt,
-      required this.writtenExcuse});
+  MissedClass({
+    this.contacted,
+    required this.createdBy,
+    this.minutesLate,
+    required this.excused,
+    required this.missedDay,
+    required this.missedPupilId,
+    required this.missedType,
+    this.modifiedBy,
+    this.returned,
+    this.returnedAt,
+    this.writtenExcuse,
+  });
 
   factory MissedClass.fromJson(Map<String, dynamic> json) =>
       _$MissedClassFromJson(json);
+  Map<String, dynamic> toJson() => _$MissedClassToJson(this);
 }

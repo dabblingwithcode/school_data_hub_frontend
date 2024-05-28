@@ -2,7 +2,7 @@
 
 enum SearchType { pupil, room, matrixUser, list, authorization, workbook }
 
-enum SnackBarType { success, error, warning, info }
+enum NotificationType { success, error, warning, info }
 
 enum CompetenceFilter { E1, E2, S3, S4 }
 
@@ -13,7 +13,7 @@ Map<CompetenceFilter, bool> initialCompetenceFilterValues = {
   CompetenceFilter.S4: false
 };
 
-enum AdmonitionFilter {
+enum SchooldayEventFilter {
   sevenDays,
   redCard,
   redCardOgs,
@@ -29,20 +29,20 @@ enum AdmonitionFilter {
   processed,
 }
 
-Map<AdmonitionFilter, bool> initialAdmonitionFilterValues = {
-  AdmonitionFilter.sevenDays: false,
-  AdmonitionFilter.redCard: false,
-  AdmonitionFilter.redCardOgs: false,
-  AdmonitionFilter.redCardsentHome: false,
-  AdmonitionFilter.parentsMeeting: false,
-  AdmonitionFilter.otherEvent: false,
-  AdmonitionFilter.violenceAgainstThings: false,
-  AdmonitionFilter.violenceAgainstPersons: false,
-  AdmonitionFilter.annoy: false,
-  AdmonitionFilter.ignoreInstructions: false,
-  AdmonitionFilter.disturbLesson: false,
-  AdmonitionFilter.other: false,
-  AdmonitionFilter.processed: false,
+Map<SchooldayEventFilter, bool> initialSchooldayEventFilterValues = {
+  SchooldayEventFilter.sevenDays: false,
+  SchooldayEventFilter.redCard: false,
+  SchooldayEventFilter.redCardOgs: false,
+  SchooldayEventFilter.redCardsentHome: false,
+  SchooldayEventFilter.parentsMeeting: false,
+  SchooldayEventFilter.otherEvent: false,
+  SchooldayEventFilter.violenceAgainstThings: false,
+  SchooldayEventFilter.violenceAgainstPersons: false,
+  SchooldayEventFilter.annoy: false,
+  SchooldayEventFilter.ignoreInstructions: false,
+  SchooldayEventFilter.disturbLesson: false,
+  SchooldayEventFilter.other: false,
+  SchooldayEventFilter.processed: false,
 };
 
 enum PupilSortMode {
@@ -54,9 +54,9 @@ enum PupilSortMode {
   sortByCredit,
   sortByCreditEarned,
   sortByGoneHome,
-  sortByAdmonitions,
-  sortByLastAdmonition,
-  sortByLastNonProcessedAdmonition,
+  sortBySchooldayEvents,
+  sortByLastSchooldayEvent,
+  sortByLastNonProcessedSchooldayEvent,
 }
 
 Map<PupilSortMode, bool> initialSortModeValues = {
@@ -68,9 +68,9 @@ Map<PupilSortMode, bool> initialSortModeValues = {
   PupilSortMode.sortByCredit: false,
   PupilSortMode.sortByCreditEarned: false,
   PupilSortMode.sortByGoneHome: false,
-  PupilSortMode.sortByAdmonitions: false,
-  PupilSortMode.sortByLastAdmonition: false,
-  PupilSortMode.sortByLastNonProcessedAdmonition: false
+  PupilSortMode.sortBySchooldayEvents: false,
+  PupilSortMode.sortByLastSchooldayEvent: false,
+  PupilSortMode.sortByLastNonProcessedSchooldayEvent: false
 };
 
 enum PupilFilter {

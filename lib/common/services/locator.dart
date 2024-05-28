@@ -1,22 +1,24 @@
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/search_textfield_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_filter_manager.dart';
-import 'package:schuldaten_hub/features/admonitions/services/admonition_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_manager.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
-import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filters_manager.dart';
+import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filter_manager.dart';
 import 'package:schuldaten_hub/features/competence/services/competence_filter_manager.dart';
 import 'package:schuldaten_hub/features/competence/services/competence_manager.dart';
 import 'package:schuldaten_hub/api/services/connection_manager.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
 import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
-import 'package:schuldaten_hub/features/pupil/services/pupilbase_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_filter_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
@@ -56,14 +58,14 @@ void registerBaseManagers() {
     return sessionManager;
   }, dependsOn: [EnvManager, ConnectionManager]);
 
-  locator.registerSingletonAsync<PupilBaseManager>(() async {
+  locator.registerSingletonAsync<PupilPersonalDataManager>(() async {
     debug.info('Registering PupilBaseManager');
-    final pupilBaseManager = PupilBaseManager();
+    final pupilBaseManager = PupilPersonalDataManager();
     await pupilBaseManager.init();
     debug.info('PupilBaseManager initialized');
     return pupilBaseManager;
   });
-  locator.registerSingleton<SnackBarManager>(SnackBarManager());
+  locator.registerSingleton<NotificationManager>(NotificationManager());
   locator.registerSingleton<BottomNavManager>(BottomNavManager());
   locator.registerSingleton<SearchManager>(SearchManager());
 }
@@ -89,26 +91,26 @@ Future registerDependentManagers(String token) async {
     debug.info('SchooldayManager initialized');
     return schooldayManager;
   }, dependsOn: [SessionManager, ApiManager]);
-
+  locator.registerSingletonAsync<PupilManager>(() async {
+    debug.info('Registering PupilManager');
+    final pupilManager = PupilManager();
+    await pupilManager.init();
+    debug.info('PupilManager initialized');
+    return pupilManager;
+  }, dependsOn: [
+    EnvManager,
+    ApiManager,
+    SessionManager,
+    PupilPersonalDataManager
+  ]);
   locator.registerSingletonAsync<WorkbookManager>(() async {
     debug.info('Registering WorkbookManager');
     final workbookManager = WorkbookManager();
     await workbookManager.init();
     debug.info('WorkbookManager initialized');
     return workbookManager;
-  }, dependsOn: [SessionManager, ApiManager]);
+  }, dependsOn: [PupilManager, SessionManager, ApiManager]);
 
-  locator.registerSingletonAsync<SchoolListManager>(() async {
-    debug.info('Registering SchoolListManager');
-    final schoolListManager = SchoolListManager();
-    await schoolListManager.init();
-    debug.info('SchoolListManager initialized');
-    return schoolListManager;
-  }, dependsOn: [SessionManager, ApiManager]);
-  locator.registerSingletonWithDependencies<SchoolListFilterManager>(
-    () => SchoolListFilterManager(),
-    dependsOn: [SchoolListManager],
-  );
   locator.registerSingletonAsync<CompetenceManager>(() async {
     debug.info('Registering CompetenceManager');
     final competenceManager = CompetenceManager();
@@ -138,23 +140,36 @@ Future registerDependentManagers(String token) async {
     return authorizationManager;
   }, dependsOn: [SessionManager, ApiManager]);
 
-  locator.registerSingletonAsync<PupilManager>(() async {
-    debug.info('Registering PupilManager');
-    final pupilManager = PupilManager();
-    await pupilManager.init();
-    debug.info('PupilManager initialized');
-    return pupilManager;
-  }, dependsOn: [EnvManager, ApiManager, SessionManager, PupilBaseManager]);
-
   locator.registerSingletonWithDependencies<PupilFilterManager>(
     () => PupilFilterManager(),
-    dependsOn: [PupilManager, SchoolListManager],
+    dependsOn: [PupilManager],
   );
-  locator.registerLazySingleton<AttendanceManager>(() => AttendanceManager());
-  locator.registerLazySingleton<AdmonitionManager>(() => AdmonitionManager());
-  locator.registerSingletonWithDependencies<AdmonitionFilterManager>(
-    () => AdmonitionFilterManager(),
-    dependsOn: [PupilManager, PupilFilterManager],
+  locator.registerSingletonWithDependencies<PupilsFilter>(
+    () => PupilsFilterImplementation(
+      locator<PupilManager>(),
+    ),
+    dependsOn: [PupilManager],
+  );
+  locator.registerSingletonAsync<SchoolListManager>(() async {
+    debug.info('Registering SchoolListManager');
+    final schoolListManager = SchoolListManager();
+    await schoolListManager.init();
+    debug.info('SchoolListManager initialized');
+    return schoolListManager;
+  }, dependsOn: [SessionManager, ApiManager]);
+  locator.registerSingletonWithDependencies<SchoolListFilterManager>(
+    () => SchoolListFilterManager(),
+    dependsOn: [SchoolListManager, PupilFilterManager],
+  );
+  locator.registerSingletonWithDependencies<AttendanceManager>(
+      () => AttendanceManager(),
+      dependsOn: [SchooldayManager, PupilFilterManager]);
+  locator.registerSingletonWithDependencies<SchooldayEventManager>(
+      () => SchooldayEventManager(),
+      dependsOn: [SchooldayManager, PupilFilterManager]);
+  locator.registerSingletonWithDependencies<SchooldayEventFilterManager>(
+    () => SchooldayEventFilterManager(),
+    dependsOn: [PupilFilterManager],
   );
   if (await secureStorageContains('matrix')) {
     await registerMatrixPolicyManager();
@@ -167,8 +182,8 @@ Future<bool> registerMatrixPolicyManager() async {
     final policyManager = MatrixPolicyManager();
     await policyManager.init();
     debug.info('MatrixPolicyManager initialized');
-    locator<SnackBarManager>().showSnackBar(
-        SnackBarType.success, 'Matrix-Räumeverwaltung initialisiert');
+    locator<NotificationManager>().showSnackBar(
+        NotificationType.success, 'Matrix-Räumeverwaltung initialisiert');
     return policyManager;
   }, dependsOn: [SessionManager, PupilManager, PupilFilterManager]);
 
@@ -192,8 +207,8 @@ Future unregisterDependentManagers() async {
   locator.unregister<SchoolListFilterManager>();
   locator.unregister<AuthorizationManager>();
   locator.unregister<AttendanceManager>();
-  locator.unregister<AdmonitionManager>();
-  locator.unregister<AdmonitionFilterManager>();
+  locator.unregister<SchooldayEventManager>();
+  locator.unregister<SchooldayEventFilterManager>();
 
   if (locator.isRegistered<MatrixPolicyManager>()) {
     locator.unregister<MatrixPolicyManager>();

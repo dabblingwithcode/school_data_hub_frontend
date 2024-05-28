@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_room.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_helper_functions.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_manager.dart';
-import 'package:schuldaten_hub/features/matrix/views/select_matrix_rooms_list_view/controller/select_matrix_rooms_list_controller.dart';
+import 'package:schuldaten_hub/features/matrix/views/select_matrix_rooms_list_page/controller/select_matrix_rooms_list_controller.dart';
 
 class NewMatrixUserView extends StatefulWidget {
   const NewMatrixUserView({super.key});

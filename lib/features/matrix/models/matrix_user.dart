@@ -12,9 +12,9 @@ part 'matrix_user.g.dart';
 class MatrixUser {
   final String? id;
   // we don't use this fields
-  // final bool? active;
-  // final String? authType;
-  final String? displayName;
+  final bool? active;
+  final String? authType;
+  final String displayName;
   // final String? avatarUri;
   List<String> joinedRoomIds;
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -29,8 +29,17 @@ class MatrixUser {
     if (user.joinedRoomIds.isNotEmpty) {
       /// eliminate duplicates
       user.joinedRoomIds = user.joinedRoomIds.toSet().toList();
+      for (var roomId in user.joinedRoomIds) {
+        user.matrixRooms.add(MatrixRoom(id: roomId));
+      }
     }
     return user;
+  }
+
+  Map<String, dynamic> toJson() {
+    var json = _$MatrixUserToJson(this);
+    json['joinedRoomIds'] = joinedRoomIds;
+    return json;
   }
 
   void joinRoom(MatrixRoom room) {
@@ -40,8 +49,8 @@ class MatrixUser {
 
   MatrixUser(
       {required this.id,
-      // required this.active,
-      // required this.authType,
+      this.active,
+      this.authType,
       required this.displayName,
       // required this.avatarUri,
       // required this.forbidRoomCreation,

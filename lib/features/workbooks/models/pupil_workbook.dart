@@ -18,6 +18,8 @@ class PupilWorkbook {
   factory PupilWorkbook.fromJson(Map<String, dynamic> json) =>
       _$PupilWorkbookFromJson(json);
 
+  Map<String, dynamic> toJson() => _$PupilWorkbookToJson(this);
+
   PupilWorkbook(
       {required this.createdAt,
       required this.createdBy,

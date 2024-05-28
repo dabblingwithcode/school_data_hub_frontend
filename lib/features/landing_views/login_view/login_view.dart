@@ -5,7 +5,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
@@ -22,7 +22,7 @@ class LoginView extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     registerHandler(
-      select: (SnackBarManager x) => x.snackBar,
+      select: (NotificationManager x) => x.notification,
       handler: (context, value, cancel) =>
           snackbar(context, value.type, value.message),
     );

@@ -62,9 +62,9 @@ const filterChipSelectedColor = Color.fromRGBO(74, 76, 161, 1);
 const filterChipUnselectedColor = Color.fromRGBO(138, 139, 203, 1);
 const filterChipSelectedCheckColor = Colors.green;
 
-Color admonitionReasonChipUnselectedColor =
+Color schooldayEventReasonChipUnselectedColor =
     const Color.fromARGB(255, 248, 162, 93);
-Color admonitionReasonChipSelectedColor =
+Color schooldayEventReasonChipSelectedColor =
     const Color.fromARGB(255, 239, 137, 13);
-Color admonitionReasonChipSelectedCheckColor =
+Color schooldayEventReasonChipSelectedCheckColor =
     const Color.fromARGB(255, 249, 56, 56);

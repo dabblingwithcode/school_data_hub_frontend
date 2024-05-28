@@ -1,22 +1,18 @@
-import 'dart:convert';
-
 import 'package:collection/collection.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
-import 'package:schuldaten_hub/api/endpoints.dart';
+import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
-import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/learning_support/models/category/goal_category.dart';
 import 'package:schuldaten_hub/features/learning_support/models/goal/pupil_goal.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 import '../models/category/pupil_category_status.dart';
 
@@ -36,34 +32,27 @@ class GoalManager {
   }
 
   final client = locator.get<ApiManager>().dioClient.value;
-  final snackBarManager = locator<SnackBarManager>();
-  Future fetchGoalCategories() async {
-    snackBarManager.isRunningValue(true);
-    try {
-      final response =
-          await client.get(EndpointsLearningSupport().fetchGoalCategories);
-      final goalCategories =
-          (response.data as List).map((e) => GoalCategory.fromJson(e)).toList();
-      snackBarManager.showSnackBar(SnackBarType.success, 'Katgorien geladen');
-      debug.success(
-          'Fetched ${goalCategories.length} goal categories! | ${StackTrace.current}');
-      _goalCategories.value = goalCategories;
-      snackBarManager.isRunningValue(false);
-      return;
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e);
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage.message);
-      snackBarManager.isRunningValue(false);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
 
-      rethrow;
-    }
+  final notificationManager = locator<NotificationManager>();
+
+  final apiLearningSupportService = ApiLearningSupportService();
+
+  Future<void> fetchGoalCategories() async {
+    final List<GoalCategory> goalCategories =
+        await apiLearningSupportService.fetchGoalCategories();
+
+    _goalCategories.value = goalCategories;
+
+    notificationManager.showSnackBar(NotificationType.success,
+        '${goalCategories.length} Kategorien geladen');
+
+    return;
   }
 
+  //- this function does not call the API
   List<PupilGoal> getPupilGoalsForCategory(int categoryId) {
     List<PupilGoal> goals = [];
-    final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
+    final List<PupilProxy> pupils = locator<PupilManager>().allPupils;
     for (PupilProxy pupil in pupils) {
       for (PupilGoal goal in pupil.pupilGoals!) {
         if (goal.goalCategoryId == categoryId) {
@@ -74,132 +63,79 @@ class GoalManager {
     return goals;
   }
 
-  Future postCategoryStatus(PupilProxy pupil, int goalCategoryId, String state,
-      String comment) async {
-    snackBarManager.isRunningValue(true);
-    final data =
-        jsonEncode({"state": state, "file_url": null, "comment": comment});
-    try {
-      final response = await client.post(
-          EndpointsLearningSupport()
-              .postCategoryStatus(pupil.internalId, goalCategoryId),
-          data: data);
-      if (response.statusCode == 200) {
-        locator<PupilManager>().patchPupilFromResponse(response.data);
-      }
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e);
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage.message);
-      snackBarManager.isRunningValue(false);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
+  Future<void> postCategoryStatus(
+    PupilProxy pupil,
+    int goalCategoryId,
+    String state,
+    String comment,
+  ) async {
+    final Pupil responsePupil = await apiLearningSupportService
+        .postCategoryStatus(pupil.internalId, goalCategoryId, state, comment);
 
-      rethrow;
-    }
-    snackBarManager.isRunningValue(false);
+    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Status hinzugefügt');
+
     return;
   }
 
-  Future patchCategoryStatus(PupilProxy pupil, String statusId, String? state,
-      String? comment, String? createdBy, String? createdAt) async {
-    snackBarManager.isRunningValue(true);
-    final data = jsonEncode({
-      if (state != null) "state": state,
-      if (comment != null) "comment": comment,
-      if (createdBy != null) "created_by": createdBy,
-      if (createdAt != null) "created_at": createdAt
-    });
-    final response = await client.patch(
-        EndpointsLearningSupport().patchCategoryStatus(statusId),
-        data: data);
+  Future<void> updateCategoryStatusProperty(
+    PupilProxy pupil,
+    String statusId,
+    String? state,
+    String? comment,
+    String? createdBy,
+    String? createdAt,
+  ) async {
+    final Pupil responsePupil =
+        await apiLearningSupportService.updateCategoryStatusProperty(
+            pupil, statusId, state, comment, createdBy, createdAt);
 
-    if (response.statusCode != 200) {
-      //- TO-DO: Error handling
-      snackBarManager.showSnackBar(
-          SnackBarType.error, 'Error: ${response.data}');
-      snackBarManager.isRunningValue(false);
-    }
-    snackBarManager.showSnackBar(SnackBarType.success, 'Status aktualisiert');
-    locator<PupilManager>().patchPupilFromResponse(response.data);
-    snackBarManager.isRunningValue(false);
+    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Status aktualisiert');
+
+    return;
   }
 
-  Future deleteCategoryStatus(String statusId) async {
-    snackBarManager.isRunningValue(true);
-    try {
-      final response = await client
-          .delete(EndpointsLearningSupport().deleteCategoryStatus(statusId));
-      if (response.statusCode == 200) {
-        locator<PupilManager>().patchPupilFromResponse(response.data);
-        snackBarManager.showSnackBar(SnackBarType.success, 'Status gelöscht');
-        snackBarManager.isRunningValue(false);
-        return;
-      }
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e);
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage.message);
-      snackBarManager.isRunningValue(false);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
-    }
+  Future<void> deleteCategoryStatus(String statusId) async {
+    final Pupil responsePupil =
+        await apiLearningSupportService.deleteCategoryStatus(statusId);
+
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Status gelöscht');
+
+    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    return;
   }
 
   Future postNewCategoryGoal(int goalCategoryId, int pupilId,
       String description, String strategies) async {
-    snackBarManager.isRunningValue(true);
+    final Pupil responsePupil = await apiLearningSupportService
+        .postNewCategoryGoal(goalCategoryId, pupilId, description, strategies);
 
-    final data = jsonEncode({
-      "goal_category_id": goalCategoryId,
-      "created_at": DateTime.now().formatForJson(),
-      "achieved": 0,
-      "achieved_at": null,
-      "description": description,
-      "strategies": strategies
-    });
-    try {
-      final response = await client
-          .post(EndpointsLearningSupport().postGoal(pupilId), data: data);
-      if (response.statusCode == 200) {
-        locator<PupilManager>().patchPupilFromResponse(response.data);
-        snackBarManager.showSnackBar(SnackBarType.success, 'Ziel hinzugefügt');
-      }
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e);
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage.message);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
+    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
 
-      rethrow;
-    }
-    snackBarManager.isRunningValue(false);
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Ziel hinzugefügt');
+
     return;
   }
 
   Future deleteGoal(String goalId) async {
-    // final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
-    // final PupilProxy pupil = pupils
-    //     .where((element) =>
-    //         element.pupilGoals!.any((element) => element.goalId == goalId))
-    //     .single;
-    snackBarManager.isRunningValue(true);
+    final Pupil responsePupil =
+        await apiLearningSupportService.deleteGoal(goalId);
 
-    try {
-      final response =
-          await client.delete(EndpointsLearningSupport().deleteGoal(goalId));
-      if (response.statusCode == 200) {
-        locator<PupilManager>().patchPupilFromResponse(response.data);
-        snackBarManager.showSnackBar(SnackBarType.success, 'Ziel gelöscht');
-        snackBarManager.isRunningValue(false);
-      }
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e);
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage.message);
-      snackBarManager.isRunningValue(false);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
-    }
+    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+
+    notificationManager.showSnackBar(NotificationType.success, 'Ziel gelöscht');
+
+    return;
   }
 
+  //- these functions do not call the API
   GoalCategory getGoalCategory(int categoryId) {
     final GoalCategory goalCategory = goalCategories.value
         .firstWhere((element) => element.categoryId == categoryId);

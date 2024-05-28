@@ -4,9 +4,10 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
+
 import 'package:watch_it/watch_it.dart';
 
 class BirthdaysView extends WatchingWidget {
@@ -46,35 +47,35 @@ class BirthdaysView extends WatchingWidget {
                               InkWell(
                                 onTap: () {
                                   Navigator.of(context).push(MaterialPageRoute(
-                                    builder: (ctx) => PupilProfile(
-                                      listedPupil,
+                                    builder: (ctx) => PupilProfilePage(
+                                      pupil: listedPupil,
                                     ),
                                   ));
                                 },
                                 child: Row(
                                   children: [
-                                    avatarImage(listedPupil, 30),
+                                    AvatarImage(pupil: listedPupil, size: 30),
                                     const Gap(10),
                                     Text(
-                                      listedPupil.firstName!,
+                                      listedPupil.firstName,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold),
                                     ),
                                     const Gap(10),
                                     Text(
-                                      listedPupil.lastName!,
+                                      listedPupil.lastName,
                                       style: const TextStyle(),
                                     ),
                                     const Gap(10),
                                     Text(
-                                      listedPupil.group!,
+                                      listedPupil.group,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: groupColor),
                                     ),
                                     const Gap(10),
                                     Text(
-                                      listedPupil.schoolyear!,
+                                      listedPupil.schoolyear,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: schoolyearColor),
@@ -86,7 +87,7 @@ class BirthdaysView extends WatchingWidget {
                               Row(
                                 children: [
                                   Text(
-                                    listedPupil.birthday!.formatForUser(),
+                                    listedPupil.birthday.formatForUser(),
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold),
                                   )

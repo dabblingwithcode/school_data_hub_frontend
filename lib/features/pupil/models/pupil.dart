@@ -1,6 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 import 'package:json_annotation/json_annotation.dart';
-import 'package:schuldaten_hub/features/admonitions/models/admonition.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
 import 'package:schuldaten_hub/features/books/models/pupil_book.dart';
@@ -15,7 +15,7 @@ import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 part 'pupil.g.dart';
 
 @JsonSerializable()
-class PupilProxy {
+class Pupil {
   @JsonKey(name: 'avatar_url')
   final String? avatarUrl;
   @JsonKey(name: 'communication_pupil')
@@ -47,54 +47,57 @@ class PupilProxy {
   @JsonKey(name: 'special_information')
   final String? specialInformation;
   @JsonKey(name: 'competence_checks')
-  List<CompetenceCheck>? competenceChecks;
+  List<CompetenceCheck> competenceChecks;
   @JsonKey(name: 'pupil_category_statuses')
-  final List<PupilCategoryStatus>? pupilCategoryStatuses;
+  final List<PupilCategoryStatus> pupilCategoryStatuses;
   @JsonKey(name: 'pupil_admonitions')
-  final List<Admonition>? pupilAdmonitions;
+  final List<SchooldayEvent> schooldayEvents;
   @JsonKey(name: 'pupil_books')
-  final List<PupilBook>? pupilBooks;
+  final List<PupilBook> pupilBooks;
   @JsonKey(name: 'pupil_lists')
-  final List<PupilList>? pupilLists;
+  final List<PupilList> pupilLists;
   @JsonKey(name: 'pupil_goals')
-  final List<PupilGoal>? pupilGoals;
+  final List<PupilGoal> pupilGoals;
   @JsonKey(name: 'pupil_missed_classes')
-  final List<MissedClass>? pupilMissedClasses;
+  final List<MissedClass> pupilMissedClasses;
   @JsonKey(name: 'pupil_workbooks')
-  final List<PupilWorkbook>? pupilWorkbooks;
-  final List<PupilAuthorization>? authorizations;
+  final List<PupilWorkbook> pupilWorkbooks;
+  final List<PupilAuthorization> authorizations;
   @JsonKey(name: "credit_history_logs")
-  final List<CreditHistoryLog>? creditHistoryLogs;
+  final List<CreditHistoryLog> creditHistoryLogs;
   @JsonKey(name: "competence_goals")
-  final List<CompetenceGoal>? competenceGoals;
+  final List<CompetenceGoal> competenceGoals;
 
-  factory PupilProxy.fromJson(Map<String, dynamic> json) =>
-      _$PupilFromJson(json);
+  factory Pupil.fromJson(Map<String, dynamic> json) => _$PupilFromJson(json);
 
-  PupilProxy(
-      {required this.avatarUrl,
-      required this.communicationPupil,
-      required this.communicationTutor1,
-      required this.communicationTutor2,
-      required this.contact,
-      required this.parentsContact,
-      required this.credit,
-      required this.creditEarned,
-      required this.fiveYears,
-      required this.individualDevelopmentPlan,
-      required this.internalId,
-      required this.ogs,
-      required this.ogsInfo,
-      required this.pickUpTime,
-      required this.specialInformation,
-      required this.pupilCategoryStatuses,
-      required this.pupilAdmonitions,
-      required this.pupilBooks,
-      required this.pupilLists,
-      required this.pupilGoals,
-      required this.pupilMissedClasses,
-      required this.pupilWorkbooks,
-      required this.authorizations,
-      required this.creditHistoryLogs,
-      required this.competenceGoals});
+  Map<String, dynamic> toJson() => _$PupilToJson(this);
+
+  Pupil({
+    required this.avatarUrl,
+    required this.communicationPupil,
+    required this.communicationTutor1,
+    required this.communicationTutor2,
+    required this.contact,
+    required this.parentsContact,
+    required this.credit,
+    required this.creditEarned,
+    required this.fiveYears,
+    required this.individualDevelopmentPlan,
+    required this.internalId,
+    required this.ogs,
+    required this.ogsInfo,
+    required this.pickUpTime,
+    required this.specialInformation,
+    required this.pupilCategoryStatuses,
+    required this.schooldayEvents,
+    required this.pupilBooks,
+    required this.pupilLists,
+    required this.pupilGoals,
+    required this.pupilMissedClasses,
+    required this.pupilWorkbooks,
+    required this.authorizations,
+    required this.creditHistoryLogs,
+    required this.competenceGoals,
+    required this.competenceChecks,
+  });
 }

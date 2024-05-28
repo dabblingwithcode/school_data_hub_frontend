@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/features/landing_views/learn_list_view.dart';
@@ -53,12 +53,12 @@ class BottomNavigation extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     registerHandler(
-        select: (SnackBarManager x) => x.snackBar,
+        select: (NotificationManager x) => x.notification,
         handler: (context, value, cancel) {
           snackbar(context, value.type, value.message);
         });
     registerHandler(
-        select: (SnackBarManager x) => x.isRunning,
+        select: (NotificationManager x) => x.isRunning,
         handler: (context, value, cancel) {
           value ? showLoadingOverlay(context) : hideLoadingOverlay();
         });
@@ -80,8 +80,8 @@ class BottomNavigation extends WatchingWidget {
         ],
         onPageChanged: (index) => manager.setBottomNavPage(index),
       ),
-      bottomNavigationBar: bottomNavBarLayout(
-        BottomNavigationBar(
+      bottomNavigationBar: BottomNavBarLayout(
+        bottomNavBar: BottomNavigationBar(
           iconSize: 28,
           onTap: (index) {
             manager.setBottomNavPage(index);

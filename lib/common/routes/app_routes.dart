@@ -1,4 +1,4 @@
-import 'package:schuldaten_hub/features/attendance/views/attendance_view/controller/attendance_list_controller.dart';
+import 'package:schuldaten_hub/features/attendance/views/attendance_page/attendance_list_page.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/landing_views/learn_list_view.dart';
 import 'package:schuldaten_hub/features/landing_views/login_view/controller/login_controller.dart';
@@ -14,7 +14,7 @@ class AppRoutes {
     Routes.login: (context) => const Login(),
     //Routes.loginScan: (context) => const QRScanCredentials(),
     Routes.home: (context) => BottomNavigation(),
-    Routes.attendanceList: (context) => const AttendanceList(),
+    Routes.attendanceList: (context) => const AttendanceListPage(),
     Routes.learnList: (context) => const LearnListView(),
     Routes.qrTools: (context) => const QrToolsView(),
     //Routes.scanPupils: (context) => const QrScanner(),

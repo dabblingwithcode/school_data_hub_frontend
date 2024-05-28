@@ -40,11 +40,11 @@ For now, all stored images.
 
 - keep track of presence, minutes late, excused / unexcused, gone back home (e.g. for being sick), parents reached/not reached
 
-#### Incidents
+#### Schoolday Events
 
-- keep track of school incidents and document them with a picture of a document (or whatever you want to photograph). Incidents could be an admonition, an accident report, or a parents meeting (anything you need to document).
+- keep track of schoolday events and document them with a picture of a document (or whatever you want to photograph). Schoolday events could be an admoniton, an accident report, a parents meeting (anything you need to document) or any other incident associated with a pupil.
   
-#### Lists
+#### School Lists
 
 - create private (user) or public check lists to keep track of whatever you need to keep track of (paid money for a day trip, signed form from the parents, ...), including a field for comments.
   
@@ -93,12 +93,20 @@ There are also a couple of models in the backend that are not implemented in the
 #### Design
 
 - review widgets (I'm still not very good at it), and for that matter, the overall design structure (for instance implementing a theme). **Priority: medium**
+
+#### Code quality / architecture
+
+- no dynamic type functions -> functions should have a return type (`void` or `Future<void>` )
+  
+- detach API calls from the managers, instead 
+
+- subsitute hard coded enum filters with a dynamic solution, so that the app can be used for other schools. **Priority: high**
   
 #### Functionality
 
 - error handling in API calls. **Priority: high**
 - review state management (specially filters, but also controllers and get_it managers) across views. **Priority: high**
-- subsitute hard coded enum filters with a more dynamic solution, so that the app can be used for other schools. **Priority: high**
+
 - implement stream checking connection (don't know how to generate/handle streams yet), and generally review the start-up process. **Priority: high**
 - review / implement navigation **Priority: medium**
 - internationalization

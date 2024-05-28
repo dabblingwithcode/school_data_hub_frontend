@@ -1,12 +1,9 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
-import 'package:schuldaten_hub/api/endpoints.dart';
+import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/competence/models/competence.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
@@ -20,7 +17,7 @@ class CompetenceManager {
   final _competences = ValueNotifier<List<Competence>>([]);
   final _isRunning = ValueNotifier<bool>(false);
   final client = locator.get<ApiManager>().dioClient.value;
-  final snackBarManager = locator<SnackBarManager>();
+  final snackBarManager = locator<NotificationManager>();
   CompetenceManager() {
     debug.warning('CompetenceManager initialized');
   }
@@ -29,117 +26,80 @@ class CompetenceManager {
     return this;
   }
 
-  Future firstFetchCompetences() async {
-    snackBarManager.isRunningValue(true);
-    try {
-      final response = await client.get(EndpointsCompetence().fetchCompetences);
-      final competences =
-          (response.data as List).map((e) => Competence.fromJson(e)).toList();
-      debug.success(
-          'Fetched ${competences.length} competences! | ${StackTrace.current}');
-      _competences.value = competences;
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).message;
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
-      snackBarManager.isRunningValue(false);
-      rethrow;
-    }
-    snackBarManager.showSnackBar(SnackBarType.success, 'Kompetenzen geladen');
-    snackBarManager.isRunningValue(false);
+  final notificationManager = locator<NotificationManager>();
+  final apiCompetenceService = ApiCompetenceService();
+
+  Future<void> firstFetchCompetences() async {
+    final List<Competence> competences =
+        await apiCompetenceService.fetchCompetences();
+
+    _competences.value = competences;
+
+    snackBarManager.showSnackBar(
+        NotificationType.success, 'Kompetenzen geladen');
+
     return;
   }
 
-  Future fetchCompetences() async {
-    snackBarManager.isRunningValue(true);
-    try {
-      final response = await client.get(EndpointsCompetence().fetchCompetences);
-      final competences =
-          (response.data as List).map((e) => Competence.fromJson(e)).toList();
-      debug.success(
-          'Fetched ${competences.length} competences! | ${StackTrace.current}');
-      _competences.value = competences;
-      locator<CompetenceFilterManager>()
-          .refreshFilteredCompetences(competences);
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).message;
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
-      snackBarManager.isRunningValue(false);
-      rethrow;
-    }
-    snackBarManager.showSnackBar(SnackBarType.success, 'Kompetenzen geladen');
-    snackBarManager.isRunningValue(false);
+  Future<void> fetchCompetences() async {
+    final List<Competence> competences =
+        await apiCompetenceService.fetchCompetences();
+
+    _competences.value = competences;
+    locator<CompetenceFilterManager>().refreshFilteredCompetences(competences);
+
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Kompetenzen aktualisiert!');
+
     return;
   }
 
-  Future postNewCompetence(int? parentCompetence, String competenceName,
-      String? competenceLevel, String? indicators) async {
-    snackBarManager.isRunningValue(true);
-    final data = jsonEncode({
-      "parent_competence": parentCompetence,
-      "competence_name": competenceName,
-      "competence_level": competenceLevel == '' ? null : competenceLevel,
-      "indicators": indicators == '' ? null : indicators
-    });
-    try {
-      final response = await client
-          .post(EndpointsCompetence().postNewCompetence, data: data);
-      final newCompetences =
-          (response.data as List).map((e) => Competence.fromJson(e)).toList();
-      debug.success(
-          'Posted ${newCompetences.length} competences | ${StackTrace.current}');
-      _competences.value = [..._competences.value, ...newCompetences];
-      locator<CompetenceFilterManager>()
-          .refreshFilteredCompetences(_competences.value);
-      snackBarManager.showSnackBar(SnackBarType.success, 'Kompetenz erstellt');
-      snackBarManager.isRunningValue(false);
-      return;
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).message;
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
-      snackBarManager.isRunningValue(false);
-      rethrow;
-    }
-  }
+  Future<void> postNewCompetence(
+    int? parentCompetence,
+    String competenceName,
+    String? competenceLevel,
+    String? indicators,
+  ) async {
+    final Competence newCompetence =
+        await apiCompetenceService.postNewCompetence(
+            parentCompetence, competenceName, competenceLevel, indicators);
 
-  Future patchCompetence(int competenceId, String competenceName,
-      String? competenceLevel, String? indicators) async {
-    snackBarManager.isRunningValue(true);
-    final data = jsonEncode({
-      "competence_name": competenceName,
-      "competence_level": competenceLevel,
-      "indicators": indicators
-    });
-    try {
-      final Response response = await client.patch(
-          EndpointsCompetence().patchCompetence(competenceId),
-          data: data);
+    _competences.value = [..._competences.value, newCompetence];
+    locator<CompetenceFilterManager>()
+        .refreshFilteredCompetences(_competences.value);
 
-      final patchedCompetence = Competence.fromJson(response.data);
-      final List<Competence> competences = List.from(_competences.value);
-      final index = competences
-          .indexWhere((element) => element.competenceId == competenceId);
-      competences[index] = patchedCompetence;
-      _competences.value = competences;
-      locator<CompetenceFilterManager>()
-          .refreshFilteredCompetences(_competences.value);
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e).message;
-      snackBarManager.showSnackBar(SnackBarType.error, errorMessage);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
-      snackBarManager.isRunningValue(false);
-      rethrow;
-    }
-    snackBarManager.isRunningValue(false);
+    snackBarManager.showSnackBar(
+        NotificationType.success, 'Kompetenz erstellt');
+
     return;
   }
 
+  Future<void> updateCompetenceProperty(
+    int competenceId,
+    String competenceName,
+    String? competenceLevel,
+    String? indicators,
+  ) async {
+    final Competence updatedCompetence =
+        await apiCompetenceService.updateCompetenceProperty(
+            competenceId, competenceName, competenceLevel, indicators);
+
+    final List<Competence> competences = List.from(_competences.value);
+    final index = competences
+        .indexWhere((element) => element.competenceId == competenceId);
+    competences[index] = updatedCompetence;
+
+    _competences.value = competences;
+    locator<CompetenceFilterManager>()
+        .refreshFilteredCompetences(_competences.value);
+
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Kompetenz aktualisiert');
+
+    return;
+  }
+
+  //- hier werden keine API Calls gemacht, nur die Kompetenz aus der Liste geholt
   Competence getCompetence(int competenceId) {
     final Competence competence = _competences.value
         .firstWhere((element) => element.competenceId == competenceId);

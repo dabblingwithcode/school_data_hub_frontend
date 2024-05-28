@@ -37,6 +37,6 @@ Future<void> printMatrixCredentials(
     ),
   );
 
-  final file = File("HP_credentials_${matrixUser.displayName!}.pdf");
+  final file = File("HP_credentials_${matrixUser.displayName}.pdf");
   await file.writeAsBytes(await pdf.save());
 }

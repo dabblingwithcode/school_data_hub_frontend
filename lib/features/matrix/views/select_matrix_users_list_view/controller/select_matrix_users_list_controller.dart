@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_users_list_view/select_matrix_users_list_view.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 import 'package:watch_it/watch_it.dart';
 
@@ -35,7 +35,7 @@ class SelectMatrixUsersListController extends State<SelectMatrixUserList> {
     //locator<PupilFilterManager>().refreshFilteredPupils();
     setState(() {
       inheritedFilters = locator<PupilFilterManager>().filterState.value;
-      pupils = locator<PupilManager>().pupils.value;
+      pupils = locator<PupilManager>().allPupils;
       //filteredPupils = List.from(pupils!);
     });
     super.initState();

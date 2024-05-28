@@ -3,10 +3,10 @@ import 'package:schuldaten_hub/common/models/schoolday_models/schoolday.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/statistics/statistics_view/statistics_view.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -18,7 +18,7 @@ class Statistics extends WatchingStatefulWidget {
 }
 
 class StatisticsController extends State<Statistics> {
-  final List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
+  final List<PupilProxy> pupils = locator<PupilManager>().allPupils;
   Map<String, int> languageOccurrences = {};
   Map<String, DateTime> enrollments = {};
   @override
@@ -30,7 +30,7 @@ class StatisticsController extends State<Statistics> {
 
   calculateLanguageOccurrences() {
     for (PupilProxy pupil in pupils) {
-      languageOccurrences[pupil.language!] =
+      languageOccurrences[pupil.language] =
           (languageOccurrences[pupil.language] ?? 0) + 1;
     }
   }
@@ -41,20 +41,20 @@ class StatisticsController extends State<Statistics> {
 
   List<PupilProxy> pupilsNotEnrolledOnDate(List<PupilProxy> givenPupils) {
     return givenPupils.where((pupil) {
-      return !(pupil.pupilSince!.month == 8 && pupil.pupilSince!.day == 1);
+      return !(pupil.pupilSince.month == 8 && pupil.pupilSince.day == 1);
     }).toList();
   }
 
   List<PupilProxy> pupilsEnrolledAfterDate(DateTime date) {
-    return pupils.where((pupil) => pupil.pupilSince!.isAfter(date)).toList();
+    return pupils.where((pupil) => pupil.pupilSince.isAfter(date)).toList();
   }
 
   List<PupilProxy> pupilsEnrolledBetweenDates(
       DateTime startDate, DateTime endDate) {
     return pupils
         .where((pupil) =>
-            pupil.pupilSince!.isAfter(startDate) &&
-            pupil.pupilSince!.isBefore(endDate))
+            pupil.pupilSince.isAfter(startDate) &&
+            pupil.pupilSince.isBefore(endDate))
         .toList();
   }
 
@@ -317,7 +317,7 @@ class StatisticsController extends State<Statistics> {
   Map<String, int> groupStatistics(List<PupilProxy> pupils) {
     Map<String, int> groupStatistics = {};
     for (PupilProxy pupil in pupils) {
-      groupStatistics[pupil.group!] = (groupStatistics[pupil.group!] ?? 0) + 1;
+      groupStatistics[pupil.group] = (groupStatistics[pupil.group] ?? 0) + 1;
     }
     return groupStatistics;
   }

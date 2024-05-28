@@ -1,17 +1,6 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Timetable(),
-    );
-  }
-}
+//- A timetable example
 
 class Lesson {
   final String teacher;
@@ -34,11 +23,13 @@ class Timetable extends StatelessWidget {
     Lesson('Ms. Jones', 'Art', 'Group 5', 'Room 105', 'Friday', 5),
   ]..sort((a, b) => a.time.compareTo(b.time));
 
+  Timetable({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Timetable'),
+        title: const Text('Timetable'),
       ),
       body: ListView.builder(
         itemCount: lessons.length,

@@ -1,5 +1,3 @@
-part of '../endpoints.dart';
-
 class EndpointsUser {
   static const login = '/users/login';
   //- GET

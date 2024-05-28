@@ -9,6 +9,8 @@ part of 'missed_class.dart';
 MissedClass _$MissedClassFromJson(Map<String, dynamic> json) => MissedClass(
       contacted: json['contacted'] as String?,
       createdBy: json['created_by'] as String,
+      minutesLate: json['minutes_late'] as int?,
+      excused: json['excused'] as bool?,
       missedDay: DateTime.parse(json['missed_day'] as String),
       missedPupilId: json['missed_pupil_id'] as int,
       missedType: json['missed_type'] as String,
@@ -16,9 +18,7 @@ MissedClass _$MissedClassFromJson(Map<String, dynamic> json) => MissedClass(
       returned: json['returned'] as bool?,
       returnedAt: json['returned_at'] as String?,
       writtenExcuse: json['written_excuse'] as bool?,
-    )
-      ..excused = json['excused'] as bool?
-      ..minutesLate = json['minutes_late'] as int?;
+    );
 
 Map<String, dynamic> _$MissedClassToJson(MissedClass instance) =>
     <String, dynamic>{

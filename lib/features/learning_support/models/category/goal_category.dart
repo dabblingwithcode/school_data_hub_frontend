@@ -12,11 +12,13 @@ class GoalCategory {
   @JsonKey(name: 'parent_category')
   final int? parentCategory;
 
-  factory GoalCategory.fromJson(Map<String, dynamic> json) =>
-      _$GoalCategoryFromJson(json);
-
   GoalCategory(
       {required this.categoryId,
       required this.categoryName,
       required this.parentCategory});
+
+  factory GoalCategory.fromJson(Map<String, dynamic> json) =>
+      _$GoalCategoryFromJson(json);
+
+  Map<String, dynamic> toJson() => _$GoalCategoryToJson(this);
 }

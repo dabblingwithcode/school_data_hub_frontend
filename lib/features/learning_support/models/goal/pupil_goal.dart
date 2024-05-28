@@ -22,9 +22,6 @@ class PupilGoal {
   final String goalId;
   final String? strategies;
 
-  factory PupilGoal.fromJson(Map<String, dynamic> json) =>
-      _$PupilGoalFromJson(json);
-
   PupilGoal(
       {required this.achieved,
       required this.achievedAt,
@@ -35,4 +32,9 @@ class PupilGoal {
       required this.goalChecks,
       required this.goalId,
       required this.strategies});
+
+  factory PupilGoal.fromJson(Map<String, dynamic> json) =>
+      _$PupilGoalFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PupilGoalToJson(this);
 }

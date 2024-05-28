@@ -1,14 +1,10 @@
 import 'dart:async';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
-import 'package:schuldaten_hub/api/dio/dio_exceptions.dart';
-import 'package:schuldaten_hub/api/endpoints.dart';
+import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 
-import 'package:schuldaten_hub/common/utils/debug_printer.dart';
-import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/models/schoolday_models/schoolday.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
@@ -21,15 +17,11 @@ class SchooldayManager {
   ValueListenable<DateTime> get startDate => _startDate;
   ValueListenable<DateTime> get endDate => _endDate;
 
-  ValueListenable<bool> get isRunning => _isRunning;
-
   final _schooldays = ValueNotifier<List<Schoolday>>([]);
   final _availableDates = ValueNotifier<List<DateTime>>([]);
   final _thisDate = ValueNotifier<DateTime>(DateTime.now());
   final _startDate = ValueNotifier<DateTime>(DateTime.now());
   final _endDate = ValueNotifier<DateTime>(DateTime.now());
-
-  final _isRunning = ValueNotifier<bool>(false);
 
   SchooldayManager();
 
@@ -41,63 +33,90 @@ class SchooldayManager {
     return this;
   }
 
-  Future getSchooldays() async {
-    locator<SnackBarManager>().isRunningValue(true);
-    try {
-      final response = await client.get(EndpointsSchoolday.getSchooldays);
-      final schooldays =
-          (response.data as List).map((e) => Schoolday.fromJson(e)).toList();
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.success, '${schooldays.length} Schultage geladen!');
+  final apiSchooldayService = ApiSchooldayService();
 
-      _schooldays.value = schooldays;
-      setAvailableDates();
-    } on DioException catch (e) {
-      final errorMessage = DioExceptions.fromDioError(e);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
+  Future<void> getSchooldays() async {
+    final List<Schoolday> responseSchooldays =
+        await apiSchooldayService.getSchooldaysFromServer();
 
-      rethrow;
-    }
-    locator<SnackBarManager>().isRunningValue(false);
+    locator<NotificationManager>().showSnackBar(NotificationType.success,
+        '${responseSchooldays.length} Schultage geladen!');
+
+    _schooldays.value = responseSchooldays;
+    setAvailableDates();
+
+    return;
   }
 
-  setAvailableDates() {
-    locator<SnackBarManager>().isRunningValue(true);
+  Future<void> postSchoolday(DateTime schoolday) async {
+    final Schoolday newSchoolday =
+        await apiSchooldayService.postSchoolday(schoolday);
+
+    _schooldays.value = [..._schooldays.value, newSchoolday];
+
+    locator<NotificationManager>().showSnackBar(
+        NotificationType.success, 'Schultag erfolgreich erstellt');
+
+    setAvailableDates();
+
+    return;
+  }
+
+  Future<void> deleteSchoolday(Schoolday schoolday) async {
+    final bool isDeleted = await apiSchooldayService.deleteSchoolday(schoolday);
+
+    if (isDeleted) {
+      _schooldays.value =
+          _schooldays.value.where((day) => day != schoolday).toList();
+
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.success, 'Schultag erfolgreich gelöscht');
+      return;
+    }
+
+    setAvailableDates();
+
+    return;
+  }
+
+  void setAvailableDates() {
     List<DateTime> processedAvailableDates = [];
+
     for (Schoolday day in _schooldays.value) {
       DateTime validDate = day.schoolday;
       processedAvailableDates.add(validDate);
     }
+
     _availableDates.value = processedAvailableDates;
-    debug.success(
-        '${_availableDates.value.length} selectableDates | ${StackTrace.current}');
 
     getThisDate();
-    // locator<SnackBarManager>().isRunningValue(false);
   }
 
-  getThisDate() {
+  void getThisDate() {
     final schooldays = _schooldays.value;
+
+    // we look for the closest schoolday to now and set it as thisDate
+
     final closestSchooldayToNow = schooldays.reduce((value, element) =>
         value.schoolday.difference(DateTime.now()).abs() <
                 element.schoolday.difference(DateTime.now()).abs()
             ? value
             : element);
+
     _thisDate.value = closestSchooldayToNow.schoolday;
-    debug.success(
-        'This day is ${_thisDate.value.formatForUser()} | ${StackTrace.current}');
+
+    return;
   }
 
-  setThisDate(DateTime date) {
+  void setThisDate(DateTime date) {
     _thisDate.value = date;
   }
 
-  setStartDate(DateTime date) {
+  void setStartDate(DateTime date) {
     _startDate.value = date;
   }
 
-  setEndDate(DateTime date) {
+  void setEndDate(DateTime date) {
     _endDate.value = date;
   }
 }

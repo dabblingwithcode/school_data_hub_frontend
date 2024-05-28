@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/common/services/snackbar_manager.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
 import 'package:schuldaten_hub/features/landing_views/loading_page.dart';
 import 'package:schuldaten_hub/features/landing_views/login_view/login_view.dart';
@@ -33,8 +33,8 @@ class LoginController extends State<Login> {
 
       attemptLogin(username: username, password: password);
     } else {
-      locator<SnackBarManager>()
-          .showSnackBar(SnackBarType.warning, 'Scanvorgang abgebrochen');
+      locator<NotificationManager>()
+          .showSnackBar(NotificationType.warning, 'Scanvorgang abgebrochen');
 
       return;
     }
@@ -44,12 +44,12 @@ class LoginController extends State<Login> {
     final String? scanResponse = await scanner(context, 'Schul-Id scannen');
     if (scanResponse != null) {
       locator<EnvManager>().setEnv(scanResponse);
-      locator<SnackBarManager>().showSnackBar(
-          SnackBarType.success, 'Schul-Id erfolgreich importiert!');
+      locator<NotificationManager>().showSnackBar(
+          NotificationType.success, 'Schul-Id erfolgreich importiert!');
       return;
     } else {
-      locator<SnackBarManager>()
-          .showSnackBar(SnackBarType.warning, 'Scanvorgang abgebrochen');
+      locator<NotificationManager>()
+          .showSnackBar(NotificationType.warning, 'Scanvorgang abgebrochen');
       return;
     }
   }

@@ -6,19 +6,20 @@ import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
-import 'package:schuldaten_hub/features/ogs/controller/ogs_list_controller.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/dialogs/ogs_pickup_time_dialog.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
+
 import 'package:watch_it/watch_it.dart';
 
 class OgsCard extends WatchingWidget {
-  final OgsListController controller;
   final PupilProxy pupil;
-  const OgsCard(this.controller, this.pupil, {super.key});
+  const OgsCard(this.pupil, {super.key});
   @override
   Widget build(BuildContext context) {
+    final pupil = watch<PupilProxy>(this.pupil);
     return Card(
       color: Colors.white,
       surfaceTintColor: Colors.white,
@@ -31,7 +32,7 @@ class OgsCard extends WatchingWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          avatarWithBadges(pupil, 80),
+          AvatarWithBadges(pupil: pupil, size: 80),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -57,13 +58,13 @@ class OgsCard extends WatchingWidget {
                                           .setPupilProfileNavPage(5);
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
-                                        builder: (ctx) => PupilProfile(
-                                          pupil,
+                                        builder: (ctx) => PupilProfilePage(
+                                          pupil: pupil,
                                         ),
                                       ));
                                     },
                                     child: Text(
-                                      '${pupil.firstName!} ${pupil.lastName!}',
+                                      '${pupil.firstName} ${pupil.lastName}',
                                       overflow: TextOverflow.fade,
                                       softWrap: false,
                                       textAlign: TextAlign.left,
@@ -101,7 +102,7 @@ class OgsCard extends WatchingWidget {
                               onTap: () => pickUpTimeDialog(
                                   context, pupil, pupil.pickUpTime),
                               child: Text(
-                                controller.pickUpValue(pupil.pickUpTime),
+                                pickUpValue(pupil.pickUpTime),
                                 style: const TextStyle(
                                     fontSize: 23,
                                     fontWeight: FontWeight.bold,

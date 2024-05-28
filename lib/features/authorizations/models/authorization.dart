@@ -17,6 +17,8 @@ class Authorization {
   factory Authorization.fromJson(Map<String, dynamic> json) =>
       _$AuthorizationFromJson(json);
 
+  Map<String, dynamic> toJson() => _$AuthorizationToJson(this);
+
   Authorization(
       {required this.authorizationDescription,
       required this.authorizationId,

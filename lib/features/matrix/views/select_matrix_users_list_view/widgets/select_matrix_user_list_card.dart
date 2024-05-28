@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_users_list_view/controller/select_matrix_users_list_controller.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/services/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_view/controller/pupil_profile_controller.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
+
 import 'package:watch_it/watch_it.dart';
 
 class SelectMatrixUserCard extends WatchingWidget {
@@ -30,12 +31,12 @@ class SelectMatrixUserCard extends WatchingWidget {
               : Colors.white,
           child: Row(
             children: [
-              avatarWithBadges(pupil, 80),
+              AvatarWithBadges(pupil: pupil, size: 80),
               InkWell(
                 onTap: () {
                   Navigator.of(context).push(MaterialPageRoute(
-                    builder: (ctx) => PupilProfile(
-                      pupil,
+                    builder: (ctx) => PupilProfilePage(
+                      pupil: pupil,
                     ),
                   ));
                 },
@@ -49,7 +50,7 @@ class SelectMatrixUserCard extends WatchingWidget {
                             child: SingleChildScrollView(
                               scrollDirection: Axis.horizontal,
                               child: Text(
-                                '${pupil.firstName!} ${pupil.lastName!}',
+                                '${pupil.firstName} ${pupil.lastName}',
                                 style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),

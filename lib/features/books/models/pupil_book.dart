@@ -30,4 +30,6 @@ class PupilBook {
 
   factory PupilBook.fromJson(Map<String, dynamic> json) =>
       _$PupilBookFromJson(json);
+
+  Map<String, dynamic> toJson() => _$PupilBookToJson(this);
 }

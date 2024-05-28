@@ -9,9 +9,9 @@ import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.da
 import 'package:schuldaten_hub/features/learning_support/models/category/pupil_category_status.dart';
 import 'package:schuldaten_hub/features/learning_support/services/goal_manager.dart';
 import 'package:schuldaten_hub/features/learning_support/services/learning_support_helper_functions.dart';
-import 'package:schuldaten_hub/features/learning_support/views/new_category_item_view/controller/new_category_item_controller.dart';
+import 'package:schuldaten_hub/features/learning_support/views/new_category_item_page/controller/new_category_item_controller.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/pupil_category_widgets/category_tree_ancestors_names.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 List<Widget> pupilCategoryStatusesList(PupilProxy pupil, BuildContext context) {
   if (pupil.pupilCategoryStatuses != null) {
@@ -43,8 +43,11 @@ List<Widget> pupilCategoryStatusesList(PupilProxy pupil, BuildContext context) {
           Card(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
-                side: const BorderSide(
-                  color: accentColor,
+                side: BorderSide(
+                  color: pupil.pupilCategoryStatuses!.any((element) =>
+                          element.goalCategoryId == status.goalCategoryId)
+                      ? Colors.green
+                      : accentColor,
                   width: 2,
                 )),
             child: Column(
@@ -148,8 +151,11 @@ List<Widget> pupilCategoryStatusesList(PupilProxy pupil, BuildContext context) {
           Card(
             shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
-                side: const BorderSide(
-                  color: accentColor,
+                side: BorderSide(
+                  color: pupil.pupilCategoryStatuses!
+                          .any((element) => element.goalCategoryId == key)
+                      ? Colors.green
+                      : accentColor,
                   width: 2,
                 )),
             child: Column(children: [
@@ -280,7 +286,7 @@ Widget statusEntry(
                               await longTextFieldDialog('Status korrigieren',
                                   status.comment, context);
                           if (correctedStatus != null) {
-                            locator<GoalManager>().patchCategoryStatus(
+                            locator<GoalManager>().updateCategoryStatusProperty(
                                 pupil,
                                 status.statusId,
                                 correctedStatus,
