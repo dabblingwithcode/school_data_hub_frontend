@@ -186,7 +186,7 @@ class ApiSchooldayEventService {
   //- delete schooldayEvent
 
   String _deleteSchooldayEventUrl(String id) {
-    return '/schooldayEvents/$id/delete';
+    return '/admonitions/$id/delete';
   }
 
   Future<Pupil> deleteSchooldayEvent(String schooldayEventId) async {
@@ -194,12 +194,10 @@ class ApiSchooldayEventService {
 
     Response response =
         await _client.delete(_deleteSchooldayEventUrl(schooldayEventId));
-
+    locator<NotificationManager>().isRunningValue(false);
     if (response.statusCode != 200) {
       locator<NotificationManager>().showSnackBar(
           NotificationType.warning, 'Fehler beim Löschen des Ereignisses!');
-
-      locator<NotificationManager>().isRunningValue(false);
 
       throw ApiException(
           'Failed to delete schooldayEvent', response.statusCode);
