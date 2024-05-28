@@ -9,8 +9,8 @@ import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
 import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_filter_manager.dart';
 
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
@@ -28,9 +28,9 @@ class SchoolListPupilsPage extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
+    bool filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
     List<PupilProxy> filteredPupils =
-        watchValue((PupilFilterManager x) => x.filteredPupils);
+        watchValue((PupilsFilter x) => x.filteredPupils);
     List<PupilProxy> filteredPupilsInList = locator<SchoolListManager>()
         .pupilsInSchoolList(schoolList.listId, filteredPupils);
 

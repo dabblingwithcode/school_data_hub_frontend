@@ -79,7 +79,7 @@ List<Widget> usersInRoomList(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Text(
-                      matrixUser.displayName!,
+                      matrixUser.displayName,
                       style: const TextStyle(
                         color: Colors.black,
                         fontWeight: FontWeight.bold,

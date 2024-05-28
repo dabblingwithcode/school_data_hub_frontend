@@ -19,6 +19,7 @@ class OgsCard extends WatchingWidget {
   const OgsCard(this.pupil, {super.key});
   @override
   Widget build(BuildContext context) {
+    final pupil = watch<PupilProxy>(this.pupil);
     return Card(
       color: Colors.white,
       surfaceTintColor: Colors.white,

@@ -70,6 +70,8 @@ class Pupil {
 
   factory Pupil.fromJson(Map<String, dynamic> json) => _$PupilFromJson(json);
 
+  Map<String, dynamic> toJson() => _$PupilToJson(this);
+
   Pupil({
     required this.avatarUrl,
     required this.communicationPupil,

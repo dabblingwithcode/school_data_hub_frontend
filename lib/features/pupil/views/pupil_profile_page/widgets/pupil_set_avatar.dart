@@ -138,7 +138,8 @@ class _CropAvatarState extends State<CropAvatarView> {
     final imageBytes = await bitmap.toByteData(format: ImageByteFormat.png);
     final file = await imageToFile(bytes: imageBytes!);
     if (context.mounted) {
-      Navigator.pop(context, file);
+      final localContext = context;
+      Navigator.pop(localContext, file);
     }
     // ignore: use_build_context_synchronously
     // await showDialog<bool>(

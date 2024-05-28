@@ -317,7 +317,7 @@ class StatisticsController extends State<Statistics> {
   Map<String, int> groupStatistics(List<PupilProxy> pupils) {
     Map<String, int> groupStatistics = {};
     for (PupilProxy pupil in pupils) {
-      groupStatistics[pupil.group!] = (groupStatistics[pupil.group!] ?? 0) + 1;
+      groupStatistics[pupil.group] = (groupStatistics[pupil.group] ?? 0) + 1;
     }
     return groupStatistics;
   }

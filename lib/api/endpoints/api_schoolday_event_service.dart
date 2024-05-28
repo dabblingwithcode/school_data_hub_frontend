@@ -71,6 +71,10 @@ class ApiSchooldayEventService {
     return '/admonitions/$id/file';
   }
 
+  String getSchooldayEventProcessedFileUrl(String id) {
+    return '/admonitions/$id/processed_file';
+  }
+
   //- patch schooldayEvent
   String _patchSchooldayEventUrl(String id) {
     return '/admonitions/$id/patch';

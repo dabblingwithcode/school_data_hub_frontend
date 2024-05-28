@@ -30,7 +30,7 @@ class _CreditListCardState extends State<CreditListCard> {
 
   @override
   Widget build(BuildContext context) {
-    PupilProxy pupil = widget.passedPupil;
+    PupilProxy pupil = watch<PupilProxy>(widget.passedPupil);
 
     return Card(
       color: Colors.white,

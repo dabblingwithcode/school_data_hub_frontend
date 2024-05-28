@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/features/statistics/statistics_view/controller/st
 import 'package:schuldaten_hub/features/statistics/statistics_view/list_tiles/group_card.dart';
 
 groupTiles(context, StatisticsController controller, List<PupilProxy> group) {
-  String groupString = group[0].group!;
+  String groupString = group[0].group;
   return ListTileTheme(
     contentPadding: const EdgeInsets.all(0),
     dense: true,

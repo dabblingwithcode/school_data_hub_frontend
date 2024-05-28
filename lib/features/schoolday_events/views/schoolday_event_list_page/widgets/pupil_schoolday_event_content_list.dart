@@ -250,10 +250,9 @@ class SchooldayEventsContentList extends StatelessWidget {
                                             null
                                         ? DocumentImage(
                                             documentTag:
-                                                '${locator<EnvManager>().env.value.serverUrl}${ApiSchooldayEventService().getSchooldayEventFileUrl(filteredSchooldayEvents[index].schooldayEventId)}',
+                                                '${filteredSchooldayEvents[index].processedFileUrl}',
                                             documentUrl:
-                                                filteredSchooldayEvents[index]
-                                                    .fileUrl,
+                                                '${locator<EnvManager>().env.value.serverUrl}${ApiSchooldayEventService().getSchooldayEventProcessedFileUrl(filteredSchooldayEvents[index].schooldayEventId)}',
                                             size: 70)
                                         : SizedBox(
                                             height: 70,
@@ -312,10 +311,9 @@ class SchooldayEventsContentList extends StatelessWidget {
                                           null
                                       ? DocumentImage(
                                           documentTag:
-                                              '${locator<EnvManager>().env.value.serverUrl}${ApiSchooldayEventService().getSchooldayEventFileUrl(filteredSchooldayEvents[index].schooldayEventId)}',
+                                              '${filteredSchooldayEvents[index].fileUrl}',
                                           documentUrl:
-                                              filteredSchooldayEvents[index]
-                                                  .fileUrl,
+                                              '${locator<EnvManager>().env.value.serverUrl}${ApiSchooldayEventService().getSchooldayEventFileUrl(filteredSchooldayEvents[index].schooldayEventId)}',
                                           size: 70)
                                       : SizedBox(
                                           height: 70,

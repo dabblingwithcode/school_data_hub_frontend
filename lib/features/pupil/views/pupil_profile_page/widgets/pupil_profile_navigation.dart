@@ -74,7 +74,7 @@ class _PupilProfileNavigationState extends State<PupilProfileNavigation> {
   Widget build(BuildContext context) {
     final int pupilProfileNavState =
         watchValue((BottomNavManager x) => x.pupilProfileNavState);
-    double boxHeight = 35;
+    //double boxHeight = 35;
     return Theme(
       data: Theme.of(context).copyWith(
           elevatedButtonTheme: ElevatedButtonThemeData(

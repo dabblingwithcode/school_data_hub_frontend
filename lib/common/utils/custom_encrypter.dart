@@ -6,7 +6,6 @@ import 'package:path_provider/path_provider.dart';
 
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'debug_printer.dart';
 
 final customEncrypter = CustomEncrypter();
 
@@ -26,7 +25,6 @@ class CustomEncrypter {
     final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
     final thisEncryptedString = enc.Encrypted.fromBase64(encryptedString);
     final decryptedString = encrypter.decrypt(thisEncryptedString, iv: iv);
-    debug.info('Decrypted string is $decryptedString');
     return decryptedString;
   }
 
@@ -34,30 +32,27 @@ class CustomEncrypter {
     final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
     final List<int> fileBytes = await file.readAsBytes();
     final encrypted = encrypter.encryptBytes(fileBytes, iv: iv);
-    final tempDir = await getTemporaryDirectory();
-    final uri = Uri.parse(file.path);
-    final extension = uri.pathSegments.last.split('.').last;
-    final tempFile = File('${tempDir.path}/encrypted_file.$extension');
+    final Directory tempDir = await getTemporaryDirectory();
+    final Uri uri = Uri.parse(file.path);
+    final String extension = uri.pathSegments.last.split('.').last;
+    final File tempFile = File('${tempDir.path}/encrypted_file.$extension');
     await tempFile.writeAsBytes(encrypted.bytes);
     return tempFile;
   }
 
   Future<Uint8List> decryptTheseBytes(Uint8List encryptedBytes) async {
     final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
-    final decrypted =
+    final List<int> decrypted =
         encrypter.decryptBytes(enc.Encrypted(encryptedBytes), iv: iv);
-    debug.warning('Typedef of decrypted is ${decrypted.runtimeType}');
+
     final Uint8List decryptedBytes = Uint8List.fromList(decrypted);
-    debug.warning(
-        'Typedef of Decrypted bytes are ${decryptedBytes.runtimeType}');
     return decryptedBytes;
   }
 
   Future<File> decryptFile(File file, int pupilId) async {
     final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
 
-    // Rea
-    //d the encrypted file as bytes
+    // Read the encrypted file as bytes
     final encryptedBytes = await file.readAsBytes();
 
     // Decrypt the bytes
@@ -70,10 +65,10 @@ class CustomEncrypter {
     // Create a temporary file for the decrypted content
     final uri = Uri.parse(file.path);
     final extension = uri.pathSegments.last.split('.').last;
-    debug.warning('Extension is $extension');
+    //debug.warning('Extension is $extension');
     final tempFile =
         File('${tempDir.path}/${pupilId}_decrypted_file.$extension');
-    debug.warning(tempFile.path);
+    // debug.warning(tempFile.path);
     // Write the decrypted bytes to the temporary file
     await tempFile.writeAsBytes(decrypted);
 

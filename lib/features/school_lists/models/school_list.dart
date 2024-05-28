@@ -20,6 +20,8 @@ class SchoolList {
   factory SchoolList.fromJson(Map<String, dynamic> json) =>
       _$SchoolListFromJson(json);
 
+  Map<String, dynamic> toJson() => _$SchoolListToJson(this);
+
   SchoolList(
       {required this.createdBy,
       required this.listDescription,

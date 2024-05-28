@@ -43,7 +43,7 @@ class MatrixPolicyFilterManager {
     List<MatrixUser> filteredMatrixUsers = [];
     filteredMatrixUsers = matrixUsers
         .where((MatrixUser user) =>
-            user.displayName!.contains(text) || user.id!.contains(text))
+            user.displayName.contains(text) || user.id!.contains(text))
         .toList();
     _filteredMatrixUsers.value = filteredMatrixUsers;
   }

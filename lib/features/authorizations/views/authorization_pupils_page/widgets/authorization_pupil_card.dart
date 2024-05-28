@@ -198,9 +198,9 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                             },
                       child: pupilAuthorization.fileUrl != null
                           ? DocumentImage(
-                              documentTag:
+                              documentTag: 'pupilAuthorization.fileUrl',
+                              documentUrl:
                                   '${locator<EnvManager>().env.value.serverUrl}${ApiAuthorizationService().getPupilAuthorizationFile(pupil.internalId, authorizationId)}',
-                              documentUrl: pupilAuthorization.fileUrl,
                               size: 70)
                           : SizedBox(
                               height: 70,

@@ -44,7 +44,7 @@ class PupilManager extends ChangeNotifier {
   }
 
   //- Fetch pupils with the given ids from the backend
-  Future fetchPupilsByInternalId(List<int> internalPupilIds) async {
+  Future<void> fetchPupilsByInternalId(List<int> internalPupilIds) async {
     locator<NotificationManager>().isRunningValue(true);
 
     // fetch the pupils from the backend
@@ -85,7 +85,7 @@ class PupilManager extends ChangeNotifier {
       final deletedPupils = await personalDataManager
           .deletePupilBaseElements(outdatedPupilPersonalDataIds);
       locator<NotificationManager>().showSnackBar(NotificationType.warning,
-          '$deletedPupils had no match and have been deleted from the pupilbase!');
+          '$deletedPupils sind nicht mehr in der Datenbank und wurden gelöscht.');
     }
 
     locator<NotificationManager>().isRunningValue(false);

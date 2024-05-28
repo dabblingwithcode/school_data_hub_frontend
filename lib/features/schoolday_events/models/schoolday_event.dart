@@ -44,4 +44,6 @@ class SchooldayEvent {
 
   factory SchooldayEvent.fromJson(Map<String, dynamic> json) =>
       _$SchooldayEventFromJson(json);
+
+  Map<String, dynamic> toJson() => _$SchooldayEventToJson(this);
 }

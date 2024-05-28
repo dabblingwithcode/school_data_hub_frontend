@@ -235,12 +235,7 @@ class NewCategoryGoalView extends StatelessWidget {
                           .getPupilGoalsForCategory(controller.goalCategoryId!)
                           .isNotEmpty) ...<Widget>[
                         ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              backgroundColor: Colors.amber[800],
-                              minimumSize: const Size.fromHeight(60)),
+                          style: actionButtonStyle,
                           onPressed: () {
                             goalExamplesDialog(
                                 context,
@@ -250,13 +245,13 @@ class NewCategoryGoalView extends StatelessWidget {
                           },
                           child: const Text(
                             'BEISPIELE',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: buttonTextStyle,
                           ),
                         ),
                       ],
                     const Gap(15),
                     ElevatedButton(
-                      style: actionButtonStyle,
+                      style: successButtonStyle,
                       onPressed: () {
                         if (controller.widget.appBarTitle ==
                             'Neues Förderziel') {

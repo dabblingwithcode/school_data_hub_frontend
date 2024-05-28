@@ -7,15 +7,12 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class SchooldayEventFilterBottomSheet extends WatchingWidget {
   const SchooldayEventFilterBottomSheet({super.key});
   @override
   Widget build(BuildContext context) {
-    Map<PupilFilter, bool> activeFilters =
-        watchValue((PupilFilterManager x) => x.filterState);
     PupilSortMode sortMode = watchValue((PupilsFilter x) => x.sortMode);
     final Map<SchooldayEventFilter, bool> activeSchooldayEventFilters =
         watchValue(
@@ -31,12 +28,11 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
         activeSchooldayEventFilters[SchooldayEventFilter.redCardOgs]!;
     bool valueRedCardSentHome =
         activeSchooldayEventFilters[SchooldayEventFilter.redCardsentHome]!;
-    bool valueParentsMeeting =
-        activeSchooldayEventFilters[SchooldayEventFilter.parentsMeeting]!;
-    bool valueOtherEvents =
-        activeSchooldayEventFilters[SchooldayEventFilter.otherEvent]!;
+    // bool valueParentsMeeting =
+    //     activeSchooldayEventFilters[SchooldayEventFilter.parentsMeeting]!;
+    // bool valueOtherEvents =
+    //     activeSchooldayEventFilters[SchooldayEventFilter.otherEvent]!;
 
-    final filterLocator = locator<PupilFilterManager>();
     final schooldayEventFilterLocator = locator<SchooldayEventFilterManager>();
     return Padding(
       padding: const EdgeInsets.only(left: 15.0, right: 15, top: 5),

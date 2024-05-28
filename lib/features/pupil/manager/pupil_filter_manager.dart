@@ -324,8 +324,8 @@ class PupilFilterManager {
     }
     // Sort by schooldayEvents
     if (sortMode[PupilSortMode.sortBySchooldayEvents] == true) {
-      filteredPupils.sort((a, b) => SchoolEventHelper.schooldayEventSum(b)!
-          .compareTo(SchoolEventHelper.schooldayEventSum(a)!));
+      filteredPupils.sort((a, b) => SchoolEventHelper.schooldayEventSum(b)
+          .compareTo(SchoolEventHelper.schooldayEventSum(a)));
     }
     // Sort by last schooldayEvent
     if (sortMode[PupilSortMode.sortByLastSchooldayEvent] == true) {

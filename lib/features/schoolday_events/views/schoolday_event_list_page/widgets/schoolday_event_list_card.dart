@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
-import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
@@ -36,8 +35,8 @@ class _SchooldayEventListCardState extends State<SchooldayEventListCard> {
   @override
   Widget build(BuildContext context) {
     PupilProxy pupil = widget.passedPupil;
-    Map<SchooldayEventFilter, bool> schooldayEventFilters = watchValue(
-        (SchooldayEventFilterManager x) => x.schooldayEventsFilterState);
+    // Map<SchooldayEventFilter, bool> schooldayEventFilters = watchValue(
+    //     (SchooldayEventFilterManager x) => x.schooldayEventsFilterState);
 
     final List<SchooldayEvent> schooldayEvents =
         List.from(pupil.schooldayEvents!);

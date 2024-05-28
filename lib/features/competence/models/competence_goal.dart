@@ -37,4 +37,6 @@ class CompetenceGoal {
 
   factory CompetenceGoal.fromJson(Map<String, dynamic> json) =>
       _$CompetenceGoalFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CompetenceGoalToJson(this);
 }

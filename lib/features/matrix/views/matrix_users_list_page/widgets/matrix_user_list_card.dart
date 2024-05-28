@@ -67,7 +67,7 @@ class _MatrixUsersListCardState extends State<MatrixUsersListCard> {
                                 // ));
                               },
                               child: Text(
-                                '${widget.matrixUser.displayName}',
+                                widget.matrixUser.displayName,
                                 overflow: TextOverflow.fade,
                                 softWrap: false,
                                 textAlign: TextAlign.left,

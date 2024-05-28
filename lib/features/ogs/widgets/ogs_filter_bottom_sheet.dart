@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class OgsFilterBottomSheet extends WatchingWidget {
@@ -10,9 +8,6 @@ class OgsFilterBottomSheet extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    Map<PupilFilter, bool> activeFilters =
-        watchValue((PupilFilterManager x) => x.filterState);
-
     return const Padding(
       padding: EdgeInsets.only(left: 20.0, right: 20, top: 8),
       child: Column(

@@ -40,6 +40,8 @@ class CompetenceCheck {
 
   factory CompetenceCheck.fromJson(Map<String, dynamic> json) =>
       _$CompetenceCheckFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CompetenceCheckToJson(this);
 }
 
 @JsonSerializable()
@@ -56,4 +58,6 @@ class CompetenceCheckFile {
 
   factory CompetenceCheckFile.fromJson(Map<String, dynamic> json) =>
       _$CompetenceCheckFileFromJson(json);
+
+  Map<String, dynamic> toJson() => _$CompetenceCheckFileToJson(this);
 }

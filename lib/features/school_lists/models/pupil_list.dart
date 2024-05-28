@@ -18,6 +18,8 @@ class PupilList {
   factory PupilList.fromJson(Map<String, dynamic> json) =>
       _$PupilListFromJson(json);
 
+  Map<String, dynamic> toJson() => _$PupilListToJson(this);
+
   PupilList(
       {required this.originList,
       required this.pupilListComment,

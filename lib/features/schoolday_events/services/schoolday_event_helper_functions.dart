@@ -91,40 +91,46 @@ class SchoolEventHelper {
     }
 
     if (value.contains('gs')) {
-      if (firstItem == false)
+      if (firstItem == false) {
         schooldayEventReasonText = '$schooldayEventReasonText - ';
+      }
       schooldayEventReasonText =
           '${schooldayEventReasonText}Gewalt gegen Sachen';
       firstItem = false;
     }
     if (value.contains('äa')) {
-      if (firstItem == false)
+      if (firstItem == false) {
         schooldayEventReasonText = '$schooldayEventReasonText - ';
+      }
 
       schooldayEventReasonText =
+          // ignore: unnecessary_brace_in_string_interps
           '${schooldayEventReasonText}Ärgern anderer Kinder';
       firstItem = false;
     }
 
     if (value.contains('il')) {
-      if (firstItem == false)
+      if (firstItem == false) {
         schooldayEventReasonText = '$schooldayEventReasonText - ';
+      }
       schooldayEventReasonText =
           '${schooldayEventReasonText}Ignorieren von Anweisungen';
       firstItem == false;
     }
 
     if (value.contains('us')) {
-      if (firstItem == false)
+      if (firstItem == false) {
         schooldayEventReasonText = '$schooldayEventReasonText - ';
+      }
       schooldayEventReasonText =
           '${schooldayEventReasonText}Unterrichtsstörung';
       firstItem = false;
     }
 
     if (value.contains('ss')) {
-      if (firstItem == false)
+      if (firstItem == false) {
         schooldayEventReasonText = '$schooldayEventReasonText - ';
+      }
       schooldayEventReasonText = '${schooldayEventReasonText}Sonstiges';
       firstItem = false;
     }

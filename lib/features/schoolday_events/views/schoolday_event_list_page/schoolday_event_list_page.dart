@@ -14,17 +14,17 @@ import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_l
 import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_list_page_search_bar.dart';
 import 'package:watch_it/watch_it.dart';
 
-class SchooldayEventPage extends WatchingStatefulWidget {
-  const SchooldayEventPage({Key? key}) : super(key: key);
+class SchooldayEventListPage extends WatchingStatefulWidget {
+  const SchooldayEventListPage({Key? key}) : super(key: key);
 
   @override
-  State<SchooldayEventPage> createState() => _SchooldayEventPageState();
+  State<SchooldayEventListPage> createState() => _SchooldayEventPageState();
 }
 
-class _SchooldayEventPageState extends State<SchooldayEventPage> {
+class _SchooldayEventPageState extends State<SchooldayEventListPage> {
   @override
   Widget build(BuildContext context) {
-    // TODO: This is not working
+    //- TODO: check how this works
     pushScope(
         init: (locator) => locator.registerSingleton<PupilsFilter>(
             locator<PupilManager>().getPupilFilter()));

@@ -30,7 +30,7 @@ class PupilSchooldayEventsContent extends StatelessWidget {
             InkWell(
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (ctx) => const SchooldayEventPage(),
+                  builder: (ctx) => const SchooldayEventListPage(),
                 ));
               },
               child: const Text('Ereignisse',

@@ -83,7 +83,7 @@ class SchooldayEventFilterManager {
     if (pupil.schooldayEvents != null) {
       final activeFilters = _schooldayEventsFilterState.value;
       for (SchooldayEvent schooldayEvent in pupil.schooldayEvents!) {
-        bool toList = true;
+        // we keep the last seven days
         if (activeFilters[SchooldayEventFilter.sevenDays]! &&
             schooldayEvent.schooldayEventDate.isBefore(sevenDaysAgo)) {
           _schooldayEventsFiltersOn.value = true;
@@ -95,11 +95,13 @@ class SchooldayEventFilterManager {
           _schooldayEventsFiltersOn.value = true;
           continue;
         }
+
         if (activeFilters[SchooldayEventFilter.redCard]! &&
             schooldayEvent.schooldayEventType != 'rk') {
           _schooldayEventsFiltersOn.value = true;
           continue;
         }
+
         if (activeFilters[SchooldayEventFilter.redCardOgs]! &&
             schooldayEvent.schooldayEventType != 'rkogs') {
           _schooldayEventsFiltersOn.value = true;

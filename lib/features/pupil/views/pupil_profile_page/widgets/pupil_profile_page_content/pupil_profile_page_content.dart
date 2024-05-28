@@ -22,7 +22,7 @@ class PupilProfilePageContent extends WatchingWidget {
   @override
   Widget build(BuildContext context) {
     int navState = watchValue((BottomNavManager x) => x.pupilProfileNavState);
-
+    final pupil = watch<PupilProxy>(this.pupil);
     return SingleChildScrollView(
       child: Column(
         children: <Widget>[

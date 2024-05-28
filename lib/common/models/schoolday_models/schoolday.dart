@@ -9,5 +9,6 @@ class Schoolday {
   factory Schoolday.fromJson(Map<String, dynamic> json) =>
       _$SchooldayFromJson(json);
 
+  Map<String, dynamic> toJson() => _$SchooldayToJson(this);
   Schoolday({required this.schoolday});
 }
