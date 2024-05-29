@@ -32,18 +32,22 @@ class AvatarImage extends StatelessWidget {
                       pupil.internalId.toString(),
                     ),
                     builder: (context, snapshot) {
+                      Widget child;
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         // Display a loading indicator while the future is not complete
-                        return const CircularProgressIndicator(
+                        child = const CircularProgressIndicator(
                           strokeWidth: 8,
                           color: backgroundColor,
                         );
                       } else if (snapshot.hasError) {
                         // Display an error message if the future encounters an error
-                        return Text('Error: ${snapshot.error}');
+                        child = Text('Error: ${snapshot.error}');
                       } else {
-                        return snapshot.data!;
+                        child = snapshot.data!;
                       }
+                      return AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: child);
                     },
                   ),
                 )
