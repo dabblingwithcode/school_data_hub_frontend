@@ -1246,10 +1246,10 @@ packages:
     dependency: "direct main"
     description:
       name: watch_it
-      sha256: "8d4cec008d4554facfb136e5be5b0461a0bc860ed5fa41287b364ced3496f5eb"
+      sha256: a01a9e8292c040de82670f28f8a7d35315115a22f3674d2c4a8fd811fd1ac0ab
       url: "https://pub.dev"
     source: hosted
-    version: "1.4.0"
+    version: "1.4.2"
   watcher:
     dependency: transitive
     description:
