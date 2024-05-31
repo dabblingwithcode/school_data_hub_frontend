@@ -30,14 +30,14 @@ Future<Widget> downloadOrCachedAndDecryptImage(
 
   final cacheManager = DefaultCacheManager();
   final cacheKey = tag!;
-  final customEncrypter = CustomEncrypter();
+
   final fileInfo = await cacheManager.getFileFromCache(cacheKey);
 
   if (fileInfo != null && await fileInfo.file.exists()) {
     // File is already cached, decrypt it before using
     final encryptedBytes = await fileInfo.file.readAsBytes();
     final decryptedBytes =
-        await customEncrypter.decryptTheseBytes(encryptedBytes);
+        await compute(customEncrypter.decryptTheseBytes, encryptedBytes);
     return Image.memory(decryptedBytes);
   }
 
@@ -46,12 +46,12 @@ Future<Widget> downloadOrCachedAndDecryptImage(
       options: Options(responseType: ResponseType.bytes));
 
   if (response.statusCode == 200) {
+    final encryptedBytes = Uint8List.fromList(response.data!);
     // Cache the encrypted bytes
-    final cachedFile =
-        await cacheManager.putFile(cacheKey, response.data as Uint8List);
+    await cacheManager.putFile(cacheKey, encryptedBytes);
     // Decrypt the bytes before returning
     final decryptedBytes =
-        await customEncrypter.decryptTheseBytes(await cachedFile.readAsBytes());
+        await compute(customEncrypter.decryptTheseBytes, encryptedBytes);
     return Image.memory(decryptedBytes);
   } else {
     throw Exception('Failed to download image');

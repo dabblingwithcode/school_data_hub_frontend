@@ -14,14 +14,14 @@ class CustomEncrypter {
   final key = enc.Key.fromUtf8(locator<EnvManager>().env.value.key!);
   final iv = enc.IV.fromUtf8(locator<EnvManager>().env.value.iv!);
 
-  Future<String?> encrypt(String nonEncryptedString) async {
+  String encrypt(String nonEncryptedString) {
     final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
     final encryptedString =
         encrypter.encrypt(nonEncryptedString, iv: iv).base64;
     return encryptedString;
   }
 
-  Future<String?> decrypt(String encryptedString) async {
+  String decrypt(String encryptedString) {
     final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
     final thisEncryptedString = enc.Encrypted.fromBase64(encryptedString);
     final decryptedString = encrypter.decrypt(thisEncryptedString, iv: iv);
@@ -38,15 +38,6 @@ class CustomEncrypter {
     final File tempFile = File('${tempDir.path}/encrypted_file.$extension');
     await tempFile.writeAsBytes(encrypted.bytes);
     return tempFile;
-  }
-
-  Future<Uint8List> decryptTheseBytes(Uint8List encryptedBytes) async {
-    final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
-    final List<int> decrypted =
-        encrypter.decryptBytes(enc.Encrypted(encryptedBytes), iv: iv);
-
-    final Uint8List decryptedBytes = Uint8List.fromList(decrypted);
-    return decryptedBytes;
   }
 
   Future<File> decryptFile(File file, int pupilId) async {
@@ -73,5 +64,14 @@ class CustomEncrypter {
     await tempFile.writeAsBytes(decrypted);
 
     return tempFile;
+  }
+
+  Uint8List decryptTheseBytes(Uint8List encryptedBytes) {
+    final encrypter = enc.Encrypter(enc.AES(key, mode: enc.AESMode.cbc));
+    final List<int> decrypted =
+        encrypter.decryptBytes(enc.Encrypted(encryptedBytes), iv: iv);
+
+    final Uint8List decryptedBytes = Uint8List.fromList(decrypted);
+    return decryptedBytes;
   }
 }

@@ -5,8 +5,10 @@ import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/download_or_cached_and_decrypt_image.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/widgets/pupil_set_avatar.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_helper_functions.dart';
 import 'package:widget_zoom/widget_zoom.dart';
 
@@ -21,43 +23,72 @@ class AvatarImage extends StatelessWidget {
       width: size,
       height: size,
       child: Center(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(size / 2),
-          child: pupil.avatarUrl != null
-              ? WidgetZoom(
-                  heroAnimationTag: pupil.internalId,
-                  zoomWidget: FutureBuilder<Widget>(
-                    future: downloadOrCachedAndDecryptImage(
-                      '${locator<EnvManager>().env.value.serverUrl}${ApiPupilService().getPupilAvatar(pupil.internalId)}',
-                      pupil.internalId.toString(),
-                    ),
-                    builder: (context, snapshot) {
-                      Widget child;
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        // Display a loading indicator while the future is not complete
-                        child = const CircularProgressIndicator(
-                          strokeWidth: 8,
-                          color: backgroundColor,
-                        );
-                      } else if (snapshot.hasError) {
-                        // Display an error message if the future encounters an error
-                        child = Text('Error: ${snapshot.error}');
-                      } else {
-                        child = snapshot.data!;
-                      }
-                      return AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 300),
-                          child: child);
-                    },
+        child: pupil.avatarUrl != null
+            ? WidgetZoom(
+                heroAnimationTag: pupil.internalId,
+                zoomWidget: FutureBuilder<Widget>(
+                  future: downloadOrCachedAndDecryptImage(
+                    '${locator<EnvManager>().env.value.serverUrl}${ApiPupilService().getPupilAvatar(pupil.internalId)}',
+                    pupil.internalId.toString(),
                   ),
-                )
-              : Image.asset(
-                  'assets/dummy-profile-pic.png',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.cover,
+                  builder: (context, snapshot) {
+                    Widget child;
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      // Display a loading indicator while the future is not complete
+                      child = const CircularProgressIndicator(
+                        strokeWidth: 8,
+                        color: backgroundColor,
+                      );
+                    } else if (snapshot.hasError) {
+                      // Display an error message if the future encounters an error
+                      child = Text('Error: ${snapshot.error}');
+                    } else {
+                      child = snapshot.data!;
+                    }
+                    return AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        child: ClipRRect(
+                            borderRadius: BorderRadius.circular(size / 2),
+                            child: child));
+                  },
                 ),
-        ),
+              )
+            : GestureDetector(
+                onLongPressStart: (details) {
+                  final offset = details.globalPosition;
+                  final position = RelativeRect.fromLTRB(
+                      offset.dx, offset.dy, offset.dx, offset.dy);
+                  showMenu(
+                    context: context,
+                    position: position,
+                    items: [
+                      PopupMenuItem(
+                        child: pupil.avatarUrl == null
+                            ? const Text('Foto hochladen')
+                            : const Text('Foto ersetzen'),
+                        onTap: () => setAvatar(context, pupil),
+                      ),
+                      if (pupil.avatarUrl != null)
+                        PopupMenuItem(
+                          child: const Text('Foto löschen'),
+                          onTap: () async {
+                            await locator<PupilManager>().deleteAvatarImage(
+                                pupil.internalId, pupil.internalId.toString());
+                          },
+                        ),
+                    ],
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(size / 2),
+                  child: Image.asset(
+                    'assets/dummy-profile-pic.png',
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
       ),
     );
   }
