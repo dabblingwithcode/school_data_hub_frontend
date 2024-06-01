@@ -23,7 +23,7 @@ class SchooldayEventFilterManager {
       SchoolEventHelper.getSchooldayEventCount(
           locator<PupilFilterManager>().filteredPupils.value));
   SchooldayEventFilterManager() {
-    debug.info('SchooldayEventFilterManager says hello!');
+    logger.i('SchooldayEventFilterManager says hello!');
   }
 
   resetFilters() {

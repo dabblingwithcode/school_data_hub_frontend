@@ -85,8 +85,8 @@ class GroupFilter extends SelectorFilter<PupilProxy, GroupId> {
 }
 
 class PupilProxy with ChangeNotifier {
-  PupilProxy({required Pupil pupil, required PupilPersonalData personalData})
-      : _pupilPersonalData = personalData {
+  PupilProxy({required Pupil pupil, required PupilIdentity pupilIdentity})
+      : _pupilIdentity = pupilIdentity {
     updatePupil(pupil);
   }
 
@@ -111,7 +111,7 @@ class PupilProxy with ChangeNotifier {
   ];
 
   late Pupil _pupil;
-  PupilPersonalData _pupilPersonalData;
+  PupilIdentity _pupilIdentity;
 
   bool pupilIsDirty = false;
 
@@ -124,8 +124,8 @@ class PupilProxy with ChangeNotifier {
     notifyListeners();
   }
 
-  void updateDataFromSchild(PupilPersonalData personalData) {
-    _pupilPersonalData = personalData;
+  void updateDataFromSchild(PupilIdentity personalData) {
+    _pupilIdentity = personalData;
     notifyListeners();
   }
 
@@ -155,23 +155,23 @@ class PupilProxy with ChangeNotifier {
     notifyListeners();
   }
 
-  String get firstName => _pupilPersonalData.name;
-  String get lastName => _pupilPersonalData.lastName;
+  String get firstName => _pupilIdentity.name;
+  String get lastName => _pupilIdentity.lastName;
 
-  String get group => _pupilPersonalData.group;
-  GroupId get groupId => GroupId.stringToValue[_pupilPersonalData.group]!;
+  String get group => _pupilIdentity.group;
+  GroupId get groupId => GroupId.stringToValue[_pupilIdentity.group]!;
 
   Jahrgangsstufe get jahrgangsstufe =>
-      Jahrgangsstufe.stringToValue[_pupilPersonalData.schoolyear]!;
+      Jahrgangsstufe.stringToValue[_pupilIdentity.schoolyear]!;
 
-  String get schoolyear => _pupilPersonalData.schoolyear;
-  String? get specialNeeds => _pupilPersonalData.specialNeeds;
-  String get gender => _pupilPersonalData.gender;
-  String get language => _pupilPersonalData.language;
-  String? get family => _pupilPersonalData.family;
-  DateTime get birthday => _pupilPersonalData.birthday;
-  DateTime? get migrationSupportEnds => _pupilPersonalData.migrationSupportEnds;
-  DateTime get pupilSince => _pupilPersonalData.pupilSince;
+  String get schoolyear => _pupilIdentity.schoolyear;
+  String? get specialNeeds => _pupilIdentity.specialNeeds;
+  String get gender => _pupilIdentity.gender;
+  String get language => _pupilIdentity.language;
+  String? get family => _pupilIdentity.family;
+  DateTime get birthday => _pupilIdentity.birthday;
+  DateTime? get migrationSupportEnds => _pupilIdentity.migrationSupportEnds;
+  DateTime get pupilSince => _pupilIdentity.pupilSince;
 
   String? _avatarUrlOverride;
   bool _avatarUpdated = false;

@@ -14,7 +14,7 @@ import 'package:schuldaten_hub/features/competence/views/patch_competence_page/p
 import 'package:watch_it/watch_it.dart';
 
 class CompetenceListPage extends WatchingWidget {
-  const CompetenceListPage({Key? key}) : super(key: key);
+  const CompetenceListPage({super.key});
 
   @override
   Widget build(BuildContext context) {

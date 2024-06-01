@@ -17,7 +17,7 @@ import 'package:watch_it/watch_it.dart';
 
 class LoginView extends WatchingWidget {
   final LoginController controller;
-  const LoginView(this.controller, {Key? key}) : super(key: key);
+  const LoginView(this.controller, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class LoginView extends WatchingWidget {
     bool isAuthenticated = watchValue((SessionManager x) => x.isAuthenticated);
     bool envReady = watchValue((EnvManager x) => x.envReady);
 
-    debug.warning('LoginView: isAuthenticated: ${isAuthenticated.toString()}');
+    logger.i('LoginView: isAuthenticated: ${isAuthenticated.toString()}');
     final bool keyboardOn = MediaQuery.of(context).viewInsets.vertical > 0.0;
     //FocusScopeNode currentFocus = FocusScope.of(context);
 

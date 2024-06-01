@@ -20,7 +20,7 @@ class MatrixPolicyFilterManager {
   final _filtersOn = ValueNotifier<bool>(false);
 
   MatrixPolicyFilterManager() {
-    debug.warning('MatrixPolicyFilterManager says hello!');
+    logger.i('MatrixPolicyFilterManager constructor called');
   }
 
   resetAllMatrixFilters() {

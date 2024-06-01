@@ -5,50 +5,124 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 
-final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-final TextEditingController _textEditingController = TextEditingController();
-
-// based on https://mobikul.com/creating-stateful-dialog-form-in-flutter/
-
 Future<void> changeCreditDialog(BuildContext context, PupilProxy pupil) async {
+  int credit = 0;
   return await showDialog(
       context: context,
       builder: (context) {
         return StatefulBuilder(builder: (context, setState) {
           return AlertDialog(
-            content: Form(
-                key: _formKey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      width: 100,
-                      child: TextFormField(
-                        textAlign: TextAlign.center,
-                        style: const TextStyle(
-                            fontSize: 25, fontWeight: FontWeight.bold),
-                        keyboardType: TextInputType.number,
-                        controller: _textEditingController,
-                        validator: (value) {
-                          return value!.isNotEmpty ? null : "";
-                        },
-                        decoration: const InputDecoration(hintText: "?"),
-                      ),
-                    ),
-                  ],
-                )),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    credit > 0 ? '+$credit' : credit.toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 40,
+                        fontWeight: FontWeight.bold,
+                        color: credit < 0
+                            ? Colors.red
+                            : credit > 0
+                                ? Colors.green
+                                : Colors.black),
+                  ),
+                ),
+              ],
+            ),
             title: const Text(
               'Guthaben ändern',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             actions: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: ElevatedButton(
+                        style: cancelButtonStyle,
+                        onPressed: () {
+                          setState(() {
+                            credit--;
+                          });
+                        },
+                        child: const Text(
+                          "-1",
+                          style: buttonTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: ElevatedButton(
+                        style: successButtonStyle,
+                        onPressed: () {
+                          setState(() {
+                            credit++;
+                          });
+                        },
+                        child: const Text(
+                          "+1",
+                          style: buttonTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: ElevatedButton(
+                        style: cancelButtonStyle,
+                        onPressed: () {
+                          setState(() {
+                            credit = credit - 10;
+                          });
+                        },
+                        child: const Text(
+                          "-10",
+                          style: buttonTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10.0),
+                      child: ElevatedButton(
+                        style: successButtonStyle,
+                        onPressed: () {
+                          setState(() {
+                            credit = credit + 10;
+                          });
+                        },
+                        child: const Text(
+                          "+10",
+                          style: buttonTextStyle,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
                 child: ElevatedButton(
                   style: actionButtonStyle,
                   onPressed: () {
-                    _textEditingController.clear();
                     Navigator.of(context).pop();
                   },
                   child: const Text(
@@ -57,43 +131,20 @@ Future<void> changeCreditDialog(BuildContext context, PupilProxy pupil) async {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10.0),
-                child: ElevatedButton(
-                  style: cancelButtonStyle,
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      int amount = -int.parse(_textEditingController.text);
-                      locator<PupilManager>()
-                          .patchPupil(pupil.internalId, 'credit', amount);
-                      // Do something like updating SharedPreferences or User Settings etc.
-                      _textEditingController.clear();
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  child: const Text(
-                    "MINUS",
-                    style: buttonTextStyle,
-                  ),
-                ),
-              ),
               ElevatedButton(
                 style: successButtonStyle,
                 onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    int amount = int.parse(_textEditingController.text);
-
+                  if (credit != 0) {
                     locator<PupilManager>()
-                        .patchPupil(pupil.internalId, 'credit', amount);
+                        .patchPupil(pupil.internalId, 'credit', credit);
                     // Do something like updating SharedPreferences or User Settings etc.
-                    locator<SessionManager>().changeSessionCredit(-amount);
-                    _textEditingController.clear();
+                    locator<SessionManager>().changeSessionCredit(credit);
 
                     Navigator.of(context).pop();
                   }
                 },
                 child: const Text(
-                  "PLUS",
+                  "SENDEN",
                   style: buttonTextStyle,
                 ),
               ),

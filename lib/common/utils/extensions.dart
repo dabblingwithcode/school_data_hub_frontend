@@ -32,28 +32,28 @@ extension DateOnlyCompare on DateTime {
   }
 }
 
-extension ColorLog on String {
-  String logWarning() {
-    final String message =
-        "\u001b[1;33m [SCHULDATEN HUB] WARNING: $this \u001b[0m";
-    return message;
-  }
+// extension ColorLog on String {
+//   String logWarning() {
+//     final String message =
+//         "\u001b[1;33m [SCHULDATEN HUB] WARNING: $this \u001b[0m";
+//     return message;
+//   }
 
-  String logSuccess() {
-    final String message =
-        "\u001b[1;32m [SCHULDATEN HUB] SUCCESS: $this \u001b[0m";
-    return message;
-  }
+//   String logSuccess() {
+//     final String message =
+//         "\u001b[1;32m [SCHULDATEN HUB] SUCCESS: $this \u001b[0m";
+//     return message;
+//   }
 
-  String logError() {
-    final String message =
-        "\u001b[1;31m [SCHULDATEN HUB] ERROR: $this \u001b[0m";
-    return message;
-  }
+//   String logError() {
+//     final String message =
+//         "\u001b[1;31m [SCHULDATEN HUB] ERROR: $this \u001b[0m";
+//     return message;
+//   }
 
-  String logInfo() {
-    final String message =
-        "\u001b[1;34m [SCHULDATEN HUB] INFO: $this \u001b[0m";
-    return message;
-  }
-}
+//   String logInfo() {
+//     final String message =
+//         "\u001b[1;34m [SCHULDATEN HUB] INFO: $this \u001b[0m";
+//     return message;
+//   }
+// }

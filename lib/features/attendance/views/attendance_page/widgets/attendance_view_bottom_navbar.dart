@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/widgets/date_picker.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 
 class AttendanceListPageBottomNavBar extends StatelessWidget {
   final bool filtersOn;
@@ -45,7 +45,8 @@ class AttendanceListPageBottomNavBar extends StatelessWidget {
                   size: 30,
                 ),
                 onPressed: () {
-                  locator<PupilPersonalDataManager>().scanNewPupilBase(context);
+                  locator<PupilIdentityManager>()
+                      .scanNewPupilIdentities(context);
                 },
               ),
               const Gap(30),

@@ -16,7 +16,7 @@ import 'package:schuldaten_hub/features/school_lists/views/school_lists_page/wid
 import 'package:watch_it/watch_it.dart';
 
 class SchoolListsPage extends WatchingWidget {
-  const SchoolListsPage({Key? key}) : super(key: key);
+  const SchoolListsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

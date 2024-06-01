@@ -16,7 +16,7 @@ import 'package:watch_it/watch_it.dart';
 class PupilProfilePage extends WatchingWidget {
   final PupilProxy pupil;
 
-  const PupilProfilePage({required this.pupil, Key? key}) : super(key: key);
+  const PupilProfilePage({required this.pupil, super.key});
 
   @override
   Widget build(BuildContext context) {

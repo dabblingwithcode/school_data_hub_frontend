@@ -13,7 +13,7 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class MatrixUsersListPage extends WatchingWidget {
-  const MatrixUsersListPage({Key? key}) : super(key: key);
+  const MatrixUsersListPage({super.key});
 
   @override
   Widget build(BuildContext context) {

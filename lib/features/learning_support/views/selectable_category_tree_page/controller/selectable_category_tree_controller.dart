@@ -8,8 +8,8 @@ class SelectableCategoryTree extends StatefulWidget {
   const SelectableCategoryTree(
     this.pupil,
     this.elementType, {
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   SelectableCategoryTreeController createState() =>

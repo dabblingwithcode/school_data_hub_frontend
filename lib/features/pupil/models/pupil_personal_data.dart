@@ -5,7 +5,7 @@ import 'package:json_annotation/json_annotation.dart';
 part 'pupil_personal_data.g.dart';
 
 @JsonSerializable()
-class PupilPersonalData {
+class PupilIdentity {
   @JsonKey(name: "id")
   final int id;
   @JsonKey(name: "name")
@@ -31,12 +31,12 @@ class PupilPersonalData {
   @JsonKey(name: "pupilSince")
   final DateTime pupilSince;
 
-  factory PupilPersonalData.fromJson(Map<String, dynamic> json) =>
+  factory PupilIdentity.fromJson(Map<String, dynamic> json) =>
       _$PupilPersonalDataFromJson(json);
 
   Map<String, dynamic> toJson() => _$PupilPersonalDataToJson(this);
 
-  PupilPersonalData({
+  PupilIdentity({
     required this.id,
     required this.name,
     required this.lastName,

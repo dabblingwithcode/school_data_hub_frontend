@@ -44,7 +44,7 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
     //  PupilSortMode? sortMode,
     // }
   ) : _pupilsManager = pupilsManager {
-    debug.info('PupilsFilterImplementation created');
+    logger.i('PupilsFilterImplementation created');
     refreshs();
     _pupilsManager.addListener(refreshs);
   }

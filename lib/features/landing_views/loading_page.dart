@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class LoadingPage extends WatchingStatefulWidget {
-  const LoadingPage({Key? key}) : super(key: key);
+  const LoadingPage({super.key});
 
   @override
   LoadingPageState createState() => LoadingPageState();

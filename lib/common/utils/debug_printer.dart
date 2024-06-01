@@ -1,22 +1,25 @@
 import 'package:flutter/foundation.dart';
 import 'extensions.dart';
+import 'package:logger/logger.dart';
 
-final debug = Debug();
+//final debug = Debug();
 
-class Debug {
-  void success(String message) {
-    debugPrint(message.logSuccess());
-  }
+final logger = Logger();
 
-  void warning(String message) {
-    debugPrint(message.logWarning());
-  }
+// class Debug {
+//   void success(String message) {
+//     debugPrint(message.logSuccess());
+//   }
 
-  void error(String message) {
-    debugPrint(message.logError());
-  }
+//   void warning(String message) {
+//     debugPrint(message.logWarning());
+//   }
 
-  void info(String message) {
-    debugPrint(message.logInfo());
-  }
-}
+//   void error(String message) {
+//     debugPrint(message.logError());
+//   }
+
+//   void info(String message) {
+//     debugPrint(message.logInfo());
+//   }
+// }

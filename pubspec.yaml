@@ -7,34 +7,35 @@ environment:
   sdk: '>=3.2.0 <4.0.0'
 
 dependencies:
-  camera_windows: ^0.2.1+9
+  camera_windows: ^0.2.2
   cached_network_image: ^3.3.1
   carousel_slider: ^4.2.1
   collection: ^1.17.1
-  connectivity_plus: ^6.0.1
+  connectivity_plus: ^6.0.3
   crop_image: ^1.0.12
-  cupertino_icons: ^1.0.6
-  dio: ^5.3.3
+  cupertino_icons: ^1.0.8
+  dio: ^5.4.3+1
   encrypt: ^5.0.3
+  extended_image: ^8.2.1
   file_picker: ^8.0.3
   flutter:
     sdk: flutter
-  flutter_cache_manager: ^3.3.1
-  flutter_dotenv: ^5.1.0
+  flutter_cache_manager: ^3.3.2
   flutter_launcher_icons: ^0.13.1
-  flutter_localizations:
+  flutter_localizations: 
     sdk: flutter
-  flutter_secure_storage: ^9.0.0
+  flutter_secure_storage: ^9.2.2
 
   gap: ^3.0.1
   icon_decoration: ^2.0.2
-  image_picker: ^1.0.4
-  intl: ^0.18.0
+  image_picker: ^1.1.2
+  intl: ^0.18.1
   json_annotation: ^4.8.1
   jwt_decoder: ^2.0.1
   listenable_collections: ^1.0.0
-  mobile_scanner: ^3.5.5
-  package_info_plus: ^4.2.0
+  logger: ^2.3.0
+  mobile_scanner: ^5.1.1
+  package_info_plus: ^8.0.0
   path_provider: ^2.1.1
   pdf: ^3.10.7
   qr_flutter: ^4.1.0
@@ -42,7 +43,7 @@ dependencies:
   top_snackbar_flutter: ^3.1.0
   watch_it: ^1.4.2
   widget_zoom: ^0.0.2
-  window_manager: ^0.3.8
+  window_manager: ^0.3.9
   image_picker_platform_interface: ^2.9.3
   camera: ^0.10.5+9
   transparent_image: ^2.0.1
@@ -51,10 +52,10 @@ dependencies:
 dev_dependencies:
   flutter_test: 
     sdk: flutter
-  flutter_lints: ^2.0.0
+  flutter_lints: ^4.0.0
   msix: ^3.16.6
   build_runner: ^2.4.6
-  json_serializable: ^6.7.1
+  json_serializable: ^6.8.0
 
 flutter:
   uses-material-design: true

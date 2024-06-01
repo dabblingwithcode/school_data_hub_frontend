@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/models/schoolday_models/schoolday.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/snackbars.dart';
+import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
+import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
+import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/atendance_list_card.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -18,7 +24,7 @@ class SchooldaysCalendar extends StatefulWidget {
 class SchooldaysCalendarState extends State<SchooldaysCalendar> {
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
+  DateTime? _selectedDay = DateTime.now();
   List<Schoolday> schooldays = locator<SchooldayManager>().schooldays.value;
 
   final kFirstDay = DateTime(
@@ -35,9 +41,13 @@ class SchooldaysCalendarState extends State<SchooldaysCalendar> {
 
   @override
   Widget build(BuildContext context) {
+    List<MissedClass> missedClasses =
+        locator<AttendanceManager>().getMissedClassesOnADay(_selectedDay!);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Schultage'),
+        foregroundColor: Colors.white,
+        backgroundColor: backgroundColor,
+        title: const Center(child: Text('Schultage', style: appBarTextStyle)),
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -118,7 +128,7 @@ class SchooldaysCalendarState extends State<SchooldaysCalendar> {
               _focusedDay = focusedDay;
             },
           ),
-          const Gap(20),
+          //const Gap(20),
           _selectedDay != null
               ? Row(
                   children: [
@@ -128,11 +138,21 @@ class SchooldaysCalendarState extends State<SchooldaysCalendar> {
                                 Localizations.localeOf(context).toString())
                             .format(_selectedDay!),
                         style: const TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold)),
+                            fontSize: 20.0, fontWeight: FontWeight.bold)),
                     const Gap(5),
                     Text(' ${_selectedDay?.formatForUser()}',
                         style: const TextStyle(
                             fontSize: 18.0, fontWeight: FontWeight.bold)),
+                    const Spacer(),
+                    Text(
+                        missedClasses
+                            .where((missedClass) =>
+                                missedClass.missedType == 'missed')
+                            .length
+                            .toString(),
+                        style: const TextStyle(
+                            fontSize: 18.0, fontWeight: FontWeight.bold)),
+                    const Gap(10)
                   ],
                 )
               : const Row(
@@ -143,6 +163,17 @@ class SchooldaysCalendarState extends State<SchooldaysCalendar> {
                             fontSize: 18.0, fontWeight: FontWeight.bold)),
                   ],
                 ),
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: missedClasses.length,
+              itemBuilder: (context, index) {
+                return AttendanceCard(
+                    findPupilById(missedClasses[index].missedPupilId),
+                    _selectedDay!);
+              },
+            ),
+          ),
         ],
       ),
     );

@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/special_info_reset_filter_button.dart';
 
 class SpecialInfoListPageBottomNavBar extends StatelessWidget {
@@ -40,7 +40,8 @@ class SpecialInfoListPageBottomNavBar extends StatelessWidget {
                   size: 30,
                 ),
                 onPressed: () {
-                  locator<PupilPersonalDataManager>().scanNewPupilBase(context);
+                  locator<PupilIdentityManager>()
+                      .scanNewPupilIdentities(context);
                 },
               ),
               const Gap(30),

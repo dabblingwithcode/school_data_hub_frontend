@@ -24,7 +24,7 @@ import 'package:watch_it/watch_it.dart';
 class SchoolListPupilsPage extends WatchingWidget {
   final SchoolList schoolList;
 
-  const SchoolListPupilsPage(this.schoolList, {Key? key}) : super(key: key);
+  const SchoolListPupilsPage(this.schoolList, {super.key});
 
   @override
   Widget build(BuildContext context) {

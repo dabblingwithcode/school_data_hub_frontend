@@ -45,7 +45,7 @@ class SessionManager {
   SessionManager();
   Future<SessionManager> init() async {
     await checkStoredCredentials();
-    debug.warning('SessionManager initialized!');
+    logger.i('Returning SessionManager instance!');
     return this;
   }
 
@@ -79,8 +79,7 @@ class SessionManager {
       }
     } on DioException catch (e) {
       final errorMessage = DioExceptions.fromDioError(e);
-      debug.error(
-          'Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
+      logger.f('Dio error: ${errorMessage.toString()} | ${StackTrace.current}');
     }
   }
 
@@ -88,41 +87,42 @@ class SessionManager {
     locator<NotificationManager>().isRunningValue(true);
     if (await secureStorageContains('session') == true) {
       final String? storedSession = await secureStorageRead('session');
-      debug.success('Session found!');
+      logger.i('Session found!');
       try {
         final Session session = Session.fromJson(
           json.decode(storedSession!) as Map<String, dynamic>,
         );
         if (JwtDecoder.isExpired(session.jwt!)) {
           await secureStorageDelete('session');
-          debug.warning(
-              'Session was not valid - deleted! | ${StackTrace.current}');
+          logger.w('Session was not valid - deleted!',
+              stackTrace: StackTrace.current);
           locator<NotificationManager>().isRunningValue(false);
           return;
         }
         if (locator<EnvManager>().env.value.serverUrl == null) {
-          debug.warning('No environment found! | ${StackTrace.current}');
+          logger.w('No environment found!', stackTrace: StackTrace.current);
           locator<NotificationManager>().isRunningValue(false);
           return;
         }
-        debug.info('Stored session is valid! | ${StackTrace.current}');
+        logger.i('Stored session is valid!');
         authenticate(session);
-        debug.warning(
+        logger.i(
             'SessionManager: isAuthenticated is ${_isAuthenticated.value.toString()}');
-        debug.warning('Calling ApiManager instance');
+        logger.i('Calling ApiManager instance');
         registerDependentManagers(_credentials.value.jwt!);
         locator<NotificationManager>().isRunningValue(false);
         return;
       } catch (e) {
-        debug.error(
-          'Error reading session from secureStorage: $e | ${StackTrace.current}',
+        logger.f(
+          'Error reading session from secureStorage: $e',
+          stackTrace: StackTrace.current,
         );
         await secureStorageDelete('session');
         locator<NotificationManager>().isRunningValue(false);
         return;
       }
     } else {
-      debug.info('No session found');
+      logger.i('No session found');
       locator<NotificationManager>().isRunningValue(false);
       return;
     }
@@ -183,8 +183,8 @@ class SessionManager {
   Future<void> saveSession(Session session) async {
     final jsonSession = json.encode(session.toJson());
     await secureStorageWrite('session', jsonSession);
-    debug.success('Session stored');
-    debug.success(jsonSession);
+    logger.i('Session stored');
+    logger.i(jsonSession);
     return;
   }
 

@@ -4,12 +4,11 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
-import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/notification_manager.dart';
-import 'package:schuldaten_hub/common/utils/scanner.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/common/utils/barcode_stream_scanner.dart';
+
+import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class QrToolsView extends WatchingWidget {
@@ -19,12 +18,14 @@ class QrToolsView extends WatchingWidget {
     if (result != null) {
       File file = File(result.files.single.path!);
       String rawTextResult = await file.readAsString();
-      if (function == 'schild') {
+      if (function == 'update_backend') {
         locator
-            .get<PupilPersonalDataManager>()
-            .updatePupilsFromSchoolDataSource(rawTextResult);
-      } else if (function == 'pupilbase') {
-        locator.get<PupilPersonalDataManager>().addNewPupilBase(rawTextResult);
+            .get<PupilIdentityManager>()
+            .updateBackendPupilsFromSchoolPupilIdentitySource(rawTextResult);
+      } else if (function == 'pupil_identities') {
+        locator
+            .get<PupilIdentityManager>()
+            .addNewPupilIdentities(encryptedIdentitiesAsString: rawTextResult);
       }
     } else {
       // User canceled the picker
@@ -59,7 +60,8 @@ class QrToolsView extends WatchingWidget {
                             ),
                             backgroundColor: Colors.amber[800],
                             minimumSize: const Size.fromHeight(90)),
-                        onPressed: () => importFileWithWindows('schild'),
+                        onPressed: () =>
+                            importFileWithWindows('update_backend'),
                         child: const Text(
                           'Daten aus SchiLD importieren',
                           textAlign: TextAlign.center,
@@ -79,7 +81,8 @@ class QrToolsView extends WatchingWidget {
                             ),
                             backgroundColor: Colors.amber[800],
                             minimumSize: const Size.fromHeight(90)),
-                        onPressed: () => importFileWithWindows('pupilbase'),
+                        onPressed: () =>
+                            importFileWithWindows('pupil_identities'),
                         child: const Text(
                           'ID-Liste importieren',
                           textAlign: TextAlign.center,
@@ -100,23 +103,13 @@ class QrToolsView extends WatchingWidget {
                           ),
                           backgroundColor: accentColor,
                           foregroundColor: Colors.white,
-                          onPressed: () async {
-                            final String? scanResult =
-                                await scanner(context, 'Kinder-Code scannen');
-                            if (scanResult != null) {
-                              locator
-                                  .get<PupilPersonalDataManager>()
-                                  .addNewPupilBase(scanResult);
-                            } else {
-                              locator<NotificationManager>().showSnackBar(
-                                  NotificationType.warning,
-                                  'Scanvorgang abgebrochen');
-
-                              return;
-                            }
+                          onPressed: () {
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (ctx) => const BarcodeStreamScanner(),
+                            ));
                           },
                           label: const Text(
-                            'Kinder-IDs',
+                            'alle Kinder IDs scannen',
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 18,

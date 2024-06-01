@@ -18,7 +18,7 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart'
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceListPage extends WatchingStatefulWidget {
-  const AttendanceListPage({Key? key}) : super(key: key);
+  const AttendanceListPage({super.key});
   @override
   State<AttendanceListPage> createState() => _AttendanceListPageState();
 }
@@ -98,7 +98,7 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
                         filtersOn: filtersOn)),
                 GenericSliverListWithEmptyListCheck(
                     items: pupils,
-                    itemBuilder: (_, pupil) => AttendanceCard(pupil)),
+                    itemBuilder: (_, pupil) => AttendanceCard(pupil, thisDate)),
               ],
             ),
           ),

@@ -18,6 +18,7 @@ class NewCompetenceViewState extends State<NewCompetenceView> {
   final TextEditingController textField1Controller = TextEditingController();
   final TextEditingController textField2Controller = TextEditingController();
   final TextEditingController textField3Controller = TextEditingController();
+
   void postNewCompetence() async {
     String text1 = textField1Controller.text;
     String text2 = textField2Controller.text;

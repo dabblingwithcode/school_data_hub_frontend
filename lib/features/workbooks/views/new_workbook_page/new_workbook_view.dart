@@ -195,7 +195,7 @@ class NewWorkbookViewState extends State<NewWorkbookView> {
                     onPressed: () async {
                       final String? scannedIsbn =
                           await scanner(context, 'Isbn code scannen');
-                      debug.info('Scanned ISBN: $scannedIsbn');
+                      logger.i('Scanned ISBN: $scannedIsbn');
                       if (scannedIsbn == null) {
                         return;
                       }

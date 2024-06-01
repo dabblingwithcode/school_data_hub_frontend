@@ -16,8 +16,7 @@ class SelectMatrixUsersListView extends WatchingWidget {
   final SelectMatrixUsersListController controller;
   final List<PupilProxy> filteredPupilsInLIst;
   const SelectMatrixUsersListView(this.controller, this.filteredPupilsInLIst,
-      {Key? key})
-      : super(key: key);
+      {super.key});
 
   @override
   Widget build(BuildContext context) {

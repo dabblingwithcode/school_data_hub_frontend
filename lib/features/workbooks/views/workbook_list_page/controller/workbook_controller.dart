@@ -9,8 +9,8 @@ import 'package:schuldaten_hub/features/workbooks/views/workbook_list_page/workb
 
 class WorkbookList extends StatefulWidget {
   const WorkbookList({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   WorkbookController createState() => WorkbookController();

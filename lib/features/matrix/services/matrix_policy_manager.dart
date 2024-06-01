@@ -66,7 +66,7 @@ class MatrixPolicyManager {
   final _policyToken = ValueNotifier<String>('');
 
   MatrixPolicyManager() {
-    debug.warning('MatrixPolicyManager initializing! | ${StackTrace.current}');
+    logger.i('MatrixPolicyManager constructor called');
   }
 
   final notificationManager = locator<NotificationManager>();
@@ -88,8 +88,9 @@ class MatrixPolicyManager {
               'Matrix-Räumeverwaltung wird geladen...');
           await fetchMatrixPolicy();
         } catch (e) {
-          debug.error(
-              'Error reading matrix credentials from secureStorage: $e | ${StackTrace.current}');
+          logger.f('Error reading matrix credentials from secureStorage: $e',
+              stackTrace: StackTrace.current);
+
           await secureStorageDelete('matrix');
         }
       }
@@ -162,7 +163,7 @@ class MatrixPolicyManager {
 
     notificationManager.showSnackBar(NotificationType.success, 'Räume geladen');
 
-    debug.success('Fetched Matrix policy! | ${StackTrace.current}');
+    logger.i('Fetched Matrix policy!');
 
     locator<SessionManager>().changeMatrixPolicyManagerRegistrationStatus(true);
     locator.get<ApiManager>().setDefaultDioClientOptions();
@@ -243,7 +244,7 @@ class MatrixPolicyManager {
     final response = await client.put(
         '$_matrixUrl${MatrixEndpoints().putRoomPowerLevels(roomId)}',
         data: data);
-    debug.success('Response: ${response.data}');
+    logger.i('Response: ${response.data}');
     locator.get<ApiManager>().setDefaultDioClientOptions();
   }
 
@@ -256,7 +257,7 @@ class MatrixPolicyManager {
 
     // First API call
     final responseRoomSPowerLevels = await client.get(
-      '${_matrixUrl}${MatrixEndpoints().fetchRoomPowerLevels(roomId)}',
+      '$_matrixUrl${MatrixEndpoints().fetchRoomPowerLevels(roomId)}',
     );
 
     if (responseRoomSPowerLevels.statusCode == 200) {

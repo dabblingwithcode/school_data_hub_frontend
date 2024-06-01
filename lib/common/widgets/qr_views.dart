@@ -9,9 +9,152 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
+
+import 'dart:async';
+
+class QrCodeCarousel extends StatefulWidget {
+  final List<Map<String, Object>> qrMaps;
+
+  const QrCodeCarousel({super.key, required this.qrMaps});
+
+  @override
+  QrCodeCarouselState createState() => QrCodeCarouselState();
+}
+
+class QrCodeCarouselState extends State<QrCodeCarousel> {
+  late Timer _timer;
+  int _currentIndex = -1;
+  int _countdown = 5; // Set the initial countdown value
+  int _milliseconds = 1000; // Set the initial timer interval
+  late Map<String, int> _pupilNumbers;
+  late Map<String, String> _qrMap;
+  @override
+  void initState() {
+    super.initState();
+    _pupilNumbers = widget.qrMaps[0] as Map<String, int>;
+    _qrMap = widget.qrMaps[1] as Map<String, String>;
+    startTimer(_milliseconds);
+  }
+
+  void startTimer(int milliseconds) {
+    _timer = Timer.periodic(Duration(milliseconds: milliseconds), (timer) {
+      setState(() {
+        _countdown = _countdown > 0 ? _countdown - 1 : _countdown;
+        if (_countdown == 0) {
+          _timer.cancel(); // Cancel the current timer
+          _milliseconds = 600; // Set the qr carousel interval
+          startTimer(_milliseconds); // Start a new timer with the new interval
+          _currentIndex = (_currentIndex + 1) % _qrMap.values.length;
+        }
+        // Stop the timer when the Container is shown
+        if (_currentIndex == _qrMap.length - 1) {
+          _timer.cancel();
+        }
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: const Text('QR-Code Carousel'),
+        backgroundColor: backgroundColor,
+      ),
+      body: _countdown > 0
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Die Codes erscheinen in...',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  const Gap(20),
+                  Text(
+                    _countdown.toString(),
+                    style: TextStyle(
+                        fontSize: 80,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[900]),
+                  ),
+                  const Gap(20),
+                  const Text(
+                    'Halten Sie Ihr Gerät in Scanmodus bereit...',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                ],
+              ),
+            )
+          : Center(
+              child: _currentIndex != _qrMap.length - 1
+                  ? Column(
+                      children: [
+                        const Gap(20),
+                        Text(_qrMap.keys.elementAt(_currentIndex),
+                            style: const TextStyle(
+                                fontSize: 30, fontWeight: FontWeight.bold),
+                            textAlign: TextAlign.center),
+                        Padding(
+                          padding: const EdgeInsets.all(20.0),
+                          child: QrImageView(
+                            size: mediaQuery.size.height * 0.75,
+                            data: _qrMap.values.elementAt(_currentIndex),
+                            version: QrVersions.auto,
+                          ),
+                        ),
+                      ],
+                    )
+                  : Column(children: [
+                      const Gap(20),
+                      Text(
+                        '${_qrMap.entries.length} Codes wurden angezeigt!',
+                        style: const TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                      const Gap(5),
+                      const Text(
+                        'Überprüfen Sie diese Zahlen:',
+                        style: TextStyle(fontSize: 20),
+                      ),
+                      const Gap(5),
+                      Text(
+                        'Insgesamt: ${_pupilNumbers.values.reduce((a, b) => a + b).toString()}',
+                        style: const TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                      const Gap(10),
+                      for (var key in _pupilNumbers.keys)
+                        Text(
+                          '$key: ${_pupilNumbers[key].toString()}',
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
+                      const Gap(20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('fertig'),
+                      ),
+                    ]),
+            ),
+    );
+  }
+}
 
 void showQrCarousel(
     Map<String, String> qrMap, bool autoPlay, BuildContext context) async {

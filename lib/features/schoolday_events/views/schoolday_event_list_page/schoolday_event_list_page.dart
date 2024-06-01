@@ -15,7 +15,7 @@ import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_l
 import 'package:watch_it/watch_it.dart';
 
 class SchooldayEventListPage extends WatchingStatefulWidget {
-  const SchooldayEventListPage({Key? key}) : super(key: key);
+  const SchooldayEventListPage({super.key});
 
   @override
   State<SchooldayEventListPage> createState() => _SchooldayEventPageState();

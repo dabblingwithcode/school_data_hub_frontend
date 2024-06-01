@@ -16,7 +16,7 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class OgsListPage extends WatchingWidget {
-  const OgsListPage({Key? key}) : super(key: key);
+  const OgsListPage({super.key});
 
   @override
   Widget build(BuildContext context) {

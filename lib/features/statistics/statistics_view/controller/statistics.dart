@@ -11,7 +11,7 @@ import 'package:schuldaten_hub/features/statistics/statistics_view/statistics_vi
 import 'package:watch_it/watch_it.dart';
 
 class Statistics extends WatchingStatefulWidget {
-  const Statistics({Key? key}) : super(key: key);
+  const Statistics({super.key});
 
   @override
   StatisticsController createState() => StatisticsController();

@@ -34,7 +34,7 @@ List<Widget> pupilCategoryStatusesList(PupilProxy pupil, BuildContext context) {
           statusesWithDuplicateGoalCategory[(status.goalCategoryId)]!
               .add(status);
         }
-        debug.warning(
+        logger.i(
             'Adding status vom ${status.createdAt.formatForUser()} erstellt von ${status.createdBy}');
       } else {
         //- GECHECKT
@@ -141,7 +141,7 @@ List<Widget> pupilCategoryStatusesList(PupilProxy pupil, BuildContext context) {
     //- Now let's build the statuses with multiple entries for a category
     if (statusesWithDuplicateGoalCategory.isNotEmpty) {
       for (int key in statusesWithDuplicateGoalCategory.keys) {
-        debug.warning('KEY: $key');
+        logger.w('Duplicate status, setting a key: $key');
         List<PupilCategoryStatus> mappedStatusesWithSameGoalCategory = [];
 
         mappedStatusesWithSameGoalCategory =

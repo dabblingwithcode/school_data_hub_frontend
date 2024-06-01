@@ -493,8 +493,8 @@ class _ExpansionTileState extends State<CustomExpansionTile>
       CurveTween(curve: Curves.easeOut);
   static final Animatable<double> _easeInTween =
       CurveTween(curve: Curves.easeIn);
-  static final Animatable<double> _halfTween =
-      Tween<double>(begin: 0.0, end: 0.5);
+  // static final Animatable<double> _halfTween =
+  //     Tween<double>(begin: 0.0, end: 0.5);
 
   final ShapeBorderTween _borderTween = ShapeBorderTween();
   final ColorTween _headerColorTween = ColorTween();
@@ -502,7 +502,7 @@ class _ExpansionTileState extends State<CustomExpansionTile>
   final ColorTween _backgroundColorTween = ColorTween();
 
   late AnimationController _animationController;
-  late Animation<double> _iconTurns;
+  // late Animation<double> _iconTurns;
   late Animation<double> _heightFactor;
   late Animation<ShapeBorder?> _border;
   late Animation<Color?> _headerColor;
@@ -517,7 +517,7 @@ class _ExpansionTileState extends State<CustomExpansionTile>
     super.initState();
     _animationController = AnimationController(duration: _kExpand, vsync: this);
     _heightFactor = _animationController.drive(_easeInTween);
-    _iconTurns = _animationController.drive(_halfTween.chain(_easeInTween));
+    //_iconTurns = _animationController.drive(_halfTween.chain(_easeInTween));
     _border = _animationController.drive(_borderTween.chain(_easeOutTween));
     _headerColor =
         _animationController.drive(_headerColorTween.chain(_easeInTween));
@@ -564,44 +564,44 @@ class _ExpansionTileState extends State<CustomExpansionTile>
     widget.onExpansionChanged?.call(_isExpanded);
   }
 
-  void _handleTap() {
-    _toggleExpansion();
-  }
+  // void _handleTap() {
+  //   _toggleExpansion();
+  // }
 
-  // Platform or null affinity defaults to trailing.
-  ListTileControlAffinity _effectiveAffinity(
-      ListTileControlAffinity? affinity) {
-    switch (affinity ?? ListTileControlAffinity.trailing) {
-      case ListTileControlAffinity.leading:
-        return ListTileControlAffinity.leading;
-      case ListTileControlAffinity.trailing:
-      case ListTileControlAffinity.platform:
-        return ListTileControlAffinity.trailing;
-    }
-  }
+  // // Platform or null affinity defaults to trailing.
+  // ListTileControlAffinity _effectiveAffinity(
+  //     ListTileControlAffinity? affinity) {
+  //   switch (affinity ?? ListTileControlAffinity.trailing) {
+  //     case ListTileControlAffinity.leading:
+  //       return ListTileControlAffinity.leading;
+  //     case ListTileControlAffinity.trailing:
+  //     case ListTileControlAffinity.platform:
+  //       return ListTileControlAffinity.trailing;
+  //   }
+  // }
 
-  Widget? _buildIcon(BuildContext context) {
-    return RotationTransition(
-      turns: _iconTurns,
-      child: const Icon(Icons.expand_more),
-    );
-  }
+  // Widget? _buildIcon(BuildContext context) {
+  //   return RotationTransition(
+  //     turns: _iconTurns,
+  //     child: const Icon(Icons.expand_more),
+  //   );
+  // }
 
-  Widget? _buildLeadingIcon(BuildContext context) {
-    if (_effectiveAffinity(widget.controlAffinity) !=
-        ListTileControlAffinity.leading) {
-      return null;
-    }
-    return _buildIcon(context);
-  }
+  // Widget? _buildLeadingIcon(BuildContext context) {
+  //   if (_effectiveAffinity(widget.controlAffinity) !=
+  //       ListTileControlAffinity.leading) {
+  //     return null;
+  //   }
+  //   return _buildIcon(context);
+  // }
 
-  Widget? _buildTrailingIcon(BuildContext context) {
-    if (_effectiveAffinity(widget.controlAffinity) !=
-        ListTileControlAffinity.trailing) {
-      return null;
-    }
-    return _buildIcon(context);
-  }
+  // Widget? _buildTrailingIcon(BuildContext context) {
+  //   if (_effectiveAffinity(widget.controlAffinity) !=
+  //       ListTileControlAffinity.trailing) {
+  //     return null;
+  //   }
+  //   return _buildIcon(context);
+  // }
 
   Widget _buildChildren(BuildContext context, Widget? child) {
     final ExpansionTileThemeData expansionTileTheme =

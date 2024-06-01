@@ -15,7 +15,7 @@ import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AuthorizationsListPage extends WatchingWidget {
-  const AuthorizationsListPage({Key? key}) : super(key: key);
+  const AuthorizationsListPage({super.key});
 
   @override
   Widget build(BuildContext context) {

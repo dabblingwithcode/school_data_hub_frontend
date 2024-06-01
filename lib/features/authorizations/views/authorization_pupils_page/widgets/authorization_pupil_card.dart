@@ -24,8 +24,7 @@ import 'package:watch_it/watch_it.dart';
 class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
   final int internalId;
   final String authorizationId;
-  AuthorizationPupilCard(this.internalId, this.authorizationId, {Key? key})
-      : super(key: key);
+  AuthorizationPupilCard(this.internalId, this.authorizationId, {super.key});
   @override
   Widget build(BuildContext context) {
     final schoolListLocator = locator<AuthorizationManager>();

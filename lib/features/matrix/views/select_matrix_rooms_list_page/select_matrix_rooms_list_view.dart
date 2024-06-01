@@ -14,8 +14,7 @@ class SelectMatrixRoomsListView extends WatchingWidget {
   final SelectMatrixRoomsListController controller;
   final List<MatrixRoom> filteredRoomsInLIst;
   const SelectMatrixRoomsListView(this.controller, this.filteredRoomsInLIst,
-      {Key? key})
-      : super(key: key);
+      {super.key});
 
   @override
   Widget build(BuildContext context) {

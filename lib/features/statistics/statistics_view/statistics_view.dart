@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/features/statistics/statistics_view/controller/st
 
 class StatisticsView extends StatelessWidget {
   final StatisticsController controller;
-  const StatisticsView(this.controller, {Key? key}) : super(key: key);
+  const StatisticsView(this.controller, {super.key});
 
   @override
   Widget build(BuildContext context) {

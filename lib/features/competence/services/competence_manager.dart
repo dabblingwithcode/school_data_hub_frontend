@@ -19,7 +19,7 @@ class CompetenceManager {
   final client = locator.get<ApiManager>().dioClient.value;
   final snackBarManager = locator<NotificationManager>();
   CompetenceManager() {
-    debug.warning('CompetenceManager initialized');
+    logger.i('CompetenceManager constructor called');
   }
   Future<CompetenceManager> init() async {
     await firstFetchCompetences();

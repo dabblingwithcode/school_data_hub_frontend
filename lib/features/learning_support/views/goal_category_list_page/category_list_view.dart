@@ -7,7 +7,7 @@ import 'package:watch_it/watch_it.dart';
 
 class CategoryListView extends WatchingWidget {
   final CategoryListController controller;
-  const CategoryListView(this.controller, {Key? key}) : super(key: key);
+  const CategoryListView(this.controller, {super.key});
 
   @override
   Widget build(BuildContext context) {

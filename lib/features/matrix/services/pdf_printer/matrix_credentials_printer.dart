@@ -15,8 +15,8 @@ Future<void> printMatrixCredentials(
   final String domain =
       matrixDomain.replaceAll("https://", "").replaceAll("/", "");
   final String qrCodeData = "$matrixId:$domain*$qrPassword";
-  debug.info('QR Code Data: $qrCodeData');
-  final String? encryptedQrCodeData = await customEncrypter.encrypt(qrCodeData);
+  logger.i('QR Code Data: $qrCodeData');
+  final String encryptedQrCodeData = customEncrypter.encrypt(qrCodeData);
   pdf.addPage(
     pw.Page(
       build: (pw.Context context) => pw.Center(
@@ -26,7 +26,7 @@ Future<void> printMatrixCredentials(
           pw.Text('PIN: $pin'),
           pw.Padding(padding: const pw.EdgeInsets.only(top: 10)),
           pw.BarcodeWidget(
-            data: encryptedQrCodeData!,
+            data: encryptedQrCodeData,
             width: 60,
             height: 60,
             barcode: pw.Barcode.qrCode(),

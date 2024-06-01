@@ -28,9 +28,9 @@ class EnvManager {
 
   EnvManager();
   Future<EnvManager> init() async {
-    debug.warning('EnvManager initializing!');
+    logger.i('EnvManager constructor called!');
     await checkStoredEnv();
-    debug.warning('returning EnvManager!');
+    logger.i('returning EnvManager instance!');
     return this;
   }
 
@@ -40,7 +40,7 @@ class EnvManager {
     _packageInfo.value = packageInfo;
     if (isStoredEnv == true) {
       final String? storedSession = await secureStorageRead('env');
-      debug.success('env found!');
+      logger.i('env found!');
       try {
         final env = Env.fromJson(
           json.decode(storedSession!) as Map<String, dynamic>,
@@ -50,15 +50,15 @@ class EnvManager {
 
         return;
       } catch (e) {
-        debug.error(
-          'Error reading env from secureStorage: $e | ${StackTrace.current}',
-        );
+        logger.f('Error reading env from secureStorage!',
+            stackTrace: StackTrace.current);
+
         await secureStorageDelete('env');
 
         return;
       }
     } else {
-      debug.info('No env found');
+      logger.i('No env found');
 
       return;
     }
@@ -68,7 +68,7 @@ class EnvManager {
     bool isStoredEnv = await secureStorageContains('testEnv');
     if (isStoredEnv == true) {
       final String? storedSession = await secureStorageRead('testEnv');
-      debug.success('testEnv found!');
+      logger.i('testEnv found!');
 
       final env = Env.fromJson(
         json.decode(storedSession!) as Map<String, dynamic>,
@@ -86,8 +86,8 @@ class EnvManager {
     final jsonEnv = json.encode(env.toJson());
     await secureStorageWrite('testEnv', jsonEnv);
     _envReady.value = true;
-    debug.success('Test Env stored');
-    debug.success(jsonEnv);
+    logger.i('Test Env stored');
+    logger.i(jsonEnv);
   }
 
   // set the environment from a string
@@ -100,8 +100,8 @@ class EnvManager {
     await secureStorageWrite('env', jsonEnv);
 
     _envReady.value = true;
-    debug.success('Env stored');
-    debug.success(jsonEnv);
+    logger.i('Env stored');
+    logger.i(jsonEnv);
     return;
   }
 

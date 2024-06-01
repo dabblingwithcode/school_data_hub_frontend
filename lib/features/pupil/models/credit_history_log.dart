@@ -16,6 +16,8 @@ class CreditHistoryLog {
   factory CreditHistoryLog.fromJson(Map<String, dynamic> json) =>
       _$CreditHistoryLogFromJson(json);
 
+  Map<String, dynamic> toJson() => _$CreditHistoryLogToJson(this);
+
   CreditHistoryLog(
       {required this.createdAt,
       required this.createdBy,

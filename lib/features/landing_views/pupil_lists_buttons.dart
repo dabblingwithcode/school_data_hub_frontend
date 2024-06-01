@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/common/utils/barcode_stream_scanner.dart';
 
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/attendance_list_page.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_page/attendance_ranking_list_page.dart';
@@ -171,6 +172,9 @@ List<Widget> pupilListButtons(
           ),
           child: InkWell(
             onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                builder: (ctx) => const BarcodeStreamScanner(),
+              ));
               // Navigator.of(context).push(MaterialPageRoute(
               //   builder: (ctx) => CategoryList(),
               // ));

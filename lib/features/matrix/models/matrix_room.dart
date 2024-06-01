@@ -35,6 +35,8 @@ class RoomAdmin {
   factory RoomAdmin.fromJson(Map<String, dynamic> json) =>
       _$RoomAdminFromJson(json);
 
+  Map<String, dynamic> toJson() => _$RoomAdminToJson(this);
+
   RoomAdmin({required this.id, required this.powerLevel});
 }
 

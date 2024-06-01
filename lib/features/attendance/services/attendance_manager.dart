@@ -1,3 +1,5 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
@@ -40,11 +42,32 @@ class AttendanceManager {
   final client = locator<ApiManager>().dioClient.value;
   final apiAttendanceService = ApiAttendanceService();
 
-  AttendanceManager();
+  ValueListenable<List<MissedClass>> get missedClasses => _missedClasses;
+  final ValueNotifier<List<MissedClass>> _missedClasses = ValueNotifier([]);
+  AttendanceManager() {
+    init();
+  }
 
   Future init() async {
     // await fetchMissedClassesOnASchoolday(schooldayManager.thisDate.value);
+    addAllPupilMissedClasses();
     return;
+  }
+
+  void addAllPupilMissedClasses() {
+    final List<MissedClass> allMissedClasses = [];
+    for (PupilProxy pupil in pupilManager.allPupils) {
+      if (pupil.pupilMissedClasses != null) {
+        allMissedClasses.addAll(pupil.pupilMissedClasses!);
+      }
+    }
+    _missedClasses.value = allMissedClasses;
+  }
+
+  List<MissedClass> getMissedClassesOnADay(DateTime date) {
+    return _missedClasses.value
+        .where((missedClass) => missedClass.missedDay.isSameDate(date))
+        .toList();
   }
 
   Future<void> fetchMissedClassesOnASchoolday(DateTime schoolday) async {
@@ -265,7 +288,7 @@ class AttendanceManager {
     if (missedClass == -1) {
       // The missed class does not exist - let's create one
 
-      debug.info('This missed class is new');
+      logger.i('This missed class is new');
 
       final Pupil responsePupil = await apiAttendanceService.postMissedClass(
         pupilId: pupilId,

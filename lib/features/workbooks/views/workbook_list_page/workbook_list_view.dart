@@ -15,7 +15,7 @@ import 'package:watch_it/watch_it.dart';
 
 class WorkbookListView extends WatchingWidget {
   final WorkbookController controller;
-  const WorkbookListView(this.controller, {Key? key}) : super(key: key);
+  const WorkbookListView(this.controller, {super.key});
 
   @override
   Widget build(BuildContext context) {

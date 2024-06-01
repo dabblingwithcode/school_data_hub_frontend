@@ -10,7 +10,7 @@ class ConnectionManager {
       Connectivity().onConnectivityChanged);
 
   ConnectionManager() {
-    debug.warning('ConnectionManager initialized');
+    logger.i('ConnectionManager constructor called');
   }
 
   Future checkConnectivity() async {

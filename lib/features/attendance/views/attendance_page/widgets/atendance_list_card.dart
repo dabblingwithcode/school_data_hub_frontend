@@ -5,7 +5,6 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
@@ -24,11 +23,12 @@ import 'package:watch_it/watch_it.dart';
 
 class AttendanceCard extends WatchingWidget {
   final PupilProxy pupil;
-  const AttendanceCard(this.pupil, {super.key});
+  final DateTime thisDate;
+  const AttendanceCard(this.pupil, this.thisDate, {super.key});
   @override
   Widget build(BuildContext context) {
     final attendanceManager = locator<AttendanceManager>();
-    DateTime thisDate = watchValue((SchooldayManager x) => x.thisDate);
+    DateTime thisDate = this.thisDate;
     MissedType dropdownMissedValue =
         setMissedTypeValue(pupil.internalId, thisDate);
     bool? excusedValue = setExcusedValue(pupil.internalId, thisDate);
@@ -196,8 +196,7 @@ class AttendanceCard extends WatchingWidget {
                                 if (newValue == true) {
                                   final String? returnedTime =
                                       await returnedDayTime(context);
-                                  debug
-                                      .warning('returned time : $returnedTime');
+                                  logger.i('returned time : $returnedTime');
                                   if (returnedTime == null) {
                                     return;
                                   }
@@ -537,8 +536,7 @@ class AttendanceCard extends WatchingWidget {
                                       }
                                       final String? returnedTime =
                                           await returnedDayTime(context);
-                                      debug.warning(
-                                          'returned time : $returnedTime');
+
                                       if (returnedTime == null) {
                                         return;
                                       }

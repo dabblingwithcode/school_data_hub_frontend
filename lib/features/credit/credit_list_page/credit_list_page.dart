@@ -18,7 +18,7 @@ import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/credit_l
 import 'package:watch_it/watch_it.dart';
 
 class CreditListPage extends WatchingWidget {
-  const CreditListPage({Key? key}) : super(key: key);
+  const CreditListPage({super.key});
 
   @override
   Widget build(BuildContext context) {

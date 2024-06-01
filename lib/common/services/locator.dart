@@ -18,7 +18,7 @@ import 'package:schuldaten_hub/features/learning_support/services/goal_manager.d
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
-import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_filter_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
@@ -33,36 +33,36 @@ import 'session_manager.dart';
 final locator = GetIt.instance;
 
 void registerBaseManagers() {
-  debug.info('Registering base managers');
+  logger.i('Registering base managers');
+
   locator.registerSingletonAsync<EnvManager>(() async {
-    debug.info('Registering EnvManager');
     final envManager = EnvManager();
     await envManager.init();
-    debug.info('EnvManager initialized');
+    logger.i('EnvManager initialized');
     return envManager;
   });
 
   locator.registerSingletonAsync<ConnectionManager>(() async {
-    debug.info('Registering ConnectionManager');
+    logger.i('Registering ConnectionManager');
     final connectionManager = ConnectionManager();
     await connectionManager.checkConnectivity();
-    debug.info('ConnectionManager initialized');
+    logger.i('ConnectionManager registered');
     return connectionManager;
   });
 
   locator.registerSingletonAsync<SessionManager>(() async {
-    debug.info('Registering SessionManager');
+    logger.i('Registering SessionManager');
     final sessionManager = SessionManager();
     await sessionManager.init();
-    debug.info('SessionManager initialized');
+    logger.i('SessionManager initialized');
     return sessionManager;
   }, dependsOn: [EnvManager, ConnectionManager]);
 
-  locator.registerSingletonAsync<PupilPersonalDataManager>(() async {
-    debug.info('Registering PupilBaseManager');
-    final pupilBaseManager = PupilPersonalDataManager();
+  locator.registerSingletonAsync<PupilIdentityManager>(() async {
+    logger.i('Registering PupilBaseManager');
+    final pupilBaseManager = PupilIdentityManager();
     await pupilBaseManager.init();
-    debug.info('PupilBaseManager initialized');
+    logger.i('PupilBaseManager initialized');
     return pupilBaseManager;
   });
   locator.registerSingleton<NotificationManager>(NotificationManager());
@@ -71,51 +71,46 @@ void registerBaseManagers() {
 }
 
 Future registerDependentManagers(String token) async {
-  debug.info('Registering dependent managers');
+  logger.i('Registering dependent managers');
 
   locator.registerSingletonAsync<ApiManager>(
     () async {
-      debug.info('Registering ApiManager');
+      logger.i('Registering ApiManager');
       final apiManager = ApiManager();
       await apiManager.init(token);
-      debug.info('ApiManager initialized');
+      logger.i('ApiManager initialized');
       return apiManager;
     },
     dependsOn: [EnvManager, SessionManager, ConnectionManager],
   );
 
   locator.registerSingletonAsync<SchooldayManager>(() async {
-    debug.info('Registering SchooldayManager');
+    logger.i('Registering SchooldayManager');
     final schooldayManager = SchooldayManager();
     await schooldayManager.init();
-    debug.info('SchooldayManager initialized');
+    logger.i('SchooldayManager initialized');
     return schooldayManager;
   }, dependsOn: [SessionManager, ApiManager]);
   locator.registerSingletonAsync<PupilManager>(() async {
-    debug.info('Registering PupilManager');
+    logger.i('Registering PupilManager');
     final pupilManager = PupilManager();
     await pupilManager.init();
-    debug.info('PupilManager initialized');
+    logger.i('PupilManager initialized');
     return pupilManager;
-  }, dependsOn: [
-    EnvManager,
-    ApiManager,
-    SessionManager,
-    PupilPersonalDataManager
-  ]);
+  }, dependsOn: [EnvManager, ApiManager, SessionManager, PupilIdentityManager]);
   locator.registerSingletonAsync<WorkbookManager>(() async {
-    debug.info('Registering WorkbookManager');
+    logger.i('Registering WorkbookManager');
     final workbookManager = WorkbookManager();
     await workbookManager.init();
-    debug.info('WorkbookManager initialized');
+    logger.i('WorkbookManager initialized');
     return workbookManager;
   }, dependsOn: [PupilManager, SessionManager, ApiManager]);
 
   locator.registerSingletonAsync<CompetenceManager>(() async {
-    debug.info('Registering CompetenceManager');
+    logger.i('Registering CompetenceManager');
     final competenceManager = CompetenceManager();
     await competenceManager.init();
-    debug.info('CompetenceManager initialized');
+    logger.i('CompetenceManager initialized');
     return competenceManager;
   }, dependsOn: [SessionManager, ApiManager]);
 
@@ -125,18 +120,18 @@ Future registerDependentManagers(String token) async {
   );
 
   locator.registerSingletonAsync<GoalManager>(() async {
-    debug.info('Regirstering GoalManager');
+    logger.i('Registering GoalManager');
     final goalManager = GoalManager();
     await goalManager.init();
-    debug.info('GoalManager initialized');
+    logger.i('GoalManager initialized');
     return goalManager;
   }, dependsOn: [SessionManager, ApiManager]);
 
   locator.registerSingletonAsync<AuthorizationManager>(() async {
-    debug.info('Registering AuthorizationManager');
+    logger.i('Registering AuthorizationManager');
     final authorizationManager = AuthorizationManager();
     await authorizationManager.init();
-    debug.warning('AuthorizationManager initialized');
+    logger.i('AuthorizationManager initialized');
     return authorizationManager;
   }, dependsOn: [SessionManager, ApiManager]);
 
@@ -151,10 +146,10 @@ Future registerDependentManagers(String token) async {
     dependsOn: [PupilManager],
   );
   locator.registerSingletonAsync<SchoolListManager>(() async {
-    debug.info('Registering SchoolListManager');
+    logger.i('Registering SchoolListManager');
     final schoolListManager = SchoolListManager();
     await schoolListManager.init();
-    debug.info('SchoolListManager initialized');
+    logger.i('SchoolListManager initialized');
     return schoolListManager;
   }, dependsOn: [SessionManager, ApiManager]);
   locator.registerSingletonWithDependencies<SchoolListFilterManager>(
@@ -178,10 +173,10 @@ Future registerDependentManagers(String token) async {
 
 Future<bool> registerMatrixPolicyManager() async {
   locator.registerSingletonAsync<MatrixPolicyManager>(() async {
-    debug.info('Registering MatrixPolicyManager');
+    logger.i('Registering MatrixPolicyManager');
     final policyManager = MatrixPolicyManager();
     await policyManager.init();
-    debug.info('MatrixPolicyManager initialized');
+    logger.i('MatrixPolicyManager initialized');
     locator<NotificationManager>().showSnackBar(
         NotificationType.success, 'Matrix-Räumeverwaltung initialisiert');
     return policyManager;

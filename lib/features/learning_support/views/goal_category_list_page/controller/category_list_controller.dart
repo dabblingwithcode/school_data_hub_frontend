@@ -3,8 +3,8 @@ import 'package:schuldaten_hub/features/learning_support/views/goal_category_lis
 
 class CategoryList extends StatefulWidget {
   const CategoryList({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   CategoryListController createState() => CategoryListController();

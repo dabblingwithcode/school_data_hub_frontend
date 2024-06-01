@@ -53,15 +53,12 @@ class SelectorFilter<T extends Object, V extends Object> extends Filter<T> {
 
 class TextFilter extends SelectorFilter<String, String> {
   TextFilter({
-    required String name,
+    required super.name,
     this.filterText = '',
-    required String Function(String) selector,
+    required super.selector,
     super.displayNameActive,
     super.displayNameInactive,
-  }) : super(
-          name: name,
-          selector: selector,
-        );
+  });
 
   String filterText = '';
 

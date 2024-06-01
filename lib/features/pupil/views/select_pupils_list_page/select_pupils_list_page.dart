@@ -21,8 +21,7 @@ class SelectPupilsListPage extends WatchingStatefulWidget {
   const SelectPupilsListPage(
       {required this.selectablePupils,
       //required this.filteredPupilsInLIst,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   State<SelectPupilsListPage> createState() => _SelectPupilsListPageState();

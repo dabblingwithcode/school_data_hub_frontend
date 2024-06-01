@@ -17,11 +17,11 @@ class CompetenceFilterManager {
       locator<CompetenceManager>().competences.value);
   final _filtersOn = ValueNotifier<bool>(false);
   CompetenceFilterManager() {
-    debug.warning('CompetenceFilterManager says hello!');
+    logger.i('CompetenceFilterManager constructor called.');
   }
   refreshFilteredCompetences(List<Competence> competences) {
     _filteredCompetences.value = competences;
-    debug.success('refreshed filtered competences');
+    logger.i('refreshed filtered competences');
   }
 
   resetFilters() {

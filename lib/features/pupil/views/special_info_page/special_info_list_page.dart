@@ -14,7 +14,7 @@ import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/sp
 import 'package:watch_it/watch_it.dart';
 
 class SpecialInfoListPage extends WatchingWidget {
-  const SpecialInfoListPage({Key? key}) : super(key: key);
+  const SpecialInfoListPage({super.key});
 
   @override
   Widget build(BuildContext context) {

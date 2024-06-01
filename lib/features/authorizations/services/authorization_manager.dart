@@ -20,7 +20,7 @@ class AuthorizationManager {
   final _authorizations = ValueNotifier<List<Authorization>>([]);
   final client = locator.get<ApiManager>().dioClient.value;
   AuthorizationManager() {
-    debug.warning('AuthorizationManager initialized');
+    logger.i('AuthorizationManager constructor called');
   }
 
   Future<AuthorizationManager> init() async {

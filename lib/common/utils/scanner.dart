@@ -5,7 +5,6 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
-import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 
 Future<String?> scanner(BuildContext context, String overlayText) async {
   if (Platform.isWindows) {
@@ -32,7 +31,7 @@ Future<String?> scanner(BuildContext context, String overlayText) async {
               onDetect: (capture) {
                 final Barcode barcode;
                 barcode = capture.barcodes[0];
-                debug.warning('Scan result: ${barcode.displayValue}');
+
                 Navigator.pop(context, barcode.displayValue);
                 controller.dispose();
               }),

@@ -19,7 +19,7 @@ import 'package:schuldaten_hub/features/landing_views/login_view/controller/logi
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_helper_functions.dart';
 import 'package:schuldaten_hub/features/matrix/views/set_matrix_environment_values_view.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/select_pupils_list_page.dart';
 import 'package:schuldaten_hub/features/statistics/birthdays_view.dart';
 import 'package:schuldaten_hub/features/statistics/statistics_view/controller/statistics.dart';
@@ -160,7 +160,9 @@ class SettingsView extends WatchingWidget {
                           'Lokale ID-Schlüssel löschen',
                           'Lokale ID-Schlüssel löschen?');
                       if (confirm == true && context.mounted) {
-                        locator.get<PupilPersonalDataManager>().deleteData();
+                        locator
+                            .get<PupilIdentityManager>()
+                            .deleteAllPupilIdentities();
                         locator<NotificationManager>().showSnackBar(
                             NotificationType.success, 'ID-Schlüssel gelöscht');
                       }
@@ -379,15 +381,14 @@ class SettingsView extends WatchingWidget {
                             await Navigator.of(context).push(MaterialPageRoute(
                           builder: (ctx) => SelectPupilsListPage(
                               selectablePupils: pupilsFromPupilIds(
-                                  locator<PupilPersonalDataManager>()
+                                  locator<PupilIdentityManager>()
                                       .availablePupilIds)),
                         ));
                         if (pupilIds.isEmpty) {
                           return;
                         }
-                        final String qr =
-                            await locator<PupilPersonalDataManager>()
-                                .generatePupilBaseQrData(pupilIds);
+                        final String qr = await locator<PupilIdentityManager>()
+                            .generatePupilIdentitiesQrData(pupilIds);
 
                         if (context.mounted) {
                           showQrCode(qr, context);
@@ -398,12 +399,15 @@ class SettingsView extends WatchingWidget {
                       title:
                           const Text('Alle vorhandenen Gruppen-QR-Ids zeigen'),
                       onPressed: (context) async {
-                        final Map<String, String> qrData =
-                            await locator<PupilPersonalDataManager>()
-                                .generateAllPupilBaseQrData(12);
+                        final List<Map<String, Object>> qrData =
+                            await locator<PupilIdentityManager>()
+                                .generateAllPupilIdentitiesQrData(
+                                    pupilsPerCode: 4);
 
                         if (context.mounted) {
-                          showQrCarousel(qrData, false, context);
+                          Navigator.of(context).push(MaterialPageRoute(
+                            builder: (ctx) => QrCodeCarousel(qrMaps: qrData),
+                          ));
                         }
                       }),
                   SettingsTile.navigation(
@@ -411,13 +415,13 @@ class SettingsView extends WatchingWidget {
                       title: const Text(
                           'Alle vorhandenen Gruppen-QR-Ids zeigen (autoplay)'),
                       onPressed: (context) async {
-                        final Map<String, String> qrData =
-                            await locator<PupilPersonalDataManager>()
-                                .generateAllPupilBaseQrData(8);
+                        // final Map<String, String> qrData =
+                        //     await locator<PupilPersonalDataManager>()
+                        //         .generateAllPupilBaseQrData(pupilsPerCode: 8);
 
-                        if (context.mounted) {
-                          showQrCarousel(qrData, true, context);
-                        }
+                        // if (context.mounted) {
+                        //   showQrCarousel(qrData, true, context);
+                        // }
                       }),
                 ],
               ),

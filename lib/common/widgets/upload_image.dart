@@ -24,7 +24,7 @@ Future<File?> uploadImage(context) async {
 
 class CropAvatarView extends StatefulWidget {
   final XFile image;
-  const CropAvatarView({Key? key, required this.image}) : super(key: key);
+  const CropAvatarView({super.key, required this.image});
   @override
   State<CropAvatarView> createState() => _CropAvatarState();
 }

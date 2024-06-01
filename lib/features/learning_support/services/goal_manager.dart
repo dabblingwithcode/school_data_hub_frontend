@@ -24,7 +24,7 @@ class GoalManager {
   final _isRunning = ValueNotifier<bool>(false);
 
   GoalManager() {
-    debug.warning('GoalManager initialized');
+    logger.i('GoalManager constructor called');
   }
   Future<GoalManager> init() async {
     await fetchGoalCategories();

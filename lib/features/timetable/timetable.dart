@@ -63,7 +63,7 @@ class Timetable extends StatelessWidget {
                     ),
                   ),
                 );
-              }).toList(),
+              }),
             ],
           );
         },

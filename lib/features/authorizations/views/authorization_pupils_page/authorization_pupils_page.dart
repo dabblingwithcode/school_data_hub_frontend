@@ -19,8 +19,7 @@ import 'package:watch_it/watch_it.dart';
 class AuthorizationPupilsPage extends WatchingWidget {
   final Authorization authorization;
 
-  const AuthorizationPupilsPage(this.authorization, {Key? key})
-      : super(key: key);
+  const AuthorizationPupilsPage(this.authorization, {super.key});
 
   @override
   Widget build(BuildContext context) {

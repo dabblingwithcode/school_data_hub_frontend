@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/ogs_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 
 class OgsListPageBottomNavBar extends StatelessWidget {
   final bool filtersOn;
@@ -42,7 +42,8 @@ class OgsListPageBottomNavBar extends StatelessWidget {
                   size: 30,
                 ),
                 onPressed: () {
-                  locator<PupilPersonalDataManager>().scanNewPupilBase(context);
+                  locator<PupilIdentityManager>()
+                      .scanNewPupilIdentities(context);
                 },
               ),
               const Gap(30),

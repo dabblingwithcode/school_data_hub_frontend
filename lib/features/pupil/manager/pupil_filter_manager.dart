@@ -27,7 +27,7 @@ class PupilFilterManager {
       ValueNotifier<Map<PupilSortMode, bool>>(initialSortModeValues);
 
   PupilFilterManager() {
-    debug.warning('PupilFilterManager says hello!');
+    logger.i('PupilFilterManager constructor called');
   }
 
   void filtersOnSwitch(bool value) {

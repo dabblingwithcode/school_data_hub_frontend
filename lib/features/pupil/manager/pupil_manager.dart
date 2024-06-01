@@ -14,7 +14,7 @@ import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_personal_data_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
@@ -31,8 +31,7 @@ class PupilManager extends ChangeNotifier {
 
   //- Fetch all available pupils from the backend
   Future fetchAllPupils() async {
-    final pupilsToFetch =
-        locator.get<PupilPersonalDataManager>().availablePupilIds;
+    final pupilsToFetch = locator.get<PupilIdentityManager>().availablePupilIds;
     if (pupilsToFetch.isEmpty) {
       return;
     }
@@ -53,13 +52,13 @@ class PupilManager extends ChangeNotifier {
 
     // check if we did not get a pupil response for some ids
     // if so, we will delete the personal data for those ids later
-    final List<int> outdatedPupilPersonalDataIds = internalPupilIds
+    final List<int> outdatedPupilIdentitiesIds = internalPupilIds
         .where((element) =>
             !fetchedPupils.any((pupil) => pupil.internalId == element))
         .toList();
 
     // now we match the pupils from the response with their personal data
-    final personalDataManager = locator.get<PupilPersonalDataManager>();
+    final pupilIdentityManager = locator.get<PupilIdentityManager>();
     for (Pupil fetchedPupil in fetchedPupils) {
       final proxyInRepository = _pupils[fetchedPupil.internalId];
       if (proxyInRepository != null) {
@@ -68,24 +67,24 @@ class PupilManager extends ChangeNotifier {
         // if the pupil is not in the repository, that would be weird
         // since we did not send the id to the backend
 
-        final personalData =
-            personalDataManager.getPersonalData(fetchedPupil.internalId);
+        final pupilIdentity =
+            pupilIdentityManager.getPupilIdentity(fetchedPupil.internalId);
 
         _pupils[fetchedPupil.internalId] =
-            PupilProxy(pupil: fetchedPupil, personalData: personalData);
+            PupilProxy(pupil: fetchedPupil, pupilIdentity: pupilIdentity);
       }
     }
 
-    // remove the outdated pupilbase elements that
+    // remove the outdated pupil identities that
     // did not get a response from the backend
     // because this means they are outdated
     // and we do not need them anymore
 
-    if (outdatedPupilPersonalDataIds.isNotEmpty) {
-      final deletedPupils = await personalDataManager
-          .deletePupilBaseElements(outdatedPupilPersonalDataIds);
+    if (outdatedPupilIdentitiesIds.isNotEmpty) {
+      final deletedPupilIdentities = await pupilIdentityManager
+          .deletePupilIdentities(outdatedPupilIdentitiesIds);
       locator<NotificationManager>().showSnackBar(NotificationType.warning,
-          '$deletedPupils sind nicht mehr in der Datenbank und wurden gelöscht.');
+          '$deletedPupilIdentities sind nicht mehr in der Datenbank und wurden gelöscht.');
     }
 
     locator<NotificationManager>().isRunningValue(false);
@@ -110,7 +109,8 @@ class PupilManager extends ChangeNotifier {
       final missedPupil = _pupils[missedClass.missedPupilId];
 
       if (missedPupil == null) {
-        debug.error('${missedClass.missedPupilId} not found');
+        logger.f('Pupil not found', stackTrace: StackTrace.current);
+
         continue;
       }
 

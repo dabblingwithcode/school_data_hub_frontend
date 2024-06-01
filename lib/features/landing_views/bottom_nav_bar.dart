@@ -57,11 +57,11 @@ class BottomNavigation extends WatchingWidget {
         handler: (context, value, cancel) {
           snackbar(context, value.type, value.message);
         });
-    registerHandler(
-        select: (NotificationManager x) => x.isRunning,
-        handler: (context, value, cancel) {
-          value ? showLoadingOverlay(context) : hideLoadingOverlay();
-        });
+    // registerHandler(
+    //     select: (NotificationManager x) => x.isRunning,
+    //     handler: (context, value, cancel) {
+    //       value ? showLoadingOverlay(context) : hideLoadingOverlay();
+    //     });
 
     final manager = locator<BottomNavManager>();
     final tab = watchValue((BottomNavManager x) => x.bottomNavState);
