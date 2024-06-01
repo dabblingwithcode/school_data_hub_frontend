@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/dio/dio_client.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 
 import '../../common/services/locator.dart';
 
@@ -23,7 +22,6 @@ class ApiManager {
   Future<ApiManager> init(String token) async {
     refreshToken(token);
 
-    debug.warning('ApiManager should be ready now');
     return this;
   }
 
