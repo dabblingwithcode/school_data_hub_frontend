@@ -12,10 +12,10 @@ import 'package:schuldaten_hub/features/pupil/models/credit_history_log.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 
-part 'pupil.g.dart';
+part 'pupil_data.g.dart';
 
 @JsonSerializable()
-class Pupil {
+class PupilData {
   @JsonKey(name: 'avatar_url')
   final String? avatarUrl;
   @JsonKey(name: 'communication_pupil')
@@ -68,11 +68,12 @@ class Pupil {
   @JsonKey(name: "competence_goals")
   final List<CompetenceGoal> competenceGoals;
 
-  factory Pupil.fromJson(Map<String, dynamic> json) => _$PupilFromJson(json);
+  factory PupilData.fromJson(Map<String, dynamic> json) =>
+      _$PupilFromJson(json);
 
   Map<String, dynamic> toJson() => _$PupilToJson(this);
 
-  Pupil({
+  PupilData({
     required this.avatarUrl,
     required this.communicationPupil,
     required this.communicationTutor1,

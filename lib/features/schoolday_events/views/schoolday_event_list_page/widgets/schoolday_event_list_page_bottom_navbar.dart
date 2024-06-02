@@ -8,14 +8,14 @@ import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_even
 
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_filter_bottom_sheet.dart';
+import 'package:watch_it/watch_it.dart';
 
-class SchooldayEventListPageBottomNavBar extends StatelessWidget {
-  final bool filtersOn;
-  const SchooldayEventListPageBottomNavBar(
-      {required this.filtersOn, super.key});
+class SchooldayEventListPageBottomNavBar extends WatchingWidget {
+  const SchooldayEventListPageBottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    bool filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
     return BottomNavBarLayout(
       bottomNavBar: BottomAppBar(
         padding: const EdgeInsets.all(10),

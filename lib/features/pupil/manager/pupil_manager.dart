@@ -15,7 +15,7 @@ import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 class PupilManager extends ChangeNotifier {
@@ -25,12 +25,12 @@ class PupilManager extends ChangeNotifier {
 
   PupilManager();
 
-  Future init() async {
+  Future<void> init() async {
     await fetchAllPupils();
   }
 
   //- Fetch all available pupils from the backend
-  Future fetchAllPupils() async {
+  Future<void> fetchAllPupils() async {
     final pupilsToFetch = locator.get<PupilIdentityManager>().availablePupilIds;
     if (pupilsToFetch.isEmpty) {
       return;
@@ -59,7 +59,7 @@ class PupilManager extends ChangeNotifier {
 
     // now we match the pupils from the response with their personal data
     final pupilIdentityManager = locator.get<PupilIdentityManager>();
-    for (Pupil fetchedPupil in fetchedPupils) {
+    for (PupilData fetchedPupil in fetchedPupils) {
       final proxyInRepository = _pupils[fetchedPupil.internalId];
       if (proxyInRepository != null) {
         proxyInRepository.updatePupil(fetchedPupil);
@@ -71,7 +71,7 @@ class PupilManager extends ChangeNotifier {
             pupilIdentityManager.getPupilIdentity(fetchedPupil.internalId);
 
         _pupils[fetchedPupil.internalId] =
-            PupilProxy(pupil: fetchedPupil, pupilIdentity: pupilIdentity);
+            PupilProxy(pupilData: fetchedPupil, pupilIdentity: pupilIdentity);
       }
     }
 
@@ -96,7 +96,7 @@ class PupilManager extends ChangeNotifier {
     _pupils.clear();
   }
 
-  void updatePupilProxyWithPupil(Pupil pupil) {
+  void updatePupilProxyWithPupilData(PupilData pupil) {
     final proxy = _pupils[pupil.internalId];
     if (proxy != null) {
       proxy.updatePupil(pupil);
@@ -139,7 +139,7 @@ class PupilManager extends ChangeNotifier {
 
     // send the Api request
 
-    final Pupil pupilUpdate = await ApiPupilService().updatePupilWithAvatar(
+    final PupilData pupilUpdate = await ApiPupilService().updatePupilWithAvatar(
       id: pupilProxy.internalId,
       formData: formData,
     );
@@ -191,7 +191,7 @@ class PupilManager extends ChangeNotifier {
 
         // call the endpoint to update the siblings
 
-        final List<Pupil> siblingsUpdate = await ApiPupilService()
+        final List<PupilData> siblingsUpdate = await ApiPupilService()
             .updateSiblingsProperty(
                 siblingsPupilIds: pupilIdsWithSameFamily,
                 property: jsonKey,
@@ -199,7 +199,7 @@ class PupilManager extends ChangeNotifier {
 
         // now update the siblings with the new data
 
-        for (Pupil sibling in siblingsUpdate) {
+        for (PupilData sibling in siblingsUpdate) {
           _pupils[sibling.internalId]!.updatePupil(sibling);
         }
 
@@ -211,7 +211,7 @@ class PupilManager extends ChangeNotifier {
 
     // The pupil is no sibling. Make the api call for the single pupil
 
-    final Pupil pupilUpdate = await ApiPupilService()
+    final PupilData pupilUpdate = await ApiPupilService()
         .updatePupilProperty(id: pupilId, property: jsonKey, value: value);
 
     // now update the pupil in the repository

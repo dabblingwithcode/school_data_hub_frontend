@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 
 class ApiAuthorizationService {
   final _client = locator.get<ApiManager>().dioClient.value;
@@ -49,7 +49,7 @@ class ApiAuthorizationService {
   static const String _postAuthorizationWithPupilsFromListUrl =
       '/authorizations/new/list';
 
-  Future<List<Pupil>> postAuthorizationWithPupils(
+  Future<List<PupilData>> postAuthorizationWithPupils(
       String name, String description, List<int> pupilIds) async {
     notificationManager.isRunningValue(true);
 
@@ -71,8 +71,8 @@ class ApiAuthorizationService {
       throw ApiException('Failed to post authorization', response.statusCode);
     }
 
-    final List<Pupil> responsePupils =
-        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+    final List<PupilData> responsePupils =
+        (response.data as List).map((e) => PupilData.fromJson(e)).toList();
 
     notificationManager.isRunningValue(false);
 
@@ -87,7 +87,7 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$pupilId/$authorizationId/new';
   }
 
-  Future<Pupil> postPupilAuthorization(int pupilId, String authId) async {
+  Future<PupilData> postPupilAuthorization(int pupilId, String authId) async {
     notificationManager.isRunningValue(true);
 
     final data =
@@ -108,7 +108,7 @@ class ApiAuthorizationService {
 
     notificationManager.isRunningValue(false);
 
-    return Pupil.fromJson(response.data);
+    return PupilData.fromJson(response.data);
   }
 
   //- post pupil authorizations for a list of pupils as members of an authorization
@@ -117,7 +117,7 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$authorizationId/list';
   }
 
-  Future<List<Pupil>> postPupilAuthorizations(
+  Future<List<PupilData>> postPupilAuthorizations(
       List<int> pupilIds, String authId) async {
     notificationManager.isRunningValue(true);
 
@@ -136,8 +136,8 @@ class ApiAuthorizationService {
           'Failed to post pupil authorizations', response.statusCode);
     }
 
-    final List<Pupil> responsePupils = (List<Pupil>.from(
-        (response.data as List).map((e) => Pupil.fromJson(e))));
+    final List<PupilData> responsePupils = (List<PupilData>.from(
+        (response.data as List).map((e) => PupilData.fromJson(e))));
 
     notificationManager.isRunningValue(false);
 
@@ -150,7 +150,7 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$pupilId/$authorizationId';
   }
 
-  Future<Pupil> deletePupilAuthorization(int pupilId, String authId) async {
+  Future<PupilData> deletePupilAuthorization(int pupilId, String authId) async {
     notificationManager.isRunningValue(true);
 
     final response =
@@ -166,7 +166,7 @@ class ApiAuthorizationService {
           'Failed to delete pupil authorization', response.statusCode);
     }
 
-    final pupil = Pupil.fromJson(response.data);
+    final pupil = PupilData.fromJson(response.data);
 
     notificationManager.isRunningValue(false);
 
@@ -179,7 +179,7 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$pupilId/$authorizationId';
   }
 
-  Future<Pupil> updatePupilAuthorizationProperty(
+  Future<PupilData> updatePupilAuthorizationProperty(
       int pupilId, String listId, bool? value, String? comment) async {
     notificationManager.isRunningValue(true);
 
@@ -205,7 +205,7 @@ class ApiAuthorizationService {
           'Failed to patch pupil authorization', response.statusCode);
     }
 
-    final pupil = Pupil.fromJson(response.data);
+    final pupil = PupilData.fromJson(response.data);
 
     notificationManager.isRunningValue(false);
 
@@ -218,7 +218,7 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$pupilId/$authorizationId/file';
   }
 
-  Future<Pupil> postAuthorizationFile(
+  Future<PupilData> postAuthorizationFile(
     File file,
     int pupilId,
     String authId,
@@ -248,7 +248,7 @@ class ApiAuthorizationService {
           'Failed to post pupil authorization file', response.statusCode);
     }
 
-    final Pupil responsePupil = Pupil.fromJson(response.data);
+    final PupilData responsePupil = PupilData.fromJson(response.data);
 
     notificationManager.isRunningValue(false);
 
@@ -261,7 +261,7 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$pupilId/$authorizationId/file';
   }
 
-  Future<Pupil> deleteAuthorizationFile(
+  Future<PupilData> deleteAuthorizationFile(
       int pupilId, String authId, String cacheKey) async {
     notificationManager.isRunningValue(true);
 
@@ -283,7 +283,7 @@ class ApiAuthorizationService {
     await cacheManager.removeFile(cacheKey);
 
     // Then we patch the pupil with the data
-    final Pupil pupil = Pupil.fromJson(response.data);
+    final PupilData pupil = PupilData.fromJson(response.data);
 
     notificationManager.isRunningValue(false);
 

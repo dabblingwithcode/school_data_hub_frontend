@@ -2,20 +2,20 @@
 
 import 'package:json_annotation/json_annotation.dart';
 
-part 'pupil_personal_data.g.dart';
+part 'pupil_identity.g.dart';
 
 @JsonSerializable()
 class PupilIdentity {
   @JsonKey(name: "id")
   final int id;
   @JsonKey(name: "name")
-  final String name;
+  final String firstName;
   @JsonKey(name: "lastName")
   final String lastName;
   @JsonKey(name: "group")
   final String group;
   @JsonKey(name: "schoolyear")
-  final String schoolyear;
+  final String schoolGrade;
   @JsonKey(name: "specialNeeds")
   final String? specialNeeds;
   @JsonKey(name: "gender")
@@ -38,10 +38,10 @@ class PupilIdentity {
 
   PupilIdentity({
     required this.id,
-    required this.name,
+    required this.firstName,
     required this.lastName,
     required this.group,
-    required this.schoolyear,
+    required this.schoolGrade,
     required this.gender,
     required this.language,
     required this.family,

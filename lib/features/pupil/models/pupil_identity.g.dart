@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'pupil_personal_data.dart';
+part of 'pupil_identity.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
@@ -9,10 +9,10 @@ part of 'pupil_personal_data.dart';
 PupilIdentity _$PupilPersonalDataFromJson(Map<String, dynamic> json) =>
     PupilIdentity(
       id: json['id'] as int,
-      name: json['name'] as String,
+      firstName: json['name'] as String,
       lastName: json['lastName'] as String,
       group: json['group'] as String,
-      schoolyear: json['schoolyear'] as String,
+      schoolGrade: json['schoolyear'] as String,
       gender: json['gender'] as String,
       language: json['language'] as String,
       family: json['family'] as String?,
@@ -27,10 +27,10 @@ PupilIdentity _$PupilPersonalDataFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$PupilPersonalDataToJson(PupilIdentity instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'name': instance.name,
+      'name': instance.firstName,
       'lastName': instance.lastName,
       'group': instance.group,
-      'schoolyear': instance.schoolyear,
+      'schoolyear': instance.schoolGrade,
       'specialNeeds': instance.specialNeeds,
       'gender': instance.gender,
       'language': instance.language,

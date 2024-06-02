@@ -3,7 +3,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
-// we should probably move this functions to the pupil manager in future
+// ? we should probably move this functions to the pupil manager in future
 
 PupilProxy findPupilById(int pupilId) {
   final pupils = locator<PupilManager>().allPupils;
@@ -156,6 +156,7 @@ List<PupilProxy> pupilsWithBirthdayInTheLastSevenDays() {
     }
   }
   int currentYear = DateTime.now().year;
+
   pupilsWithBirthdayInTheLastSevenDays.sort((a, b) {
     int aDayOfYear = DateTime(currentYear, a.birthday.month, a.birthday.day)
         .difference(DateTime(currentYear, 1, 1))

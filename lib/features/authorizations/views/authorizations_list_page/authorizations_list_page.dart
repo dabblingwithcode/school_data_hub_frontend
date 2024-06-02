@@ -12,6 +12,7 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart'
 import 'package:schuldaten_hub/features/authorizations/views/authorizations_list_page/widgets/authorization_card.dart';
 
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AuthorizationsListPage extends WatchingWidget {
@@ -103,7 +104,7 @@ class AuthorizationsListPage extends WatchingWidget {
                               onTap: () {},
 
                               onLongPress: () =>
-                                  locator<PupilFilterManager>().resetFilters(),
+                                  locator<PupilsFilter>().resetFilters(),
                               // onPressed: () => showBottomSheetFilters(context),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),

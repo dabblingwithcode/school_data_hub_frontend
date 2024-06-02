@@ -2,11 +2,14 @@ import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 
 import 'package:schuldaten_hub/common/filters/filters.dart';
+import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_helper_functions.dart';
 
 class PupilTextFilter extends Filter<PupilProxy> {
@@ -50,6 +53,12 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   }
 
   @override
+  void setFiltersOn(bool value) {
+    _filtersOn.value = value;
+    notifyListeners();
+  }
+
+  @override
   void dispose() {
     _pupilsManager.removeListener(refreshs);
     _filteredPupils.dispose();
@@ -74,10 +83,22 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   final PupilTextFilter _textFilter = PupilTextFilter(name: 'Text Filter');
 
   late List<Filter> allFilters = [
-    ...stufenFilters,
+    ...schoolGradeFilters,
     ...groupFilters,
     _textFilter,
   ];
+
+  // reset the filters to its initial state
+  @override
+  void resetFilters() {
+    for (final filter in allFilters) {
+      filter.reset();
+    }
+    _filteredPupils.value = _pupilsManager.allPupils;
+    locator<PupilFilterManager>().resetFilters();
+    sortPupils();
+    _filtersOn.value = false;
+  }
 
   // updates the filtered pupils with current filters
   // and sort mode
@@ -85,8 +106,19 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   void refreshs() {
     final allPupils = _pupilsManager.allPupils;
 
+    final bool specificFiltersOn = locator<PupilFilterManager>()
+            .filterState
+            .value
+            .values
+            .any((x) => x == true) ||
+        locator<SchooldayEventFilterManager>()
+            .schooldayEventsFilterState
+            .value
+            .values
+            .any((x) => x == true);
     // If no filters are active, just sort
-    if (!allFilters.any((x) => x.isActive)) {
+    if (!allFilters.any((x) => x.isActive == true) &&
+        specificFiltersOn == false) {
       _filteredPupils.value = allPupils;
       _filtersOn.value = false;
       sortPupils();
@@ -98,7 +130,7 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
     bool isAnyGroupFilterActive = groupFilters.any((filter) => filter.isActive);
 
     bool isAnyStufenFilterActive =
-        stufenFilters.any((filter) => filter.isActive);
+        schoolGradeFilters.any((filter) => filter.isActive);
 
     for (final pupil in allPupils) {
       bool toList = false;
@@ -110,17 +142,22 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
 
       // matches if no stufen filter is active or if the stufen matches the pupil's stufe
       bool isMatchedByStufenFilter = !isAnyStufenFilterActive ||
-          stufenFilters
+          schoolGradeFilters
               .any((filter) => filter.isActive && filter.matches(pupil));
 
       // If a pupil matches both groupFilter and stufenFilter conditions, add it to the list
       if (isMatchedByGroupFilter && isMatchedByStufenFilter) {
         toList = true;
+      } else {
+        continue;
       }
 
       // If the text filter is active, check if the pupil matches the text filter
       if (toList == true && _textFilter.isActive) {
         toList = toList && _textFilter.matches(pupil);
+        if (!toList) {
+          continue;
+        }
       }
 
       if (toList) {
@@ -133,17 +170,6 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
     }
     _filteredPupils.value = thisFilteredPupils;
     sortPupils();
-  }
-
-  // reset the filters to its initial state
-  @override
-  void resetFilters() {
-    for (final filter in allFilters) {
-      filter.reset();
-    }
-    _filteredPupils.value = _pupilsManager.allPupils;
-    sortPupils();
-    _filtersOn.value = false;
   }
 
   // Set modified filter value
@@ -211,7 +237,7 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   List<Filter> get groupFilters => PupilProxy.groupFilters;
 
   @override
-  List<Filter> get stufenFilters => PupilProxy.jahrgangsStufenFilters;
+  List<Filter> get schoolGradeFilters => PupilProxy.schoolGradeFilters;
 }
 
 int comparePupilsByAdmonishedDate(PupilProxy a, PupilProxy b) {

@@ -11,7 +11,7 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 
 class ApiAttendanceService {
   late final DioClient _client = locator<ApiManager>().dioClient.value;
@@ -56,7 +56,7 @@ class ApiAttendanceService {
 
   static const _postMissedClass = '/missed_classes/new';
 
-  Future<Pupil> postMissedClass({
+  Future<PupilData> postMissedClass({
     required int pupilId,
     required MissedType missedType,
     required DateTime date,
@@ -89,7 +89,7 @@ class ApiAttendanceService {
       throw ApiException('Failed to add missed class', response.statusCode);
     }
 
-    final pupil = Pupil.fromJson(response.data);
+    final pupil = PupilData.fromJson(response.data);
 
     return pupil;
   }
@@ -98,7 +98,7 @@ class ApiAttendanceService {
 
   static const _postMissedClassList = '/missed_classes/list';
 
-  Future<Pupil> postMissedClassList(
+  Future<PupilData> postMissedClassList(
       {required List<MissedClass> missedClasses}) async {
     final data = jsonEncode([
       missedClasses.map((missedClass) => missedClass.toJson()).toList(),
@@ -119,7 +119,7 @@ class ApiAttendanceService {
           'Failed to add many missed classes', response.statusCode);
     }
 
-    final pupil = Pupil.fromJson(response.data);
+    final pupil = PupilData.fromJson(response.data);
 
     return pupil;
   }
@@ -131,7 +131,7 @@ class ApiAttendanceService {
     return '/missed_classes/$pupilId/$missedDate';
   }
 
-  Future<Pupil> patchMissedClass({
+  Future<PupilData> patchMissedClass({
     required int pupilId,
     required DateTime date,
     MissedType? missedType,
@@ -168,7 +168,7 @@ class ApiAttendanceService {
       throw ApiException('Failed to add missed class', response.statusCode);
     }
 
-    final pupil = Pupil.fromJson(response.data);
+    final pupil = PupilData.fromJson(response.data);
 
     return pupil;
   }
@@ -180,7 +180,7 @@ class ApiAttendanceService {
     return '/missed_classes/$id/$missedDate';
   }
 
-  Future<Pupil> deleteMissedClass(int pupilId, DateTime date) async {
+  Future<PupilData> deleteMissedClass(int pupilId, DateTime date) async {
     notificationManager.isRunningValue(true);
 
     final response = await _client.delete(_deleteMissedClassUrl(pupilId, date));
@@ -194,7 +194,7 @@ class ApiAttendanceService {
       throw ApiException('Failed to delete missed class', response.statusCode);
     }
 
-    final pupil = Pupil.fromJson(response.data);
+    final pupil = PupilData.fromJson(response.data);
 
     return pupil;
   }

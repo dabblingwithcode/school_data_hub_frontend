@@ -1,12 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'pupil.dart';
+part of 'pupil_data.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Pupil _$PupilFromJson(Map<String, dynamic> json) => Pupil(
+PupilData _$PupilFromJson(Map<String, dynamic> json) => PupilData(
       avatarUrl: json['avatar_url'] as String?,
       communicationPupil: json['communication_pupil'] as String?,
       communicationTutor1: json['communication_tutor1'] as String?,
@@ -57,7 +57,7 @@ Pupil _$PupilFromJson(Map<String, dynamic> json) => Pupil(
           .toList(),
     )..preschoolRevision = json['preschool_revision'] as int?;
 
-Map<String, dynamic> _$PupilToJson(Pupil instance) => <String, dynamic>{
+Map<String, dynamic> _$PupilToJson(PupilData instance) => <String, dynamic>{
       'avatar_url': instance.avatarUrl,
       'communication_pupil': instance.communicationPupil,
       'communication_tutor1': instance.communicationTutor1,

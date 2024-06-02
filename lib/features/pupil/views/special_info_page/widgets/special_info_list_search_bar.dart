@@ -4,8 +4,8 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/special_info_reset_filter_button.dart';
 
 class SpecialInfoListSearchBar extends StatelessWidget {
@@ -53,8 +53,7 @@ class SpecialInfoListSearchBar extends StatelessWidget {
                     child: SearchTextField(
                         searchType: SearchType.pupil,
                         hintText: 'Schüler/in suchen',
-                        refreshFunction: locator<PupilFilterManager>()
-                            .refreshFilteredPupils)),
+                        refreshFunction: locator<PupilsFilter>().refreshs)),
                 specialInfoResetFilterButton(context, filtersOn),
               ],
             ),

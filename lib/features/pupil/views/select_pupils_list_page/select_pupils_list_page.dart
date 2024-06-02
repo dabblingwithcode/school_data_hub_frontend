@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
@@ -265,7 +266,7 @@ class _SelectPupilsListPageState extends State<SelectPupilsListPage> {
                       InkWell(
                         onTap: () => showSelectPupilsFilterBottomSheet(context),
                         onLongPress: () =>
-                            locator<PupilFilterManager>().resetFilters(),
+                            locator<PupilsFilter>().resetFilters(),
                         // onPressed: () => showBottomSheetFilters(context),
                         child: Padding(
                           padding: const EdgeInsets.all(10.0),

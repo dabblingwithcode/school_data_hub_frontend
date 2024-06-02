@@ -59,10 +59,10 @@ void registerBaseManagers() {
   }, dependsOn: [EnvManager, ConnectionManager]);
 
   locator.registerSingletonAsync<PupilIdentityManager>(() async {
-    logger.i('Registering PupilBaseManager');
+    logger.i('Registering PupilIdentityManager');
     final pupilBaseManager = PupilIdentityManager();
     await pupilBaseManager.init();
-    logger.i('PupilBaseManager initialized');
+    logger.i('PupilIdentityManager initialized');
     return pupilBaseManager;
   });
   locator.registerSingleton<NotificationManager>(NotificationManager());
@@ -139,11 +139,18 @@ Future registerDependentManagers(String token) async {
     () => PupilFilterManager(),
     dependsOn: [PupilManager],
   );
+  locator.registerSingletonWithDependencies<SchooldayEventFilterManager>(
+    () {
+      logger.i('SchooldayEventFilterManager initialized');
+      return SchooldayEventFilterManager();
+    },
+    dependsOn: [PupilManager, PupilFilterManager],
+  );
   locator.registerSingletonWithDependencies<PupilsFilter>(
     () => PupilsFilterImplementation(
       locator<PupilManager>(),
     ),
-    dependsOn: [PupilManager],
+    dependsOn: [PupilManager, PupilFilterManager, SchooldayEventFilterManager],
   );
   locator.registerSingletonAsync<SchoolListManager>(() async {
     logger.i('Registering SchoolListManager');
@@ -154,18 +161,15 @@ Future registerDependentManagers(String token) async {
   }, dependsOn: [SessionManager, ApiManager]);
   locator.registerSingletonWithDependencies<SchoolListFilterManager>(
     () => SchoolListFilterManager(),
-    dependsOn: [SchoolListManager, PupilFilterManager],
+    dependsOn: [SchoolListManager, PupilsFilter],
   );
   locator.registerSingletonWithDependencies<AttendanceManager>(
       () => AttendanceManager(),
-      dependsOn: [SchooldayManager, PupilFilterManager]);
+      dependsOn: [SchooldayManager, PupilsFilter]);
   locator.registerSingletonWithDependencies<SchooldayEventManager>(
       () => SchooldayEventManager(),
-      dependsOn: [SchooldayManager, PupilFilterManager]);
-  locator.registerSingletonWithDependencies<SchooldayEventFilterManager>(
-    () => SchooldayEventFilterManager(),
-    dependsOn: [PupilFilterManager],
-  );
+      dependsOn: [SchooldayManager, PupilsFilter]);
+
   if (await secureStorageContains('matrix')) {
     await registerMatrixPolicyManager();
   }
@@ -180,7 +184,7 @@ Future<bool> registerMatrixPolicyManager() async {
     locator<NotificationManager>().showSnackBar(
         NotificationType.success, 'Matrix-Räumeverwaltung initialisiert');
     return policyManager;
-  }, dependsOn: [SessionManager, PupilManager, PupilFilterManager]);
+  }, dependsOn: [SessionManager, PupilManager]);
 
   locator.registerSingletonWithDependencies<MatrixPolicyFilterManager>(
     () => MatrixPolicyFilterManager(),

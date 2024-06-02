@@ -6,6 +6,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
 import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
 import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
+import 'package:schuldaten_hub/features/learning_support/services/learning_support_filters.dart';
 import 'package:schuldaten_hub/features/learning_support/services/pupil_goal_filters.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_list_card.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_list_search_bar.dart';
@@ -22,11 +23,13 @@ class LearningSupportListPage extends WatchingWidget {
   Widget build(BuildContext context) {
     bool filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
     // These come from the PupilFilterManager
-    List<PupilProxy> filteredPupils =
+    List<PupilProxy> filteredPupilsByClassAndSchoolGrade =
         watchValue((PupilsFilter x) => x.filteredPupils);
     // We want them to go through the learning support filters first
-    final List<PupilProxy> pupils = categoryGoalFilteredPupils(filteredPupils);
-
+    List<PupilProxy> filteredPupilsByCategoryGoals =
+        categoryGoalFilteredPupils(filteredPupilsByClassAndSchoolGrade);
+    List<PupilProxy> pupils =
+        learningSupportFilter(filteredPupilsByCategoryGoals);
     return Scaffold(
       backgroundColor: canvasColor,
       appBar: const GenericAppBar(

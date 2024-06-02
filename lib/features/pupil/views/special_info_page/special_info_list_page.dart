@@ -13,14 +13,27 @@ import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/sp
 import 'package:schuldaten_hub/features/pupil/views/special_info_page/widgets/special_info_list_page_bottom_navbar.dart';
 import 'package:watch_it/watch_it.dart';
 
+List<PupilProxy> specialInfoFilter(List<PupilProxy> pupils) {
+  List<PupilProxy> filteredPupils = [];
+  for (PupilProxy pupil in pupils) {
+    if (pupil.specialInformation == null || pupil.specialInformation!.isEmpty) {
+      locator<PupilsFilter>().setFiltersOn(true);
+      continue;
+    }
+    filteredPupils.add(pupil);
+  }
+  return filteredPupils;
+}
+
 class SpecialInfoListPage extends WatchingWidget {
   const SpecialInfoListPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     bool filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
-    List<PupilProxy> pupils = watchValue((PupilsFilter x) => x.filteredPupils);
-
+    List<PupilProxy> filteredPupils =
+        watchValue((PupilsFilter x) => x.filteredPupils);
+    List<PupilProxy> pupils = specialInfoFilter(filteredPupils);
     return Scaffold(
       backgroundColor: canvasColor,
       appBar: AppBar(

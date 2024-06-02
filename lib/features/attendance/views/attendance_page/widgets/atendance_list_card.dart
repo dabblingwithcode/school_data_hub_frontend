@@ -27,6 +27,7 @@ class AttendanceCard extends WatchingWidget {
   const AttendanceCard(this.pupil, this.thisDate, {super.key});
   @override
   Widget build(BuildContext context) {
+    PupilProxy pupil = watch(this.pupil);
     final attendanceManager = locator<AttendanceManager>();
     DateTime thisDate = this.thisDate;
     MissedType dropdownMissedValue =

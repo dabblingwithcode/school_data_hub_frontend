@@ -1,4 +1,4 @@
-import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_identity.dart';
 
 PupilIdentity pupilIdentityFromString(String pupilIdentityAsString) {
   List<String> splittedData = pupilIdentityAsString.split(',');
@@ -10,10 +10,10 @@ PupilIdentity pupilIdentityFromString(String pupilIdentityAsString) {
           : splittedData[4];
   final newPupilIdentity = PupilIdentity(
     id: int.parse(splittedData[0]),
-    name: splittedData[1],
+    firstName: splittedData[1],
     lastName: splittedData[2],
     group: splittedData[3],
-    schoolyear: schoolyear,
+    schoolGrade: schoolyear,
     specialNeeds:
         splittedData[5] == '' ? null : '${splittedData[5]}${splittedData[6]}',
     gender: splittedData[7],

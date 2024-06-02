@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
@@ -118,11 +118,11 @@ class SchoolListManager {
   }
 
   Future<void> addPupilsToSchoolList(String listId, List<int> pupilIds) async {
-    final List<Pupil> responsePupils =
+    final List<PupilData> responsePupils =
         await apiSchoolListService.addPupilsToSchoolList(listId, pupilIds);
 
-    for (Pupil pupil in responsePupils) {
-      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
+    for (PupilData pupil in responsePupils) {
+      locator<PupilManager>().updatePupilProxyWithPupilData(pupil);
     }
 
     notificationManager.showSnackBar(
@@ -137,14 +137,14 @@ class SchoolListManager {
   ) async {
     // The response are the updated pupils whose pupil list was deleted
 
-    final List<Pupil> responsePupils =
+    final List<PupilData> responsePupils =
         await apiSchoolListService.deletePupilsFromSchoolList(
       pupilIds: pupilIds,
       listId: listId,
     );
 
-    for (Pupil pupil in responsePupils) {
-      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
+    for (PupilData pupil in responsePupils) {
+      locator<PupilManager>().updatePupilProxyWithPupilData(pupil);
     }
     notificationManager.showSnackBar(
         NotificationType.success, 'Schülereinträge erfolgreich gelöscht');
@@ -154,10 +154,11 @@ class SchoolListManager {
 
   Future<void> patchSchoolListPupil(
       int pupilId, String listId, bool? value, String? comment) async {
-    final Pupil responsePupil = await apiSchoolListService.patchSchoolListPupil(
-        pupilId: pupilId, listId: listId, value: value, comment: comment);
+    final PupilData responsePupil =
+        await apiSchoolListService.patchSchoolListPupil(
+            pupilId: pupilId, listId: listId, value: value, comment: comment);
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Eintrag erfolgreich aktualisiert');

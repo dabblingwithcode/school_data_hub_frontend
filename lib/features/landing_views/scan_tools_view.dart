@@ -13,6 +13,7 @@ import 'package:watch_it/watch_it.dart';
 
 class QrToolsView extends WatchingWidget {
   const QrToolsView({super.key});
+
   importFileWithWindows(String function) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles();
     if (result != null) {

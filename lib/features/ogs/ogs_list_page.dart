@@ -15,6 +15,18 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart'
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
+List<PupilProxy> ogsFilter(List<PupilProxy> pupils) {
+  List<PupilProxy> filteredPupils = [];
+  for (PupilProxy pupil in pupils) {
+    if (!pupil.ogs == true) {
+      locator<PupilsFilter>().setFiltersOn(true);
+      continue;
+    }
+    filteredPupils.add(pupil);
+  }
+  return filteredPupils;
+}
+
 class OgsListPage extends WatchingWidget {
   const OgsListPage({super.key});
 
@@ -24,12 +36,15 @@ class OgsListPage extends WatchingWidget {
 
     List<PupilProxy> pupils = watchValue((PupilsFilter x) => x.filteredPupils);
 
+    List<PupilProxy> ogsPupils = ogsFilter(pupils);
+
     return Scaffold(
       backgroundColor: canvasColor,
       appBar: const GenericAppBar(
           iconData: Icons.restaurant_menu_rounded, title: 'OGS Infos'),
       body: RefreshIndicator(
-        onRefresh: () async => locator<PupilManager>().updatePupilList(pupils),
+        onRefresh: () async =>
+            locator<PupilManager>().updatePupilList(ogsPupils),
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 800),
@@ -38,10 +53,12 @@ class OgsListPage extends WatchingWidget {
                 const SliverGap(5),
                 SliverSearchAppBar(
                   height: 110,
-                  title: OgsListSearchBar(pupils: pupils, filtersOn: filtersOn),
+                  title:
+                      OgsListSearchBar(pupils: ogsPupils, filtersOn: filtersOn),
                 ),
                 GenericSliverListWithEmptyListCheck(
-                    items: pupils, itemBuilder: (_, pupil) => OgsCard(pupil)),
+                    items: ogsPupils,
+                    itemBuilder: (_, pupil) => OgsCard(pupil)),
               ],
             ),
           ),

@@ -13,7 +13,7 @@ import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 class ApiSchooldayEventService {
@@ -26,7 +26,7 @@ class ApiSchooldayEventService {
 
   static const _postSchooldayEventUrl = '/admonitions/new';
 
-  Future<Pupil> postSchooldayEvent(
+  Future<PupilData> postSchooldayEvent(
       int pupilId, DateTime date, String type, String reason) async {
     locator<NotificationManager>().isRunningValue(true);
 
@@ -54,7 +54,7 @@ class ApiSchooldayEventService {
           'Failed to post an schooldayEvent', response.statusCode);
     }
 
-    final Pupil responsePupil = Pupil.fromJson(response.data);
+    final PupilData responsePupil = PupilData.fromJson(response.data);
 
     locator<NotificationManager>().isRunningValue(false);
     return responsePupil;
@@ -80,7 +80,7 @@ class ApiSchooldayEventService {
     return '/admonitions/$id/patch';
   }
 
-  Future<Pupil> patchSchooldayEvent(
+  Future<PupilData> patchSchooldayEvent(
       String schooldayEventId,
       String? admonisher,
       String? reason,
@@ -116,7 +116,7 @@ class ApiSchooldayEventService {
           'Failed to patch an schooldayEvent', response.statusCode);
     }
 
-    final Pupil responsePupil = Pupil.fromJson(response.data);
+    final PupilData responsePupil = PupilData.fromJson(response.data);
 
     locator<NotificationManager>().isRunningValue(false);
 
@@ -137,7 +137,7 @@ class ApiSchooldayEventService {
     return '/admonitions/$id/processed_file';
   }
 
-  Future<Pupil> patchSchooldayEventWithFile(
+  Future<PupilData> patchSchooldayEventWithFile(
       File imageFile, String schooldayEventId, bool isProcessed) async {
     locator<NotificationManager>().isRunningValue(true);
 
@@ -176,7 +176,7 @@ class ApiSchooldayEventService {
           'Failed to upload schooldayEvent file', response.statusCode);
     }
 
-    final Pupil responsePupil = Pupil.fromJson(response.data);
+    final PupilData responsePupil = PupilData.fromJson(response.data);
 
     locator<NotificationManager>().isRunningValue(false);
 
@@ -189,7 +189,7 @@ class ApiSchooldayEventService {
     return '/admonitions/$id/delete';
   }
 
-  Future<Pupil> deleteSchooldayEvent(String schooldayEventId) async {
+  Future<PupilData> deleteSchooldayEvent(String schooldayEventId) async {
     locator<NotificationManager>().isRunningValue(true);
 
     Response response =
@@ -203,7 +203,7 @@ class ApiSchooldayEventService {
           'Failed to delete schooldayEvent', response.statusCode);
     }
 
-    final Pupil responsePupil = Pupil.fromJson(response.data);
+    final PupilData responsePupil = PupilData.fromJson(response.data);
     return responsePupil;
   }
 
@@ -241,7 +241,7 @@ class ApiSchooldayEventService {
           'Failed to delete schooldayEvent', response.statusCode);
     }
 
-    final Pupil responsePupil = Pupil.fromJson(response.data);
+    final PupilData responsePupil = PupilData.fromJson(response.data);
 
     // Delete the file from the cache
     final cacheManager = DefaultCacheManager();

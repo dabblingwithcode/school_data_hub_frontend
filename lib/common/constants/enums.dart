@@ -74,21 +74,6 @@ Map<PupilSortMode, bool> initialSortModeValues = {
 };
 
 enum PupilFilter {
-  E1,
-  E2,
-  E3,
-  S3,
-  S4,
-  A1,
-  A2,
-  A3,
-  B1,
-  B2,
-  B3,
-  B4,
-  C1,
-  C2,
-  C3,
   late,
   missed,
   home,
@@ -132,21 +117,6 @@ enum PupilFilter {
 }
 
 Map<PupilFilter, bool> initialFilterValues = {
-  PupilFilter.E1: false,
-  PupilFilter.E2: false,
-  PupilFilter.E3: false,
-  PupilFilter.S3: false,
-  PupilFilter.S4: false,
-  PupilFilter.A1: false,
-  PupilFilter.A2: false,
-  PupilFilter.A3: false,
-  PupilFilter.B1: false,
-  PupilFilter.B2: false,
-  PupilFilter.B3: false,
-  PupilFilter.B4: false,
-  PupilFilter.C1: false,
-  PupilFilter.C2: false,
-  PupilFilter.C3: false,
   PupilFilter.late: false,
   PupilFilter.missed: false,
   PupilFilter.home: false,

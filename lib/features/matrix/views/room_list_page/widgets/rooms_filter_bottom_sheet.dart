@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
+import 'package:schuldaten_hub/common/widgets/common_pupil_filters.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -29,7 +29,7 @@ class RoomsFilterBottomSheet extends WatchingWidget {
           constraints: const BoxConstraints(maxWidth: 800),
           child: Column(
             children: [
-              const StandardFilters(),
+              const CommonPupilFiltersWidget(),
               const Row(
                 children: [
                   Text(
@@ -56,10 +56,10 @@ class RoomsFilterBottomSheet extends WatchingWidget {
                     ),
                     selected: valueSortByName,
                     onSelected: (val) {
-                      filterLocator.setSortMode(PupilSortMode.sortByName, val);
-                      valueSortByName = filterLocator
-                          .sortMode.value[PupilSortMode.sortByName]!;
-                      filterLocator.sortPupils();
+                      // filterLocator.setSortMode(PupilSortMode.sortByName, val);
+                      // valueSortByName = filterLocator
+                      //     .sortMode.value[PupilSortMode.sortByName]!;
+                      // filterLocator.sortPupils();
                     },
                   ),
                   FilterChip(
@@ -75,11 +75,11 @@ class RoomsFilterBottomSheet extends WatchingWidget {
                     ),
                     selected: valueSortByCredit,
                     onSelected: (val) {
-                      filterLocator.setSortMode(
-                          PupilSortMode.sortByCredit, val);
-                      valueSortByCredit = filterLocator
-                          .sortMode.value[PupilSortMode.sortByCredit]!;
-                      filterLocator.sortPupils();
+                      // filterLocator.setSortMode(
+                      //     PupilSortMode.sortByCredit, val);
+                      // valueSortByCredit = filterLocator
+                      //     .sortMode.value[PupilSortMode.sortByCredit]!;
+                      // filterLocator.sortPupils();
                     },
                   ),
                   FilterChip(
@@ -95,11 +95,11 @@ class RoomsFilterBottomSheet extends WatchingWidget {
                     ),
                     selected: valueSortByCreditEarned,
                     onSelected: (val) {
-                      filterLocator.setSortMode(
-                          PupilSortMode.sortByCreditEarned, val);
-                      valueSortByCreditEarned = filterLocator
-                          .sortMode.value[PupilSortMode.sortByCreditEarned]!;
-                      filterLocator.sortPupils();
+                      // filterLocator.setSortMode(
+                      //     PupilSortMode.sortByCreditEarned, val);
+                      // valueSortByCreditEarned = filterLocator
+                      //     .sortMode.value[PupilSortMode.sortByCreditEarned]!;
+                      // filterLocator.sortPupils();
                     },
                   ),
                 ],

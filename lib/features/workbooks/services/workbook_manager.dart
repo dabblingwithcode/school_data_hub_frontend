@@ -8,7 +8,8 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/common/utils/debug_printer.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/workbooks/models/workbook.dart';
 
@@ -24,6 +25,7 @@ class WorkbookManager {
 
   Future<WorkbookManager> init() async {
     await getWorkbooks();
+    logger.i('WorkbookManager constructed!');
     return this;
   }
 
@@ -116,10 +118,10 @@ class WorkbookManager {
   //- PUPIL WORKBOOKS
 
   Future<void> newPupilWorkbook(int pupilId, int isbn) async {
-    final Pupil responsePupil =
+    final PupilData responsePupil =
         await apiPupilWorkbookService.postNewPupilWorkbook(pupilId, isbn);
 
-    pupilManager.updatePupilProxyWithPupil(responsePupil);
+    pupilManager.updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Arbeitsheft erstellt');
@@ -128,10 +130,10 @@ class WorkbookManager {
   }
 
   Future<void> deletePupilWorkbook(int pupilId, int isbn) async {
-    final Pupil responsePupil =
+    final PupilData responsePupil =
         await apiPupilWorkbookService.deletePupilWorkbook(pupilId, isbn);
 
-    pupilManager.updatePupilProxyWithPupil(responsePupil);
+    pupilManager.updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Arbeitsheft gelöscht');

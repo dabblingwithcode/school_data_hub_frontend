@@ -16,8 +16,8 @@ import 'package:schuldaten_hub/common/utils/scanner.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_identity.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 class PupilIdentityManager {
@@ -37,11 +37,9 @@ class PupilIdentityManager {
   }
 
   Future<void> deleteAllPupilIdentities() async {
-    locator<NotificationManager>().isRunningValue(true);
     await secureStorageDelete('pupilBase');
     _pupilIdentities.clear();
     locator<PupilManager>().clearData();
-    locator<NotificationManager>().isRunningValue(false);
   }
 
   Future<void> getStoredPupilIdentities() async {
@@ -78,11 +76,6 @@ class PupilIdentityManager {
       return;
     }
   }
-
-  // Future<void> decryptAndAddNewPupilBase(String scanResult) async {
-  //   final decryptedResult = customEncrypter.decrypt(scanResult);
-  //   addNewPupilIdentities( decryptedResult);
-  // }
 
   Future<void> setNewPupilIdentities(
       List<PupilIdentity> personalIdentitiesList) async {
@@ -143,10 +136,10 @@ class PupilIdentityManager {
                 : pupilIdentityValues[4];
         importedPupilIdentityList.add(PupilIdentity(
           id: int.parse(pupilIdentityValues[0]),
-          name: pupilIdentityValues[1],
+          firstName: pupilIdentityValues[1],
           lastName: pupilIdentityValues[2],
           group: pupilIdentityValues[3],
-          schoolyear: schoolyear,
+          schoolGrade: schoolyear,
           specialNeeds: pupilIdentityValues[5] == ''
               ? null
               : '${pupilIdentityValues[5]}${pupilIdentityValues[6]}',
@@ -171,10 +164,10 @@ class PupilIdentityManager {
     // The server will
     final textFile = File('temp.txt')
       ..writeAsStringSync(pupilListTxtFileContentForBackendUpdate);
-    final List<Pupil> updatedRepository =
+    final List<PupilData> updatedRepository =
         await ApiPupilService().updateBackendPupilsDatabase(file: textFile);
-    for (Pupil pupil in updatedRepository) {
-      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
+    for (PupilData pupil in updatedRepository) {
+      locator<PupilManager>().updatePupilProxyWithPupilData(pupil);
     }
     // We don't need the temp file any more, let's delete it
     textFile.delete();
@@ -185,10 +178,14 @@ class PupilIdentityManager {
 
     await secureStorageWrite(
         'pupilBase', jsonEncode(_pupilIdentities.values.toList()));
+
     await locator<PupilManager>().fetchAllPupils();
+
     locator<NotificationManager>().showSnackBar(NotificationType.success,
         '${_pupilIdentities.length} Schülerdaten wurden aktualisiert!');
+
     locator<BottomNavManager>().setBottomNavPage(0);
+
     return;
   }
 
@@ -204,7 +201,7 @@ class PupilIdentityManager {
       final specialNeeds = pupilIdentity.specialNeeds ?? '';
       final family = pupilIdentity.family ?? '';
       final String pupilbaseString =
-          '${pupilIdentity.id},${pupilIdentity.name},${pupilIdentity.lastName},${pupilIdentity.group},${pupilIdentity.schoolyear},$specialNeeds,,${pupilIdentity.gender},${pupilIdentity.language},$family,${pupilIdentity.birthday.formatForJson()},$migrationSupportEnds,${pupilIdentity.pupilSince.formatForJson()},\n';
+          '${pupilIdentity.id},${pupilIdentity.firstName},${pupilIdentity.lastName},${pupilIdentity.group},${pupilIdentity.schoolGrade},$specialNeeds,,${pupilIdentity.gender},${pupilIdentity.language},$family,${pupilIdentity.birthday.formatForJson()},$migrationSupportEnds,${pupilIdentity.pupilSince.formatForJson()},\n';
       qrString = qrString + pupilbaseString;
     }
     final encryptedString = customEncrypter.encrypt(qrString);
@@ -244,7 +241,7 @@ class PupilIdentityManager {
           final specialNeeds = pupilIdentity.specialNeeds ?? '';
           final family = pupilIdentity.family ?? '';
           final String pupilIdentityString =
-              '${pupilIdentity.id},${pupilIdentity.name},${pupilIdentity.lastName},${pupilIdentity.group},${pupilIdentity.schoolyear},$specialNeeds,,${pupilIdentity.gender},${pupilIdentity.language},$family,${pupilIdentity.birthday.formatForJson()},$migrationSupportEnds,${pupilIdentity.pupilSince.formatForJson()},\n';
+              '${pupilIdentity.id},${pupilIdentity.firstName},${pupilIdentity.lastName},${pupilIdentity.group},${pupilIdentity.schoolGrade},$specialNeeds,,${pupilIdentity.gender},${pupilIdentity.language},$family,${pupilIdentity.birthday.formatForJson()},$migrationSupportEnds,${pupilIdentity.pupilSince.formatForJson()},\n';
           qrString = qrString + pupilIdentityString;
         }
         final encryptedString = customEncrypter.encrypt(qrString);
@@ -268,7 +265,7 @@ class PupilIdentityManager {
     List<String> toBeDeletedPupilIdentities = [];
 
     for (int id in toBeDeletedPupilIds) {
-      toBeDeletedPupilIdentities.add(_pupilIdentities[id]!.name);
+      toBeDeletedPupilIdentities.add(_pupilIdentities[id]!.firstName);
       _pupilIdentities.remove(id);
     }
 
@@ -280,15 +277,4 @@ class PupilIdentityManager {
 
     return toBeDeletedPupilIdentities.join(', ');
   }
-
-  // importPupilIdentitiesWithWindows() async {
-  //   FilePickerResult? result = await FilePicker.platform.pickFiles();
-  //   if (result != null) {
-  //     File file = File(result.files.single.path!);
-  //     String rawTextResult = await file.readAsString();
-  //     addNewPupilIdentities(encryptedIdentitiesAsString: rawTextResult);
-  //   } else {
-  //     // User canceled the picker
-  //   }
-  // }
 }

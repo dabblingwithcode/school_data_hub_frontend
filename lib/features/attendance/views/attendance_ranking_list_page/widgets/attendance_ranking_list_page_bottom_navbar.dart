@@ -4,8 +4,8 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_page/widgets/attendance_ranking_filter_bottom_sheet.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 
 class AttendanceRankingListPageBottomNavBar extends StatelessWidget {
   final bool filtersOn;
@@ -57,8 +57,7 @@ class AttendanceRankingListPageBottomNavBar extends StatelessWidget {
                 const Gap(30),
                 InkWell(
                   onTap: () => showAttendanceRankingFilterBottomSheet(context),
-                  onLongPress: () =>
-                      locator<PupilFilterManager>().resetFilters(),
+                  onLongPress: () => locator<PupilsFilter>().resetFilters(),
                   child: Icon(
                     Icons.filter_list,
                     color: filtersOn ? Colors.deepOrange : Colors.white,

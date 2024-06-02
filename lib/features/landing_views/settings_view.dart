@@ -415,13 +415,13 @@ class SettingsView extends WatchingWidget {
                       title: const Text(
                           'Alle vorhandenen Gruppen-QR-Ids zeigen (autoplay)'),
                       onPressed: (context) async {
-                        // final Map<String, String> qrData =
-                        //     await locator<PupilPersonalDataManager>()
-                        //         .generateAllPupilBaseQrData(pupilsPerCode: 8);
+                        final qrDataMaps = await locator<PupilIdentityManager>()
+                            .generateAllPupilIdentitiesQrData(pupilsPerCode: 8);
+                        final qrData = qrDataMaps[1] as Map<String, String>;
 
-                        // if (context.mounted) {
-                        //   showQrCarousel(qrData, true, context);
-                        // }
+                        if (context.mounted) {
+                          showQrCarousel(qrData, true, context);
+                        }
                       }),
                 ],
               ),

@@ -3,8 +3,8 @@ import 'package:gap/gap.dart';
 
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/common/widgets/common_pupil_filters.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:watch_it/watch_it.dart';
 
 class SelectPupilsFilterBottomSheet extends WatchingWidget {
@@ -30,14 +30,14 @@ class SelectPupilsFilterBottomSheet extends WatchingWidget {
                       iconSize: 35,
                       color: Colors.amber,
                       onPressed: () {
-                        locator<PupilFilterManager>().resetFilters();
+                        locator<PupilsFilter>().resetFilters();
 
                         //Navigator.pop(context);
                       },
                       icon: const Icon(Icons.restart_alt_rounded)),
                 ],
               ),
-              const StandardFilters(),
+              const CommonPupilFiltersWidget(),
               const Row(
                 children: [
                   Text(

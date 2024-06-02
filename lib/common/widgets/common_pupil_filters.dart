@@ -33,12 +33,12 @@ class FilterHeading extends StatelessWidget {
   }
 }
 
-class StandardFilters extends WatchingWidget {
-  const StandardFilters({super.key});
+class CommonPupilFiltersWidget extends WatchingWidget {
+  const CommonPupilFiltersWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final stufenFilters = locator<PupilsFilter>().stufenFilters;
+    final schoolGradeFilters = locator<PupilsFilter>().schoolGradeFilters;
     final groupFilters = locator<PupilsFilter>().groupFilters;
 
     return Column(
@@ -56,7 +56,7 @@ class StandardFilters extends WatchingWidget {
           spacing: 5,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
-            for (final stufenFilter in stufenFilters)
+            for (final schoolGradeFilter in schoolGradeFilters)
               FilterChip(
                 padding: filterChipPadding,
                 labelPadding: filterChipLabelPadding,
@@ -65,12 +65,12 @@ class StandardFilters extends WatchingWidget {
                 checkmarkColor: filterChipSelectedCheckColor,
                 backgroundColor: filterChipUnselectedColor,
                 label: Text(
-                  stufenFilter.displayName,
+                  schoolGradeFilter.displayName,
                   style: filterItemsTextStyle,
                 ),
-                selected: watch(stufenFilter).isActive,
+                selected: watch(schoolGradeFilter).isActive,
                 onSelected: (val) {
-                  stufenFilter.toggle(val);
+                  schoolGradeFilter.toggle(val);
                 },
               ),
             // just an example how it could be done with radio buttons

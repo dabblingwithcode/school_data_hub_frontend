@@ -7,22 +7,23 @@ import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_page/widgets/authorization_pupils_filter_bottom_sheet.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/select_pupils_list_page.dart';
+import 'package:watch_it/watch_it.dart';
 
-class AuthorizationPupilsBottomNavBar extends StatelessWidget {
+class AuthorizationPupilsBottomNavBar extends WatchingWidget {
   final Authorization authorization;
-  final bool filtersOn;
+
   final List<int> pupilsInAuthorization;
   const AuthorizationPupilsBottomNavBar(
-      {required this.filtersOn,
-      required this.pupilsInAuthorization,
+      {required this.pupilsInAuthorization,
       required this.authorization,
       super.key});
 
   @override
   Widget build(BuildContext context) {
+    final filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
     return BottomNavBarLayout(
       bottomNavBar: BottomAppBar(
         padding: const EdgeInsets.all(9),
@@ -70,7 +71,7 @@ class AuthorizationPupilsBottomNavBar extends StatelessWidget {
               const Gap(10),
               InkWell(
                 onTap: () => showAuthorizationPupilsFilterBottomSheet(context),
-                onLongPress: () => locator<PupilFilterManager>().resetFilters(),
+                onLongPress: () => locator<PupilsFilter>().resetFilters(),
                 child: Icon(
                   Icons.filter_list,
                   color: filtersOn ? Colors.deepOrange : Colors.white,
@@ -135,7 +136,7 @@ BottomAppBar authorizationPupilsBottomNavBar(
           const Gap(10),
           InkWell(
             onTap: () => showAuthorizationPupilsFilterBottomSheet(context),
-            onLongPress: () => locator<PupilFilterManager>().resetFilters(),
+            onLongPress: () => locator<PupilsFilter>().resetFilters(),
             child: Icon(
               Icons.filter_list,
               color: filtersOn ? Colors.deepOrange : Colors.white,

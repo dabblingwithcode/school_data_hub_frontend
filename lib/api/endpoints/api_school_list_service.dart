@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
 
 class ApiSchoolListService {
@@ -153,7 +153,7 @@ class ApiSchoolListService {
     return '/school_lists/$listId/pupils';
   }
 
-  Future<List<Pupil>> addPupilsToSchoolList(
+  Future<List<PupilData>> addPupilsToSchoolList(
       String listId, List<int> pupilIds) async {
     notificationManager.isRunningValue(true);
 
@@ -171,8 +171,8 @@ class ApiSchoolListService {
       throw ApiException('Failed to delete school list', response.statusCode);
     }
 
-    final List<Pupil> responsePupils =
-        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+    final List<PupilData> responsePupils =
+        (response.data as List).map((e) => PupilData.fromJson(e)).toList();
 
     return responsePupils;
   }
@@ -183,7 +183,7 @@ class ApiSchoolListService {
     return '/pupil_lists/$pupilId/$listId';
   }
 
-  Future<Pupil> patchSchoolListPupil({
+  Future<PupilData> patchSchoolListPupil({
     required int pupilId,
     required String listId,
     bool? value,
@@ -219,7 +219,7 @@ class ApiSchoolListService {
       throw ApiException('Failed to patch school list', response.statusCode);
     }
 
-    final Pupil responsePupil = Pupil.fromJson(response.data);
+    final PupilData responsePupil = PupilData.fromJson(response.data);
 
     return responsePupil;
   }
@@ -249,8 +249,8 @@ class ApiSchoolListService {
     }
     // The response are the updated pupils whose pupil list was deleted
 
-    final List<Pupil> responsePupils =
-        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+    final List<PupilData> responsePupils =
+        (response.data as List).map((e) => PupilData.fromJson(e)).toList();
 
     return responsePupils;
   }

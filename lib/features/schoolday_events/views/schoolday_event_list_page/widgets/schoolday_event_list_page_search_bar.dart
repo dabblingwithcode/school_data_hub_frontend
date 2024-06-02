@@ -4,7 +4,6 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_helper_functions.dart';
@@ -112,8 +111,7 @@ class SchooldayEventListSearchBar extends WatchingWidget {
                     child: SearchTextField(
                         searchType: SearchType.pupil,
                         hintText: 'Schüler/in suchen',
-                        refreshFunction: locator<PupilFilterManager>()
-                            .refreshFilteredPupils)),
+                        refreshFunction: locator<PupilsFilter>().refreshs)),
                 InkWell(
                   onTap: () => showModalBottomSheet(
                     constraints: const BoxConstraints(maxWidth: 800),
@@ -123,8 +121,7 @@ class SchooldayEventListSearchBar extends WatchingWidget {
                     context: context,
                     builder: (_) => const SchooldayEventFilterBottomSheet(),
                   ),
-                  onLongPress: () =>
-                      locator<PupilFilterManager>().resetFilters(),
+                  onLongPress: () => locator<PupilsFilter>().resetFilters(),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Icon(

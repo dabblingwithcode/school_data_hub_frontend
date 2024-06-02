@@ -6,9 +6,9 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_page/widgets/attendance_ranking_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_badges.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 
 class AttendanceRankingListSearchbar extends StatelessWidget {
   final List<PupilProxy> pupils;
@@ -57,12 +57,10 @@ class AttendanceRankingListSearchbar extends StatelessWidget {
                     child: SearchTextField(
                         searchType: SearchType.pupil,
                         hintText: 'Schüler/in suchen',
-                        refreshFunction: locator<PupilFilterManager>()
-                            .refreshFilteredPupils)),
+                        refreshFunction: locator<PupilsFilter>().refreshs)),
                 InkWell(
                   onTap: () => showAttendanceRankingFilterBottomSheet(context),
-                  onLongPress: () =>
-                      locator<PupilFilterManager>().resetFilters(),
+                  onLongPress: () => locator<PupilsFilter>().resetFilters(),
                   // onPressed: () => showBottomSheetFilters(context),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),

@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/learning_support/models/category/goal_category.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 class ApiLearningSupportService {
@@ -54,7 +54,7 @@ class ApiLearningSupportService {
     return '/category/statuses/$pupilId/$categoryId';
   }
 
-  Future<Pupil> postCategoryStatus(
+  Future<PupilData> postCategoryStatus(
     int pupilInternalId,
     int goalCategoryId,
     String state,
@@ -80,7 +80,7 @@ class ApiLearningSupportService {
 
       throw ApiException('Failed to post category status', response.statusCode);
     }
-    final Pupil pupil = Pupil.fromJson(response.data);
+    final PupilData pupil = PupilData.fromJson(response.data);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Status erfolgreich gepostet');
@@ -94,7 +94,7 @@ class ApiLearningSupportService {
     return '/category/statuses/$categoryStatusId';
   }
 
-  Future<Pupil> updateCategoryStatusProperty(
+  Future<PupilData> updateCategoryStatusProperty(
       PupilProxy pupil,
       String statusId,
       String? state,
@@ -123,7 +123,7 @@ class ApiLearningSupportService {
           'Failed to update category status', response.statusCode);
     }
 
-    final Pupil pupil = Pupil.fromJson(response.data);
+    final PupilData pupil = PupilData.fromJson(response.data);
 
     notificationManager.isRunningValue(false);
 
@@ -153,7 +153,7 @@ class ApiLearningSupportService {
           'Failed to delete category status', response.statusCode);
     }
 
-    final Pupil pupil = Pupil.fromJson(response.data);
+    final PupilData pupil = PupilData.fromJson(response.data);
 
     notificationManager.isRunningValue(false);
 
@@ -168,7 +168,7 @@ class ApiLearningSupportService {
     return '/category_goals/$pupilId/new';
   }
 
-  Future<Pupil> postNewCategoryGoal(int goalCategoryId, int pupilId,
+  Future<PupilData> postNewCategoryGoal(int goalCategoryId, int pupilId,
       String description, String strategies) async {
     notificationManager.isRunningValue(true);
 
@@ -193,7 +193,7 @@ class ApiLearningSupportService {
       throw ApiException('Failed to post category goal', response.statusCode);
     }
 
-    final Pupil pupil = Pupil.fromJson(response.data);
+    final PupilData pupil = PupilData.fromJson(response.data);
 
     notificationManager.isRunningValue(false);
 
@@ -220,7 +220,7 @@ class ApiLearningSupportService {
       throw ApiException('Failed to delete category goal', response.statusCode);
     }
 
-    final Pupil pupil = Pupil.fromJson(response.data);
+    final PupilData pupil = PupilData.fromJson(response.data);
 
     notificationManager.isRunningValue(false);
 

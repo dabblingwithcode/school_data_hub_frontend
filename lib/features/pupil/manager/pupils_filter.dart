@@ -5,20 +5,6 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/filters/filters.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
-enum AttendanceStatus {
-  late('late'),
-  missed('missed'),
-  home('home'),
-  unexcused('unexcused'),
-  contacted('contacted'),
-  goneHome('goneHome'),
-  present('present'),
-  notPresent('notPresent');
-
-  final String value;
-  const AttendanceStatus(this.value);
-}
-
 enum PupilProperties {
   specialNeeds,
   ogs,
@@ -105,7 +91,7 @@ abstract class PupilsFilter implements Listenable {
   ValueListenable<List<PupilProxy>> get filteredPupils;
 
   List<Filter> get groupFilters;
-  List<Filter> get stufenFilters;
+  List<Filter> get schoolGradeFilters;
   ValueListenable<PupilSortMode> get sortMode;
 
   /// must be called when this object is no longer needed
@@ -117,6 +103,10 @@ abstract class PupilsFilter implements Listenable {
 
   // reset the filters to its initial state
   void resetFilters();
+
+  // for now, we need to access the switch from outside
+  // because additional filters outside are still used
+  void setFiltersOn(bool value);
 
   void setSortMode(PupilSortMode sortMode);
   void sortPupils();

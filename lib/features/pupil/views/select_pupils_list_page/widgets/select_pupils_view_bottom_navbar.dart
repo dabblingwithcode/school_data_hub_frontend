@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/widgets/select_pupils_filter_bottom_sheet.dart';
 
 class SelectPupilsPageBottomNavBar extends StatelessWidget {
@@ -76,7 +76,7 @@ class SelectPupilsPageBottomNavBar extends StatelessWidget {
               ),
               InkWell(
                 onTap: () => showSelectPupilsFilterBottomSheet(context),
-                onLongPress: () => locator<PupilFilterManager>().resetFilters(),
+                onLongPress: () => locator<PupilsFilter>().resetFilters(),
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
                   child: Icon(

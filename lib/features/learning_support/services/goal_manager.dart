@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/learning_support/models/category/goal_category.dart';
 import 'package:schuldaten_hub/features/learning_support/models/goal/pupil_goal.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
@@ -69,10 +69,10 @@ class GoalManager {
     String state,
     String comment,
   ) async {
-    final Pupil responsePupil = await apiLearningSupportService
+    final PupilData responsePupil = await apiLearningSupportService
         .postCategoryStatus(pupil.internalId, goalCategoryId, state, comment);
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Status hinzugefügt');
@@ -88,11 +88,11 @@ class GoalManager {
     String? createdBy,
     String? createdAt,
   ) async {
-    final Pupil responsePupil =
+    final PupilData responsePupil =
         await apiLearningSupportService.updateCategoryStatusProperty(
             pupil, statusId, state, comment, createdBy, createdAt);
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Status aktualisiert');
@@ -101,22 +101,22 @@ class GoalManager {
   }
 
   Future<void> deleteCategoryStatus(String statusId) async {
-    final Pupil responsePupil =
+    final PupilData responsePupil =
         await apiLearningSupportService.deleteCategoryStatus(statusId);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Status gelöscht');
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
     return;
   }
 
   Future postNewCategoryGoal(int goalCategoryId, int pupilId,
       String description, String strategies) async {
-    final Pupil responsePupil = await apiLearningSupportService
+    final PupilData responsePupil = await apiLearningSupportService
         .postNewCategoryGoal(goalCategoryId, pupilId, description, strategies);
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Ziel hinzugefügt');
@@ -125,10 +125,10 @@ class GoalManager {
   }
 
   Future deleteGoal(String goalId) async {
-    final Pupil responsePupil =
+    final PupilData responsePupil =
         await apiLearningSupportService.deleteGoal(goalId);
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(NotificationType.success, 'Ziel gelöscht');
 

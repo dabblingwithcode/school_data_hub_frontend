@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/common/widgets/standard_filters.dart';
+import 'package:schuldaten_hub/common/widgets/common_pupil_filters.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -39,7 +39,7 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
           Expanded(
             child: SingleChildScrollView(
               child: Column(children: [
-                const StandardFilters(),
+                const CommonPupilFiltersWidget(),
                 const Row(
                   children: [
                     Text(

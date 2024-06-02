@@ -172,9 +172,7 @@ List<Widget> pupilListButtons(
           ),
           child: InkWell(
             onTap: () {
-              Navigator.of(context).push(MaterialPageRoute(
-                builder: (ctx) => const BarcodeStreamScanner(),
-              ));
+           
               // Navigator.of(context).push(MaterialPageRoute(
               //   builder: (ctx) => CategoryList(),
               // ));

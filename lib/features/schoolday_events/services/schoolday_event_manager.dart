@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 
 import '../../../api/services/api_manager.dart';
 import '../../../common/services/locator.dart';
@@ -54,10 +54,10 @@ class SchooldayEventManager {
     String type,
     String reason,
   ) async {
-    final Pupil responsePupil = await apiSchooldayEventService
+    final PupilData responsePupil = await apiSchooldayEventService
         .postSchooldayEvent(pupilId, date, type, reason);
 
-    pupilManager.updatePupilProxyWithPupil(responsePupil);
+    pupilManager.updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Eintrag erfolgreich!');
@@ -75,11 +75,11 @@ class SchooldayEventManager {
       String? file,
       String? processedBy,
       DateTime? processedAt}) async {
-    final Pupil responsePupil =
+    final PupilData responsePupil =
         await apiSchooldayEventService.patchSchooldayEvent(schooldayEventId,
             admonisher, reason, processed, file, processedBy, processedAt);
 
-    pupilManager.updatePupilProxyWithPupil(responsePupil);
+    pupilManager.updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Eintrag erfolgreich geändert!');
@@ -127,10 +127,10 @@ class SchooldayEventManager {
 
   Future<void> patchSchooldayEventWithFile(
       File imageFile, String schooldayEventId, bool isProcessed) async {
-    final Pupil responsePupil = await apiSchooldayEventService
+    final PupilData responsePupil = await apiSchooldayEventService
         .patchSchooldayEventWithFile(imageFile, schooldayEventId, isProcessed);
 
-    pupilManager.updatePupilProxyWithPupil(responsePupil);
+    pupilManager.updatePupilProxyWithPupilData(responsePupil);
 
     locator<NotificationManager>().showSnackBar(
         NotificationType.success, 'Datei erfolgreich hochgeladen!');
@@ -140,10 +140,10 @@ class SchooldayEventManager {
 
   Future<void> deleteSchooldayEventFile(
       String schooldayEventId, String cacheKey, bool isProcessed) async {
-    final Pupil responsePupil = await apiSchooldayEventService
+    final PupilData responsePupil = await apiSchooldayEventService
         .deleteSchooldayEventFile(schooldayEventId, cacheKey, isProcessed);
 
-    pupilManager.updatePupilProxyWithPupil(responsePupil);
+    pupilManager.updatePupilProxyWithPupilData(responsePupil);
 
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Datei erfolgreich gelöscht!');
@@ -152,10 +152,10 @@ class SchooldayEventManager {
   }
 
   Future<void> deleteSchooldayEvent(String schooldayEventId) async {
-    final Pupil responsePupil =
+    final PupilData responsePupil =
         await apiSchooldayEventService.deleteSchooldayEvent(schooldayEventId);
 
-    pupilManager.updatePupilProxyWithPupil(responsePupil);
+    pupilManager.updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Ereignis gelöscht!');

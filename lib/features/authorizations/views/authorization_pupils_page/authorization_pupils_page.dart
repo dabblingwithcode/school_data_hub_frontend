@@ -5,9 +5,9 @@ import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_pupil_filters.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_page/widgets/authorization_pupil_list_searchbar.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_page/widgets/authorization_pupil_card.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_page/widgets/authorization_pupils_bottom_navbar.dart';
 
@@ -23,9 +23,8 @@ class AuthorizationPupilsPage extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
     List<PupilProxy> filteredPupils =
-        watchValue((PupilFilterManager x) => x.filteredPupils);
+        watchValue((PupilsFilter x) => x.filteredPupils);
 
     List<PupilProxy> pupilsInList =
         addAuthorizationFiltersToFilteredPupils(filteredPupils, authorization);
@@ -60,8 +59,8 @@ class AuthorizationPupilsPage extends WatchingWidget {
                   const SliverGap(5),
                   SliverSearchAppBar(
                     height: 110,
-                    title: AuthorizationPupilListSearchBar(
-                        filtersOn: filtersOn, pupils: pupilsInList),
+                    title:
+                        AuthorizationPupilListSearchBar(pupils: pupilsInList),
                   ),
                   pupilsInList.isEmpty
                       ? const SliverToBoxAdapter(
@@ -95,7 +94,6 @@ class AuthorizationPupilsPage extends WatchingWidget {
       ),
       bottomNavigationBar: AuthorizationPupilsBottomNavBar(
         authorization: authorization,
-        filtersOn: filtersOn,
         pupilsInAuthorization: pupilIdsFromPupils(pupilsInList),
       ),
     );

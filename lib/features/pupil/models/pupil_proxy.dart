@@ -10,13 +10,13 @@ import 'package:schuldaten_hub/features/competence/models/competence_goal.dart';
 import 'package:schuldaten_hub/features/learning_support/models/category/pupil_category_status.dart';
 import 'package:schuldaten_hub/features/learning_support/models/goal/pupil_goal.dart';
 import 'package:schuldaten_hub/features/pupil/models/credit_history_log.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_personal_data.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_identity.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 
-enum Jahrgangsstufe {
+enum SchoolGrade {
   E1('E1'),
   E2('E2'),
   E3('E3'),
@@ -24,14 +24,14 @@ enum Jahrgangsstufe {
   S4('S4');
 
   static const stringToValue = {
-    'E1': Jahrgangsstufe.E1,
-    'E2': Jahrgangsstufe.E2,
-    'E3': Jahrgangsstufe.E3,
-    'S3': Jahrgangsstufe.S3,
-    'S4': Jahrgangsstufe.S4,
+    'E1': SchoolGrade.E1,
+    'E2': SchoolGrade.E2,
+    'E3': SchoolGrade.E3,
+    'S3': SchoolGrade.S3,
+    'S4': SchoolGrade.S4,
   };
   final String value;
-  const Jahrgangsstufe(this.value);
+  const SchoolGrade(this.value);
 }
 
 enum GroupId {
@@ -63,9 +63,9 @@ enum GroupId {
   const GroupId(this.value);
 }
 
-class StufenFilter extends SelectorFilter<PupilProxy, Jahrgangsstufe> {
-  StufenFilter(Jahrgangsstufe stufe)
-      : super(name: stufe.value, selector: (proxy) => proxy.jahrgangsstufe);
+class SchoolGradeFilter extends SelectorFilter<PupilProxy, SchoolGrade> {
+  SchoolGradeFilter(SchoolGrade schoolGrade)
+      : super(name: schoolGrade.value, selector: (proxy) => proxy.schoolGrade);
 
   @override
   bool matches(PupilProxy item) {
@@ -85,9 +85,10 @@ class GroupFilter extends SelectorFilter<PupilProxy, GroupId> {
 }
 
 class PupilProxy with ChangeNotifier {
-  PupilProxy({required Pupil pupil, required PupilIdentity pupilIdentity})
+  PupilProxy(
+      {required PupilData pupilData, required PupilIdentity pupilIdentity})
       : _pupilIdentity = pupilIdentity {
-    updatePupil(pupil);
+    updatePupil(pupilData);
   }
 
   static List<GroupFilter> groupFilters = [
@@ -102,30 +103,31 @@ class PupilProxy with ChangeNotifier {
     GroupFilter(GroupId.C2),
     GroupFilter(GroupId.C3),
   ];
-  static List<StufenFilter> jahrgangsStufenFilters = [
-    StufenFilter(Jahrgangsstufe.E1),
-    StufenFilter(Jahrgangsstufe.E2),
-    StufenFilter(Jahrgangsstufe.E3),
-    StufenFilter(Jahrgangsstufe.S3),
-    StufenFilter(Jahrgangsstufe.S4),
+  static List<SchoolGradeFilter> schoolGradeFilters = [
+    SchoolGradeFilter(SchoolGrade.E1),
+    SchoolGradeFilter(SchoolGrade.E2),
+    SchoolGradeFilter(SchoolGrade.E3),
+    SchoolGradeFilter(SchoolGrade.S3),
+    SchoolGradeFilter(SchoolGrade.S4),
   ];
 
-  late Pupil _pupil;
+  late PupilData _pupilData;
   PupilIdentity _pupilIdentity;
 
   bool pupilIsDirty = false;
 
-  void updatePupil(Pupil pupil) {
-    _pupil = pupil;
+// TODO: this function should be renamed
+  void updatePupil(PupilData pupilData) {
+    _pupilData = pupilData;
     // ignore: prefer_for_elements_to_map_fromiterable
-    _missedClasses = Map.fromIterable(pupil.pupilMissedClasses,
+    _missedClasses = Map.fromIterable(pupilData.pupilMissedClasses,
         key: (e) => e.missedDay, value: (e) => e);
     pupilIsDirty = false;
     notifyListeners();
   }
 
-  void updateDataFromSchild(PupilIdentity personalData) {
-    _pupilIdentity = personalData;
+  void updatePupilIdentityFromSchoolDatabase(PupilIdentity pupilIdentity) {
+    _pupilIdentity = pupilIdentity;
     notifyListeners();
   }
 
@@ -139,7 +141,7 @@ class PupilProxy with ChangeNotifier {
   void updateFromAllMissedClasses(List<MissedClass> allMissedClasses) {
     // add new missed classes
     for (final missed in allMissedClasses) {
-      if (missed.missedPupilId == _pupil.internalId) {
+      if (missed.missedPupilId == _pupilData.internalId) {
         _missedClasses[missed.missedDay] = missed;
       }
     }
@@ -152,19 +154,20 @@ class PupilProxy with ChangeNotifier {
       }
     }
     pupilIsDirty = true;
+
     notifyListeners();
   }
 
-  String get firstName => _pupilIdentity.name;
+  String get firstName => _pupilIdentity.firstName;
   String get lastName => _pupilIdentity.lastName;
 
   String get group => _pupilIdentity.group;
   GroupId get groupId => GroupId.stringToValue[_pupilIdentity.group]!;
 
-  Jahrgangsstufe get jahrgangsstufe =>
-      Jahrgangsstufe.stringToValue[_pupilIdentity.schoolyear]!;
+  SchoolGrade get schoolGrade =>
+      SchoolGrade.stringToValue[_pupilIdentity.schoolGrade]!;
 
-  String get schoolyear => _pupilIdentity.schoolyear;
+  String get schoolyear => _pupilIdentity.schoolGrade;
   String? get specialNeeds => _pupilIdentity.specialNeeds;
   String get gender => _pupilIdentity.gender;
   String get language => _pupilIdentity.language;
@@ -176,36 +179,36 @@ class PupilProxy with ChangeNotifier {
   String? _avatarUrlOverride;
   bool _avatarUpdated = false;
   String? get avatarUrl =>
-      _avatarUpdated ? _avatarUrlOverride : _pupil.avatarUrl;
+      _avatarUpdated ? _avatarUrlOverride : _pupilData.avatarUrl;
 
-  String? get communicationPupil => _pupil.communicationPupil;
-  String? get communicationTutor1 => _pupil.communicationTutor1;
-  String? get communicationTutor2 => _pupil.communicationTutor2;
-  String? get contact => _pupil.contact;
-  String? get parentsContact => _pupil.parentsContact;
-  int get credit => _pupil.credit;
-  int get creditEarned => _pupil.creditEarned;
-  String? get fiveYears => _pupil.fiveYears;
-  int get individualDevelopmentPlan => _pupil.individualDevelopmentPlan;
-  int get internalId => _pupil.internalId;
-  bool get ogs => _pupil.ogs;
-  String? get ogsInfo => _pupil.ogsInfo;
-  String? get pickUpTime => _pupil.pickUpTime;
-  int? get preschoolRevision => _pupil.preschoolRevision;
-  String? get specialInformation => _pupil.specialInformation;
-  List<CompetenceCheck>? get competenceChecks => _pupil.competenceChecks;
+  String? get communicationPupil => _pupilData.communicationPupil;
+  String? get communicationTutor1 => _pupilData.communicationTutor1;
+  String? get communicationTutor2 => _pupilData.communicationTutor2;
+  String? get contact => _pupilData.contact;
+  String? get parentsContact => _pupilData.parentsContact;
+  int get credit => _pupilData.credit;
+  int get creditEarned => _pupilData.creditEarned;
+  String? get fiveYears => _pupilData.fiveYears;
+  int get individualDevelopmentPlan => _pupilData.individualDevelopmentPlan;
+  int get internalId => _pupilData.internalId;
+  bool get ogs => _pupilData.ogs;
+  String? get ogsInfo => _pupilData.ogsInfo;
+  String? get pickUpTime => _pupilData.pickUpTime;
+  int? get preschoolRevision => _pupilData.preschoolRevision;
+  String? get specialInformation => _pupilData.specialInformation;
+  List<CompetenceCheck>? get competenceChecks => _pupilData.competenceChecks;
   List<PupilCategoryStatus>? get pupilCategoryStatuses =>
-      _pupil.pupilCategoryStatuses;
-  List<SchooldayEvent>? get schooldayEvents => _pupil.schooldayEvents;
-  List<PupilBook>? get pupilBooks => _pupil.pupilBooks;
-  List<PupilList>? get pupilLists => _pupil.pupilLists;
-  List<PupilGoal>? get pupilGoals => _pupil.pupilGoals;
+      _pupilData.pupilCategoryStatuses;
+  List<SchooldayEvent>? get schooldayEvents => _pupilData.schooldayEvents;
+  List<PupilBook>? get pupilBooks => _pupilData.pupilBooks;
+  List<PupilList>? get pupilLists => _pupilData.pupilLists;
+  List<PupilGoal>? get pupilGoals => _pupilData.pupilGoals;
 
   List<MissedClass>? get pupilMissedClasses => _missedClasses.values.toList();
   Map<DateTime, MissedClass> _missedClasses = {};
 
-  List<PupilWorkbook>? get pupilWorkbooks => _pupil.pupilWorkbooks;
-  List<PupilAuthorization>? get authorizations => _pupil.authorizations;
-  List<CreditHistoryLog>? get creditHistoryLogs => _pupil.creditHistoryLogs;
-  List<CompetenceGoal>? get competenceGoals => _pupil.competenceGoals;
+  List<PupilWorkbook>? get pupilWorkbooks => _pupilData.pupilWorkbooks;
+  List<PupilAuthorization>? get authorizations => _pupilData.authorizations;
+  List<CreditHistoryLog>? get creditHistoryLogs => _pupilData.creditHistoryLogs;
+  List<CompetenceGoal>? get competenceGoals => _pupilData.competenceGoals;
 }

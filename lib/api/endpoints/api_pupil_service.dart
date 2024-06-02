@@ -8,7 +8,7 @@ import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 
 class ApiPupilService {
   late final DioClient _client = locator<ApiManager>().dioClient.value;
@@ -19,7 +19,8 @@ class ApiPupilService {
 
   static const _updateBackendPupilsDatabaseUrl = '/import/pupils/txt';
 
-  Future<List<Pupil>> updateBackendPupilsDatabase({required File file}) async {
+  Future<List<PupilData>> updateBackendPupilsDatabase(
+      {required File file}) async {
     notificationManager.isRunningValue(true);
 
     String fileName = file.path.split('/').last;
@@ -44,8 +45,8 @@ class ApiPupilService {
       throw ApiException('Failed to export pupils to txt', response.statusCode);
     }
 
-    final List<Pupil> pupils =
-        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+    final List<PupilData> pupils =
+        (response.data as List).map((e) => PupilData.fromJson(e)).toList();
 
     notificationManager.isRunningValue(false);
 
@@ -64,7 +65,7 @@ class ApiPupilService {
 
   static const _fetchPupilsUrl = '/pupils/list';
 
-  Future<List<Pupil>> fetchListOfPupils({
+  Future<List<PupilData>> fetchListOfPupils({
     required List<int> internalPupilIds,
   }) async {
     notificationManager.isRunningValue(true);
@@ -83,8 +84,8 @@ class ApiPupilService {
       throw ApiException('Failed to fetch pupils', response.statusCode);
     }
 
-    final List<Pupil> responsePupils =
-        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+    final List<PupilData> responsePupils =
+        (response.data as List).map((e) => PupilData.fromJson(e)).toList();
 
     notificationManager.isRunningValue(false);
 
@@ -112,7 +113,7 @@ class ApiPupilService {
     return '/pupils/$id';
   }
 
-  Future<Pupil> updatePupilProperty({
+  Future<PupilData> updatePupilProperty({
     required int id,
     required String property,
     required dynamic value,
@@ -136,7 +137,7 @@ class ApiPupilService {
     /// wenn immer möglich mach die deserialisierung direkt am endpoint
     /// so dass die app nicht mit resonse objekten arbeiten und wissen muss
     /// wie die daten aussehen
-    final Pupil responsePupil = Pupil.fromJson(response.data);
+    final PupilData responsePupil = PupilData.fromJson(response.data);
 
     notificationManager.isRunningValue(false);
 
@@ -146,7 +147,7 @@ class ApiPupilService {
   //- patch siblings
 
   static const String _patchSiblingsUrl = '/pupils/patch_siblings';
-  Future<List<Pupil>> updateSiblingsProperty({
+  Future<List<PupilData>> updateSiblingsProperty({
     required List<int> siblingsPupilIds,
     required String property,
     required dynamic value,
@@ -168,8 +169,8 @@ class ApiPupilService {
 
       throw ApiException('Failed to patch siblings', response.statusCode);
     }
-    final List<Pupil> responsePupils =
-        (response.data as List).map((e) => Pupil.fromJson(e)).toList();
+    final List<PupilData> responsePupils =
+        (response.data as List).map((e) => PupilData.fromJson(e)).toList();
 
     notificationManager.isRunningValue(false);
 
@@ -182,7 +183,7 @@ class ApiPupilService {
     return '/pupils/$id/avatar';
   }
 
-  Future<Pupil> updatePupilWithAvatar({
+  Future<PupilData> updatePupilWithAvatar({
     required int id,
     required FormData formData,
   }) async {
@@ -202,7 +203,7 @@ class ApiPupilService {
 
     notificationManager.isRunningValue(false);
 
-    return Pupil.fromJson(response.data);
+    return PupilData.fromJson(response.data);
   }
 
   //- delete pupil avatar

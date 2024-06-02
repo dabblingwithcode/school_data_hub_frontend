@@ -7,6 +7,7 @@ import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/ogs_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 
 class OgsListPageBottomNavBar extends StatelessWidget {
   final bool filtersOn;
@@ -50,7 +51,7 @@ class OgsListPageBottomNavBar extends StatelessWidget {
               InkWell(
                 onTap: () => showOgsFilterBottomSheet(context),
                 onLongPress: () {
-                  locator<PupilFilterManager>().resetFilters();
+                  locator<PupilsFilter>().resetFilters();
 
                   locator<PupilFilterManager>()
                       .setFilter(PupilFilter.ogs, true);

@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
@@ -48,11 +48,11 @@ class AuthorizationManager {
     String description,
     List<int> pupilIds,
   ) async {
-    final List<Pupil> responsePupils = await apiAuthorizationService
+    final List<PupilData> responsePupils = await apiAuthorizationService
         .postAuthorizationWithPupils(name, description, pupilIds);
 
-    for (Pupil pupil in responsePupils) {
-      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
+    for (PupilData pupil in responsePupils) {
+      locator<PupilManager>().updatePupilProxyWithPupilData(pupil);
     }
 
     fetchAuthorizations();
@@ -64,11 +64,11 @@ class AuthorizationManager {
   }
 
   Future<void> postPupilAuthorization(int pupilId, String authId) async {
-    final Pupil updatedPupilWithPupilAuthorization =
+    final PupilData updatedPupilWithPupilAuthorization =
         await apiAuthorizationService.postPupilAuthorization(pupilId, authId);
 
     locator<PupilManager>()
-        .updatePupilProxyWithPupil(updatedPupilWithPupilAuthorization);
+        .updatePupilProxyWithPupilData(updatedPupilWithPupilAuthorization);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Einwilligung erstellt');
@@ -80,11 +80,11 @@ class AuthorizationManager {
     List<int> pupilIds,
     String authId,
   ) async {
-    final List<Pupil> responsePupils =
+    final List<PupilData> responsePupils =
         await apiAuthorizationService.postPupilAuthorizations(pupilIds, authId);
 
-    for (Pupil pupil in responsePupils) {
-      locator<PupilManager>().updatePupilProxyWithPupil(pupil);
+    for (PupilData pupil in responsePupils) {
+      locator<PupilManager>().updatePupilProxyWithPupilData(pupil);
     }
 
     notificationManager.showSnackBar(
@@ -97,10 +97,10 @@ class AuthorizationManager {
     int pupilId,
     String authId,
   ) async {
-    final Pupil responsePupil =
+    final PupilData responsePupil =
         await apiAuthorizationService.deletePupilAuthorization(pupilId, authId);
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Einwilligung gelöscht');
@@ -109,10 +109,10 @@ class AuthorizationManager {
 
   Future<void> updatePupilAuthorizationProperty(
       int pupilId, String listId, bool? value, String? comment) async {
-    final Pupil responsePupil = await apiAuthorizationService
+    final PupilData responsePupil = await apiAuthorizationService
         .updatePupilAuthorizationProperty(pupilId, listId, value, comment);
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Einwilligung geändert');
@@ -125,10 +125,10 @@ class AuthorizationManager {
     int pupilId,
     String authId,
   ) async {
-    final Pupil responsePupil = await apiAuthorizationService
+    final PupilData responsePupil = await apiAuthorizationService
         .postAuthorizationFile(file, pupilId, authId);
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Datei hochgeladen');
@@ -141,10 +141,10 @@ class AuthorizationManager {
     String authId,
     String cacheKey,
   ) async {
-    final Pupil responsePupil = await apiAuthorizationService
+    final PupilData responsePupil = await apiAuthorizationService
         .deleteAuthorizationFile(pupilId, authId, cacheKey);
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Einwilligungsdatei gelöscht');

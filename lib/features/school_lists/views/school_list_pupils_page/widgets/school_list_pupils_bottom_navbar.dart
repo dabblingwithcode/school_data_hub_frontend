@@ -5,8 +5,8 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/short_textfield_dialog.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/select_pupils_list_page.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_page/widgets/pupil_list_filter_bottom_sheet.dart';
@@ -95,7 +95,7 @@ class SchoolListPupilsPageBottomNavBar extends StatelessWidget {
               const Gap(15),
               InkWell(
                 onTap: () => showPupilListFilterBottomSheet(context),
-                onLongPress: () => locator<PupilFilterManager>().resetFilters(),
+                onLongPress: () => locator<PupilsFilter>().resetFilters(),
                 child: Icon(
                   Icons.filter_list,
                   color: filtersOn ? Colors.deepOrange : Colors.white,

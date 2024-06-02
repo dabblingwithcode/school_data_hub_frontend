@@ -46,7 +46,7 @@ class QrCodeCarouselState extends State<QrCodeCarousel> {
         _countdown = _countdown > 0 ? _countdown - 1 : _countdown;
         if (_countdown == 0) {
           _timer.cancel(); // Cancel the current timer
-          _milliseconds = 600; // Set the qr carousel interval
+          _milliseconds = 800; // Set the qr carousel interval
           startTimer(_milliseconds); // Start a new timer with the new interval
           _currentIndex = (_currentIndex + 1) % _qrMap.values.length;
         }

@@ -6,6 +6,7 @@ import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/workbooks/models/workbook.dart';
 import 'package:schuldaten_hub/features/workbooks/services/workbook_manager.dart';
 import 'package:schuldaten_hub/features/workbooks/views/workbook_list_page/controller/workbook_controller.dart';
@@ -103,7 +104,7 @@ class WorkbookListView extends WatchingWidget {
                               onTap: () {},
 
                               onLongPress: () =>
-                                  locator<PupilFilterManager>().resetFilters(),
+                                  locator<PupilsFilter>().resetFilters(),
                               // onPressed: () => showBottomSheetFilters(context),
                               child: Padding(
                                 padding: const EdgeInsets.all(10.0),

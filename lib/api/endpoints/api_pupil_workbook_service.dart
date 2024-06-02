@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 
 class ApiPupilWorkbookService {
   final _client = ApiManager().dioClient.value;
@@ -15,7 +15,7 @@ class ApiPupilWorkbookService {
     return '/pupil_workbooks/$pupilId/$isbn';
   }
 
-  Future<Pupil> postNewPupilWorkbook(int pupilId, int isbn) async {
+  Future<PupilData> postNewPupilWorkbook(int pupilId, int isbn) async {
     notificationManager.isRunningValue(true);
 
     final Response response =
@@ -30,7 +30,7 @@ class ApiPupilWorkbookService {
       throw ApiException(
           'Failed to create a pupil workbook', response.statusCode);
     }
-    final Pupil pupil = Pupil.fromJson(response.data);
+    final PupilData pupil = PupilData.fromJson(response.data);
 
     return pupil;
   }
@@ -40,7 +40,7 @@ class ApiPupilWorkbookService {
     return '/pupil_workbooks/$pupilId/$isbn';
   }
 
-  Future<Pupil> deletePupilWorkbook(int pupilId, int isbn) async {
+  Future<PupilData> deletePupilWorkbook(int pupilId, int isbn) async {
     notificationManager.isRunningValue(true);
     final Response response =
         await _client.delete(_deletePupilWorkbookUrl(pupilId, isbn));
@@ -54,7 +54,7 @@ class ApiPupilWorkbookService {
       throw ApiException(
           'Failed to delete a pupil workbook', response.statusCode);
     }
-    final Pupil pupil = Pupil.fromJson(response.data);
+    final PupilData pupil = PupilData.fromJson(response.data);
 
     return pupil;
   }

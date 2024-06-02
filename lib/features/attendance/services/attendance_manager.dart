@@ -1,5 +1,4 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
@@ -11,7 +10,7 @@ import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
@@ -89,10 +88,10 @@ class AttendanceManager {
     if (missedClass == null || missedClass == -1) {
       return;
     }
-    final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+    final PupilData responsePupil = await apiAttendanceService.patchMissedClass(
         pupilId: pupilId, date: date, excused: newValue);
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Eintrag erfolgreich!');
@@ -101,12 +100,13 @@ class AttendanceManager {
   }
 
   Future<void> deleteMissedClass(int pupilId, DateTime date) async {
-    final Pupil responsePupil = await apiAttendanceService.deleteMissedClass(
+    final PupilData responsePupil =
+        await apiAttendanceService.deleteMissedClass(
       pupilId,
       date,
     );
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Fehlzeit erfolgreich gelöscht!');
@@ -128,7 +128,7 @@ class AttendanceManager {
 
     if (missedClass == -1) {
       // This missed class is new
-      final Pupil responsePupil = await apiAttendanceService.postMissedClass(
+      final PupilData pupilData = await apiAttendanceService.postMissedClass(
         pupilId: pupilId,
         missedType: MissedType.notSet,
         date: date,
@@ -138,7 +138,7 @@ class AttendanceManager {
         returnedAt: time,
       );
 
-      locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+      locator<PupilManager>().updatePupilProxyWithPupilData(pupilData);
 
       return;
     }
@@ -150,12 +150,13 @@ class AttendanceManager {
     if (newValue == false &&
         pupil.pupilMissedClasses![missedClass!].missedType ==
             MissedType.notSet.value) {
-      final Pupil responsePupil = await apiAttendanceService.deleteMissedClass(
+      final PupilData responsePupil =
+          await apiAttendanceService.deleteMissedClass(
         pupilId,
         date,
       );
 
-      locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+      locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
       return;
     }
@@ -163,25 +164,27 @@ class AttendanceManager {
     //- Case patch an existing missed class entry
 
     if (newValue == true) {
-      final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+      final PupilData responsePupil =
+          await apiAttendanceService.patchMissedClass(
         pupilId: pupilId,
         returned: newValue,
         date: date,
         returnedAt: time,
       );
 
-      locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+      locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
       return;
     } else {
-      final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+      final PupilData responsePupil =
+          await apiAttendanceService.patchMissedClass(
         pupilId: pupilId,
         returned: newValue,
         date: date,
         returnedAt: null,
       );
 
-      locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+      locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
       return;
     }
@@ -196,7 +199,8 @@ class AttendanceManager {
     if (missedClass == -1) {
       // The missed class does not exist - let's create one
 
-      final Pupil responsePupil = await apiAttendanceService.postMissedClass(
+      final PupilData responsePupil =
+          await apiAttendanceService.postMissedClass(
         pupilId: pupilId,
         missedType: dropdownValue,
         date: date,
@@ -208,21 +212,21 @@ class AttendanceManager {
         writtenExcuse: null,
       );
 
-      locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+      locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
       return;
     }
 
     // The missed class exists already - patching it
 
-    final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+    final PupilData responsePupil = await apiAttendanceService.patchMissedClass(
       pupilId: pupilId,
       missedType: dropdownValue,
       date: date,
       minutesLate: minutesLate,
     );
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     return;
   }
@@ -258,10 +262,10 @@ class AttendanceManager {
       }
     }
 
-    final Pupil responsePupil = await apiAttendanceService.postMissedClassList(
-        missedClasses: missedClasses);
+    final PupilData responsePupil = await apiAttendanceService
+        .postMissedClassList(missedClasses: missedClasses);
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Einträge erfolgreich!');
@@ -290,13 +294,14 @@ class AttendanceManager {
 
       logger.i('This missed class is new');
 
-      final Pupil responsePupil = await apiAttendanceService.postMissedClass(
+      final PupilData responsePupil =
+          await apiAttendanceService.postMissedClass(
         pupilId: pupilId,
         missedType: missedType,
         date: date,
       );
 
-      pupilManager.updatePupilProxyWithPupil(responsePupil);
+      pupilManager.updatePupilProxyWithPupilData(responsePupil);
 
       locator<NotificationManager>()
           .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
@@ -305,14 +310,14 @@ class AttendanceManager {
     }
     // The missed class exists already - patching it
     // we make sure that incidentally stored minutes_late values are deleted
-    final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+    final PupilData responsePupil = await apiAttendanceService.patchMissedClass(
       pupilId: pupilId,
       missedType: missedType,
       date: date,
       minutesLate: null,
     );
 
-    pupilManager.updatePupilProxyWithPupil(responsePupil);
+    pupilManager.updatePupilProxyWithPupilData(responsePupil);
 
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');
@@ -323,13 +328,13 @@ class AttendanceManager {
   Future<void> changeContactedValue(
       int pupilId, ContactedType contactedType, DateTime date) async {
     // The missed class exists alreade - patching it
-    final Pupil responsePupil = await apiAttendanceService.patchMissedClass(
+    final PupilData responsePupil = await apiAttendanceService.patchMissedClass(
       pupilId: pupilId,
       contactedType: contactedType,
       date: date,
     );
 
-    locator<PupilManager>().updatePupilProxyWithPupil(responsePupil);
+    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
     locator<NotificationManager>()
         .showSnackBar(NotificationType.success, 'Eintrag erfolgreich!');

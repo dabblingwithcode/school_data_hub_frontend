@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_filter_manager.dart';
 
 class SearchManager {
@@ -31,9 +30,9 @@ class SearchManager {
       return;
     }
     _searchState.value = true;
-    if (_searchType.value == SearchType.pupil) {
-      locator<PupilFilterManager>().setSearchText(text);
-    }
+    // if (_searchType.value == SearchType.pupil) {
+    //   locator<PupilFilterManager>().setSearchText(text);
+    // }
     if (_searchType.value == SearchType.room) {
       locator<MatrixPolicyFilterManager>().filterRoomsWithSearchText(text);
     }
@@ -53,9 +52,9 @@ class SearchManager {
   void cancelSearch({bool unfocus = true}) {
     _searchController.value.clear();
     _searchState.value = false;
-    if (_searchType.value == SearchType.pupil) {
-      locator<PupilFilterManager>().resetFilters();
-    }
+    // if (_searchType.value == SearchType.pupil) {
+    //   locator<PupilFilterManager>().resetFilters();
+    // }
     if (_searchType.value == SearchType.room) {
       locator<MatrixPolicyFilterManager>().filterRoomsWithSearchText('');
     }
