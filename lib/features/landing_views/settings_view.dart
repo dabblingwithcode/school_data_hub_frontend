@@ -366,11 +366,25 @@ class SettingsView extends WatchingWidget {
                   ),
                   SettingsTile.navigation(
                     leading: const Icon(Icons.cake_rounded),
-                    title: const Text('Geburtstage in den letzten 7 Tagen'),
-                    onPressed: (context) {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (ctx) => const BirthdaysView(),
-                      ));
+                    title:
+                        const Text('vergangene Geburtstage seit einem Datum'),
+                    onPressed: (context) async {
+                      final DateTime? selectedDate = await showDatePicker(
+                        context: context,
+                        initialDate: DateTime.now(),
+                        firstDate: DateTime(2000),
+                        lastDate: DateTime.now(),
+                      );
+                      if (selectedDate == null) {
+                        return;
+                      }
+                      if (context.mounted) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                          builder: (ctx) => BirthdaysView(
+                            selectedDate: selectedDate,
+                          ),
+                        ));
+                      }
                     },
                   ),
                   SettingsTile.navigation(

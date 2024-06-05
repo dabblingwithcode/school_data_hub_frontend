@@ -72,11 +72,20 @@ class PupilManager extends ChangeNotifier {
     Map<int, PupilProxy> allPupils = Map<int, PupilProxy>.of(_pupils);
     final DateTime now = DateTime.now();
     allPupils.removeWhere((key, pupil) {
-      final birthdayThisYear = DateTime(
-          DateTime.now().year, pupil.birthday.month, pupil.birthday.day);
-      return birthdayThisYear.isAfter(date) && birthdayThisYear.isBefore(now);
+      final birthdayThisYear =
+          DateTime(now.year, pupil.birthday.month, pupil.birthday.day);
+      // Ensure the birthday this year is not before the specified date and not after today.
+      return !(birthdayThisYear.isAtSameMomentAs(date) ||
+          (birthdayThisYear.isAfter(date) && birthdayThisYear.isBefore(now)));
     });
     final pupilsWithBirthdaySinceDate = allPupils.values.toList();
+    pupilsWithBirthdaySinceDate.sort((b, a) {
+      final birthdayA =
+          DateTime(DateTime.now().year, a.birthday.month, a.birthday.day);
+      final birthdayB =
+          DateTime(DateTime.now().year, b.birthday.month, b.birthday.day);
+      return birthdayA.compareTo(birthdayB);
+    });
     return pupilsWithBirthdaySinceDate;
   }
 

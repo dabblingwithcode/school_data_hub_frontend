@@ -1,8 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-
 // ? we should move this functions to the pupil manager in future
 
 // TODO: these should be enums
@@ -76,55 +71,4 @@ bool hadLanguageSupport(DateTime? endOfSupport) {
     return endOfSupport.isBefore(DateTime.now());
   }
   return false;
-}
-
-// TODO: Migrate to pupilsWithBirthdaySinceDate an remove this function
-
-List<PupilProxy> pupilsWithBirthdayInTheLastSevenDays() {
-  final List<PupilProxy> pupils = locator<PupilManager>().allPupils;
-  final DateTime now = DateTime.now();
-
-  List<PupilProxy> pupilsWithBirthdayInTheLastSevenDays = [];
-  final int currentDay = now.day;
-  final int currentMonth = now.month;
-
-  for (PupilProxy pupil in pupils) {
-    /// TODO, das geht einfacher und wäre warhscheinlich besser als Filter  zu implementieren
-
-    // Extract day and month from birthday and current date
-    final int pupilBirthDay = pupil.birthday.day;
-    final int pupilBirthMonth = pupil.birthday.month;
-
-    // Check if birthday falls within the last seven days (including today)
-    final bool isBirthdayTodayOrInLastSevenDays = (currentMonth ==
-                pupilBirthMonth &&
-            // Check for birthdays within the current month
-            (currentDay >=
-                    pupilBirthDay && // Birthday falls on or after current day
-                currentDay - pupilBirthDay <=
-                    6) || // Within 6 days of the current day
-        (currentMonth - pupilBirthMonth ==
-                1 && // Birthday in the previous month
-            currentDay < pupilBirthDay && // Current day is before birthday
-            currentDay +
-                    DateUtils.getDaysInMonth(now.year, currentMonth - 1) -
-                    pupilBirthDay <=
-                6));
-
-    if (isBirthdayTodayOrInLastSevenDays) {
-      pupilsWithBirthdayInTheLastSevenDays.add(pupil);
-    }
-  }
-  int currentYear = DateTime.now().year;
-
-  pupilsWithBirthdayInTheLastSevenDays.sort((a, b) {
-    int aDayOfYear = DateTime(currentYear, a.birthday.month, a.birthday.day)
-        .difference(DateTime(currentYear, 1, 1))
-        .inDays;
-    int bDayOfYear = DateTime(currentYear, b.birthday.month, b.birthday.day)
-        .difference(DateTime(currentYear, 1, 1))
-        .inDays;
-    return bDayOfYear.compareTo(aDayOfYear);
-  });
-  return pupilsWithBirthdayInTheLastSevenDays;
 }
