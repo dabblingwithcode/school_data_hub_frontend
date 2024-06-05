@@ -72,12 +72,16 @@ class SchooldayEventManager {
       String? admonisher,
       String? reason,
       bool? processed,
-      String? file,
       String? processedBy,
       DateTime? processedAt}) async {
     final PupilData responsePupil =
-        await apiSchooldayEventService.patchSchooldayEvent(schooldayEventId,
-            admonisher, reason, processed, file, processedBy, processedAt);
+        await apiSchooldayEventService.patchSchooldayEvent(
+            schooldayEventId: schooldayEventId,
+            admonisher: admonisher,
+            reason: reason,
+            processed: processed,
+            processedBy: processedBy,
+            processedAt: processedAt);
 
     pupilManager.updatePupilProxyWithPupilData(responsePupil);
 
@@ -87,9 +91,7 @@ class SchooldayEventManager {
     return;
   }
 
-  //- THIS ONE IS NOT NEEDED ANY MORE
-  //- TODO - SWITCH TO THE NEW PATCH ADMONITION FUNCTION
-  // patchSchooldayEventAsProcessed(
+  // Future<void> patchSchooldayEventAsProcessed(
   //     String schooldayEventId, bool processed) async {
   //   locator<NotificationManager>().isRunningValue(true);
 
@@ -106,7 +108,7 @@ class SchooldayEventManager {
   //   }
   //   // send request
   //   final Response response = await client.patch(
-  //       ApiSchooldayEventService().patchSchooldayEventUrl(schooldayEventId),
+  //       ApiSchooldayEventService()._patchSchooldayEventUrl(schooldayEventId),
   //       data: data);
   //   // Handle errors.
   //   if (response.statusCode != 200) {
@@ -121,7 +123,7 @@ class SchooldayEventManager {
   //   final Map<String, dynamic> pupilResponse = response.data;
 
   //   pupilManager
-  //       .updatePupilProxyWithPupil(Pupil.fromJson(pupilResponse));
+  //       .updatePupilProxyWithPupilData(PupilData.fromJson(pupilResponse));
   //   locator<NotificationManager>().isRunningValue(false);
   // }
 

@@ -40,7 +40,9 @@ class DocumentImage extends StatelessWidget {
                 child = Text('Error: ${snapshot.error}');
               } else {
                 // Display the result when the future is complete
-                child = snapshot.data!;
+                child = ClipRRect(
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                    child: snapshot.data!);
               }
               return AnimatedSwitcher(
                   duration: const Duration(milliseconds: 300), child: child);

@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
+
 import 'package:schuldaten_hub/common/widgets/common_pupil_filters.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
@@ -21,7 +21,7 @@ class RoomsFilterBottomSheet extends WatchingWidget {
     bool valueSortByCredit = sortMode[PupilSortMode.sortByCredit]!;
     bool valueSortByCreditEarned = sortMode[PupilSortMode.sortByCreditEarned]!;
 
-    final filterLocator = locator<PupilFilterManager>();
+    //final filterLocator = locator<PupilFilterManager>();
     return Padding(
       padding: const EdgeInsets.only(left: 20.0, right: 20, top: 8),
       child: Center(

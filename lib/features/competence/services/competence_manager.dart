@@ -54,15 +54,19 @@ class CompetenceManager {
     return;
   }
 
-  Future<void> postNewCompetence(
+  Future<void> postNewCompetence({
     int? parentCompetence,
-    String competenceName,
-    String? competenceLevel,
-    String? indicators,
-  ) async {
+    required String competenceName,
+    required competenceLevel,
+    required indicators,
+  }) async {
     final Competence newCompetence =
         await apiCompetenceService.postNewCompetence(
-            parentCompetence, competenceName, competenceLevel, indicators);
+      parentCompetence: parentCompetence,
+      competenceName: competenceName,
+      competenceLevel: competenceLevel,
+      indicators: indicators,
+    );
 
     _competences.value = [..._competences.value, newCompetence];
     locator<CompetenceFilterManager>()

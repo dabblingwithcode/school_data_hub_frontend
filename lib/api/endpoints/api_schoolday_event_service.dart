@@ -81,26 +81,39 @@ class ApiSchooldayEventService {
   }
 
   Future<PupilData> patchSchooldayEvent(
-      String schooldayEventId,
+      {required String schooldayEventId,
       String? admonisher,
       String? reason,
       bool? processed,
-      String? file,
+      //String? file,
       String? processedBy,
-      DateTime? processedAt) async {
+      DateTime? processedAt}) async {
     notificationManager.isRunningValue(true);
 
     // if the schooldayEvent is patched as processed,
     // processing user and processed date are automatically added
 
+    if (processed == true && processedBy == null && processedAt == null) {
+      processedBy = locator<SessionManager>().credentials.value.username;
+      processedAt = DateTime.now();
+    }
+
+    // if the schooldayEvent is patched as not processed,
+    // processing user and processed date are set to null
+
+    if (processed == false) {
+      processedBy = null;
+      processedAt = null;
+    }
+
     final data = jsonEncode({
       if (admonisher != null) "admonishing_user": admonisher,
       if (reason != null) "admonition_reason": reason,
       if (processed != null) "processed": processed,
-      if (file != null) "file_url": file,
-      if (processedBy != null)
-        "processed_by": locator<SessionManager>().credentials.value.username,
-      if (processedAt != null) "processed_at": processedAt.formatForJson()
+      if (processedBy != null) "processed_by": processedBy,
+      if (processed == false) "processed_by": null,
+      if (processedAt != null) "processed_at": processedAt.formatForJson(),
+      if (processed == false) "processed_at": null,
     });
 
     final Response response = await _client

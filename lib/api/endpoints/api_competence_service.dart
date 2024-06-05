@@ -45,10 +45,10 @@ class ApiCompetenceService {
   static const String _postNewCompetenceUrl = '/competences/new';
 
   Future<Competence> postNewCompetence(
-      int? parentCompetence,
-      String competenceName,
+      {int? parentCompetence,
+      required String competenceName,
       String? competenceLevel,
-      String? indicators) async {
+      String? indicators}) async {
     notificationManager.isRunningValue(true);
 
     final data = jsonEncode({

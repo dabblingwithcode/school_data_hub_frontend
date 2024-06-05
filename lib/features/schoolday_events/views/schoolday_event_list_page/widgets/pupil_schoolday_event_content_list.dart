@@ -24,13 +24,15 @@ import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_l
 import 'package:schuldaten_hub/features/schoolday_events/views/new_schoolday_event_page/new_schoolday_event_page.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:watch_it/watch_it.dart';
 
-class SchooldayEventsContentList extends StatelessWidget {
+class SchooldayEventsContentList extends WatchingWidget {
   final PupilProxy pupil;
   const SchooldayEventsContentList({super.key, required this.pupil});
 
   @override
   Widget build(BuildContext context) {
+    final pupil = watch(this.pupil);
     final List<SchooldayEvent> filteredSchooldayEvents =
         locator<SchooldayEventFilterManager>().filteredSchooldayEvents(pupil);
     return Column(children: [
@@ -205,7 +207,7 @@ class SchooldayEventsContentList extends StatelessWidget {
                             ),
                             const Gap(10),
                             //- Image for event processing description
-                            if (filteredSchooldayEvents[index].fileUrl != null)
+                            if (filteredSchooldayEvents[index].processed)
                               Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -361,12 +363,13 @@ class SchooldayEventsContentList extends StatelessWidget {
                                       filteredSchooldayEvents[index]
                                           .schooldayEventId,
                                   processed: false,
+                                  processedBy: 'none',
                                 );
                               },
                               child: Text(
-                                  !filteredSchooldayEvents[index].processed
-                                      ? 'Nicht bearbeitet'
-                                      : 'Bearbeitet von',
+                                  filteredSchooldayEvents[index].processed
+                                      ? 'Bearbeitet von'
+                                      : 'Nicht bearbeitet',
                                   style: const TextStyle(
                                       fontSize: 16, color: backgroundColor)),
                             ),
@@ -389,7 +392,7 @@ class SchooldayEventsContentList extends StatelessWidget {
                                             schooldayEventId:
                                                 filteredSchooldayEvents[index]
                                                     .schooldayEventId,
-                                            admonisher: processingUser,
+                                            processedBy: processingUser,
                                           );
                                         }
                                       },

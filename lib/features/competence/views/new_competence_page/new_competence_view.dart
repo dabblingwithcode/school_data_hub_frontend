@@ -15,19 +15,20 @@ class NewCompetenceView extends StatefulWidget {
 }
 
 class NewCompetenceViewState extends State<NewCompetenceView> {
-  final TextEditingController textField1Controller = TextEditingController();
-  final TextEditingController textField2Controller = TextEditingController();
-  final TextEditingController textField3Controller = TextEditingController();
+  final TextEditingController competenceNameController =
+      TextEditingController();
+  final TextEditingController competenceGradeController =
+      TextEditingController();
+  final TextEditingController indicatorsController = TextEditingController();
 
   void postNewCompetence() async {
-    String text1 = textField1Controller.text;
-    String text2 = textField2Controller.text;
-    String text3 = textField3Controller.text;
-    await locator<CompetenceManager>()
-        .postNewCompetence(widget.parentCompetence, text1, text2, text3);
-    if (context.mounted) {
-      Navigator.pop(context);
-    }
+    Navigator.pop(context);
+
+    await locator<CompetenceManager>().postNewCompetence(
+        parentCompetence: widget.parentCompetence,
+        competenceLevel: competenceGradeController.text,
+        competenceName: competenceNameController.text,
+        indicators: indicatorsController.text);
   }
 
   @override
@@ -52,7 +53,7 @@ class NewCompetenceViewState extends State<NewCompetenceView> {
                 TextField(
                   minLines: 1,
                   maxLines: 2,
-                  controller: textField1Controller,
+                  controller: competenceNameController,
                   decoration: const InputDecoration(
                     labelText: 'Name der Kompetenz',
                     labelStyle: TextStyle(color: backgroundColor),
@@ -65,7 +66,7 @@ class NewCompetenceViewState extends State<NewCompetenceView> {
                 TextField(
                   minLines: 1,
                   maxLines: 1,
-                  controller: textField2Controller,
+                  controller: competenceGradeController,
                   decoration: const InputDecoration(
                     labelText: 'Jahrgang / Jahrgänge',
                     labelStyle: TextStyle(color: backgroundColor),
@@ -78,7 +79,7 @@ class NewCompetenceViewState extends State<NewCompetenceView> {
                 TextField(
                   minLines: 2,
                   maxLines: 3,
-                  controller: textField3Controller,
+                  controller: indicatorsController,
                   decoration: const InputDecoration(
                     labelText: 'Indikatoren',
                     labelStyle: TextStyle(color: backgroundColor),
@@ -124,8 +125,8 @@ class NewCompetenceViewState extends State<NewCompetenceView> {
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the tree
-    textField1Controller.dispose();
-    textField2Controller.dispose();
+    competenceNameController.dispose();
+    competenceGradeController.dispose();
     super.dispose();
   }
 }
