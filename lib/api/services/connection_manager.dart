@@ -1,6 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/foundation.dart';
-import 'package:schuldaten_hub/common/utils/debug_printer.dart';
+import 'package:schuldaten_hub/common/utils/logger.dart';
 
 class ConnectionManager {
   ValueListenable<Stream<List<ConnectivityResult>>> get connectivity =>

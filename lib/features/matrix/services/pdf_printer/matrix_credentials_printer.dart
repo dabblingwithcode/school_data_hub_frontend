@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:pdf/widgets.dart' as pw;
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
-import 'package:schuldaten_hub/common/utils/debug_printer.dart';
+import 'package:schuldaten_hub/common/utils/logger.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
 
 Future<void> printMatrixCredentials(
