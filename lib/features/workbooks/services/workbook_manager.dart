@@ -115,6 +115,17 @@ class WorkbookManager {
     return;
   }
 
+  Future<void> deleteWorkbookFile(int isbn) async {
+    final Workbook responseWorkbook =
+        await apiWorkbookService.deleteWorkbookFile(isbn);
+
+    updateWorkbookInRepositoryWithResponse(responseWorkbook);
+
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Bild erfolgreich gelöscht');
+
+    return;
+  }
   //- PUPIL WORKBOOKS
 
   Future<void> newPupilWorkbook(int pupilId, int isbn) async {

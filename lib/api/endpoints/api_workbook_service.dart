@@ -8,6 +8,7 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
+import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/workbooks/models/workbook.dart';
 
 class ApiWorkbookService {
@@ -166,6 +167,28 @@ class ApiWorkbookService {
   //- delete workbook
   String deleteWorkbookUrl(int isbn) {
     return '/workbooks/$isbn';
+  }
+
+  Future<Workbook> deleteWorkbookFile(int isbn) async {
+    notificationManager.isRunningValue(true);
+
+    final Response response = await _client.delete(getWorkbookImage(isbn));
+
+    if (response.statusCode != 200) {
+      notificationManager.showSnackBar(
+          NotificationType.error, 'Fehler beim Löschen des Bildes');
+
+      notificationManager.isRunningValue(false);
+
+      throw ApiException(
+          'Failed to delete workbook image', response.statusCode);
+    }
+
+    final Workbook workbook = Workbook.fromJson(response.data);
+
+    notificationManager.isRunningValue(false);
+
+    return workbook;
   }
 
   Future<List<Workbook>> deleteWorkbook(int isbn) async {

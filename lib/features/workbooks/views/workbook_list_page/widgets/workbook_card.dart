@@ -72,12 +72,8 @@ class WorkbookCard extends StatelessWidget {
                                 final bool? result = await confirmationDialog(
                                     context, 'Bild löschen', 'Bild löschen?');
                                 if (result != true) return;
-                                // await locator<WorkbookManager>()
-                                //     .deleteAuthorizationFile(
-                                //   pupil.internalId,
-                                //   authorizationId,
-                                //   pupilAuthorization.fileUrl!,
-                                // );
+                                await locator<WorkbookManager>()
+                                    .deleteWorkbookFile(workbook.isbn);
                               },
                         child: workbook.imageUrl != null
                             ? DocumentImage(
