@@ -19,9 +19,12 @@ class MissedClass {
   final String missedType;
   @JsonKey(name: 'modified_by')
   final String? modifiedBy;
-  final bool? returned;
+  // TODO: migrate to the new property name in the backend
+  @JsonKey(name: 'returned')
+  final bool? backHome;
+  // TODO: migrate to the new property name in the backend
   @JsonKey(name: 'returned_at')
-  final String? returnedAt;
+  final String? backHomeAt;
   @JsonKey(name: 'written_excuse')
   final bool? writtenExcuse;
 
@@ -34,10 +37,43 @@ class MissedClass {
     required this.missedPupilId,
     required this.missedType,
     this.modifiedBy,
-    this.returned,
-    this.returnedAt,
+    this.backHome,
+    this.backHomeAt,
     this.writtenExcuse,
   });
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is MissedClass &&
+        other.contacted == contacted &&
+        other.createdBy == createdBy &&
+        other.excused == excused &&
+        other.minutesLate == minutesLate &&
+        other.missedDay == missedDay &&
+        other.missedPupilId == missedPupilId &&
+        other.missedType == missedType &&
+        other.modifiedBy == modifiedBy &&
+        other.backHome == backHome &&
+        other.backHomeAt == backHomeAt &&
+        other.writtenExcuse == writtenExcuse;
+  }
+
+  @override
+  int get hashCode {
+    return contacted.hashCode ^
+        createdBy.hashCode ^
+        excused.hashCode ^
+        minutesLate.hashCode ^
+        missedDay.hashCode ^
+        missedPupilId.hashCode ^
+        missedType.hashCode ^
+        modifiedBy.hashCode ^
+        backHome.hashCode ^
+        backHomeAt.hashCode ^
+        writtenExcuse.hashCode;
+  }
 
   factory MissedClass.fromJson(Map<String, dynamic> json) =>
       _$MissedClassFromJson(json);
