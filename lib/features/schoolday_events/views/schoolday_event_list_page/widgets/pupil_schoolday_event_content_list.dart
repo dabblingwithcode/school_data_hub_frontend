@@ -94,10 +94,10 @@ class SchooldayEventsContentList extends StatelessWidget {
                 ),
                 child: Container(
                   decoration: BoxDecoration(
-                    border: filteredSchooldayEvents[index].processed
+                    border: !filteredSchooldayEvents[index].processed
                         ? Border.all(
                             color: Colors
-                                .green, // Specify the color of the border here
+                                .orangeAccent, // Specify the color of the border here
                             width: 3, // Specify the width of the border here
                           )
                         : null,

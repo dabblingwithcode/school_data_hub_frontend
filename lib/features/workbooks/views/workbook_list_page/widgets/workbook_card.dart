@@ -81,9 +81,9 @@ class WorkbookCard extends StatelessWidget {
                               },
                         child: workbook.imageUrl != null
                             ? DocumentImage(
-                                documentTag:
+                                documentTag: workbook.imageUrl!.split('/').last,
+                                documentUrl:
                                     '${locator<EnvManager>().env.value.serverUrl}${ApiWorkbookService().getWorkbookImage(workbook.isbn)}',
-                                documentUrl: workbook.imageUrl,
                                 size: 100)
                             : SizedBox(
                                 height: 100,

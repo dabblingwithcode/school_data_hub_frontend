@@ -159,8 +159,6 @@ class ApiWorkbookService {
   }
 
   //- get workbook image
-  //- this one is called from a widget, should we move it
-  //- when we stitch the datalayer back to the widgets?
   String getWorkbookImage(int isbn) {
     return '/workbooks/$isbn/image';
   }
