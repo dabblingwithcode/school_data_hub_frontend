@@ -16,7 +16,7 @@ List<PupilProxy> learningSupportFilter(List<PupilProxy> pupils) {
     } else if (activeFilters[PupilFilter.developmentPlan1] == false) {
       toList = true;
     } else {
-      locator<PupilsFilter>().setFiltersOn(true);
+      locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }
     // Filter development plan 2
@@ -26,7 +26,7 @@ List<PupilProxy> learningSupportFilter(List<PupilProxy> pupils) {
     } else if (activeFilters[PupilFilter.developmentPlan2] == false) {
       toList = true;
     } else {
-      locator<PupilsFilter>().setFiltersOn(true);
+      locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }
     // Filter development plan 3
@@ -36,7 +36,7 @@ List<PupilProxy> learningSupportFilter(List<PupilProxy> pupils) {
     } else if (activeFilters[PupilFilter.developmentPlan3] == false) {
       toList = true;
     } else {
-      locator<PupilsFilter>().setFiltersOn(true);
+      locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }
     // Filter special needs
@@ -46,7 +46,7 @@ List<PupilProxy> learningSupportFilter(List<PupilProxy> pupils) {
     } else if (activeFilters[PupilFilter.specialNeeds] == false) {
       toList = true;
     } else {
-      locator<PupilsFilter>().setFiltersOn(true);
+      locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }
     // Filter pupils with a development goal
@@ -60,7 +60,7 @@ List<PupilProxy> learningSupportFilter(List<PupilProxy> pupils) {
     } else if (activeFilters[PupilFilter.migrationSupport] == false) {
       toList = true;
     } else {
-      locator<PupilsFilter>().setFiltersOn(true);
+      locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }
     filteredPupils.add(pupil);

@@ -174,7 +174,7 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                                 file, pupil.internalId, authorizationId);
                         locator<NotificationManager>().showSnackBar(
                             NotificationType.success,
-                            'Die Einwilligung wurde geändert!');
+                            'Der Einwilligung wurde ein Dokument hinzugefügt!');
                       },
                       onLongPress: (pupilAuthorization.fileUrl == null)
                           ? () {}
@@ -197,7 +197,7 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
                             },
                       child: pupilAuthorization.fileUrl != null
                           ? DocumentImage(
-                              documentTag: 'pupilAuthorization.fileUrl',
+                              documentTag: pupilAuthorization.fileUrl!,
                               documentUrl:
                                   '${locator<EnvManager>().env.value.serverUrl}${ApiAuthorizationService().getPupilAuthorizationFile(pupil.internalId, authorizationId)}',
                               size: 70)

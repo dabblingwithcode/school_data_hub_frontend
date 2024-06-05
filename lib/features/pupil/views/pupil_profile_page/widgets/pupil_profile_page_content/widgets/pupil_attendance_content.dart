@@ -108,7 +108,7 @@ class PupilAttendanceContent extends StatelessWidget {
                             const Gap(3),
                             contactedDayBadge(missedClasses[index].contacted),
                             const Gap(3),
-                            returnedBadge(missedClasses[index].returned),
+                            returnedBadge(missedClasses[index].backHome),
                           ],
                         ),
                         const Gap(5),
@@ -127,14 +127,14 @@ class PupilAttendanceContent extends StatelessWidget {
                                 ],
                               ),
                             const Gap(10),
-                            if (missedClasses[index].returned == true)
+                            if (missedClasses[index].backHome == true)
                               RichText(
                                   text: TextSpan(
                                 text: 'abgeholt um: ',
                                 style: DefaultTextStyle.of(context).style,
                                 children: <TextSpan>[
                                   TextSpan(
-                                      text: missedClasses[index].returnedAt,
+                                      text: missedClasses[index].backHomeAt,
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold)),
                                 ],
@@ -233,7 +233,7 @@ List<Widget> pupilAttendanceContentList(PupilProxy pupil, context) {
                       const Gap(3),
                       contactedDayBadge(missedClasses[index].contacted),
                       const Gap(3),
-                      returnedBadge(missedClasses[index].returned),
+                      returnedBadge(missedClasses[index].backHome),
                     ],
                   ),
                   const Gap(5),
@@ -251,14 +251,14 @@ List<Widget> pupilAttendanceContentList(PupilProxy pupil, context) {
                           ],
                         ),
                       const Gap(10),
-                      if (missedClasses[index].returned == true)
+                      if (missedClasses[index].backHome == true)
                         RichText(
                             text: TextSpan(
                           text: 'abgeholt um: ',
                           style: DefaultTextStyle.of(context).style,
                           children: <TextSpan>[
                             TextSpan(
-                                text: missedClasses[index].returnedAt,
+                                text: missedClasses[index].backHomeAt,
                                 style: const TextStyle(
                                     fontWeight: FontWeight.bold)),
                           ],

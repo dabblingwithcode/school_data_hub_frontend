@@ -21,7 +21,7 @@ List<PupilProxy> categoryGoalFilteredPupils(List<PupilProxy> filteredPupils) {
                     1)) ||
             (activeFilters[PupilFilter.supportAreaMotorics] == false)) {
         } else {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
 
@@ -33,7 +33,7 @@ List<PupilProxy> categoryGoalFilteredPupils(List<PupilProxy> filteredPupils) {
                 2)) {
         } else if (activeFilters[PupilFilter.supportAreaEmotions] == false) {
         } else {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
         if (activeFilters[PupilFilter.supportAreaMath] == true &&
@@ -44,7 +44,7 @@ List<PupilProxy> categoryGoalFilteredPupils(List<PupilProxy> filteredPupils) {
                 3)) {
         } else if (activeFilters[PupilFilter.supportAreaMath] == false) {
         } else {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
         if (activeFilters[PupilFilter.supportAreaLearning] == true &&
@@ -55,7 +55,7 @@ List<PupilProxy> categoryGoalFilteredPupils(List<PupilProxy> filteredPupils) {
                 4)) {
         } else if (activeFilters[PupilFilter.supportAreaLearning] == false) {
         } else {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
         if (activeFilters[PupilFilter.supportAreaGerman] == true &&
@@ -66,14 +66,14 @@ List<PupilProxy> categoryGoalFilteredPupils(List<PupilProxy> filteredPupils) {
                 5)) {
         } else if (activeFilters[PupilFilter.supportAreaGerman] == false) {
         } else {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
         if (activeFilters[PupilFilter.supportAreaLanguage] == true &&
             pupil.pupilGoals!.any((element) => element.goalCategoryId == 6)) {
         } else if (activeFilters[PupilFilter.supportAreaLanguage] == false) {
         } else {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
 

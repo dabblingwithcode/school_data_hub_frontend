@@ -15,6 +15,7 @@ import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/dialogues/multiple_entries_dialog.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/dialogues/returned_time_picker.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
@@ -22,20 +23,20 @@ import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_pro
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceCard extends WatchingWidget {
-  final PupilProxy pupil;
+  final int internalId;
   final DateTime thisDate;
-  const AttendanceCard(this.pupil, this.thisDate, {super.key});
+  const AttendanceCard(this.internalId, this.thisDate, {super.key});
   @override
   Widget build(BuildContext context) {
-    PupilProxy pupil = watch(this.pupil);
+    PupilProxy pupil = watch(locator<PupilManager>().findPupilById(internalId));
+
     final attendanceManager = locator<AttendanceManager>();
     DateTime thisDate = this.thisDate;
-    MissedType dropdownMissedValue =
-        setMissedTypeValue(pupil.internalId, thisDate);
-    bool? excusedValue = setExcusedValue(pupil.internalId, thisDate);
+    MissedType dropdownMissedValue = setMissedTypeValue(internalId, thisDate);
+    bool? excusedValue = setExcusedValue(internalId, thisDate);
     ContactedType dropdownContactedValue =
-        setContactedValue(pupil.internalId, thisDate);
-    bool? returnedValue = setReturnedValue(pupil.internalId, thisDate);
+        setContactedValue(internalId, thisDate);
+    bool? returnedValue = setReturnedValue(internalId, thisDate);
     String? createdModifiedValue(pupilId) {
       return setCreatedModifiedValue(pupilId, thisDate);
     }

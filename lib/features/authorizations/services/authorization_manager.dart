@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/features/authorizations/models/pupil_authorizatio
 import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/api/services/api_manager.dart';
+
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
@@ -18,7 +18,7 @@ class AuthorizationManager {
   ValueListenable<List<Authorization>> get authorizations => _authorizations;
 
   final _authorizations = ValueNotifier<List<Authorization>>([]);
-  final client = locator.get<ApiManager>().dioClient.value;
+
   AuthorizationManager() {
     logger.i('AuthorizationManager constructor called');
   }

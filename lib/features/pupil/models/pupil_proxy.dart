@@ -1,7 +1,10 @@
 // ignore_for_file: constant_identifier_names
 
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/filters/filters.dart';
+import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
 import 'package:schuldaten_hub/features/books/models/pupil_book.dart';
@@ -116,8 +119,8 @@ class PupilProxy with ChangeNotifier {
 
   bool pupilIsDirty = false;
 
-// TODO: this function should be renamed
   void updatePupil(PupilData pupilData) {
+    //if (pupilData == _pupilData) return;
     _pupilData = pupilData;
     // ignore: prefer_for_elements_to_map_fromiterable
     _missedClasses = Map.fromIterable(pupilData.pupilMissedClasses,
@@ -139,10 +142,18 @@ class PupilProxy with ChangeNotifier {
   }
 
   void updateFromAllMissedClasses(List<MissedClass> allMissedClasses) {
-    // add new missed classes
-    for (final missed in allMissedClasses) {
-      if (missed.missedPupilId == _pupilData.internalId) {
-        _missedClasses[missed.missedDay] = missed;
+    bool _pupilIsDirty = false;
+
+    for (final missedClass in allMissedClasses) {
+      // if the missed class is for this pupil
+      if (missedClass.missedPupilId == _pupilData.internalId) {
+        // if the missed class is not already in the missed classes
+        // or if the missed class is different from the one in the missed classes
+        if (!_missedClasses.containsKey(missedClass.missedDay) ||
+            !(_missedClasses[missedClass.missedDay] == missedClass)) {
+          _missedClasses[missedClass.missedDay] = missedClass;
+          _pupilIsDirty = true;
+        }
       }
     }
     var missedClassesValues = List.from(_missedClasses.values);
@@ -151,11 +162,13 @@ class PupilProxy with ChangeNotifier {
     for (final pupilMissedClass in missedClassesValues) {
       if (!allMissedClasses.contains(pupilMissedClass)) {
         _missedClasses.remove(pupilMissedClass.missedDay);
+        _pupilIsDirty = true;
       }
     }
-    pupilIsDirty = true;
-
-    notifyListeners();
+    if (_pupilIsDirty) {
+      pupilIsDirty = true;
+      notifyListeners();
+    }
   }
 
   String get firstName => _pupilIdentity.firstName;

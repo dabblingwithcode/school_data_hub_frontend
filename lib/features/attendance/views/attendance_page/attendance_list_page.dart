@@ -5,16 +5,16 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
+import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
 import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
-import 'package:schuldaten_hub/features/attendance/services/attendance_filters.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/atendance_list_card.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/attendance_list_search_bar.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/attendance_view_bottom_navbar.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:watch_it/watch_it.dart';
 
 class AttendanceListPage extends WatchingStatefulWidget {
@@ -29,6 +29,8 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
   @override
   void initState() {
     super.initState();
+    locator<PupilsFilter>().switchAttendanceFilters(true);
+
     locator<AttendanceManager>().fetchMissedClassesOnASchoolday(
         locator<SchooldayManager>().thisDate.value);
 
@@ -41,18 +43,17 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
   @override
   void dispose() {
     _timer.cancel();
+    locator<PupilsFilter>().switchAttendanceFilters(false);
     super.dispose();
   }
 
+  final pupilManager = locator<PupilManager>();
   @override
   Widget build(BuildContext context) {
     DateTime thisDate = watchValue((SchooldayManager x) => x.thisDate);
-    bool filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
-    List<PupilProxy> filteredPupils =
-        watchValue((PupilsFilter x) => x.filteredPupils);
 
-    //- TODO: the attendance filters should be integrated using the new filter implementation
-    List<PupilProxy> pupils = attendanceFilters(filteredPupils);
+    List<int> pupilIds = watchValue((PupilsFilter x) => x.filteredPupilIds);
+    logger.i('Rebuilding AttendanceListPage');
 
     return Scaffold(
       backgroundColor: canvasColor,
@@ -97,19 +98,19 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
                 SliverSearchAppBar(
                     height: 110,
                     title: AttendanceListSearchBar(
-                        pupils: pupils,
-                        thisDate: thisDate,
-                        filtersOn: filtersOn)),
+                      pupils: pupilManager.pupilsFromPupilIds(pupilIds),
+                      thisDate: thisDate,
+                    )),
                 GenericSliverListWithEmptyListCheck(
-                    items: pupils,
-                    itemBuilder: (_, pupil) => AttendanceCard(pupil, thisDate)),
+                    items: pupilIds,
+                    itemBuilder: (_, pupilId) =>
+                        AttendanceCard(pupilId, thisDate)),
               ],
             ),
           ),
         ),
       ),
-      bottomNavigationBar: AttendanceListPageBottomNavBar(
-          filtersOn: filtersOn, thisDate: thisDate),
+      bottomNavigationBar: const AttendanceListPageBottomNavBar(),
     );
   }
 }

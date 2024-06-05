@@ -8,15 +8,15 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:watch_it/watch_it.dart';
 
-class AttendanceListPageBottomNavBar extends StatelessWidget {
-  final bool filtersOn;
-  final DateTime thisDate;
-  const AttendanceListPageBottomNavBar(
-      {required this.filtersOn, required this.thisDate, super.key});
+class AttendanceListPageBottomNavBar extends WatchingWidget {
+  const AttendanceListPageBottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    DateTime thisDate = watchValue((SchooldayManager x) => x.thisDate);
+    bool filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
     return BottomNavBarLayout(
       bottomNavBar: BottomAppBar(
         padding: const EdgeInsets.all(10),

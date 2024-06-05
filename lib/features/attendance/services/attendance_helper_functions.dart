@@ -6,9 +6,9 @@ import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/date_picker.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
-import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 
 //- lookup functions
 
@@ -31,7 +31,7 @@ int missedPupilsSum(List<PupilProxy> filteredPupils, DateTime thisDate) {
           missedClass.missedDay == thisDate &&
           (missedClass.missedType == 'missed' ||
               missedClass.missedType == 'home' ||
-              missedClass.returned == true))) {
+              missedClass.backHome == true))) {
         missedPupils.add(pupil);
       }
     }
@@ -117,7 +117,7 @@ bool schooldayIsToday(DateTime schoolday) {
 
 //- set value functions
 MissedType setMissedTypeValue(int pupilId, DateTime date) {
-  final PupilProxy pupil = findPupilById(pupilId);
+  final PupilProxy pupil = locator<PupilManager>().findPupilById(pupilId);
   final int? missedClass = findMissedClassIndex(pupil, date);
   if (missedClass == -1 || missedClass == null) {
     return MissedType.notSet;
@@ -130,7 +130,7 @@ MissedType setMissedTypeValue(int pupilId, DateTime date) {
 }
 
 ContactedType setContactedValue(int pupilId, DateTime date) {
-  final PupilProxy pupil = findPupilById(pupilId);
+  final PupilProxy pupil = locator<PupilManager>().findPupilById(pupilId);
   final int? missedClass = findMissedClassIndex(pupil, date);
   if (missedClass == -1) {
     return ContactedType.notSet;
@@ -143,7 +143,7 @@ ContactedType setContactedValue(int pupilId, DateTime date) {
 }
 
 String? setCreatedModifiedValue(int pupilId, DateTime date) {
-  final PupilProxy pupil = findPupilById(pupilId);
+  final PupilProxy pupil = locator<PupilManager>().findPupilById(pupilId);
   final int? missedClass = findMissedClassIndex(pupil, date);
   if (missedClass == -1 || missedClass == null) {
     return null;
@@ -158,7 +158,7 @@ String? setCreatedModifiedValue(int pupilId, DateTime date) {
 }
 
 bool setExcusedValue(int pupilId, DateTime date) {
-  final PupilProxy pupil = findPupilById(pupilId);
+  final PupilProxy pupil = locator<PupilManager>().findPupilById(pupilId);
   final int? missedClass = findMissedClassIndex(pupil, date);
   if (missedClass == -1) {
     return false;
@@ -168,23 +168,23 @@ bool setExcusedValue(int pupilId, DateTime date) {
 }
 
 bool? setReturnedValue(int pupilId, DateTime date) {
-  final PupilProxy pupil = findPupilById(pupilId);
+  final PupilProxy pupil = locator<PupilManager>().findPupilById(pupilId);
   final int? missedClass = findMissedClassIndex(pupil, date);
 
   if (missedClass == -1) {
     return false;
   }
-  final returnedindex = pupil.pupilMissedClasses![missedClass!].returned;
+  final returnedindex = pupil.pupilMissedClasses![missedClass!].backHome;
   return returnedindex;
 }
 
 String? setReturnedTime(int pupilId, DateTime date) {
-  final PupilProxy pupil = findPupilById(pupilId);
+  final PupilProxy pupil = locator<PupilManager>().findPupilById(pupilId);
   final int? missedClass = findMissedClassIndex(pupil, date);
   if (missedClass == -1) {
     return null;
   }
-  final returnedTime = pupil.pupilMissedClasses![missedClass!].returnedAt;
+  final returnedTime = pupil.pupilMissedClasses![missedClass!].backHomeAt;
   return returnedTime;
 }
 

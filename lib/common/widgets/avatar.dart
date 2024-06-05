@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
@@ -10,26 +11,37 @@ import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/widgets/pupil_set_avatar.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_helper_functions.dart';
+import 'package:watch_it/watch_it.dart';
 import 'package:widget_zoom/widget_zoom.dart';
 
-class AvatarImage extends StatelessWidget {
-  final PupilProxy pupil;
+class AvatarData {
+  final String? avatarUrl;
+  final int internalId;
   final double size;
-  const AvatarImage({required this.pupil, required this.size, super.key});
+
+  AvatarData(
+      {required this.avatarUrl, required this.internalId, required this.size});
+}
+
+class AvatarImage extends StatelessWidget {
+  const AvatarImage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final avatarUrl = Provider.of<AvatarData>(context).avatarUrl;
+    final internalId = Provider.of<AvatarData>(context).internalId;
+    final size = Provider.of<AvatarData>(context).size;
     return SizedBox(
       width: size,
       height: size,
       child: Center(
-        child: pupil.avatarUrl != null
+        child: avatarUrl != null
             ? WidgetZoom(
-                heroAnimationTag: pupil.internalId,
+                heroAnimationTag: internalId,
                 zoomWidget: FutureBuilder<Widget>(
                   future: downloadOrCachedAndDecryptImage(
-                    '${locator<EnvManager>().env.value.serverUrl}${ApiPupilService().getPupilAvatar(pupil.internalId)}',
-                    pupil.internalId.toString(),
+                    '${locator<EnvManager>().env.value.serverUrl}${ApiPupilService().getPupilAvatar(internalId)}',
+                    internalId.toString(),
                   ),
                   builder: (context, snapshot) {
                     Widget child;
@@ -63,17 +75,18 @@ class AvatarImage extends StatelessWidget {
                     position: position,
                     items: [
                       PopupMenuItem(
-                        child: pupil.avatarUrl == null
+                        child: avatarUrl == null
                             ? const Text('Foto hochladen')
                             : const Text('Foto ersetzen'),
-                        onTap: () => setAvatar(context, pupil),
+                        onTap: () => setAvatar(context,
+                            locator<PupilManager>().findPupilById(internalId)),
                       ),
-                      if (pupil.avatarUrl != null)
+                      if (avatarUrl != null)
                         PopupMenuItem(
                           child: const Text('Foto löschen'),
                           onTap: () async {
                             await locator<PupilManager>().deleteAvatarImage(
-                                pupil.internalId, pupil.internalId.toString());
+                                internalId, internalId.toString());
                           },
                         ),
                     ],
@@ -94,7 +107,7 @@ class AvatarImage extends StatelessWidget {
   }
 }
 
-class AvatarWithBadges extends StatelessWidget {
+class AvatarWithBadges extends WatchingWidget {
   final PupilProxy pupil;
   final double size;
   const AvatarWithBadges({required this.pupil, required this.size, super.key});
@@ -107,7 +120,12 @@ class AvatarWithBadges extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.all(4.0),
-            child: AvatarImage(pupil: pupil, size: size),
+            child: Provider<AvatarData>.value(
+                value: AvatarData(
+                    avatarUrl: pupil.avatarUrl,
+                    internalId: pupil.internalId,
+                    size: size),
+                child: const AvatarImage()),
           ),
           Positioned(
             bottom: 0,

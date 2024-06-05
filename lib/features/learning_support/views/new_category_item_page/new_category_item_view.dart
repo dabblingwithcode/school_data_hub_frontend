@@ -10,7 +10,7 @@ import 'package:schuldaten_hub/features/learning_support/widgets/dialogs/goal_ex
 
 import 'package:schuldaten_hub/features/learning_support/widgets/pupil_category_widgets/category_status_dropdown.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/pupil_category_widgets/category_tree_ancestors_names.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 class NewCategoryGoalView extends StatelessWidget {
   final NewCategoryGoalController controller;
@@ -69,7 +69,7 @@ class NewCategoryGoalView extends StatelessWidget {
                                       context)
                                   .push(MaterialPageRoute(
                                       builder: (ctx) => SelectableCategoryTree(
-                                          findPupilById(
+                                          locator<PupilManager>().findPupilById(
                                               controller.widget.pupilId),
                                           controller.widget.elementType)));
                               if (categoryId == null) {
@@ -258,7 +258,8 @@ class NewCategoryGoalView extends StatelessWidget {
                           controller.postCategoryGoal();
                         } else {
                           locator<GoalManager>().postCategoryStatus(
-                              findPupilById(controller.widget.pupilId),
+                              locator<PupilManager>()
+                                  .findPupilById(controller.widget.pupilId),
                               controller.goalCategoryId!,
                               controller.categoryStatusValue,
                               controller.textField2Controller.text);

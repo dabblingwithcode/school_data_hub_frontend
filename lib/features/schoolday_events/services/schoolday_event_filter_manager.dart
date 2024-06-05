@@ -87,7 +87,7 @@ class SchooldayEventFilterManager {
         // we keep the last seven days
         if (activeFilters[SchooldayEventFilter.sevenDays]! &&
             schooldayEvent.schooldayEventDate.isBefore(sevenDaysAgo)) {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
         // we keep the not processed ones
@@ -99,33 +99,33 @@ class SchooldayEventFilterManager {
 
         if (activeFilters[SchooldayEventFilter.redCard]! &&
             schooldayEvent.schooldayEventType != 'rk') {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
 
         if (activeFilters[SchooldayEventFilter.redCardOgs]! &&
             schooldayEvent.schooldayEventType != 'rkogs') {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
         if (activeFilters[SchooldayEventFilter.redCardsentHome]! &&
             schooldayEvent.schooldayEventType != 'rkabh') {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
         if (activeFilters[SchooldayEventFilter.otherEvent]! &&
             schooldayEvent.schooldayEventType == 'other') {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
         if (activeFilters[SchooldayEventFilter.parentsMeeting]! &&
             schooldayEvent.schooldayEventType != 'Eg') {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
         if (activeFilters[SchooldayEventFilter.violenceAgainstPersons]! &&
             !schooldayEvent.schooldayEventReason.contains('gm')) {
-          locator<PupilsFilter>().setFiltersOn(true);
+          locator<PupilsFilter>().setFiltersOnValue(true);
           continue;
         }
 

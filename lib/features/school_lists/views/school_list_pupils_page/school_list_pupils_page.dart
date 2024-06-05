@@ -7,7 +7,6 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
 import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
@@ -89,7 +88,8 @@ class SchoolListPupilsPage extends WatchingWidget {
       bottomNavigationBar: SchoolListPupilsPageBottomNavBar(
           listId: schoolList.listId,
           filtersOn: filtersOn,
-          pupilsInList: pupilIdsFromPupils(pupilsInList)),
+          pupilsInList:
+              locator<PupilManager>().pupilIdsFromPupils(pupilsInList)),
     );
   }
 }

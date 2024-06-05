@@ -17,7 +17,7 @@ List<PupilProxy> specialInfoFilter(List<PupilProxy> pupils) {
   List<PupilProxy> filteredPupils = [];
   for (PupilProxy pupil in pupils) {
     if (pupil.specialInformation == null || pupil.specialInformation!.isEmpty) {
-      locator<PupilsFilter>().setFiltersOn(true);
+      locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }
     filteredPupils.add(pupil);

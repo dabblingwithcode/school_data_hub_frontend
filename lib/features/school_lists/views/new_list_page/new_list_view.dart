@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
 import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/select_pupils_list_page.dart';
 
@@ -37,7 +38,8 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
 
   @override
   Widget build(BuildContext context) {
-    List<PupilProxy> pupilsFromIds = pupilsFromPupilIds(pupilIds.toList());
+    List<PupilProxy> pupilsFromIds =
+        locator<PupilManager>().pupilsFromPupilIds(pupilIds.toList());
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -158,8 +160,15 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
                                         },
                                         child: Row(
                                           children: [
-                                            AvatarImage(
-                                                pupil: listedPupil, size: 30),
+                                            Provider.value(
+                                              value: AvatarData(
+                                                  avatarUrl:
+                                                      listedPupil.avatarUrl,
+                                                  internalId:
+                                                      listedPupil.internalId,
+                                                  size: 30),
+                                              child: const AvatarImage(),
+                                            ),
                                             const Gap(10),
                                             Text(
                                               listedPupil.firstName,
@@ -211,8 +220,8 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
                     final List<int> selectedPupilIds =
                         await Navigator.of(context).push(MaterialPageRoute(
                               builder: (ctx) => SelectPupilsListPage(
-                                  selectablePupils:
-                                      restOfPupils(pupilIds.toList())),
+                                  selectablePupils: locator<PupilManager>()
+                                      .restOfPupils(pupilIds.toList())),
                             )) ??
                             [];
                     if (selectedPupilIds.isNotEmpty) {

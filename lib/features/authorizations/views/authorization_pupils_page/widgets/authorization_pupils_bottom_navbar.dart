@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_page/widgets/authorization_pupils_filter_bottom_sheet.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/views/select_pupils_list_page/select_pupils_list_page.dart';
 import 'package:watch_it/watch_it.dart';
@@ -55,8 +55,8 @@ class AuthorizationPupilsBottomNavBar extends WatchingWidget {
                         final List<int>? selectedPupilIds =
                             await Navigator.of(context).push(MaterialPageRoute(
                           builder: (ctx) => SelectPupilsListPage(
-                              selectablePupils:
-                                  restOfPupils(pupilsInAuthorization)),
+                              selectablePupils: locator<PupilManager>()
+                                  .restOfPupils(pupilsInAuthorization)),
                         ));
                         if (selectedPupilIds == null) {
                           return;
@@ -121,8 +121,8 @@ BottomAppBar authorizationPupilsBottomNavBar(
                     final List<int>? selectedPupilIds =
                         await Navigator.of(context).push(MaterialPageRoute(
                       builder: (ctx) => SelectPupilsListPage(
-                          selectablePupils:
-                              restOfPupils(pupilsInAuthorization)),
+                          selectablePupils: locator<PupilManager>()
+                              .restOfPupils(pupilsInAuthorization)),
                     ));
                     if (selectedPupilIds == null) {
                       return;

@@ -4,7 +4,6 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/matrix/views/select_matrix_users_list_view/select_matrix_users_list_view.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 import 'package:watch_it/watch_it.dart';
@@ -158,10 +157,10 @@ class SelectMatrixUsersListController extends State<SelectMatrixUserList> {
   Widget build(BuildContext context) {
     List<PupilProxy> filteredPupils =
         watchValue((PupilFilterManager x) => x.filteredPupils);
-    List<PupilProxy> filteredListedPupils =
-        pupilsFromPupilIds(widget.selectablePupils!)
-            .where((pupil) => filteredPupils.contains(pupil))
-            .toList();
+    List<PupilProxy> filteredListedPupils = locator<PupilManager>()
+        .pupilsFromPupilIds(widget.selectablePupils!)
+        .where((pupil) => filteredPupils.contains(pupil))
+        .toList();
     return SelectMatrixUsersListView(this, filteredListedPupils);
   }
 }

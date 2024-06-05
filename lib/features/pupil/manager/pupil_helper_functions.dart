@@ -3,41 +3,9 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
-// ? we should probably move this functions to the pupil manager in future
+// ? we should move this functions to the pupil manager in future
 
-PupilProxy findPupilById(int pupilId) {
-  final pupils = locator<PupilManager>().allPupils;
-  final PupilProxy pupil =
-      pupils.singleWhere((element) => element.internalId == pupilId);
-  return pupil;
-}
-
-List<PupilProxy> pupilsFromPupilIds(List<int> pupilIds) {
-  List<PupilProxy> pupilsfromPupilIds = [];
-  final pupils = locator<PupilManager>().allPupils;
-  pupilsfromPupilIds =
-      pupils.where((element) => pupilIds.contains(element.internalId)).toList();
-  return pupilsfromPupilIds;
-}
-
-List<int> pupilIdsFromPupils(List<PupilProxy> pupils) {
-  List<int> pupilIds = [];
-  for (PupilProxy pupil in pupils) {
-    pupilIds.add(pupil.internalId);
-  }
-  return pupilIds;
-}
-
-List<PupilProxy> restOfPupils(List<int> pupilIds) {
-  List<int> restOfPupils = [];
-  final pupils = locator<PupilManager>().allPupils;
-  for (PupilProxy pupil in pupils) {
-    if (!pupilIds.contains(pupil.internalId)) {
-      restOfPupils.add(pupil.internalId);
-    }
-  }
-  return pupilsFromPupilIds(restOfPupils);
-}
+// TODO: these should be enums
 
 String preschoolRevisionPredicate(int value) {
   switch (value) {
@@ -94,17 +62,7 @@ String communicationPredicate(String? value) {
   }
 }
 
-List<PupilProxy> siblings(PupilProxy pupil) {
-  if (pupil.family == null) {
-    return [];
-  }
-  List<PupilProxy> pupilSiblings = [];
-  final pupils = locator<PupilManager>().allPupils;
-  pupilSiblings =
-      pupils.where((element) => element.family == pupil.family).toList();
-  pupilSiblings.remove(pupil);
-  return pupilSiblings;
-}
+// TODO: Should these be getters in PupilProxy?
 
 bool hasLanguageSupport(DateTime? endOfSupport) {
   if (endOfSupport != null) {
@@ -119,6 +77,8 @@ bool hadLanguageSupport(DateTime? endOfSupport) {
   }
   return false;
 }
+
+// TODO: Migrate to pupilsWithBirthdaySinceDate an remove this function
 
 List<PupilProxy> pupilsWithBirthdayInTheLastSevenDays() {
   final List<PupilProxy> pupils = locator<PupilManager>().allPupils;

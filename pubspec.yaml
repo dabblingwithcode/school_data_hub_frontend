@@ -48,6 +48,7 @@ dependencies:
   camera: ^0.10.5+9
   transparent_image: ^2.0.1
   table_calendar: ^3.0.9
+  provider: ^6.1.2
 
 dev_dependencies:
   flutter_test: 

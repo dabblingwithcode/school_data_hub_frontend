@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
@@ -7,7 +8,6 @@ import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
 
@@ -17,7 +17,7 @@ class PupilInfosContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<PupilProxy> pupilSiblings = siblings(pupil);
+    List<PupilProxy> pupilSiblings = locator<PupilManager>().siblings(pupil);
     return Column(
       children: [
         const Row(
@@ -149,7 +149,13 @@ class PupilInfosContent extends StatelessWidget {
                         },
                         child: Row(
                           children: [
-                            AvatarImage(pupil: sibling, size: 30),
+                            Provider.value(
+                              value: AvatarData(
+                                  avatarUrl: sibling.avatarUrl,
+                                  internalId: sibling.internalId,
+                                  size: 30),
+                              child: const AvatarImage(),
+                            ),
                             const Gap(10),
                             Text(
                               sibling.firstName,

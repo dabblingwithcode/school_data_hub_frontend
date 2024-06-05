@@ -19,7 +19,7 @@ List<PupilProxy> ogsFilter(List<PupilProxy> pupils) {
   List<PupilProxy> filteredPupils = [];
   for (PupilProxy pupil in pupils) {
     if (!pupil.ogs == true) {
-      locator<PupilsFilter>().setFiltersOn(true);
+      locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }
     filteredPupils.add(pupil);

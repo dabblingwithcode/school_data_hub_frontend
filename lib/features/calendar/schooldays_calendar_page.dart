@@ -10,7 +10,6 @@ import 'package:schuldaten_hub/common/widgets/snackbars.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/atendance_list_card.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -169,8 +168,7 @@ class SchooldaysCalendarState extends State<SchooldaysCalendar> {
               itemCount: missedClasses.length,
               itemBuilder: (context, index) {
                 return AttendanceCard(
-                    findPupilById(missedClasses[index].missedPupilId),
-                    _selectedDay!);
+                    missedClasses[index].missedPupilId, _selectedDay!);
               },
             ),
           ),

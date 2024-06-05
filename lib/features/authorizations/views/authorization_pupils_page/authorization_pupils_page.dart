@@ -11,7 +11,6 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_page/widgets/authorization_pupil_card.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_page/widgets/authorization_pupils_bottom_navbar.dart';
 
-import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 import 'package:watch_it/watch_it.dart';
@@ -94,7 +93,8 @@ class AuthorizationPupilsPage extends WatchingWidget {
       ),
       bottomNavigationBar: AuthorizationPupilsBottomNavBar(
         authorization: authorization,
-        pupilsInAuthorization: pupilIdsFromPupils(pupilsInList),
+        pupilsInAuthorization:
+            locator<PupilManager>().pupilIdsFromPupils(pupilsInList),
       ),
     );
   }

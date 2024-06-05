@@ -12,7 +12,6 @@ import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 enum MissedType {
@@ -83,7 +82,7 @@ class AttendanceManager {
 
   Future<void> changeExcusedValue(
       int pupilId, DateTime date, bool newValue) async {
-    final PupilProxy pupil = findPupilById(pupilId);
+    final PupilProxy pupil = pupilManager.findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     if (missedClass == null || missedClass == -1) {
       return;
@@ -117,7 +116,7 @@ class AttendanceManager {
   Future<void> changeReturnedValue(
       int pupilId, bool newValue, DateTime date, String? time) async {
     locator<NotificationManager>().isRunningValue(true);
-    final PupilProxy pupil = findPupilById(pupilId);
+    final PupilProxy pupil = pupilManager.findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
 
     // pupils gone home during class for whatever reason
@@ -194,7 +193,7 @@ class AttendanceManager {
       DateTime date, int minutesLate) async {
     // Let's look for an existing missed class - if pupil and date match, there is one
 
-    final PupilProxy pupil = findPupilById(pupilId);
+    final PupilProxy pupil = pupilManager.findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     if (missedClass == -1) {
       // The missed class does not exist - let's create one
@@ -254,8 +253,8 @@ class AttendanceManager {
           missedType: missedType,
           excused: false,
           contacted: '0',
-          returned: false,
-          returnedAt: null,
+          backHome: false,
+          backHomeAt: null,
           minutesLate: null,
           writtenExcuse: null,
         ));
@@ -287,7 +286,7 @@ class AttendanceManager {
 
     // Let's look for an existing missed class - if pupil and date match, there is one
 
-    final PupilProxy pupil = findPupilById(pupilId);
+    final PupilProxy pupil = pupilManager.findPupilById(pupilId);
     final int? missedClass = findMissedClassIndex(pupil, date);
     if (missedClass == -1) {
       // The missed class does not exist - let's create one

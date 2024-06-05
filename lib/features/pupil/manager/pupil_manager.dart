@@ -13,7 +13,6 @@ import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
@@ -25,11 +24,68 @@ class PupilManager extends ChangeNotifier {
 
   PupilManager();
 
-  Future<void> init() async {
-    await fetchAllPupils();
+  //- HELPER METHODS
+
+  void clearData() {
+    _pupils.clear();
   }
 
+  PupilProxy findPupilById(int id) {
+    return _pupils[id]!;
+  }
+
+  List<PupilProxy> pupilsFromPupilIds(List<int> pupilIds) {
+    List<PupilProxy> pupilsfromPupilIds = [];
+
+    for (int pupilId in pupilIds) {
+      pupilsfromPupilIds.add(_pupils[pupilId]!);
+    }
+
+    return pupilsfromPupilIds;
+  }
+
+  List<int> pupilIdsFromPupils(List<PupilProxy> pupils) {
+    return pupils.map((pupil) => pupil.internalId).toList();
+  }
+
+  List<PupilProxy> restOfPupils(List<int> pupilIds) {
+    Map<int, PupilProxy> allPupils = Map<int, PupilProxy>.of(_pupils);
+    allPupils.removeWhere((key, value) => pupilIds.contains(key));
+    return allPupils.values.toList();
+  }
+
+  List<PupilProxy> siblings(PupilProxy pupil) {
+    if (pupil.family == null) {
+      return [];
+    }
+
+    Map<int, PupilProxy> allPupils = Map<int, PupilProxy>.of(_pupils);
+
+    allPupils.removeWhere((key, value) => value.family != pupil.family);
+
+    allPupils.remove(pupil.internalId);
+    final pupilSiblings = allPupils.values.toList();
+    return pupilSiblings;
+  }
+
+  List<PupilProxy> pupilsWithBirthdaySinceDate(DateTime date) {
+    Map<int, PupilProxy> allPupils = Map<int, PupilProxy>.of(_pupils);
+    final DateTime now = DateTime.now();
+    allPupils.removeWhere((key, pupil) {
+      final birthdayThisYear = DateTime(
+          DateTime.now().year, pupil.birthday.month, pupil.birthday.day);
+      return birthdayThisYear.isAfter(date) && birthdayThisYear.isBefore(now);
+    });
+    final pupilsWithBirthdaySinceDate = allPupils.values.toList();
+    return pupilsWithBirthdaySinceDate;
+  }
+
+  //- API CONSUMER METHODS
+
+  final apiPupilService = ApiPupilService();
+
   //- Fetch all available pupils from the backend
+
   Future<void> fetchAllPupils() async {
     final pupilsToFetch = locator.get<PupilIdentityManager>().availablePupilIds;
     if (pupilsToFetch.isEmpty) {
@@ -38,17 +94,22 @@ class PupilManager extends ChangeNotifier {
     await fetchPupilsByInternalId(pupilsToFetch);
   }
 
+  Future<void> init() async {
+    await fetchAllPupils();
+  }
+
   Future<void> updatePupilList(List<PupilProxy> pupils) async {
     await fetchPupilsByInternalId(pupils.map((e) => e.internalId).toList());
   }
 
   //- Fetch pupils with the given ids from the backend
+
   Future<void> fetchPupilsByInternalId(List<int> internalPupilIds) async {
     locator<NotificationManager>().isRunningValue(true);
 
     // fetch the pupils from the backend
-    final fetchedPupils = await ApiPupilService()
-        .fetchListOfPupils(internalPupilIds: internalPupilIds);
+    final fetchedPupils = await apiPupilService.fetchListOfPupils(
+        internalPupilIds: internalPupilIds);
 
     // check if we did not get a pupil response for some ids
     // if so, we will delete the personal data for those ids later
@@ -92,19 +153,19 @@ class PupilManager extends ChangeNotifier {
     notifyListeners();
   }
 
-  void clearData() {
-    _pupils.clear();
-  }
-
-  void updatePupilProxyWithPupilData(PupilData pupil) {
-    final proxy = _pupils[pupil.internalId];
+  void updatePupilProxyWithPupilData(PupilData pupilData) {
+    final proxy = _pupils[pupilData.internalId];
     if (proxy != null) {
-      proxy.updatePupil(pupil);
-      notifyListeners();
+      proxy.updatePupil(pupilData);
+      // No need to call notifyListeners here, because the proxy will notify the listeners itself
+      // notifyListeners();
     }
   }
 
   void updatePupilsFromMissedClasses(List<MissedClass> allMissedClasses) {
+    if (allMissedClasses.isEmpty) {
+      return;
+    }
     for (MissedClass missedClass in allMissedClasses) {
       final missedPupil = _pupils[missedClass.missedPupilId];
 
@@ -116,7 +177,8 @@ class PupilManager extends ChangeNotifier {
 
       missedPupil.updateFromAllMissedClasses(allMissedClasses);
     }
-    notifyListeners();
+    // no need to notify listeners here, because the pupils will notify the listeners themselves
+    //notifyListeners();
   }
 
   Future<void> postAvatarImage(
@@ -139,7 +201,7 @@ class PupilManager extends ChangeNotifier {
 
     // send the Api request
 
-    final PupilData pupilUpdate = await ApiPupilService().updatePupilWithAvatar(
+    final PupilData pupilUpdate = await apiPupilService.updatePupilWithAvatar(
       id: pupilProxy.internalId,
       formData: formData,
     );
@@ -158,7 +220,7 @@ class PupilManager extends ChangeNotifier {
 
   Future<void> deleteAvatarImage(int pupilId, String cacheKey) async {
     // send the Api request
-    await ApiPupilService().deletePupilAvatar(
+    await apiPupilService.deletePupilAvatar(
       internalId: pupilId,
     );
 
@@ -191,8 +253,8 @@ class PupilManager extends ChangeNotifier {
 
         // call the endpoint to update the siblings
 
-        final List<PupilData> siblingsUpdate = await ApiPupilService()
-            .updateSiblingsProperty(
+        final List<PupilData> siblingsUpdate =
+            await apiPupilService.updateSiblingsProperty(
                 siblingsPupilIds: pupilIdsWithSameFamily,
                 property: jsonKey,
                 value: value);
@@ -211,8 +273,8 @@ class PupilManager extends ChangeNotifier {
 
     // The pupil is no sibling. Make the api call for the single pupil
 
-    final PupilData pupilUpdate = await ApiPupilService()
-        .updatePupilProperty(id: pupilId, property: jsonKey, value: value);
+    final PupilData pupilUpdate = await apiPupilService.updatePupilProperty(
+        id: pupilId, property: jsonKey, value: value);
 
     // now update the pupil in the repository
 

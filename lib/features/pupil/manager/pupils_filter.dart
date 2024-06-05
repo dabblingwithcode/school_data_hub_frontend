@@ -89,6 +89,7 @@ class RadioButtonFilter extends Filter<PupilProxy> {
 abstract class PupilsFilter implements Listenable {
   ValueListenable<bool> get filtersOn;
   ValueListenable<List<PupilProxy>> get filteredPupils;
+  ValueListenable<List<int>> get filteredPupilIds;
 
   List<Filter> get groupFilters;
   List<Filter> get schoolGradeFilters;
@@ -106,9 +107,10 @@ abstract class PupilsFilter implements Listenable {
 
   // for now, we need to access the switch from outside
   // because additional filters outside are still used
-  void setFiltersOn(bool value);
+  void setFiltersOnValue(bool value);
 
   void setSortMode(PupilSortMode sortMode);
   void sortPupils();
   void setTextFilter(String? text, {bool refresh = true});
+  void switchAttendanceFilters(bool value);
 }

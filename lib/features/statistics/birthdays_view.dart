@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:provider/provider.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
@@ -54,7 +55,13 @@ class BirthdaysView extends WatchingWidget {
                                 },
                                 child: Row(
                                   children: [
-                                    AvatarImage(pupil: listedPupil, size: 30),
+                                    Provider.value(
+                                      value: AvatarData(
+                                          avatarUrl: listedPupil.avatarUrl,
+                                          internalId: listedPupil.internalId,
+                                          size: 40),
+                                      child: const AvatarImage(),
+                                    ),
                                     const Gap(10),
                                     Text(
                                       listedPupil.firstName,

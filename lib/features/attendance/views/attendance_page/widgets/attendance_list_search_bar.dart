@@ -8,19 +8,18 @@ import 'package:schuldaten_hub/features/attendance/services/attendance_helper_fu
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/attendance_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:watch_it/watch_it.dart';
 
-class AttendanceListSearchBar extends StatelessWidget {
+class AttendanceListSearchBar extends WatchingWidget {
   final List<PupilProxy> pupils;
-  final bool filtersOn;
+
   final DateTime thisDate;
   const AttendanceListSearchBar(
-      {required this.pupils,
-      required this.thisDate,
-      required this.filtersOn,
-      super.key});
+      {required this.pupils, required this.thisDate, super.key});
 
   @override
   Widget build(BuildContext context) {
+    bool filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
     return Container(
       decoration: BoxDecoration(
         color: canvasColor,

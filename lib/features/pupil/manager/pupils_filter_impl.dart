@@ -5,40 +5,14 @@ import 'package:schuldaten_hub/common/filters/filters.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/utils/debug_printer.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupil_filters.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupil_objects_filters.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_filter_manager.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_helper_functions.dart';
-
-class PupilTextFilter extends Filter<PupilProxy> {
-  PupilTextFilter({
-    required super.name,
-  });
-
-  String _text = '';
-  String get text => _text;
-
-  void setFilterText(String text) {
-    _text = text;
-    toggle(isActive);
-    notifyListeners();
-  }
-
-  @override
-  void reset() {
-    _text = '';
-    super.reset();
-  }
-
-  @override
-  bool matches(PupilProxy item) {
-    return item.internalId.toString().contains(text) ||
-        item.firstName.toLowerCase().contains(text.toLowerCase()) ||
-        item.lastName.toLowerCase().contains(text.toLowerCase());
-  }
-}
 
 class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   PupilsFilterImplementation(
@@ -53,7 +27,7 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   }
 
   @override
-  void setFiltersOn(bool value) {
+  void setFiltersOnValue(bool value) {
     _filtersOn.value = value;
     notifyListeners();
   }
@@ -73,9 +47,21 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   final _filtersOn = ValueNotifier<bool>(false);
 
   @override
+  void switchAttendanceFilters(bool value) {
+    _attendanceFiltersOn.value = value;
+    notifyListeners();
+  }
+
+  ValueListenable<bool> get attendanceFiltersOn => _attendanceFiltersOn;
+  final _attendanceFiltersOn = ValueNotifier<bool>(false);
+
+  @override
   ValueListenable<List<PupilProxy>> get filteredPupils => _filteredPupils;
   final ValueNotifier<List<PupilProxy>> _filteredPupils = ValueNotifier([]);
 
+  @override
+  ValueListenable<List<int>> get filteredPupilIds => _filteredPupilIds;
+  final ValueNotifier<List<int>> _filteredPupilIds = ValueNotifier([]);
   @override
   ValueListenable<PupilSortMode> get sortMode => _sortMode;
   final _sortMode = ValueNotifier<PupilSortMode>(PupilSortMode.sortByName);
@@ -95,6 +81,8 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
       filter.reset();
     }
     _filteredPupils.value = _pupilsManager.allPupils;
+    _filteredPupilIds.value =
+        _pupilsManager.allPupils.map((e) => e.internalId).toList();
     locator<PupilFilterManager>().resetFilters();
     sortPupils();
     _filtersOn.value = false;
@@ -106,6 +94,7 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   void refreshs() {
     final allPupils = _pupilsManager.allPupils;
 
+    // checks if any not yet migrated filters are active
     final bool specificFiltersOn = locator<PupilFilterManager>()
             .filterState
             .value
@@ -116,10 +105,12 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
             .value
             .values
             .any((x) => x == true);
+
     // If no filters are active, just sort
     if (!allFilters.any((x) => x.isActive == true) &&
         specificFiltersOn == false) {
       _filteredPupils.value = allPupils;
+      _filteredPupilIds.value = allPupils.map((e) => e.internalId).toList();
       _filtersOn.value = false;
       sortPupils();
       return;
@@ -160,6 +151,10 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
         }
       }
 
+      if (toList == true && _attendanceFiltersOn.value) {
+        toList = attendanceFilters(pupil);
+      }
+
       if (toList) {
         thisFilteredPupils.add(pupil);
       }
@@ -169,6 +164,8 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
       _filtersOn.value = true;
     }
     _filteredPupils.value = thisFilteredPupils;
+    _filteredPupilIds.value =
+        thisFilteredPupils.map((e) => e.internalId).toList();
     sortPupils();
   }
 
@@ -196,7 +193,7 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
         thisFilteredPupils.sort((a, b) => SchoolEventHelper.schooldayEventSum(b)
             .compareTo(SchoolEventHelper.schooldayEventSum(a)));
       case PupilSortMode.sortByLastSchooldayEvent:
-        thisFilteredPupils.sort(comparePupilsByAdmonishedDate);
+        thisFilteredPupils.sort(comparePupilsBySchooldayEventDate);
       case PupilSortMode.sortByLastNonProcessedSchooldayEvent:
         thisFilteredPupils.sort(comparePupilsByLastNonProcessedSchooldayEvent);
       case PupilSortMode.sortByMissedUnexcused:
@@ -216,6 +213,8 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
         PupilSortMode.sortByName;
     }
     _filteredPupils.value = thisFilteredPupils;
+    _filteredPupilIds.value =
+        thisFilteredPupils.map((e) => e.internalId).toList();
     notifyListeners();
   }
 
@@ -240,11 +239,11 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   List<Filter> get schoolGradeFilters => PupilProxy.schoolGradeFilters;
 }
 
-int comparePupilsByAdmonishedDate(PupilProxy a, PupilProxy b) {
+int comparePupilsBySchooldayEventDate(PupilProxy a, PupilProxy b) {
   // Handle potential null cases with null-aware operators
   return (a.schooldayEvents?.isEmpty ?? true) ==
           (b.schooldayEvents?.isEmpty ?? true)
-      ? compareLastAdmonishedDates(a, b) // Handle empty or both empty
+      ? compareLastSchooldayEventDates(a, b) // Handle empty or both empty
       : (a.schooldayEvents?.isEmpty ?? true)
           ? 1
           : -1; // Place empty after non-empty
@@ -254,19 +253,19 @@ int comparePupilsByLastNonProcessedSchooldayEvent(PupilProxy a, PupilProxy b) {
   // Handle potential null cases with null-aware operators
   return (a.schooldayEvents?.isEmpty ?? true) ==
           (b.schooldayEvents?.isEmpty ?? true)
-      ? compareLastAdmonishedDates(a, b) // Handle empty or both empty
+      ? compareLastSchooldayEventDates(a, b) // Handle empty or both empty
       : (a.schooldayEvents?.isEmpty ?? true)
           ? 1
           : -1; // Place empty after non-empty
 }
 
-int compareLastAdmonishedDates(PupilProxy a, PupilProxy b) {
+int compareLastSchooldayEventDates(PupilProxy a, PupilProxy b) {
   // Ensure non-empty lists before accessing elements
   if (a.schooldayEvents!.isNotEmpty && b.schooldayEvents!.isNotEmpty) {
-    final admonishedDateA = a.schooldayEvents!.last.schooldayEventDate;
-    final admonishedDateB = b.schooldayEvents!.last.schooldayEventDate;
-    return admonishedDateB
-        .compareTo(admonishedDateA); // Reversed for descending order
+    final schooldayEventA = a.schooldayEvents!.last.schooldayEventDate;
+    final schooldayEventB = b.schooldayEvents!.last.schooldayEventDate;
+    return schooldayEventB
+        .compareTo(schooldayEventA); // Reversed for descending order
   } else {
     // Handle cases where one or both lists are empty (optional, adjust logic as needed)
     return 0; // Consider them equal, or apply other logic based on your requirements
