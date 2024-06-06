@@ -8,22 +8,20 @@ import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_helper_functions.dart';
+import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_page/widgets/pupil_list_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/school_lists/views/school_list_pupils_page/widgets/school_list_stats_row.dart';
-import 'package:schuldaten_hub/features/schoolday_events/views/schoolday_event_list_page/widgets/schoolday_event_filter_bottom_sheet.dart';
+import 'package:watch_it/watch_it.dart';
 
-class SchoolListPupilsPageSearchBar extends StatelessWidget {
+class SchoolListPupilsPageSearchBar extends WatchingWidget {
   final SchoolList schoolList;
   final List<PupilProxy> pupils;
-  final bool filtersOn;
 
   const SchoolListPupilsPageSearchBar(
-      {required this.filtersOn,
-      required this.pupils,
-      required this.schoolList,
-      super.key});
+      {required this.pupils, required this.schoolList, super.key});
 
   @override
   Widget build(BuildContext context) {
+    final bool filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
     return Container(
       decoration: BoxDecoration(
         color: canvasColor,
@@ -94,7 +92,7 @@ class SchoolListPupilsPageSearchBar extends StatelessWidget {
                         hintText: 'Schüler/in suchen',
                         refreshFunction: locator<PupilsFilter>().refreshs)),
                 InkWell(
-                  onTap: () => const SchooldayEventFilterBottomSheet(),
+                  onTap: () => showPupilListFilterBottomSheet(context),
                   onLongPress: () => locator<PupilsFilter>().resetFilters(),
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),

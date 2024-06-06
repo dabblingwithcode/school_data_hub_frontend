@@ -48,131 +48,136 @@ class SchooldaysCalendarState extends State<SchooldaysCalendar> {
         backgroundColor: backgroundColor,
         title: const Center(child: Text('Schultage', style: appBarTextStyle)),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TableCalendar<String>(
-            selectedDayPredicate: (day) {
-              // check if the day is in schooldays
-              bool isSchoolday = schooldays
-                  .any((element) => element.schoolday.isSameDate(day));
-              return isSchoolday;
-            },
-            locale: 'de_DE',
-            startingDayOfWeek: StartingDayOfWeek.monday,
-            availableCalendarFormats: const {
-              CalendarFormat.month: 'Month',
-            },
-            calendarBuilders: CalendarBuilders(
-              singleMarkerBuilder: (context, date, events) => Container(
-                margin: const EdgeInsets.all(4.0),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(20.0)),
-                child: Text(
-                  date.day.toString(),
-                  style: const TextStyle(color: Colors.white),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 800),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TableCalendar<String>(
+                selectedDayPredicate: (day) {
+                  // check if the day is in schooldays
+                  bool isSchoolday = schooldays
+                      .any((element) => element.schoolday.isSameDate(day));
+                  return isSchoolday;
+                },
+                locale: 'de_DE',
+                startingDayOfWeek: StartingDayOfWeek.monday,
+                availableCalendarFormats: const {
+                  CalendarFormat.month: 'Month',
+                },
+                calendarBuilders: CalendarBuilders(
+                  singleMarkerBuilder: (context, date, events) => Container(
+                    margin: const EdgeInsets.all(4.0),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(20.0)),
+                    child: Text(
+                      date.day.toString(),
+                      style: const TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  // selectedBuilder: (context, day, focusedDay) => Container(
+                  //     margin: const EdgeInsets.all(4.0),
+                  //     alignment: Alignment.center,
+                  //     decoration: BoxDecoration(
+                  //         color: Theme.of(context).primaryColor,
+                  //         borderRadius: BorderRadius.circular(25.0)),
+                  //     child: Text(
+                  //       day.day.toString(),
+                  //       style: TextStyle(color: Colors.white),
+                  //     )),
+                  todayBuilder: (context, date, events) => Container(
+                      margin: const EdgeInsets.all(4.0),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: Theme.of(context).highlightColor,
+                          borderRadius: BorderRadius.circular(10.0)),
+                      child: Text(
+                        date.day.toString(),
+                        style: const TextStyle(color: Colors.white),
+                      )),
+                ),
+                firstDay: kFirstDay,
+                lastDay: kLastDay,
+                focusedDay: _focusedDay,
+                eventLoader: _getEventsForDay,
+                calendarFormat: _calendarFormat,
+                onDaySelected: (selectedDay, focusedDay) {
+                  if (!isSameDay(_selectedDay, selectedDay)) {
+                    // Call `setState()` when updating the selected day
+                    setState(() {
+                      _selectedDay = selectedDay;
+                      _focusedDay = focusedDay;
+                    });
+                  }
+                },
+                onDayLongPressed: (selectedDay, focusedDay) {
+                  snackbarInfo(context,
+                      ' Selected day: ${selectedDay.formatForUser()}, focused day: ${focusedDay.formatForUser()}');
+                },
+                onFormatChanged: (format) {
+                  if (_calendarFormat != format) {
+                    // Call `setState()` when updating calendar format
+                    setState(() {
+                      _calendarFormat = format;
+                    });
+                  }
+                },
+                onPageChanged: (focusedDay) {
+                  // No need to call `setState()` here
+                  _focusedDay = focusedDay;
+                },
+              ),
+              //const Gap(20),
+              _selectedDay != null
+                  ? Row(
+                      children: [
+                        const Gap(15),
+                        Text(
+                            DateFormat('EEEE',
+                                    Localizations.localeOf(context).toString())
+                                .format(_selectedDay!),
+                            style: const TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold)),
+                        const Gap(5),
+                        Text(' ${_selectedDay?.formatForUser()}',
+                            style: const TextStyle(
+                                fontSize: 20.0, fontWeight: FontWeight.bold)),
+                        const Gap(40),
+                        Text(
+                            missedClasses
+                                .where((missedClass) =>
+                                    missedClass.missedType == 'missed')
+                                .length
+                                .toString(),
+                            style: const TextStyle(
+                                fontSize: 28.0, fontWeight: FontWeight.bold)),
+                        const Gap(20)
+                      ],
+                    )
+                  : const Row(
+                      children: [
+                        Gap(15),
+                        Text('Kein Tag ausgewählt',
+                            style: TextStyle(
+                                fontSize: 18.0, fontWeight: FontWeight.bold)),
+                      ],
+                    ),
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: missedClasses.length,
+                  itemBuilder: (context, index) {
+                    return AttendanceCard(
+                        missedClasses[index].missedPupilId, _selectedDay!);
+                  },
                 ),
               ),
-              // selectedBuilder: (context, day, focusedDay) => Container(
-              //     margin: const EdgeInsets.all(4.0),
-              //     alignment: Alignment.center,
-              //     decoration: BoxDecoration(
-              //         color: Theme.of(context).primaryColor,
-              //         borderRadius: BorderRadius.circular(25.0)),
-              //     child: Text(
-              //       day.day.toString(),
-              //       style: TextStyle(color: Colors.white),
-              //     )),
-              todayBuilder: (context, date, events) => Container(
-                  margin: const EdgeInsets.all(4.0),
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).highlightColor,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Text(
-                    date.day.toString(),
-                    style: const TextStyle(color: Colors.white),
-                  )),
-            ),
-            firstDay: kFirstDay,
-            lastDay: kLastDay,
-            focusedDay: _focusedDay,
-            eventLoader: _getEventsForDay,
-            calendarFormat: _calendarFormat,
-            onDaySelected: (selectedDay, focusedDay) {
-              if (!isSameDay(_selectedDay, selectedDay)) {
-                // Call `setState()` when updating the selected day
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                });
-              }
-            },
-            onDayLongPressed: (selectedDay, focusedDay) {
-              snackbarInfo(context,
-                  ' Selected day: ${selectedDay.formatForUser()}, focused day: ${focusedDay.formatForUser()}');
-            },
-            onFormatChanged: (format) {
-              if (_calendarFormat != format) {
-                // Call `setState()` when updating calendar format
-                setState(() {
-                  _calendarFormat = format;
-                });
-              }
-            },
-            onPageChanged: (focusedDay) {
-              // No need to call `setState()` here
-              _focusedDay = focusedDay;
-            },
+            ],
           ),
-          //const Gap(20),
-          _selectedDay != null
-              ? Row(
-                  children: [
-                    const Gap(15),
-                    Text(
-                        DateFormat('EEEE',
-                                Localizations.localeOf(context).toString())
-                            .format(_selectedDay!),
-                        style: const TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold)),
-                    const Gap(5),
-                    Text(' ${_selectedDay?.formatForUser()}',
-                        style: const TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold)),
-                    const Spacer(),
-                    Text(
-                        missedClasses
-                            .where((missedClass) =>
-                                missedClass.missedType == 'missed')
-                            .length
-                            .toString(),
-                        style: const TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold)),
-                    const Gap(10)
-                  ],
-                )
-              : const Row(
-                  children: [
-                    Gap(15),
-                    Text('Kein Tag ausgewählt',
-                        style: TextStyle(
-                            fontSize: 18.0, fontWeight: FontWeight.bold)),
-                  ],
-                ),
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              itemCount: missedClasses.length,
-              itemBuilder: (context, index) {
-                return AttendanceCard(
-                    missedClasses[index].missedPupilId, _selectedDay!);
-              },
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }

@@ -50,6 +50,12 @@ class AttendanceRankingFilterBottomSheet extends WatchingWidget {
                     ),
                     selected: sortMode == PupilSortMode.sortByName,
                     onSelected: (val) {
+                      // if the filter is already selected, do nothing
+                      if (locator<PupilsFilter>().sortMode.value ==
+                          PupilSortMode.sortByName) {
+                        return;
+                      }
+                      // set the filter
                       locator<PupilsFilter>()
                           .setSortMode(PupilSortMode.sortByName);
                     },
@@ -67,6 +73,12 @@ class AttendanceRankingFilterBottomSheet extends WatchingWidget {
                     ),
                     selected: sortMode == PupilSortMode.sortByMissedExcused,
                     onSelected: (val) {
+                      // if the filter is already selected, do nothing
+                      if (locator<PupilsFilter>().sortMode.value ==
+                          PupilSortMode.sortByMissedExcused) {
+                        return;
+                      }
+                      // set the filter
                       locator<PupilsFilter>()
                           .setSortMode(PupilSortMode.sortByMissedExcused);
                     },
@@ -84,6 +96,12 @@ class AttendanceRankingFilterBottomSheet extends WatchingWidget {
                     ),
                     selected: sortMode == PupilSortMode.sortByMissedUnexcused,
                     onSelected: (val) {
+                      // if the filter is already selected, do nothing
+                      if (locator<PupilsFilter>().sortMode.value ==
+                          PupilSortMode.sortByMissedUnexcused) {
+                        return;
+                      }
+                      // set the filter
                       locator<PupilsFilter>()
                           .setSortMode(PupilSortMode.sortByMissedUnexcused);
                     },
@@ -101,6 +119,12 @@ class AttendanceRankingFilterBottomSheet extends WatchingWidget {
                     ),
                     selected: sortMode == PupilSortMode.sortByLate,
                     onSelected: (val) {
+                      // if the filter is already selected, do nothing
+                      if (locator<PupilsFilter>().sortMode.value ==
+                          PupilSortMode.sortByLate) {
+                        return;
+                      }
+                      // set the filter
                       locator<PupilsFilter>()
                           .setSortMode(PupilSortMode.sortByLate);
                     },
@@ -118,6 +142,12 @@ class AttendanceRankingFilterBottomSheet extends WatchingWidget {
                     ),
                     selected: sortMode == PupilSortMode.sortByContacted,
                     onSelected: (val) {
+                      // if the filter is already selected, do nothing
+                      if (locator<PupilsFilter>().sortMode.value ==
+                          PupilSortMode.sortByContacted) {
+                        return;
+                      }
+                      // set the filter
                       locator<PupilsFilter>()
                           .setSortMode(PupilSortMode.sortByContacted);
                     },

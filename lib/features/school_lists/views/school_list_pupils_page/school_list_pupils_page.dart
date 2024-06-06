@@ -53,9 +53,9 @@ class SchoolListPupilsPage extends WatchingWidget {
                   SliverSearchAppBar(
                     height: 130,
                     title: SchoolListPupilsPageSearchBar(
-                        pupils: pupilsInList,
-                        schoolList: schoolList,
-                        filtersOn: filtersOn),
+                      pupils: pupilsInList,
+                      schoolList: schoolList,
+                    ),
                   ),
                   pupilsInList.isEmpty
                       ? const SliverToBoxAdapter(

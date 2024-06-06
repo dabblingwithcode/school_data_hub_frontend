@@ -10,8 +10,8 @@ import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart
 import 'package:schuldaten_hub/common/widgets/dialogues/information_dialog.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/long_textfield_dialog.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_helper_functions.dart';
@@ -22,13 +22,12 @@ class SchoolListPupilCard extends StatelessWidget with WatchItMixin {
   final int internalId;
   final String originList;
   SchoolListPupilCard(this.internalId, this.originList, {super.key});
+  final schoolListLocator = locator<SchoolListManager>();
   @override
   Widget build(BuildContext context) {
-    final schoolListLocator = locator<SchoolListManager>();
-    List<PupilProxy> pupils =
-        watchValue((PupilFilterManager x) => x.filteredPupils);
     final PupilProxy pupil =
-        pupils.where((pupil) => pupil.internalId == internalId).first;
+        watch(locator<PupilManager>().findPupilById(internalId));
+
     final PupilList pupilList = pupil.pupilLists!
         .where((pupilList) => pupilList.originList == originList)
         .first;
@@ -114,7 +113,8 @@ class SchoolListPupilCard extends StatelessWidget with WatchItMixin {
                         );
                       },
                       child: Text(
-                          pupilList.pupilListComment != null
+                          pupilList.pupilListComment != null &&
+                                  pupilList.pupilListComment != ''
                               ? pupilList.pupilListComment!
                               : 'kein Kommentar',
                           textAlign: TextAlign.left,

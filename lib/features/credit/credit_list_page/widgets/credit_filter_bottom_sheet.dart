@@ -44,13 +44,19 @@ class CreditFilterBottomSheet extends WatchingWidget {
                     checkmarkColor: filterChipSelectedCheckColor,
                     backgroundColor: filterChipUnselectedColor,
                     label: const Text(
-                      'alphabetisch',
+                      'A-Z',
                       style: filterItemsTextStyle,
                     ),
                     selected: sortModeValue == PupilSortMode.sortByName
                         ? true
                         : false,
                     onSelected: (val) {
+                      // if the filter is already selected, do nothing
+                      if (locator<PupilsFilter>().sortMode.value ==
+                          PupilSortMode.sortByName) {
+                        return;
+                      }
+                      // set the filter
                       locator<PupilsFilter>()
                           .setSortMode(PupilSortMode.sortByName);
                     },
@@ -70,6 +76,12 @@ class CreditFilterBottomSheet extends WatchingWidget {
                         ? true
                         : false,
                     onSelected: (val) {
+                      // if the filter is already selected, do nothing
+                      if (locator<PupilsFilter>().sortMode.value ==
+                          PupilSortMode.sortByCredit) {
+                        return;
+                      }
+                      // set the filter
                       locator<PupilsFilter>().setSortMode(
                         PupilSortMode.sortByCredit,
                       );
@@ -90,6 +102,12 @@ class CreditFilterBottomSheet extends WatchingWidget {
                         ? true
                         : false,
                     onSelected: (val) {
+                      // if the filter is already selected, do nothing
+                      if (locator<PupilsFilter>().sortMode.value ==
+                          PupilSortMode.sortByCreditEarned) {
+                        return;
+                      }
+                      // set the filter
                       locator<PupilsFilter>().setSortMode(
                         PupilSortMode.sortByCreditEarned,
                       );

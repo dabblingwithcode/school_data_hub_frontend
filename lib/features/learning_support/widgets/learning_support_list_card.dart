@@ -28,7 +28,7 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
       CustomExpansionTileController();
   @override
   Widget build(BuildContext context) {
-    final PupilProxy pupil = widget.pupil;
+    final PupilProxy pupil = watch(widget.pupil);
 
     return Card(
       color: Colors.white,
