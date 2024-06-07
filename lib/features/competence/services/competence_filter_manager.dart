@@ -44,28 +44,21 @@ class CompetenceFilterManager {
     List<Competence> filteredCompetences = [];
     final activeFilters = _filterState.value;
     for (Competence competence in competences) {
-      bool toList = true;
       if (competence.competenceLevel != null) {
         if ((activeFilters[CompetenceFilter.E1]! &&
-                competence.competenceLevel!.contains('E1')) ||
+                !competence.competenceLevel!.contains('E1')) ||
             (activeFilters[CompetenceFilter.E2]! &&
-                competence.competenceLevel!.contains('E2')) ||
+                !competence.competenceLevel!.contains('E2')) ||
             (activeFilters[CompetenceFilter.S3]! &&
-                competence.competenceLevel!.contains('S3')) ||
+                !competence.competenceLevel!.contains('S3')) ||
             (activeFilters[CompetenceFilter.S4]! &&
-                competence.competenceLevel!.contains('S4')) ||
-            (!activeFilters[CompetenceFilter.E1]! &&
-                !activeFilters[CompetenceFilter.E2]! &&
-                !activeFilters[CompetenceFilter.S3]! &&
-                !activeFilters[CompetenceFilter.S4]!)) {
-          toList = true;
-        } else {
-          toList = false;
+                !competence.competenceLevel!.contains('S4'))) {
+          continue;
         }
       }
-      if (toList == true) {
-        filteredCompetences.add(competence);
-      }
+
+      filteredCompetences.add(competence);
+
       _filteredCompetences.value = filteredCompetences;
     }
   }

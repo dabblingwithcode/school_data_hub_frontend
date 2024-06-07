@@ -44,7 +44,7 @@ class PupilProfilePage extends WatchingWidget {
                         slivers: [
                           SliverAppBar(
                             systemOverlayStyle: const SystemUiOverlayStyle(
-                                statusBarColor: backgroundColor),
+                                statusBarColor: canvasColor),
                             pinned: false,
                             floating: true,
                             scrolledUnderElevation: null,

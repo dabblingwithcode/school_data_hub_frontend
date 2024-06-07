@@ -120,49 +120,39 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
 
     bool isAnyGroupFilterActive = groupFilters.any((filter) => filter.isActive);
 
-    bool isAnyStufenFilterActive =
+    bool isAnySchoolGradeFilterActive =
         schoolGradeFilters.any((filter) => filter.isActive);
 
     for (final pupil in allPupils) {
-      bool toList = false;
-
       // matches if no group filter is active or if the group matches the pupil's group
       bool isMatchedByGroupFilter = !isAnyGroupFilterActive ||
           groupFilters
               .any((filter) => filter.isActive && filter.matches(pupil));
 
       // matches if no stufen filter is active or if the stufen matches the pupil's stufe
-      bool isMatchedByStufenFilter = !isAnyStufenFilterActive ||
+      bool isMatchedBySchoolGradeFilter = !isAnySchoolGradeFilterActive ||
           schoolGradeFilters
               .any((filter) => filter.isActive && filter.matches(pupil));
 
-      // If a pupil matches both groupFilter and stufenFilter conditions, add it to the list
-      if (isMatchedByGroupFilter && isMatchedByStufenFilter) {
-        toList = true;
-      } else {
+      // if the pupil is not matched by any group or stufen filter, skip the pupil
+      if (!isMatchedByGroupFilter || !isMatchedBySchoolGradeFilter) {
         continue;
       }
 
-      // If the text filter is active, check if the pupil matches the text filter
-      if (toList == true && _textFilter.isActive) {
-        toList = toList && _textFilter.matches(pupil);
-        if (!toList) {
+      if (_textFilter.isActive && !_textFilter.matches(pupil)) {
+        _filtersOn.value = true;
+        continue;
+      }
+      if (_attendanceFiltersOn.value) {
+        if (!attendanceFilters(pupil)) {
+          _filtersOn.value = true;
           continue;
         }
       }
 
-      if (toList == true && _attendanceFiltersOn.value) {
-        toList = attendanceFilters(pupil);
-      }
-
-      if (toList) {
-        thisFilteredPupils.add(pupil);
-      }
+      thisFilteredPupils.add(pupil);
     }
 
-    if (isAnyStufenFilterActive || isAnyGroupFilterActive) {
-      _filtersOn.value = true;
-    }
     _filteredPupils.value = thisFilteredPupils;
     _filteredPupilIds.value =
         thisFilteredPupils.map((e) => e.internalId).toList();

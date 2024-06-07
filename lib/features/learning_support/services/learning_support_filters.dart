@@ -7,45 +7,29 @@ import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dar
 
 List<PupilProxy> learningSupportFilter(List<PupilProxy> pupils) {
   final activeFilters = locator<PupilFilterManager>().filterState.value;
-  bool toList = true;
+
   List<PupilProxy> filteredPupils = [];
   for (PupilProxy pupil in pupils) {
     if (activeFilters[PupilFilter.developmentPlan1]! &&
-        pupil.individualDevelopmentPlan == 1) {
-      toList = true;
-    } else if (activeFilters[PupilFilter.developmentPlan1] == false) {
-      toList = true;
-    } else {
+        pupil.individualDevelopmentPlan != 1) {
       locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }
     // Filter development plan 2
     if (activeFilters[PupilFilter.developmentPlan2]! &&
-        pupil.individualDevelopmentPlan == 2) {
-      toList = true;
-    } else if (activeFilters[PupilFilter.developmentPlan2] == false) {
-      toList = true;
-    } else {
+        pupil.individualDevelopmentPlan != 2) {
       locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }
     // Filter development plan 3
     if (activeFilters[PupilFilter.developmentPlan3]! &&
-        pupil.individualDevelopmentPlan == 3) {
-      toList = true;
-    } else if (activeFilters[PupilFilter.developmentPlan3] == false) {
-      toList = true;
-    } else {
+        pupil.individualDevelopmentPlan != 3) {
       locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }
     // Filter special needs
     if (activeFilters[PupilFilter.specialNeeds]! &&
-        pupil.specialNeeds != null) {
-      toList = true;
-    } else if (activeFilters[PupilFilter.specialNeeds] == false) {
-      toList = true;
-    } else {
+        pupil.specialNeeds == null) {
       locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }
@@ -55,11 +39,7 @@ List<PupilProxy> learningSupportFilter(List<PupilProxy> pupils) {
 
     // Filter migrationSupport
     if (activeFilters[PupilFilter.migrationSupport]! &&
-        hasLanguageSupport(pupil.migrationSupportEnds) == true) {
-      toList = true;
-    } else if (activeFilters[PupilFilter.migrationSupport] == false) {
-      toList = true;
-    } else {
+        hasLanguageSupport(pupil.migrationSupportEnds) != true) {
       locator<PupilsFilter>().setFiltersOnValue(true);
       continue;
     }

@@ -44,56 +44,31 @@ class SchoolListFilterManager {
       List<PupilProxy> pupils, String schoolListId) {
     List<PupilProxy> filteredPupils = [];
     for (PupilProxy pupil in pupils) {
-      bool toList = true;
       final PupilList? pupilList = pupil.pupilLists!.firstWhereOrNull(
           (pupilList) => pupilList.originList == schoolListId);
       if (pupilList == null) {
         continue;
       }
       if (filterLocator.filterState.value[PupilFilter.schoolListYesResponse]! &&
-          pupilList.pupilListStatus == true) {
-        toList = true;
-      } else if (!filterLocator
-          .filterState.value[PupilFilter.schoolListYesResponse]!) {
-        toList = true;
-      } else {
-        toList = false;
+          pupilList.pupilListStatus != true) {
+        continue;
       }
       if (filterLocator.filterState.value[PupilFilter.schoolListNoResponse]! &&
-          pupilList.pupilListStatus == false) {
-        toList = true;
-      } else if (!filterLocator
-              .filterState.value[PupilFilter.schoolListNoResponse]! &&
-          toList == true) {
-        toList = true;
-      } else {
-        toList = false;
+          pupilList.pupilListStatus != false) {
+        continue;
       }
       if (filterLocator
               .filterState.value[PupilFilter.schoolListNullResponse]! &&
-          pupilList.pupilListStatus == null) {
-        toList = true;
-      } else if (!filterLocator
-              .filterState.value[PupilFilter.schoolListNullResponse]! &&
-          toList == true) {
-        toList = true;
-      } else {
-        toList = false;
+          pupilList.pupilListStatus != null) {
+        continue;
       }
       if (filterLocator
               .filterState.value[PupilFilter.schoolListCommentResponse]! &&
-          pupilList.pupilListComment != null) {
-        toList = true;
-      } else if (!filterLocator
-              .filterState.value[PupilFilter.schoolListCommentResponse]! &&
-          toList == true) {
-        toList = true;
-      } else {
-        toList = false;
+          pupilList.pupilListComment == null) {
+        continue;
       }
-      if (toList) {
-        filteredPupils.add(pupil);
-      }
+
+      filteredPupils.add(pupil);
     }
     return filteredPupils;
   }

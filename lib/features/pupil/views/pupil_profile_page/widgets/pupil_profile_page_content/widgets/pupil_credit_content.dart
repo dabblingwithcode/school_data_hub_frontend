@@ -23,7 +23,7 @@ class PupilCreditContent extends StatelessWidget {
       ),
       child: Padding(
         padding: pupilProfileCardPadding,
-        child: Column(children: [
+        child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
           Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
             const Icon(
               Icons.attach_money_rounded,
