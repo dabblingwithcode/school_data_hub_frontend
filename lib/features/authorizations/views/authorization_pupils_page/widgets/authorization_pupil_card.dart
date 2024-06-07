@@ -16,8 +16,8 @@ import 'package:schuldaten_hub/common/widgets/upload_image.dart';
 import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
 import 'package:schuldaten_hub/features/authorizations/services/authorization_manager.dart';
 import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -28,10 +28,9 @@ class AuthorizationPupilCard extends StatelessWidget with WatchItMixin {
   @override
   Widget build(BuildContext context) {
     final schoolListLocator = locator<AuthorizationManager>();
-    List<PupilProxy> pupils =
-        watchValue((PupilFilterManager x) => x.filteredPupils);
+
     final PupilProxy pupil =
-        pupils.firstWhere((pupil) => pupil.internalId == internalId);
+        watch(locator<PupilManager>().findPupilById(internalId));
     final PupilAuthorization pupilAuthorization = pupil.authorizations!
         .where((authorization) =>
             authorization.originAuthorization == authorizationId)
