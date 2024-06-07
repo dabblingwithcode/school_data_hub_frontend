@@ -12,7 +12,7 @@ While learning more and more how programming works, I extended the model more an
 
 ### So what does it do?
 
-The app takes exported information from the software provided by our Education ministry and uses it to build extended models in the backend to add our additional information.
+The app takes exported information from the software provided by our Education ministry and uses it to build extended models in the backend to add our additional information without uploading any personal data to the server.
 
 ### Data protection efforts
 
