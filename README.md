@@ -28,6 +28,10 @@ A singular approach that this app takes is the **transport of personal informati
 
 Since I'm no expert in data security, this is the way I found to ensure that the pupils' personal data isn't sent back and forth through the internet. In fact, this way the personal data is only transported through devices over encrypted qr-codes. As we are storing quite sensitive information, it is crucial that this information can't be related to a concrete pupil without proper authorization.
 
+You can read more about the data modeling here:
+
+https://github.com/dabblingwithcode/school_data_hub_frontend/blob/main/lib/docs/data_models_description.md
+
 **Have you got a better idea? Pull requests welcome! :-)**
 
 #### What else is encrypted?
