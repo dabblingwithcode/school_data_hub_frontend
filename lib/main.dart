@@ -17,6 +17,7 @@ import 'package:schuldaten_hub/features/landing_views/no_connection_view.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'common/services/locator.dart';
 
@@ -79,7 +80,9 @@ class MyApp extends WatchingWidget {
 
     return MaterialApp(
       localizationsDelegates: const <LocalizationsDelegate<Object>>[
+        AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: const [

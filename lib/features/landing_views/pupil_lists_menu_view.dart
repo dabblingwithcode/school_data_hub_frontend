@@ -2,20 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
-import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/features/landing_views/pupil_lists_buttons.dart';
-import 'package:watch_it/watch_it.dart';
 
-class PupilMenuView extends WatchingWidget {
+class PupilMenuView extends StatelessWidget {
   const PupilMenuView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    bool matrixSessionConfigured = watchValue(
-        (SessionManager x) => x.matrixPolicyManagerRegistrationStatus);
+    final locale = AppLocalizations.of(context)!;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       primary: true,
@@ -26,8 +23,8 @@ class PupilMenuView extends WatchingWidget {
         ),
         centerTitle: true,
         backgroundColor: backgroundColor,
-        title: const Text(
-          'Kinderlisten',
+        title: Text(
+          locale.pupilLists,
           style: appBarTextStyle,
           textAlign: TextAlign.end,
         ),
@@ -39,27 +36,12 @@ class PupilMenuView extends WatchingWidget {
               ? 600
               : MediaQuery.of(context).size.height * 0.9,
           child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              physics: const ScrollPhysics(),
-              child: Wrap(alignment: WrapAlignment.center, children: [
-                ...pupilListButtons(
-                    context, screenWidth, matrixSessionConfigured)
-              ])
-
-              // GridView.count(
-              //   shrinkWrap: true,
-              //   crossAxisCount: screenWidth < 400
-              //       ? 2
-              //       : screenWidth < 700
-              //           ? 3
-              //           : 4,
-              //   padding: const EdgeInsets.all(20),
-              //   physics: const NeverScrollableScrollPhysics(),
-              //   children: [
-              //     ...pupilListButtons(context, screenWidth),
-              //   ],
-              // ),
-              ),
+            scrollDirection: Axis.vertical,
+            physics: const ScrollPhysics(),
+            child: PupilListButtons(
+              screenWidth: screenWidth,
+            ),
+          ),
         ),
       ),
     );

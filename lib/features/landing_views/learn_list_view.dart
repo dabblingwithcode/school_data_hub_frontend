@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
@@ -13,13 +14,14 @@ class LearnListView extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: canvasColor,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: backgroundColor,
-        title: const Text(
-          'Ressourcenlisten',
+        title: Text(
+          locale.learningresources,
           style: appBarTextStyle,
         ),
       ),
@@ -46,18 +48,18 @@ class LearnListView extends WatchingWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.lightbulb,
                           size: 50,
                           color: gridViewColor,
                         ),
-                        Gap(10),
+                        const Gap(10),
                         Text(
-                          'Kompetenzen',
-                          style: TextStyle(
+                          locale.competences,
+                          style: const TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -78,18 +80,18 @@ class LearnListView extends WatchingWidget {
                         builder: (ctx) => const CategoryList(),
                       ));
                     },
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.support_rounded,
                           size: 50,
                           color: gridViewColor,
                         ),
-                        Gap(10),
+                        const Gap(10),
                         Text(
-                          'Förderkategorien',
-                          style: TextStyle(
+                          locale.supportCategories,
+                          style: const TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -110,18 +112,18 @@ class LearnListView extends WatchingWidget {
                         builder: (ctx) => const WorkbookList(),
                       ));
                     },
-                    child: const Column(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
+                        const Icon(
                           Icons.note_alt,
                           size: 50,
                           color: gridViewColor,
                         ),
-                        Gap(10),
+                        const Gap(10),
                         Text(
-                          'Arbeitshefte',
-                          style: TextStyle(
+                          locale.workbooks,
+                          style: const TextStyle(
                               color: Colors.white, fontWeight: FontWeight.bold),
                         ),
                       ],
@@ -136,18 +138,18 @@ class LearnListView extends WatchingWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15.0),
                   ),
-                  child: const Column(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.book,
                         size: 50,
                         color: gridViewColor,
                       ),
-                      Gap(10),
+                      const Gap(10),
                       Text(
-                        'Bücher',
-                        style: TextStyle(
+                        locale.books,
+                        style: const TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold),
                       ),
                     ],

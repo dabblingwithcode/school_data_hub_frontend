@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
@@ -28,7 +29,7 @@ class LoginView extends WatchingWidget {
     );
     bool isAuthenticated = watchValue((SessionManager x) => x.isAuthenticated);
     bool envReady = watchValue((EnvManager x) => x.envReady);
-
+    final locale = AppLocalizations.of(context)!;
     logger.i('LoginView: isAuthenticated: ${isAuthenticated.toString()}');
     final bool keyboardOn = MediaQuery.of(context).viewInsets.vertical > 0.0;
     //FocusScopeNode currentFocus = FocusScope.of(context);
@@ -63,9 +64,9 @@ class LoginView extends WatchingWidget {
                               ),
                             ),
                       const Gap(20),
-                      const Text(
-                        "Schuldaten Hub",
-                        style: TextStyle(
+                      Text(
+                        locale.schoolDataHub,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 30,
@@ -88,13 +89,13 @@ class LoginView extends WatchingWidget {
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                               controller: controller.usernameController,
-                              decoration: const InputDecoration(
-                                contentPadding: EdgeInsets.symmetric(
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 5),
                                 filled: true,
                                 fillColor: Colors.white,
-                                labelText: 'Benutzername',
-                                labelStyle: TextStyle(
+                                labelText: locale.userName,
+                                labelStyle: const TextStyle(
                                   fontWeight: FontWeight.normal,
                                   color: Color.fromRGBO(74, 76, 161, 1),
                                 ),
@@ -111,14 +112,14 @@ class LoginView extends WatchingWidget {
                               textDirection: null,
                               controller: controller.passwordController,
                               obscureText: true,
-                              decoration: const InputDecoration(
+                              decoration: InputDecoration(
                                 border: InputBorder.none,
-                                contentPadding: EdgeInsets.symmetric(
+                                contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 15, vertical: 5),
                                 filled: true,
                                 fillColor: Colors.white,
-                                labelText: 'Passwort',
-                                labelStyle: TextStyle(
+                                labelText: locale.password,
+                                labelStyle: const TextStyle(
                                   color: Color.fromRGBO(74, 76, 161, 1),
                                 ),
                               ),
@@ -140,9 +141,9 @@ class LoginView extends WatchingWidget {
                                 // locator<EnvManager>().deleteEnv();
                                 await controller.loginWithTextCredentials();
                               },
-                              child: const Text(
-                                "EINLOGGEN",
-                                style: TextStyle(
+                              child: Text(
+                                locale.logInButtonText,
+                                style: const TextStyle(
                                     fontSize: 17.0,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
@@ -161,13 +162,13 @@ class LoginView extends WatchingWidget {
                               onPressed: () async {
                                 await confirmationDialog(
                                     context,
-                                    "Schulschlüssel löschen?",
-                                    "Sind Sie sicher, dass Sie die Schuldaten löschen möchten?");
+                                    locale.deleteKeyPrompt,
+                                    locale.areYouSureYouWantToDeleteSchoolKey);
                                 locator<EnvManager>().deleteEnv();
                               },
-                              child: const Text(
-                                "SCHULSCHLÜSSEL LÖSCHEN",
-                                style: TextStyle(
+                              child: Text(
+                                locale.deleteKeyButtonText,
+                                style: const TextStyle(
                                     fontSize: 17.0,
                                     fontWeight: FontWeight.bold,
                                     color: Colors.white),
@@ -181,20 +182,20 @@ class LoginView extends WatchingWidget {
                           padding: const EdgeInsets.all(15.0),
                           child: Center(
                             child: Platform.isWindows
-                                ? const Text(
-                                    'Schul-ID importieren, um fortfahren zu können.',
+                                ? Text(
+                                    locale.importSchoolDataToContinue,
                                     softWrap: true,
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
                                     ),
                                   )
-                                : const Text(
-                                    'Schul-ID scannen, um fortfahren zu können.',
+                                : Text(
+                                    locale.scanSchoolIdToContinue,
                                     softWrap: true,
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 20,
                                     ),
@@ -218,10 +219,10 @@ class LoginView extends WatchingWidget {
                                         : controller.scanEnv(context);
                               },
                               child: Platform.isWindows
-                                  ? const Text('DATEI AUSWÄHLEN',
+                                  ? Text(locale.chooseFileButton,
                                       style: buttonTextStyle)
-                                  : const Text(
-                                      "SCANNEN",
+                                  : Text(
+                                      locale.scanButton,
                                       style: buttonTextStyle,
                                     )),
                         ),

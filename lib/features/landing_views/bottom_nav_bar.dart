@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
@@ -52,11 +53,13 @@ class BottomNavigation extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = AppLocalizations.of(context)!;
     registerHandler(
         select: (NotificationManager x) => x.notification,
         handler: (context, value, cancel) {
           snackbar(context, value.type, value.message);
         });
+    //- TODO: use overlay without blocking interaction
     // registerHandler(
     //     select: (NotificationManager x) => x.isRunning,
     //     handler: (context, value, cancel) {
@@ -93,26 +96,26 @@ class BottomNavigation extends WatchingWidget {
           showSelectedLabels: true,
           currentIndex: tab,
           selectedItemColor: accentColor,
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.account_box_rounded),
-              label: 'Kinderlisten',
+              icon: const Icon(Icons.account_box_rounded),
+              label: locale.pupilLists,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.list),
-              label: 'Schullisten',
+              icon: const Icon(Icons.list),
+              label: locale.schoolLists,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.lightbulb),
-              label: 'Lernen',
+              icon: const Icon(Icons.lightbulb),
+              label: locale.learningLists,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code_scanner),
-              label: 'Scan',
+              icon: const Icon(Icons.qr_code_scanner),
+              label: locale.scanTools,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
-              label: 'Einstellungen',
+              icon: const Icon(Icons.settings),
+              label: locale.settings,
             ),
           ],
 

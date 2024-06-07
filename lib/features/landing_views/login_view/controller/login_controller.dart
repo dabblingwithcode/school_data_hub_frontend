@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/env_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
@@ -25,7 +26,8 @@ class LoginController extends State<Login> {
   final TextEditingController passwordController = TextEditingController();
 
   scanCredentials(BuildContext context) async {
-    final String? scanResponse = await scanner(context, 'Zugangscode scannen');
+    final locale = AppLocalizations.of(context)!;
+    final String? scanResponse = await scanner(context, locale.scanAccessCode);
     if (scanResponse != null) {
       final loginData = await json.decode(scanResponse);
       final String username = loginData['username'];
@@ -34,22 +36,21 @@ class LoginController extends State<Login> {
       attemptLogin(username: username, password: password);
     } else {
       locator<NotificationManager>()
-          .showSnackBar(NotificationType.warning, 'Scanvorgang abgebrochen');
+          .showSnackBar(NotificationType.warning, locale.scanAborted);
 
       return;
     }
   }
 
   scanEnv(BuildContext context) async {
-    final String? scanResponse = await scanner(context, 'Schul-Id scannen');
+    final locale = AppLocalizations.of(context)!;
+    final String? scanResponse = await scanner(context, locale.scanSchoolId);
     if (scanResponse != null) {
       locator<EnvManager>().setEnv(scanResponse);
-      locator<NotificationManager>().showSnackBar(
-          NotificationType.success, 'Schul-Id erfolgreich importiert!');
+      locator<NotificationManager>().showSnackBar(NotificationType.success, '');
       return;
     } else {
-      locator<NotificationManager>()
-          .showSnackBar(NotificationType.warning, 'Scanvorgang abgebrochen');
+      locator<NotificationManager>().showSnackBar(NotificationType.warning, '');
       return;
     }
   }
