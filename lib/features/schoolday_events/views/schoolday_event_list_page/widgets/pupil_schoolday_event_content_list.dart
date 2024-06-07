@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -232,7 +233,7 @@ class SchooldayEventsContentList extends WatchingWidget {
                                           context,
                                           'Dokument löschen',
                                           'Dokument löschen?');
-                                      if (confirm == null || confirm == false) {
+                                      if (confirm != true) {
                                         return;
                                       }
                                       await locator<SchooldayEventManager>()
@@ -240,7 +241,7 @@ class SchooldayEventsContentList extends WatchingWidget {
                                               filteredSchooldayEvents[index]
                                                   .schooldayEventId,
                                               filteredSchooldayEvents[index]
-                                                  .fileUrl!,
+                                                  .processedFileUrl!,
                                               true);
                                       locator<NotificationManager>()
                                           .showSnackBar(
