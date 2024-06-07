@@ -15,61 +15,39 @@ List<PupilProxy> addAuthorizationFiltersToFilteredPupils(
   List<PupilProxy> filteredPupils = [];
 
   for (PupilProxy pupil in pupils) {
-    bool toList = true;
     // Check first if the filtered pupil is in the authorization. If not, continue with next one.
+
     final PupilAuthorization? pupilAuthorization = pupil.authorizations!
         .firstWhereOrNull((pupilAuthorization) =>
             pupilAuthorization.originAuthorization ==
             authorization.authorizationId);
+
     if (pupilAuthorization == null) {
       continue;
     }
     // This one is - let's apply the authorization filters
+
     if (filterLocator
             .filterState.value[PupilFilter.authorizationYesResponse]! &&
-        pupilAuthorization.status == true) {
-      toList = true;
-    } else if (!filterLocator
-        .filterState.value[PupilFilter.authorizationYesResponse]!) {
-      toList = true;
-    } else {
-      toList = false;
+        pupilAuthorization.status == false) {
+      continue;
     }
     if (filterLocator.filterState.value[PupilFilter.authorizationNoResponse]! &&
-        pupilAuthorization.status == false) {
-      toList = true;
-    } else if (!filterLocator
-            .filterState.value[PupilFilter.authorizationNoResponse]! &&
-        toList == true) {
-      toList = true;
-    } else {
-      toList = false;
+        pupilAuthorization.status == true) {
+      continue;
     }
     if (filterLocator
             .filterState.value[PupilFilter.authorizationNullResponse]! &&
-        pupilAuthorization.status == null) {
-      toList = true;
-    } else if (!filterLocator
-            .filterState.value[PupilFilter.authorizationNullResponse]! &&
-        toList == true) {
-      toList = true;
-    } else {
-      toList = false;
-    }
-    if (filterLocator
-            .filterState.value[PupilFilter.authorizationCommentResponse]! &&
         pupilAuthorization.status != null) {
-      toList = true;
-    } else if (!filterLocator
+      continue;
+    }
+    if (filterLocator
             .filterState.value[PupilFilter.authorizationCommentResponse]! &&
-        toList == true) {
-      toList = true;
-    } else {
-      toList = false;
+        pupilAuthorization.comment == null) {
+      continue;
     }
-    if (toList) {
-      filteredPupils.add(pupil);
-    }
+
+    filteredPupils.add(pupil);
   }
   return filteredPupils;
 }
