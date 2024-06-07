@@ -24,7 +24,7 @@ class AvatarData {
 }
 
 class AvatarImage extends StatelessWidget {
-  const AvatarImage({super.key});
+  const AvatarImage({super.key, Key? customKey});
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +121,8 @@ class AvatarWithBadges extends WatchingWidget {
           Padding(
             padding: const EdgeInsets.all(4.0),
             child: Provider<AvatarData>.value(
+                updateShouldNotify: (oldValue, newValue) =>
+                    oldValue.avatarUrl != newValue.avatarUrl,
                 value: AvatarData(
                     avatarUrl: pupil.avatarUrl,
                     internalId: pupil.internalId,
