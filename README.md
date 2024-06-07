@@ -30,7 +30,7 @@ Since I'm no expert in data security, this is the way I found to ensure that the
 
 You can read more about the data modeling here:
 
-https://github.com/dabblingwithcode/school_data_hub_frontend/blob/main/lib/docs/data_models_description.md
+https://github.com/dabblingwithcode/school_data_hub_frontend/blob/main/docs/data_models_description.md
 
 **Have you got a better idea? Pull requests welcome! :-)**
 
