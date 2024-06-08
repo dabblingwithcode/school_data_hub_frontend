@@ -32,7 +32,10 @@
     "competences": "Kompetenzen",
     "supportCategories": "Förderkategorien",
     "workbooks": "Arbeitshefte",
-    "books": "Bücher"
+    "books": "Bücher",
+    "selectPupils": "Kind/Kinder auswählen",
+    "shown": "Angezeigt:",
+    "selected": "Ausgewählt:"
 
 
 }

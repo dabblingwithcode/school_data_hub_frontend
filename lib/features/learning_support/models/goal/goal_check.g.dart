@@ -10,7 +10,7 @@ GoalCheck _$GoalCheckFromJson(Map<String, dynamic> json) => GoalCheck(
       comment: json['comment'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
       createdBy: json['created_by'] as String,
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
     );
 
 Map<String, dynamic> _$GoalCheckToJson(GoalCheck instance) => <String, dynamic>{

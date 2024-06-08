@@ -7,7 +7,7 @@ part of 'policy.dart';
 // **************************************************************************
 
 Policy _$PolicyFromJson(Map<String, dynamic> json) => Policy(
-      schemaVersion: json['schemaVersion'] as int,
+      schemaVersion: (json['schemaVersion'] as num).toInt(),
       identificationStamp: json['identificationStamp'],
       flags: Flags.fromJson(json['flags'] as Map<String, dynamic>),
       hooks: json['hooks'],

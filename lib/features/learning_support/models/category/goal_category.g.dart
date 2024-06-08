@@ -7,9 +7,9 @@ part of 'goal_category.dart';
 // **************************************************************************
 
 GoalCategory _$GoalCategoryFromJson(Map<String, dynamic> json) => GoalCategory(
-      categoryId: json['category_id'] as int,
+      categoryId: (json['category_id'] as num).toInt(),
       categoryName: json['category_name'] as String,
-      parentCategory: json['parent_category'] as int?,
+      parentCategory: (json['parent_category'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$GoalCategoryToJson(GoalCategory instance) =>

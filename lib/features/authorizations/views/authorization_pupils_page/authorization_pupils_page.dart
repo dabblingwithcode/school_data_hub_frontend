@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
-import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
+import 'package:schuldaten_hub/common/widgets/sliver_search_app_bar.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
-import 'package:schuldaten_hub/features/authorizations/services/authorization_pupil_filters.dart';
+import 'package:schuldaten_hub/features/pupil/filters/authorization_pupil_filters.dart';
 import 'package:schuldaten_hub/features/authorizations/views/authorization_pupils_page/widgets/authorization_pupil_list_searchbar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';

@@ -10,7 +10,7 @@ PupilCategoryStatus _$PupilCategoryStatusFromJson(Map<String, dynamic> json) =>
     PupilCategoryStatus(
       comment: json['comment'] as String,
       fileUrl: json['file_url'] as String?,
-      goalCategoryId: json['goal_category_id'] as int,
+      goalCategoryId: (json['goal_category_id'] as num).toInt(),
       statusId: json['status_id'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
       createdBy: json['created_by'] as String,

@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/attendance_list_page.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_page/attendance_ranking_list_page.dart';
+import 'package:schuldaten_hub/features/attendance/views/missed_classes_pupil_list_page/missed_classes_pupil_list_page.dart';
 import 'package:schuldaten_hub/features/credit/credit_list_page/credit_list_page.dart';
 import 'package:schuldaten_hub/features/learning_support/views/learning_support_list_page/learning_support_list_page.dart';
 import 'package:schuldaten_hub/features/matrix/views/room_list_page/room_list_page.dart';

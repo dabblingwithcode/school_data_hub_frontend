@@ -21,19 +21,22 @@ class NewSchoolListView extends StatefulWidget {
 }
 
 class NewSchoolListViewState extends State<NewSchoolListView> {
-  final TextEditingController textField1Controller = TextEditingController();
-  final TextEditingController textField2Controller = TextEditingController();
+  final TextEditingController schoolListNameController =
+      TextEditingController();
+  final TextEditingController schoolListDescriptionController =
+      TextEditingController();
   bool _isOn = false;
   Set<int> pupilIds = {};
   void postNewSchoolList() async {
-    String text1 = textField1Controller.text;
-    String text2 = textField2Controller.text;
     String listType = 'private';
     if (_isOn == true) {
       listType = 'public';
     }
-    await locator<SchoolListManager>()
-        .postSchoolListWithGroup(text1, text2, pupilIds.toList(), listType);
+    await locator<SchoolListManager>().postSchoolListWithGroup(
+        name: schoolListNameController.text,
+        description: schoolListDescriptionController.text,
+        pupilIds: pupilIds.toList(),
+        visibility: listType);
   }
 
   @override
@@ -65,19 +68,37 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 TextField(
-                  minLines: 2,
+                  minLines: 1,
                   maxLines: 3,
-                  controller: textField1Controller,
-                  decoration:
-                      const InputDecoration(labelText: 'Name der Liste'),
+                  controller: schoolListNameController,
+                  decoration: const InputDecoration(
+                    contentPadding: EdgeInsets.all(10),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: backgroundColor, width: 2),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: backgroundColor, width: 2),
+                    ),
+                    labelStyle: TextStyle(color: backgroundColor),
+                    labelText: 'Name der Liste',
+                  ),
                 ),
                 const Gap(20),
                 TextField(
-                  minLines: 2,
+                  minLines: 1,
                   maxLines: 3,
-                  controller: textField2Controller,
+                  controller: schoolListDescriptionController,
                   decoration: const InputDecoration(
-                      labelText: 'Kurze Beschreibung der Liste'),
+                    contentPadding: EdgeInsets.all(10),
+                    border: OutlineInputBorder(
+                      borderSide: BorderSide(color: backgroundColor, width: 2),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: backgroundColor, width: 2),
+                    ),
+                    labelStyle: TextStyle(color: backgroundColor),
+                    labelText: 'Kurze Beschreibung der Liste',
+                  ),
                 ),
                 const Gap(10),
                 locator<SessionManager>().isAdmin.value == true
@@ -269,8 +290,8 @@ class NewSchoolListViewState extends State<NewSchoolListView> {
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the tree
-    textField1Controller.dispose();
-    textField2Controller.dispose();
+    schoolListNameController.dispose();
+    schoolListDescriptionController.dispose();
     super.dispose();
   }
 }

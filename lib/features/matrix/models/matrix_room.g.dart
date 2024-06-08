@@ -8,7 +8,7 @@ part of 'matrix_room.dart';
 
 RoomAdmin _$RoomAdminFromJson(Map<String, dynamic> json) => RoomAdmin(
       id: json['id'] as String,
-      powerLevel: json['powerLevel'] as int,
+      powerLevel: (json['powerLevel'] as num).toInt(),
     );
 
 Map<String, dynamic> _$RoomAdminToJson(RoomAdmin instance) => <String, dynamic>{

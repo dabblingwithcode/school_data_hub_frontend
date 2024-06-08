@@ -157,6 +157,7 @@ class SchooldayEventsContentList extends WatchingWidget {
                                       const Text('Erstellt von:',
                                           style: TextStyle(fontSize: 16)),
                                       const Gap(5),
+                                      // only admin can change the admonishing user
                                       locator<SessionManager>().isAdmin.value
                                           ? InkWell(
                                               onTap: () async {

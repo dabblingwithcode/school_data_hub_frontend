@@ -32,9 +32,9 @@ class PupilIdentity {
   final DateTime pupilSince;
 
   factory PupilIdentity.fromJson(Map<String, dynamic> json) =>
-      _$PupilPersonalDataFromJson(json);
+      _$PupilIdentityFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PupilPersonalDataToJson(this);
+  Map<String, dynamic> toJson() => _$PupilIdentityToJson(this);
 
   PupilIdentity({
     required this.id,

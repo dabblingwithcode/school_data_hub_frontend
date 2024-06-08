@@ -69,9 +69,9 @@ class PupilData {
   final List<CompetenceGoal> competenceGoals;
 
   factory PupilData.fromJson(Map<String, dynamic> json) =>
-      _$PupilFromJson(json);
+      _$PupilDataFromJson(json);
 
-  Map<String, dynamic> toJson() => _$PupilToJson(this);
+  Map<String, dynamic> toJson() => _$PupilDataToJson(this);
 
   PupilData({
     required this.avatarUrl,

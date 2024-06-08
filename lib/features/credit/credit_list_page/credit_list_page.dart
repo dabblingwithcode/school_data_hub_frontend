@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
 import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
-import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
+import 'package:schuldaten_hub/common/widgets/sliver_search_app_bar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';

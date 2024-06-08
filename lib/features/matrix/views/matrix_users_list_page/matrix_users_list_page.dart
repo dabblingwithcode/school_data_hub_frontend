@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
-import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
+import 'package:schuldaten_hub/common/widgets/sliver_search_app_bar.dart';
 import 'package:schuldaten_hub/features/matrix/models/matrix_user.dart';
 import 'package:schuldaten_hub/features/matrix/services/matrix_policy_filter_manager.dart';
 import 'package:schuldaten_hub/features/matrix/views/matrix_users_list_page/widgets/matrix_user_list_card.dart';

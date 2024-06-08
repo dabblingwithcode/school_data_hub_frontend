@@ -10,7 +10,7 @@ PupilBook _$PupilBookFromJson(Map<String, dynamic> json) => PupilBook(
       bookId: json['book_id'] as String,
       lentAt: DateTime.parse(json['lent_at'] as String),
       lentBy: json['lent_by'] as String,
-      pupilId: json['pupil_id'] as int,
+      pupilId: (json['pupil_id'] as num).toInt(),
       receivedBy: json['received_by'] as String?,
       returnedAt: json['returned_at'] == null
           ? null

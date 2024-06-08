@@ -6,9 +6,9 @@ part of 'pupil_identity.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PupilIdentity _$PupilPersonalDataFromJson(Map<String, dynamic> json) =>
+PupilIdentity _$PupilIdentityFromJson(Map<String, dynamic> json) =>
     PupilIdentity(
-      id: json['id'] as int,
+      id: (json['id'] as num).toInt(),
       firstName: json['name'] as String,
       lastName: json['lastName'] as String,
       group: json['group'] as String,
@@ -24,7 +24,7 @@ PupilIdentity _$PupilPersonalDataFromJson(Map<String, dynamic> json) =>
           : DateTime.parse(json['migrationSupportEnds'] as String),
     );
 
-Map<String, dynamic> _$PupilPersonalDataToJson(PupilIdentity instance) =>
+Map<String, dynamic> _$PupilIdentityToJson(PupilIdentity instance) =>
     <String, dynamic>{
       'id': instance.id,
       'name': instance.firstName,

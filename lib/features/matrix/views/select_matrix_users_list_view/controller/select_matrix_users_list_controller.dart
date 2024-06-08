@@ -75,7 +75,7 @@ class SelectMatrixUsersListController extends State<SelectMatrixUserList> {
     setState(() {
       searchController.clear();
       isSearchMode = false;
-      locator<PupilFilterManager>().setSearchText('');
+      //locator<PupilFilterManager>().setSearchText('');
       filteredPupils = List.from(pupils!);
       isSearching = false;
     });
@@ -132,7 +132,7 @@ class SelectMatrixUsersListController extends State<SelectMatrixUserList> {
       return;
     }
     isSearchMode = true;
-    locator<PupilFilterManager>().setSearchText(text);
+    //locator<PupilFilterManager>().setSearchText(text);
     setState(() {
       // final pupils = locator<PupilFilterManager>().filteredPupils.value;
       // isSearchMode = true;

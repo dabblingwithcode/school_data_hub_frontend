@@ -8,8 +8,8 @@ part of 'matrix_user.dart';
 
 MatrixUser _$MatrixUserFromJson(Map<String, dynamic> json) => MatrixUser(
       id: json['id'] as String?,
-      active: json['active'] as bool,
-      authType: json['authType'] as String,
+      active: json['active'] as bool?,
+      authType: json['authType'] as String?,
       displayName: json['displayName'] as String,
       joinedRoomIds: (json['joinedRoomIds'] as List<dynamic>?)
               ?.map((e) => e as String)

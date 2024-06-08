@@ -12,7 +12,7 @@ PupilAuthorization _$PupilAuthorizationFromJson(Map<String, dynamic> json) =>
       createdBy: json['created_by'] as String?,
       fileUrl: json['file_url'] as String?,
       originAuthorization: json['origin_authorization'] as String,
-      pupilId: json['pupil_id'] as int,
+      pupilId: (json['pupil_id'] as num).toInt(),
       status: json['status'] as bool?,
     );
 

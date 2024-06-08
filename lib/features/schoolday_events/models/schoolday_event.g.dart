@@ -20,7 +20,7 @@ SchooldayEvent _$SchooldayEventFromJson(Map<String, dynamic> json) =>
       fileUrl: json['file_url'] as String?,
       processedFileUrl: json['processed_file_url'] as String?,
       schooldayEventDate: DateTime.parse(json['admonished_day'] as String),
-      admonishedPupilId: json['admonished_pupil_id'] as int,
+      admonishedPupilId: (json['admonished_pupil_id'] as num).toInt(),
     );
 
 Map<String, dynamic> _$SchooldayEventToJson(SchooldayEvent instance) =>

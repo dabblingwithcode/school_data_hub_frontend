@@ -9,7 +9,7 @@ import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/confirmation_dialog.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_page/attendance_ranking_list_page.dart';
+import 'package:schuldaten_hub/features/attendance/views/missed_classes_pupil_list_page/missed_classes_pupil_list_page.dart';
 
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_badges.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_stats_pupil.dart';
@@ -21,6 +21,8 @@ class PupilAttendanceContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final List<int> missedHoursForActualReport =
+        locator<AttendanceManager>().missedHoursforSemesterOrSchoolyear(pupil);
     List<MissedClass> missedClasses = List.from(pupil.pupilMissedClasses!);
     // sort by missedDay
     missedClasses.sort((b, a) => a.missedDay.compareTo(b.missedDay));
@@ -55,6 +57,38 @@ class PupilAttendanceContent extends StatelessWidget {
           ]),
           const Gap(15),
           attendanceStats(pupil),
+          const Gap(10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text(
+                'Fehlstunden:',
+                style: TextStyle(fontSize: 14),
+              ),
+              Text(
+                ' ${missedHoursForActualReport[0].toString()}',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const Gap(5),
+              const Text(
+                'davon unent:',
+                style: TextStyle(fontSize: 14),
+              ),
+              Text(
+                ' ${missedHoursForActualReport[1].toString()}',
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                ),
+              ),
+              const Gap(15),
+            ],
+          ),
           const Gap(10),
           ListView.builder(
             padding: const EdgeInsets.only(top: 5, bottom: 15),

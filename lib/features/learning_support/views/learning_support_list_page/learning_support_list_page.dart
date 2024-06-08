@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
 import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
-import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
+import 'package:schuldaten_hub/common/widgets/sliver_search_app_bar.dart';
 import 'package:schuldaten_hub/features/learning_support/services/learning_support_filters.dart';
 import 'package:schuldaten_hub/features/learning_support/services/pupil_goal_filters.dart';
 import 'package:schuldaten_hub/features/learning_support/widgets/learning_support_list_card.dart';

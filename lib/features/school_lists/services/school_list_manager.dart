@@ -99,8 +99,11 @@ class SchoolListManager {
     return visiblePupilLists;
   }
 
-  Future<void> postSchoolListWithGroup(String name, String description,
-      List<int> pupilIds, String visibility) async {
+  Future<void> postSchoolListWithGroup(
+      {required String name,
+      required String description,
+      required List<int> pupilIds,
+      required String visibility}) async {
     final SchoolList newList =
         await apiSchoolListService.postSchoolListWithGroup(
             name: name,

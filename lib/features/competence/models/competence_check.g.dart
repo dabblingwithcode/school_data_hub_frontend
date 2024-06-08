@@ -10,11 +10,11 @@ CompetenceCheck _$CompetenceCheckFromJson(Map<String, dynamic> json) =>
     CompetenceCheck(
       checkId: json['check_id'] as String,
       comment: json['comment'] as String,
-      competenceId: json['competence_id'] as int,
-      competenceStatus: json['competence_status'] as int,
+      competenceId: (json['competence_id'] as num).toInt(),
+      competenceStatus: (json['competence_status'] as num).toInt(),
       createdAt: DateTime.parse(json['created_at'] as String),
       createdBy: json['created_by'] as String,
-      pupilId: json['pupil_id'] as int,
+      pupilId: (json['pupil_id'] as num).toInt(),
       isReport: json['is_report'] as bool,
       reportId: json['report_id'] as String?,
       competenceCheckFiles: (json['competence_check_files'] as List<dynamic>?)

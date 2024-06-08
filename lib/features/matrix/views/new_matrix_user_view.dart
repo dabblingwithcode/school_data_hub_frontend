@@ -17,13 +17,13 @@ class NewMatrixUserView extends StatefulWidget {
 }
 
 class NewMatrixUserViewState extends State<NewMatrixUserView> {
-  final TextEditingController textField1Controller = TextEditingController();
-  final TextEditingController textField2Controller = TextEditingController();
+  final TextEditingController matrixIdController = TextEditingController();
+  final TextEditingController displayNameController = TextEditingController();
   Set<String> roomIds = {};
   //Set<int> pupilIds = {};
   void postNewMatrixUser() async {
-    String matrixId = '@${textField1Controller.text}:hermannschule.de';
-    String displayName = textField2Controller.text;
+    String matrixId = '@${matrixIdController.text}:hermannschule.de';
+    String displayName = displayNameController.text;
     List<String> roomIdsList = roomIds.toList();
     await locator<MatrixPolicyManager>()
         .createNewMatrixUser(matrixId, displayName);
@@ -82,7 +82,7 @@ class NewMatrixUserViewState extends State<NewMatrixUserView> {
                       child: TextField(
                         minLines: 1,
                         maxLines: 3,
-                        controller: textField1Controller,
+                        controller: matrixIdController,
                         decoration: const InputDecoration(
                           contentPadding: EdgeInsets.all(10),
                           border: OutlineInputBorder(
@@ -112,7 +112,7 @@ class NewMatrixUserViewState extends State<NewMatrixUserView> {
                 TextField(
                   minLines: 1,
                   maxLines: 3,
-                  controller: textField2Controller,
+                  controller: displayNameController,
                   decoration: const InputDecoration(
                     contentPadding: EdgeInsets.all(10),
                     border: OutlineInputBorder(
@@ -275,8 +275,8 @@ class NewMatrixUserViewState extends State<NewMatrixUserView> {
   @override
   void dispose() {
     // Clean up the controller when the widget is removed from the tree
-    textField1Controller.dispose();
-    textField2Controller.dispose();
+    matrixIdController.dispose();
+    displayNameController.dispose();
     super.dispose();
   }
 }

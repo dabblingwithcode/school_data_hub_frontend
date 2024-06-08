@@ -37,23 +37,6 @@ class PupilFilterManager {
     }
   }
 
-  // cloneToFilteredPupil(PupilProxy pupil) {
-  //   List<PupilProxy> filteredPupils = _filteredPupils.value;
-  //   List<PupilProxy> updatedPupils = List<PupilProxy>.from(filteredPupils);
-  //   int index = updatedPupils
-  //       .indexWhere((element) => element.internalId == pupil.internalId);
-  //   updatedPupils[index] = pupil;
-  //   _filteredPupils.value = updatedPupils;
-  // }
-
-  // rebuildFilteredPupils() {
-  //   // List<PupilProxy> pupils = locator<PupilManager>().pupils.value;
-  //   _filteredPupils.value = locator<PupilManager>().allPupils;
-  //   filterPupils();
-  //   sortPupils();
-  //   //setSearchText(_searchText.value);
-  // }
-
   resetFilters() {
     _filterState.value = {...initialFilterValues};
     locator<SearchManager>().searchController.value.clear();
@@ -85,39 +68,25 @@ class PupilFilterManager {
     return filteredPupilsFromList;
   }
 
-  // void setSortMode(PupilSortMode sortMode, bool isActive) {
-  //   if (sortMode == PupilSortMode.sortByName || isActive == false) {
-  //     _sortMode.value = initialSortModeValues;
-  //   } else {
-  //     _sortMode.value = initialSortModeValues;
-  //     _sortMode.value = {
-  //       ..._sortMode.value,
-  //       PupilSortMode.sortByName: false,
-  //       sortMode: isActive,
-  //     };
+  // setSearchText(String? text) {
+  //   if (text!.isEmpty) {
+  //     _filteredPupils.value = locator<PupilManager>().allPupils;
+  //     _searchText.value = '';
+  //     _filtersOn.value = false;
+  //     return;
   //   }
-  //   sortPupils();
+  //   _searchText.value = text;
+  //   _filtersOn.value = true;
+  //   List<PupilProxy> filteredPupils = [];
+  //   List<PupilProxy> filteredPupilsState = List.from(_filteredPupils.value);
+  //   filteredPupils = filteredPupilsState
+  //       .where((PupilProxy pupil) =>
+  //           pupil.internalId.toString().contains(text) ||
+  //           pupil.firstName.toLowerCase().contains(text.toLowerCase()) ||
+  //           pupil.lastName.toLowerCase().contains(text.toLowerCase()))
+  //       .toList();
+  //   _filteredPupils.value = filteredPupils;
   // }
-
-  setSearchText(String? text) {
-    if (text!.isEmpty) {
-      _filteredPupils.value = locator<PupilManager>().allPupils;
-      _searchText.value = '';
-      _filtersOn.value = false;
-      return;
-    }
-    _searchText.value = text;
-    _filtersOn.value = true;
-    List<PupilProxy> filteredPupils = [];
-    List<PupilProxy> filteredPupilsState = List.from(_filteredPupils.value);
-    filteredPupils = filteredPupilsState
-        .where((PupilProxy pupil) =>
-            pupil.internalId.toString().contains(text) ||
-            pupil.firstName.toLowerCase().contains(text.toLowerCase()) ||
-            pupil.lastName.toLowerCase().contains(text.toLowerCase()))
-        .toList();
-    _filteredPupils.value = filteredPupils;
-  }
 
   filterPupils() {
     _filtersOn.value = false;
@@ -136,16 +105,9 @@ class PupilFilterManager {
 
       //- OGS filters -//
       // Filter ogs
-      if (activeFilters[PupilFilter.ogs]! &&
-          pupil.ogs == true &&
-          isMatching == true) {
-        isMatching = true;
-      } else if (activeFilters[PupilFilter.ogs] == false &&
-          isMatching == true) {
-        isMatching = true;
-      } else {
+      if (activeFilters[PupilFilter.ogs]! && pupil.ogs != true) {
         _filtersOn.value = true;
-        isMatching = false;
+        continue;
       }
 
       //- Filter not ogs
@@ -172,8 +134,6 @@ class PupilFilterManager {
         _filtersOn.value = true;
         isMatching = false;
       }
-      //- Development filters -//
-      // Filter development plan 1
 
       // Filter boys
       if (activeFilters[PupilFilter.justBoys]! &&
@@ -210,10 +170,6 @@ class PupilFilterManager {
     }
     // Now write it in the manager
     _filteredPupils.value = filteredPupils;
-
-    if (_searchText.value.isNotEmpty) {
-      setSearchText(_searchText.value);
-    }
   }
 
   int comparePupilsByAdmonishedDate(PupilProxy a, PupilProxy b) {

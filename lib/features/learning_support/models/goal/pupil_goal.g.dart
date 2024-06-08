@@ -7,14 +7,14 @@ part of 'pupil_goal.dart';
 // **************************************************************************
 
 PupilGoal _$PupilGoalFromJson(Map<String, dynamic> json) => PupilGoal(
-      achieved: json['achieved'] as int?,
+      achieved: (json['achieved'] as num?)?.toInt(),
       achievedAt: json['achieved_at'] == null
           ? null
           : DateTime.parse(json['achieved_at'] as String),
       createdAt: DateTime.parse(json['created_at'] as String),
       createdBy: json['created_by'] as String,
       description: json['description'] as String?,
-      goalCategoryId: json['goal_category_id'] as int,
+      goalCategoryId: (json['goal_category_id'] as num).toInt(),
       goalChecks: (json['goal_checks'] as List<dynamic>?)
           ?.map((e) => GoalCheck.fromJson(e as Map<String, dynamic>))
           .toList(),

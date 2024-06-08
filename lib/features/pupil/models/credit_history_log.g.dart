@@ -10,8 +10,8 @@ CreditHistoryLog _$CreditHistoryLogFromJson(Map<String, dynamic> json) =>
     CreditHistoryLog(
       createdAt: DateTime.parse(json['created_at'] as String),
       createdBy: json['created_by'] as String,
-      credit: json['credit'] as int,
-      operation: json['operation'] as int,
+      credit: (json['credit'] as num).toInt(),
+      operation: (json['operation'] as num).toInt(),
     );
 
 Map<String, dynamic> _$CreditHistoryLogToJson(CreditHistoryLog instance) =>

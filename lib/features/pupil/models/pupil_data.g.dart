@@ -6,18 +6,19 @@ part of 'pupil_data.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-PupilData _$PupilFromJson(Map<String, dynamic> json) => PupilData(
+PupilData _$PupilDataFromJson(Map<String, dynamic> json) => PupilData(
       avatarUrl: json['avatar_url'] as String?,
       communicationPupil: json['communication_pupil'] as String?,
       communicationTutor1: json['communication_tutor1'] as String?,
       communicationTutor2: json['communication_tutor2'] as String?,
       contact: json['contact'] as String?,
       parentsContact: json['parents_contact'] as String?,
-      credit: json['credit'] as int,
-      creditEarned: json['credit_earned'] as int,
+      credit: (json['credit'] as num).toInt(),
+      creditEarned: (json['credit_earned'] as num).toInt(),
       fiveYears: json['five_years'] as String?,
-      individualDevelopmentPlan: json['individual_development_plan'] as int,
-      internalId: json['internal_id'] as int,
+      individualDevelopmentPlan:
+          (json['individual_development_plan'] as num).toInt(),
+      internalId: (json['internal_id'] as num).toInt(),
       ogs: json['ogs'] as bool,
       ogsInfo: json['ogs_info'] as String?,
       pickUpTime: json['pick_up_time'] as String?,
@@ -55,9 +56,9 @@ PupilData _$PupilFromJson(Map<String, dynamic> json) => PupilData(
       competenceChecks: (json['competence_checks'] as List<dynamic>)
           .map((e) => CompetenceCheck.fromJson(e as Map<String, dynamic>))
           .toList(),
-    )..preschoolRevision = json['preschool_revision'] as int?;
+    )..preschoolRevision = (json['preschool_revision'] as num?)?.toInt();
 
-Map<String, dynamic> _$PupilToJson(PupilData instance) => <String, dynamic>{
+Map<String, dynamic> _$PupilDataToJson(PupilData instance) => <String, dynamic>{
       'avatar_url': instance.avatarUrl,
       'communication_pupil': instance.communicationPupil,
       'communication_tutor1': instance.communicationTutor1,

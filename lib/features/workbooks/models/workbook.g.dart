@@ -7,11 +7,11 @@ part of 'workbook.dart';
 // **************************************************************************
 
 Workbook _$WorkbookFromJson(Map<String, dynamic> json) => Workbook(
-      isbn: json['isbn'] as int,
+      isbn: (json['isbn'] as num).toInt(),
       name: json['name'] as String?,
       subject: json['subject'] as String?,
       level: json['level'] as String?,
-      amount: json['amount'] as int,
+      amount: (json['amount'] as num).toInt(),
       imageUrl: json['image_url'] as String?,
     );
 

@@ -7,10 +7,10 @@ part of 'competence.dart';
 // **************************************************************************
 
 Competence _$CompetenceFromJson(Map<String, dynamic> json) => Competence(
-      competenceId: json['competence_id'] as int,
+      competenceId: (json['competence_id'] as num).toInt(),
       competenceLevel: json['competence_level'] as String?,
       competenceName: json['competence_name'] as String,
-      parentCompetence: json['parent_competence'] as int?,
+      parentCompetence: (json['parent_competence'] as num?)?.toInt(),
       indicators: json['indicators'] as String?,
     );
 

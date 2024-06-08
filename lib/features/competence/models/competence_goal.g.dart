@@ -8,15 +8,15 @@ part of 'competence_goal.dart';
 
 CompetenceGoal _$CompetenceGoalFromJson(Map<String, dynamic> json) =>
     CompetenceGoal(
-      competenceId: json['competence_id'] as int,
+      competenceId: (json['competence_id'] as num).toInt(),
       competenceGoalId: json['competence_goal_id'] as String,
       createdAt: DateTime.parse(json['created_at'] as String),
       createdBy: json['created_by'] as String,
-      pupilId: json['pupil_id'] as int,
+      pupilId: (json['pupil_id'] as num).toInt(),
       description: json['description'] as String,
       strategies: json['strategies'] as String,
     )
-      ..achieved = json['achieved'] as int?
+      ..achieved = (json['achieved'] as num?)?.toInt()
       ..achievedAt = json['achieved_at'] == null
           ? null
           : DateTime.parse(json['achieved_at'] as String)

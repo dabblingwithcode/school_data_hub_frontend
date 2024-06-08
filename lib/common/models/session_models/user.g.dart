@@ -12,8 +12,8 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       name: json['name'] as String,
       role: json['role'] as String,
       tutoring: json['tutoring'] as String?,
-      credit: json['credit'] as int,
-      timeUnits: json['time_units'] as int,
+      credit: (json['credit'] as num).toInt(),
+      timeUnits: (json['time_units'] as num).toInt(),
       contact: json['contact'] as String?,
     );
 

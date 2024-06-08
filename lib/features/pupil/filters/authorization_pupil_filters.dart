@@ -6,7 +6,7 @@ import 'package:schuldaten_hub/features/authorizations/models/pupil_authorizatio
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
-final filterLocator = locator<PupilFilterManager>();
+final activeFilters = locator<PupilFilterManager>();
 
 List<PupilProxy> addAuthorizationFiltersToFilteredPupils(
   List<PupilProxy> pupils,
@@ -27,21 +27,21 @@ List<PupilProxy> addAuthorizationFiltersToFilteredPupils(
     }
     // This one is - let's apply the authorization filters
 
-    if (filterLocator
+    if (activeFilters
             .filterState.value[PupilFilter.authorizationYesResponse]! &&
         pupilAuthorization.status == false) {
       continue;
     }
-    if (filterLocator.filterState.value[PupilFilter.authorizationNoResponse]! &&
+    if (activeFilters.filterState.value[PupilFilter.authorizationNoResponse]! &&
         pupilAuthorization.status == true) {
       continue;
     }
-    if (filterLocator
+    if (activeFilters
             .filterState.value[PupilFilter.authorizationNullResponse]! &&
         pupilAuthorization.status != null) {
       continue;
     }
-    if (filterLocator
+    if (activeFilters
             .filterState.value[PupilFilter.authorizationCommentResponse]! &&
         pupilAuthorization.comment == null) {
       continue;
