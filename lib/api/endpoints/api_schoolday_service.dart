@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -97,4 +98,62 @@ class ApiSchooldayService {
   }
 
   static const deleteSchooldays = '/schooldays/delete/list';
+
+  //- School semester
+
+  static const _getSchoolSemester = '/school_semesters/all';
+
+  Future<List<SchoolSemester>> getSchoolSemesters() async {
+    notificationManager.isRunningValue(true);
+
+    final Response response = await _client.get(_getSchoolSemester);
+
+    if (response.statusCode != 200) {
+      notificationManager.showSnackBar(NotificationType.error,
+          'Die Schulsemester konnten nicht geladen werden');
+
+      notificationManager.isRunningValue(false);
+
+      throw ApiException(
+          'Failed to fetch school semesters', response.statusCode);
+    }
+
+    final List<SchoolSemester> schoolSemesters = List<SchoolSemester>.from(
+        (response.data as List).map((e) => SchoolSemester.fromJson(e)));
+
+    notificationManager.isRunningValue(false);
+
+    return schoolSemesters;
+  }
+
+  static const _postSchoolSemester = '/school_semesters/new';
+
+  Future<SchoolSemester> postSchoolSemester(
+      {required DateTime startDate,
+      required DateTime endDate,
+      required bool isFirst}) async {
+    notificationManager.isRunningValue(true);
+
+    final data = jsonEncode({
+      'start_date': startDate.formatForJson(),
+      'end_date': endDate.formatForJson(),
+      'is_first': isFirst
+    });
+
+    final Response response =
+        await _client.post(_postSchoolSemester, data: data);
+
+    if (response.statusCode != 200) {
+      notificationManager.showSnackBar(
+          NotificationType.error, 'Fehler beim Erstellen des Schulsemesters');
+
+      notificationManager.isRunningValue(false);
+
+      throw ApiException('Failed to post school semester', response.statusCode);
+    }
+
+    notificationManager.isRunningValue(false);
+
+    return SchoolSemester.fromJson(response.data);
+  }
 }

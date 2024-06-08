@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 
-contactedBadge(contacted) {
+Widget contactedBadge(contacted) {
   if (contacted == 1 || contacted == 2 || contacted == 3) {
     return Padding(
       padding: const EdgeInsets.all(1.0),
@@ -28,7 +28,7 @@ contactedBadge(contacted) {
   }
 }
 
-contactedDayBadge(contacted) {
+Widget contactedDayBadge(contacted) {
   return (contacted == '1' || contacted == '2' || contacted == '3')
       ? Padding(
           padding: const EdgeInsets.all(1),
@@ -59,7 +59,7 @@ contactedDayBadge(contacted) {
       : Container();
 }
 
-returnedBadge(returned) {
+Widget returnedBadge(returned) {
   if (returned == true) {
     return Padding(
       padding: const EdgeInsets.all(1.0),
@@ -86,7 +86,7 @@ returnedBadge(returned) {
   }
 }
 
-excusedBadge(excused) {
+Widget excusedBadge(excused) {
   if (excused == true) {
     return Padding(
       padding: const EdgeInsets.all(2.0),
@@ -132,7 +132,7 @@ excusedBadge(excused) {
   }
 }
 
-missedTypeBadge(missedtype) {
+Widget missedTypeBadge(missedtype) {
   if (missedtype == 'missed') {
     return Padding(
       padding: const EdgeInsets.all(2.0),

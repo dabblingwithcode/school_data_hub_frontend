@@ -4,20 +4,20 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_page/widgets/attendance_ranking_filter_bottom_sheet.dart';
+import 'package:schuldaten_hub/features/attendance/views/missed_classes_pupil_list_page/widgets/missed_classes_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_badges.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:watch_it/watch_it.dart';
 
-
-class AttendanceRankingListSearchbar extends StatelessWidget {
+class AttendanceRankingListSearchbar extends WatchingWidget {
   final List<PupilProxy> pupils;
-  final bool filtersOn;
-  const AttendanceRankingListSearchbar(
-      {required this.filtersOn, required this.pupils, super.key});
+
+  const AttendanceRankingListSearchbar({required this.pupils, super.key});
 
   @override
   Widget build(BuildContext context) {
+    final filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
     return Container(
       decoration: BoxDecoration(
         color: canvasColor,

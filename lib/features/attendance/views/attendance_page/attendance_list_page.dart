@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/logger.dart';
 import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
-import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
+import 'package:schuldaten_hub/common/widgets/sliver_search_app_bar.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
 import 'package:schuldaten_hub/features/attendance/views/attendance_page/widgets/atendance_list_card.dart';
@@ -51,7 +51,6 @@ class _AttendanceListPageState extends State<AttendanceListPage> {
   @override
   Widget build(BuildContext context) {
     DateTime thisDate = watchValue((SchooldayManager x) => x.thisDate);
-
     List<int> pupilIds = watchValue((PupilsFilter x) => x.filteredPupilIds);
     logger.i('Rebuilding AttendanceListPage');
 

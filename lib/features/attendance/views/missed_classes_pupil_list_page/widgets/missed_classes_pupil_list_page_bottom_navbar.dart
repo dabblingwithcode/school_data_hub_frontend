@@ -3,17 +3,17 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_page/widgets/attendance_ranking_filter_bottom_sheet.dart';
+import 'package:schuldaten_hub/features/attendance/views/missed_classes_pupil_list_page/widgets/missed_classes_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:watch_it/watch_it.dart';
 
-class AttendanceRankingListPageBottomNavBar extends StatelessWidget {
-  final bool filtersOn;
-  const AttendanceRankingListPageBottomNavBar(
-      {required this.filtersOn, super.key});
+class AttendanceRankingListPageBottomNavBar extends WatchingWidget {
+  const AttendanceRankingListPageBottomNavBar({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final filtersOn = watchValue((PupilsFilter x) => x.filtersOn);
     return BottomNavBarLayout(
       bottomNavBar: BottomAppBar(
         padding: const EdgeInsets.all(10),

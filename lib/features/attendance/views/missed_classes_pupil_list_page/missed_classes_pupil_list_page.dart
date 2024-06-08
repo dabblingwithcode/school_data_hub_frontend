@@ -4,13 +4,12 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/generic_app_bar.dart';
 import 'package:schuldaten_hub/common/widgets/generic_sliver_list.dart';
-import 'package:schuldaten_hub/common/widgets/sliver_app_bar.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_page/widgets/attendance_ranking_list_card.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_page/widgets/attendance_ranking_list_searchbar.dart';
-import 'package:schuldaten_hub/features/attendance/views/attendance_ranking_list_page/widgets/attendance_ranking_list_page_bottom_navbar.dart';
+import 'package:schuldaten_hub/common/widgets/sliver_search_app_bar.dart';
+import 'package:schuldaten_hub/features/attendance/views/missed_classes_pupil_list_page/widgets/missed_classes_pupil_list_card.dart';
+import 'package:schuldaten_hub/features/attendance/views/missed_classes_pupil_list_page/widgets/missed_classes_pupil_list_searchbar.dart';
+import 'package:schuldaten_hub/features/attendance/views/missed_classes_pupil_list_page/widgets/missed_classes_pupil_list_page_bottom_navbar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -19,7 +18,6 @@ class AttendanceRankingListPage extends WatchingWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool filtersOn = watchValue((PupilFilterManager x) => x.filtersOn);
     List<PupilProxy> pupils = watchValue((PupilsFilter x) => x.filteredPupils);
 
     return Scaffold(
@@ -36,8 +34,7 @@ class AttendanceRankingListPage extends WatchingWidget {
                 const SliverGap(5),
                 SliverSearchAppBar(
                   height: 110,
-                  title: AttendanceRankingListSearchbar(
-                      pupils: pupils, filtersOn: filtersOn),
+                  title: AttendanceRankingListSearchbar(pupils: pupils),
                 ),
                 GenericSliverListWithEmptyListCheck(
                     items: pupils,
@@ -48,8 +45,7 @@ class AttendanceRankingListPage extends WatchingWidget {
           ),
         ),
       ),
-      bottomNavigationBar:
-          AttendanceRankingListPageBottomNavBar(filtersOn: filtersOn),
+      bottomNavigationBar: const AttendanceRankingListPageBottomNavBar(),
     );
   }
 }

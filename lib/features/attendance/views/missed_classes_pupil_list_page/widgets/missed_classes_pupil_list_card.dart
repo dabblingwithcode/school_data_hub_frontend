@@ -4,6 +4,7 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/avatar.dart';
 import 'package:schuldaten_hub/common/widgets/custom_expansion_tile.dart';
 import 'package:schuldaten_hub/common/widgets/custom_list_tiles.dart';
+import 'package:schuldaten_hub/features/attendance/services/attendance_manager.dart';
 import 'package:schuldaten_hub/features/attendance/views/widgets/attendance_stats_pupil.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/pupil_profile_page.dart';
 import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/widgets/pupil_profile_page_content/widgets/pupil_attendance_content.dart';
@@ -31,7 +32,9 @@ class _AttendanceRankingListCardState extends State<AttendanceRankingListCard> {
 
   @override
   Widget build(BuildContext context) {
-    final PupilProxy pupil = widget.pupil;
+    final PupilProxy pupil = watch(widget.pupil);
+    final List<int> missedHoursForActualReport =
+        locator<AttendanceManager>().missedHoursforSemesterOrSchoolyear(pupil);
     return Card(
       color: Colors.white,
       surfaceTintColor: Colors.white,
@@ -86,6 +89,7 @@ class _AttendanceRankingListCardState extends State<AttendanceRankingListCard> {
                                 ),
                               ),
                             ),
+                            const Spacer(),
                           ],
                         ),
                         const Gap(10),
@@ -102,6 +106,38 @@ class _AttendanceRankingListCardState extends State<AttendanceRankingListCard> {
                             const Gap(20),
                           ],
                         ),
+                      ],
+                    ),
+                    const Gap(10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text(
+                          'Fehlstunden:',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          ' ${missedHoursForActualReport[0].toString()}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const Gap(5),
+                        const Text(
+                          'davon unent:',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                        Text(
+                          ' ${missedHoursForActualReport[1].toString()}',
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        const Gap(15),
                       ],
                     ),
                     const Gap(10),

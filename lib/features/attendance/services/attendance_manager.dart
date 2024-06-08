@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
+import 'package:schuldaten_hub/common/models/schoolday_models/schoolday.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
@@ -78,6 +79,105 @@ class AttendanceManager {
     //     NotificationType.success, 'Fehlzeiten erfolgreich geladen!');
 
     return;
+  }
+
+  bool isMissedClassinSemester(
+      MissedClass missedClass, SchoolSemester schoolSemester) {
+    return missedClass.missedDay.isAfter(schoolSemester.startDate) &&
+        missedClass.missedDay.isBefore(schoolSemester.endDate);
+  }
+
+  List<int> missedHoursforSemesterOrSchoolyear(PupilProxy pupil) {
+    // The law in NRW Germany requires that absences are counted in hours
+    // The function returns absence hours and unexcused hours for the current semester
+    // (for grades 3 and 4)
+    // in the last semester for the school year (for grades 1 and 2)
+
+    // if no missed classes, we return 0, 0
+    if (pupil.pupilMissedClasses == null) {
+      return [0, 0];
+    }
+    final List<MissedClass> missedClasses = pupil.pupilMissedClasses!;
+    final List<SchoolSemester> schoolSemesters =
+        locator<SchooldayManager>().schoolSemesters.value;
+    final DateTime now = DateTime.now();
+
+    final SchoolSemester currentSemester = schoolSemesters.firstWhere(
+        (semester) =>
+            semester.startDate.isBefore(now) && semester.endDate.isAfter(now));
+
+    final List<MissedClass> missedClassesThisSemester = missedClasses
+        .where((missedClass) =>
+            isMissedClassinSemester(missedClass, currentSemester) &&
+            missedClass.missedType == MissedType.isMissed.value)
+        .toList();
+    final List<MissedClass> unexcusedMissedClassesThisSemester =
+        missedClassesThisSemester
+            .where((missedClass) => missedClass.excused == true)
+            .toList();
+    if (currentSemester.isFirst) {
+      switch (pupil.schoolGrade) {
+        case SchoolGrade.E1:
+        case SchoolGrade.E2:
+        case SchoolGrade.E3:
+          // for class 1 and 2 the average hours per day are 4
+          final int missedHoursThisSemester =
+              missedClassesThisSemester.length * 4;
+          final int unExcusedMissedHoursThisSemester =
+              unexcusedMissedClassesThisSemester.length * 4;
+          return [missedHoursThisSemester, unExcusedMissedHoursThisSemester];
+
+        case SchoolGrade.S3:
+        case SchoolGrade.S4:
+          // for class 1 and 2 the average hours per day are 5
+          final int missedHoursThisSemester =
+              missedClassesThisSemester.length * 5;
+          final int unExcusedMissedHoursThisSemester =
+              unexcusedMissedClassesThisSemester.length * 5;
+          return [missedHoursThisSemester, unExcusedMissedHoursThisSemester];
+      }
+    } else {
+      switch (pupil.schoolGrade) {
+        case SchoolGrade.E1:
+        case SchoolGrade.E2:
+        case SchoolGrade.E3:
+          // for class 1 and 2 the average hours per day are 4
+          // being the last semester of the school year,
+          // we need to acount for last semester, too
+          final SchoolSemester lastSemester =
+              schoolSemesters.firstWhere((semester) =>
+                  // last semester is the one with the year of end date being the same as the year of the current semester
+                  semester.endDate.year == currentSemester.endDate.year);
+          final List<MissedClass> missedClassesLastSemester = missedClasses
+              .where((missedClass) =>
+                  isMissedClassinSemester(missedClass, lastSemester) &&
+                  missedClass.missedType == MissedType.isMissed.value)
+              .toList();
+          final List<MissedClass> unexcusedMissedClassesLastSemester =
+              missedClassesLastSemester
+                  .where((missedClass) => missedClass.excused == true)
+                  .toList();
+          final int missedHoursThisSemester =
+              missedClassesThisSemester.length * 4;
+          final int unExcusedMissedHoursThisSemester =
+              unexcusedMissedClassesThisSemester.length * 4;
+          final int missedHoursLastSemester =
+              missedClassesLastSemester.length * 4;
+          final int unExcusedMissedHoursLastSemester =
+              unexcusedMissedClassesLastSemester.length * 4;
+          return [
+            missedHoursThisSemester + missedHoursLastSemester,
+            unExcusedMissedHoursThisSemester + unExcusedMissedHoursLastSemester
+          ];
+        case SchoolGrade.S3:
+        case SchoolGrade.S4:
+          final int missedHoursThisSemester =
+              missedClassesThisSemester.length * 5;
+          final int unExcusedMissedHoursThisSemester =
+              unexcusedMissedClassesThisSemester.length * 5;
+          return [missedHoursThisSemester, unExcusedMissedHoursThisSemester];
+      }
+    }
   }
 
   Future<void> changeExcusedValue(

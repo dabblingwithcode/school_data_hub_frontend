@@ -16,12 +16,14 @@ class SchooldayManager {
   ValueListenable<DateTime> get thisDate => _thisDate;
   ValueListenable<DateTime> get startDate => _startDate;
   ValueListenable<DateTime> get endDate => _endDate;
+  ValueListenable<List<SchoolSemester>> get schoolSemesters => _schoolSemesters;
 
   final _schooldays = ValueNotifier<List<Schoolday>>([]);
   final _availableDates = ValueNotifier<List<DateTime>>([]);
   final _thisDate = ValueNotifier<DateTime>(DateTime.now());
   final _startDate = ValueNotifier<DateTime>(DateTime.now());
   final _endDate = ValueNotifier<DateTime>(DateTime.now());
+  final _schoolSemesters = ValueNotifier<List<SchoolSemester>>([]);
 
   SchooldayManager();
 
@@ -30,6 +32,7 @@ class SchooldayManager {
 
   Future<SchooldayManager> init() async {
     await getSchooldays();
+    await getSchoolSemesters();
     return this;
   }
 
@@ -75,6 +78,34 @@ class SchooldayManager {
     }
 
     setAvailableDates();
+
+    return;
+  }
+
+  Future<void> getSchoolSemesters() async {
+    final List<SchoolSemester> responseSchoolSemesters =
+        await apiSchooldayService.getSchoolSemesters();
+
+    locator<NotificationManager>().showSnackBar(NotificationType.success,
+        '${responseSchoolSemesters.length} Schulhalbjahre geladen!');
+
+    _schoolSemesters.value = responseSchoolSemesters;
+
+    return;
+  }
+
+  Future<void> postSchoolSemester(
+      {required DateTime startDate,
+      required DateTime endDate,
+      required bool isFirst}) async {
+    final SchoolSemester newSemester =
+        await apiSchooldayService.postSchoolSemester(
+            startDate: startDate, endDate: endDate, isFirst: isFirst);
+
+    _schoolSemesters.value = [..._schoolSemesters.value, newSemester];
+
+    locator<NotificationManager>().showSnackBar(
+        NotificationType.success, 'Schulhalbjahr erfolgreich erstellt');
 
     return;
   }
