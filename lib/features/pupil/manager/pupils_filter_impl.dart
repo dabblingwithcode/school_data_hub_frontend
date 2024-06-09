@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/common/filters/filters.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/utils/logger.dart';
 import 'package:schuldaten_hub/features/attendance/services/attendance_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/filters/pupil_filters.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupil_text_filter.dart';
 import 'package:schuldaten_hub/features/pupil/filters/pupil_objects_filters.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
@@ -65,7 +65,8 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
   @override
   ValueListenable<PupilSortMode> get sortMode => _sortMode;
   final _sortMode = ValueNotifier<PupilSortMode>(PupilSortMode.sortByName);
-
+  @override
+  PupilTextFilter get textFilter => _textFilter;
   final PupilTextFilter _textFilter = PupilTextFilter(name: 'Text Filter');
 
   late List<Filter> allFilters = [
@@ -138,7 +139,7 @@ class PupilsFilterImplementation with ChangeNotifier implements PupilsFilter {
       if (!isMatchedByGroupFilter || !isMatchedBySchoolGradeFilter) {
         continue;
       }
-
+      logger.i('PupilFilter says Textfilter: ${_textFilter.text}');
       if (_textFilter.isActive && !_textFilter.matches(pupil)) {
         _filtersOn.value = true;
         continue;

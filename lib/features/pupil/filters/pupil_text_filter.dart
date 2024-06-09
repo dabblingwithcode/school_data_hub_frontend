@@ -1,4 +1,5 @@
 import 'package:schuldaten_hub/common/filters/filters.dart';
+import 'package:schuldaten_hub/common/utils/logger.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 class PupilTextFilter extends Filter<PupilProxy> {
@@ -11,8 +12,15 @@ class PupilTextFilter extends Filter<PupilProxy> {
 
   void setFilterText(String text) {
     _text = text;
-    toggle(isActive);
+    if (text.isEmpty) {
+      toggle(false);
+      notifyListeners();
+      return;
+    }
+    toggle(true);
+    logger.i('PupilTextFilter: setFilterText: $text');
     notifyListeners();
+    return;
   }
 
   @override

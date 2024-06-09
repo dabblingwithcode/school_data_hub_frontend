@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/search_textfield_manager.dart';
+import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:watch_it/watch_it.dart';
 
-class SearchTextField extends StatefulWidget {
+class SearchTextField extends WatchingStatefulWidget {
   final SearchType searchType;
   final String hintText;
   final Function refreshFunction;
@@ -18,18 +20,23 @@ class SearchTextField extends StatefulWidget {
 }
 
 class _SearchTextFieldState extends State<SearchTextField> {
+  final pupilsFilter = locator<PupilsFilter>();
+
   final searchManager = locator<SearchManager>();
   FocusNode focusNode = FocusNode();
-
+  final textEditingController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    searchManager.setSearchType(widget.searchType);
-
+    final textFilter = watch(locator<PupilsFilter>().textFilter);
+    if (locator<PupilsFilter>().textFilter.text == '') {
+      textEditingController.clear();
+    }
     return TextField(
       focusNode: focusNode,
-      controller: searchManager.searchController.value,
+      controller: textEditingController,
       textInputAction: TextInputAction.search,
-      onChanged: searchManager.onSearchEnter,
+      onChanged: (value) =>
+          locator<PupilsFilter>().textFilter.setFilterText(value),
       decoration: InputDecoration(
         fillColor: const Color.fromARGB(255, 255, 255, 255),
         filled: true,

@@ -3,6 +3,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/filters/filters.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupil_text_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 enum PupilProperties {
@@ -93,6 +94,7 @@ abstract class PupilsFilter implements Listenable {
 
   List<Filter> get groupFilters;
   List<Filter> get schoolGradeFilters;
+  PupilTextFilter get textFilter;
   ValueListenable<PupilSortMode> get sortMode;
 
   /// must be called when this object is no longer needed
