@@ -8,7 +8,6 @@ import 'package:schuldaten_hub/features/competence/models/competence_goal.dart';
 import 'package:schuldaten_hub/features/learning_support/models/category/pupil_category_status.dart';
 import 'package:schuldaten_hub/features/learning_support/models/goal/pupil_goal.dart';
 import 'package:schuldaten_hub/features/pupil/models/credit_history_log.dart';
-import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 
 part 'pupil_data.g.dart';

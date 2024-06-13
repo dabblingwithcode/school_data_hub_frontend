@@ -8,7 +8,6 @@ import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/ogs_filter_bottom_sheet.dart';
 import 'package:schuldaten_hub/features/pupil/filters/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/filters/pupil_filter_manager.dart';
 
 class OgsListSearchBar extends StatelessWidget {
   final List<PupilProxy> pupils;

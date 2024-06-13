@@ -49,6 +49,7 @@ dependencies:
   table_calendar: ^3.0.9
   provider: ^6.1.2
   url_launcher: ^6.3.0
+  pasteboard: ^0.2.0
 
 dev_dependencies:
   flutter_test: 

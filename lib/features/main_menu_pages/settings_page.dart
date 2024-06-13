@@ -21,7 +21,7 @@ import 'package:schuldaten_hub/features/matrix/pages/set_matrix_environment_valu
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/pages/select_pupils_list_page/select_pupils_list_page.dart';
-import 'package:schuldaten_hub/features/statistics/birthdays_page.dart';
+import 'package:schuldaten_hub/features/pupil/pages/birthdays_page.dart';
 import 'package:schuldaten_hub/features/statistics/statistics_page/controller/statistics.dart';
 import 'package:flutter_settings_ui/flutter_settings_ui.dart';
 import 'package:watch_it/watch_it.dart';

@@ -6,7 +6,6 @@ import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
 import 'package:schuldaten_hub/common/widgets/filter_button.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/credit_filter_bottom_sheet.dart';
-import 'package:schuldaten_hub/features/pupil/filters/pupils_filter.dart';
 
 class CreditListPageBottomNavBar extends StatelessWidget {
   final bool filtersOn;

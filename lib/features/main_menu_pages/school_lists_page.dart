@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/features/authorizations/pages/authorizations_list_page/authorizations_list_page.dart';
 import 'package:schuldaten_hub/features/main_menu_pages/widgets/main_menu_button.dart';
-import 'package:schuldaten_hub/features/school_lists/pages/school_list_pupils_page/school_list_pupils_page.dart';
 import 'package:schuldaten_hub/features/school_lists/pages/school_lists_page/school_lists_page.dart';
 
 import 'package:watch_it/watch_it.dart';

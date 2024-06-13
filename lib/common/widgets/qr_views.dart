@@ -8,7 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:gap/gap.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:pasteboard/pasteboard.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
@@ -183,7 +185,7 @@ void showQrCarousel(
             enlargeCenterPage: true,
             height: maxHeight,
             autoPlay: autoPlay,
-            autoPlayInterval: const Duration(seconds: 3),
+            autoPlayInterval: const Duration(seconds: 1),
             pauseAutoPlayInFiniteScroll: true,
             pauseAutoPlayOnTouch: true,
             scrollPhysics: const PageScrollPhysics(),
@@ -229,7 +231,7 @@ void showQrCarousel(
       });
 }
 
-void showQrCode(String qr, BuildContext context) async {
+Future<void> showQrCode(String qr, BuildContext context) async {
   final qrImageKey = GlobalKey();
   final mediaQuery = MediaQuery.of(context);
   final maxWidth =
@@ -271,6 +273,13 @@ void showQrCode(String qr, BuildContext context) async {
                   child: const Text('code speichern'),
                 ),
                 const SizedBox(width: 20),
+                TextButton(
+                  onPressed: () {
+                    copyQrCodeToClipboard(qr, context, qrImageKey);
+                  },
+                  child: const Text('In der Zwischenablage kopieren'),
+                ),
+                const SizedBox(width: 20),
               ],
             ),
           ],
@@ -280,7 +289,8 @@ void showQrCode(String qr, BuildContext context) async {
   );
 }
 
-void saveQrCode(String qr, BuildContext context, GlobalKey qrKey) async {
+Future<void> saveQrCode(
+    String qr, BuildContext context, GlobalKey qrKey) async {
   final RenderRepaintBoundary boundary =
       qrKey.currentContext!.findRenderObject()
           as RenderRepaintBoundary; //final repaintBoundary = RepaintBoundary();
@@ -297,6 +307,43 @@ void saveQrCode(String qr, BuildContext context, GlobalKey qrKey) async {
   File imgFile = File(Platform.isWindows ? '$filePath.png' : filePath);
   await imgFile.writeAsBytes(pngBytes);
 
+  // Show a success message
+  locator<NotificationManager>()
+      .showSnackBar(NotificationType.success, ' QR-Code gespeichert');
+}
+
+Future<void> copyQrCodeToClipboard(
+    String qr, BuildContext context, GlobalKey qrKey) async {
+  final RenderRepaintBoundary boundary =
+      qrKey.currentContext!.findRenderObject()
+          as RenderRepaintBoundary; //final repaintBoundary = RepaintBoundary();
+  // Wrap the QR image with a Container or SizedBox
+  ui.Image image = await boundary.toImage();
+
+  ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+  Uint8List pngBytes = byteData!.buffer.asUint8List();
+  Directory directory = await getTemporaryDirectory();
+
+  String fileName =
+      'school_data_qr_code_${DateTime.now().millisecondsSinceEpoch}.png';
+  String filePath = '${directory.path}/$fileName';
+  File imgFile = File(filePath);
+  await imgFile.writeAsBytes(pngBytes);
+
+  await Pasteboard.writeFiles([filePath]);
+
+  // Find and delete old QR code files, excluding the current imgFile
+  final List<FileSystemEntity> files = directory.listSync();
+  for (final file in files) {
+    if (file.path.contains('school_data_qr_code') &&
+        !file.path.contains(fileName)) {
+      try {
+        await File(file.path).delete();
+      } catch (e) {
+        // Handle the error or ignore
+      }
+    }
+  }
   // Show a success message
   locator<NotificationManager>()
       .showSnackBar(NotificationType.success, ' QR-Code gespeichert');

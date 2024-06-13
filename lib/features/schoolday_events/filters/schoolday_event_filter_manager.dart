@@ -1,10 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
-import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/utils/logger.dart';
 //import 'package:schuldaten_hub/features/pupil/filters/pupils_filter.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
-import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 class SchooldayEventFilterManager {
