@@ -33,7 +33,7 @@ const contactedQuestionColor = Color.fromRGBO(238, 238, 238, 1);
 const contactedSuccessColor = Color.fromRGBO(139, 195, 74, 1);
 const contactedCalledBackColor = Color.fromRGBO(255, 183, 77, 1);
 const contactedFailedColor = Color.fromRGBO(239, 108, 0, 1);
-const goneHomeColor = Color.fromRGBO(63, 156, 70, 1);
+const goneHomeColor = Colors.blue;
 
 //- Development category colore
 

@@ -35,7 +35,10 @@
     "books": "Bücher",
     "selectPupils": "Kind/Kinder auswählen",
     "shown": "Angezeigt:",
-    "selected": "Ausgewählt:"
+    "selected": "Ausgewählt:",
+    "checkLists":"Eintragelisten",
+    "lists":"listen",
+    "authorizations":"Einwilligungen"
 
 
 }

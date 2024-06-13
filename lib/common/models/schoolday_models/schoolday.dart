@@ -19,6 +19,10 @@ class SchoolSemester {
   final DateTime startDate;
   @JsonKey(name: 'end_date')
   final DateTime endDate;
+  @JsonKey(name: 'class_conference_date')
+  final DateTime? classConferenceDate;
+  @JsonKey(name: 'report_conference_date')
+  final DateTime? reportConferenceDate;
   @JsonKey(name: 'is_first')
   final bool isFirst;
 
@@ -27,5 +31,9 @@ class SchoolSemester {
 
   Map<String, dynamic> toJson() => _$SchoolSemesterToJson(this);
   SchoolSemester(
-      {required this.startDate, required this.endDate, required this.isFirst});
+      {required this.startDate,
+      required this.endDate,
+      this.classConferenceDate,
+      this.reportConferenceDate,
+      required this.isFirst});
 }

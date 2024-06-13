@@ -20,10 +20,10 @@ class SchooldayEvent {
   final String? processedBy;
   @JsonKey(name: 'processed_at')
   final DateTime? processedAt;
-  @JsonKey(name: 'file_url')
-  final String? fileUrl;
-  @JsonKey(name: 'processed_file_url')
-  final String? processedFileUrl;
+  @JsonKey(name: 'file_id')
+  final String? fileId;
+  @JsonKey(name: 'processed_file_id')
+  final String? processedFileId;
   @JsonKey(name: 'admonished_day')
   final DateTime schooldayEventDate;
   @JsonKey(name: 'admonished_pupil_id')
@@ -37,8 +37,8 @@ class SchooldayEvent {
       required this.processed,
       required this.processedBy,
       required this.processedAt,
-      required this.fileUrl,
-      required this.processedFileUrl,
+      required this.fileId,
+      required this.processedFileId,
       required this.schooldayEventDate,
       required this.admonishedPupilId});
 

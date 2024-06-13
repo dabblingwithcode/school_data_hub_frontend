@@ -18,20 +18,23 @@ class GenericAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       centerTitle: true,
       backgroundColor: backgroundColor,
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            iconData,
-            size: 25,
-            color: Colors.white,
-          ),
-          const SizedBox(width: 10),
-          Text(
-            title,
-            style: appBarTextStyle,
-          ),
-        ],
+      title: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              iconData,
+              size: 25,
+              color: Colors.white,
+            ),
+            const SizedBox(width: 10),
+            Text(
+              title,
+              style: appBarTextStyle,
+            ),
+          ],
+        ),
       ),
     );
   }

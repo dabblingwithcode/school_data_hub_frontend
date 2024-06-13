@@ -3,7 +3,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/filters/filters.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
-import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
 import 'package:schuldaten_hub/features/books/models/pupil_book.dart';
 import 'package:schuldaten_hub/features/competence/models/competence_check.dart';
 import 'package:schuldaten_hub/features/competence/models/competence_goal.dart';
@@ -12,7 +11,6 @@ import 'package:schuldaten_hub/features/learning_support/models/goal/pupil_goal.
 import 'package:schuldaten_hub/features/pupil/models/credit_history_log.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_identity.dart';
-import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/workbooks/models/pupil_workbook.dart';
 
@@ -122,6 +120,7 @@ class PupilProxy with ChangeNotifier {
     // ignore: prefer_for_elements_to_map_fromiterable
     _missedClasses = Map.fromIterable(pupilData.pupilMissedClasses,
         key: (e) => e.missedDay, value: (e) => e);
+
     pupilIsDirty = false;
     notifyListeners();
   }
@@ -132,24 +131,26 @@ class PupilProxy with ChangeNotifier {
   }
 
   void clearAvatar() {
-    _avatarUrlOverride = null;
+    _avatarIdOverride = null;
     _avatarUpdated = true;
     pupilIsDirty = true;
     notifyListeners();
   }
 
-  void updateFromAllMissedClasses(List<MissedClass> allMissedClasses) {
-    bool _pupilIsDirty = false;
+  void updateFromMissedClassesOnASchoolday(List<MissedClass> allMissedClasses) {
+    pupilIsDirty = false;
 
     for (final missedClass in allMissedClasses) {
       // if the missed class is for this pupil
+
       if (missedClass.missedPupilId == _pupilData.internalId) {
         // if the missed class is not already in the missed classes
         // or if the missed class is different from the one in the missed classes
+
         if (!_missedClasses.containsKey(missedClass.missedDay) ||
             !(_missedClasses[missedClass.missedDay] == missedClass)) {
           _missedClasses[missedClass.missedDay] = missedClass;
-          _pupilIsDirty = true;
+          pupilIsDirty = true;
         }
       }
     }
@@ -159,11 +160,10 @@ class PupilProxy with ChangeNotifier {
     for (final pupilMissedClass in missedClassesValues) {
       if (!allMissedClasses.contains(pupilMissedClass)) {
         _missedClasses.remove(pupilMissedClass.missedDay);
-        _pupilIsDirty = true;
+        pupilIsDirty = true;
       }
     }
-    if (_pupilIsDirty) {
-      pupilIsDirty = true;
+    if (pupilIsDirty) {
       notifyListeners();
     }
   }
@@ -186,10 +186,10 @@ class PupilProxy with ChangeNotifier {
   DateTime? get migrationSupportEnds => _pupilIdentity.migrationSupportEnds;
   DateTime get pupilSince => _pupilIdentity.pupilSince;
 
-  String? _avatarUrlOverride;
+  String? _avatarIdOverride;
   bool _avatarUpdated = false;
-  String? get avatarUrl =>
-      _avatarUpdated ? _avatarUrlOverride : _pupilData.avatarUrl;
+  String? get avatarId =>
+      _avatarUpdated ? _avatarIdOverride : _pupilData.avatarId;
 
   String? get communicationPupil => _pupilData.communicationPupil;
   String? get communicationTutor1 => _pupilData.communicationTutor1;
@@ -206,19 +206,18 @@ class PupilProxy with ChangeNotifier {
   String? get pickUpTime => _pupilData.pickUpTime;
   int? get preschoolRevision => _pupilData.preschoolRevision;
   String? get specialInformation => _pupilData.specialInformation;
+  bool? get emergencyCare => _pupilData.emergencyCare;
   List<CompetenceCheck>? get competenceChecks => _pupilData.competenceChecks;
   List<PupilCategoryStatus>? get pupilCategoryStatuses =>
       _pupilData.pupilCategoryStatuses;
   List<SchooldayEvent>? get schooldayEvents => _pupilData.schooldayEvents;
   List<PupilBook>? get pupilBooks => _pupilData.pupilBooks;
-  List<PupilList>? get pupilLists => _pupilData.pupilLists;
   List<PupilGoal>? get pupilGoals => _pupilData.pupilGoals;
 
   List<MissedClass>? get pupilMissedClasses => _missedClasses.values.toList();
   Map<DateTime, MissedClass> _missedClasses = {};
 
   List<PupilWorkbook>? get pupilWorkbooks => _pupilData.pupilWorkbooks;
-  List<PupilAuthorization>? get authorizations => _pupilData.authorizations;
   List<CreditHistoryLog>? get creditHistoryLogs => _pupilData.creditHistoryLogs;
   List<CompetenceGoal>? get competenceGoals => _pupilData.competenceGoals;
 }

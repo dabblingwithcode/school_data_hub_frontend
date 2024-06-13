@@ -41,7 +41,7 @@ class _BarcodeStreamScannerState extends State<BarcodeStreamScanner> {
         if (newQrCode != null) {
           if (_lastProcessedQrCode == '' || _lastProcessedQrCode != newQrCode) {
             unawaited(locator<PupilIdentityManager>()
-                .addNewPupilIdentities(encryptedIdentitiesAsString: newQrCode));
+                .addNewPupilIdentities(identitiesFromStringLines: newQrCode));
             _counter++;
             _lastProcessedQrCode = newQrCode;
           }

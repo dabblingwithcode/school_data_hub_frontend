@@ -11,8 +11,8 @@ import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/common/utils/logger.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter_impl.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupils_filter.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupils_filter_impl.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
@@ -171,7 +171,14 @@ class PupilManager extends ChangeNotifier {
     }
   }
 
-  void updatePupilsFromMissedClasses(List<MissedClass> allMissedClasses) {
+  void updatePupilProxiesWithPupilData(List<PupilData> pupils) {
+    for (PupilData pupil in pupils) {
+      updatePupilProxyWithPupilData(pupil);
+    }
+  }
+
+  void updatePupilsFromMissedClassesOnASchoolday(
+      List<MissedClass> allMissedClasses) {
     if (allMissedClasses.isEmpty) {
       return;
     }
@@ -179,12 +186,12 @@ class PupilManager extends ChangeNotifier {
       final missedPupil = _pupils[missedClass.missedPupilId];
 
       if (missedPupil == null) {
-        logger.f('Pupil not found', stackTrace: StackTrace.current);
-
+        logger.f('Pupil ${missedClass.missedPupilId} not found',
+            stackTrace: StackTrace.current);
         continue;
       }
 
-      missedPupil.updateFromAllMissedClasses(allMissedClasses);
+      missedPupil.updateFromMissedClassesOnASchoolday(allMissedClasses);
     }
     // no need to notify listeners here, because the pupils will notify the listeners themselves
     //notifyListeners();

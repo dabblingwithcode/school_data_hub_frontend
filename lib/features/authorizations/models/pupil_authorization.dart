@@ -9,8 +9,8 @@ class PupilAuthorization {
   final String? comment;
   @JsonKey(name: 'created_by')
   final String? createdBy;
-  @JsonKey(name: 'file_url')
-  final String? fileUrl;
+  @JsonKey(name: 'file_id')
+  final String? fileId;
   @JsonKey(name: 'origin_authorization')
   final String originAuthorization;
   @JsonKey(name: 'pupil_id')
@@ -25,7 +25,7 @@ class PupilAuthorization {
   PupilAuthorization(
       {required this.comment,
       required this.createdBy,
-      required this.fileUrl,
+      required this.fileId,
       required this.originAuthorization,
       required this.pupilId,
       required this.status});

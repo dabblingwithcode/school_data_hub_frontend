@@ -9,18 +9,18 @@ import 'package:schuldaten_hub/features/attendance/services/attendance_helper_fu
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_helper_functions.dart';
-import 'package:schuldaten_hub/features/pupil/views/pupil_profile_page/widgets/pupil_set_avatar.dart';
+import 'package:schuldaten_hub/features/pupil/pages/pupil_profile_page/widgets/pupil_set_avatar.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_helper_functions.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:widget_zoom/widget_zoom.dart';
 
 class AvatarData {
-  final String? avatarUrl;
+  final String? avatarId;
   final int internalId;
   final double size;
 
   AvatarData(
-      {required this.avatarUrl, required this.internalId, required this.size});
+      {required this.avatarId, required this.internalId, required this.size});
 }
 
 class AvatarImage extends StatelessWidget {
@@ -28,14 +28,14 @@ class AvatarImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final avatarUrl = Provider.of<AvatarData>(context).avatarUrl;
+    final avatarId = Provider.of<AvatarData>(context).avatarId;
     final internalId = Provider.of<AvatarData>(context).internalId;
     final size = Provider.of<AvatarData>(context).size;
     return SizedBox(
       width: size,
       height: size,
       child: Center(
-        child: avatarUrl != null
+        child: avatarId != null
             ? WidgetZoom(
                 heroAnimationTag: internalId,
                 zoomWidget: FutureBuilder<Widget>(
@@ -75,13 +75,13 @@ class AvatarImage extends StatelessWidget {
                     position: position,
                     items: [
                       PopupMenuItem(
-                        child: avatarUrl == null
+                        child: avatarId == null
                             ? const Text('Foto hochladen')
                             : const Text('Foto ersetzen'),
                         onTap: () => setAvatar(context,
                             locator<PupilManager>().findPupilById(internalId)),
                       ),
-                      if (avatarUrl != null)
+                      if (avatarId != null)
                         PopupMenuItem(
                           child: const Text('Foto löschen'),
                           onTap: () async {
@@ -122,9 +122,9 @@ class AvatarWithBadges extends WatchingWidget {
             padding: const EdgeInsets.all(4.0),
             child: Provider<AvatarData>.value(
                 updateShouldNotify: (oldValue, newValue) =>
-                    oldValue.avatarUrl != newValue.avatarUrl,
+                    oldValue.avatarId != newValue.avatarId,
                 value: AvatarData(
-                    avatarUrl: pupil.avatarUrl,
+                    avatarId: pupil.avatarId,
                     internalId: pupil.internalId,
                     size: size),
                 child: const AvatarImage()),
@@ -159,7 +159,7 @@ class AvatarWithBadges extends WatchingWidget {
               width: 30.0,
               height: 30.0,
               decoration: BoxDecoration(
-                color: SchoolEventHelper.pupilIsAdmonishedToday(pupil)
+                color: SchoolDayEventHelper.pupilIsAdmonishedToday(pupil)
                     ? Colors.red
                     : schoolyearColor,
                 shape: BoxShape.circle,

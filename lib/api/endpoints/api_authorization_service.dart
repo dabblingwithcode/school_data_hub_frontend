@@ -10,7 +10,6 @@ import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 
 class ApiAuthorizationService {
   final _client = locator.get<ApiManager>().dioClient.value;
@@ -49,7 +48,7 @@ class ApiAuthorizationService {
   static const String _postAuthorizationWithPupilsFromListUrl =
       '/authorizations/new/list';
 
-  Future<List<PupilData>> postAuthorizationWithPupils(
+  Future<Authorization> postAuthorizationWithPupils(
       String name, String description, List<int> pupilIds) async {
     notificationManager.isRunningValue(true);
 
@@ -61,7 +60,7 @@ class ApiAuthorizationService {
 
     final Response response =
         await _client.post(_postAuthorizationWithPupilsFromListUrl, data: data);
-
+    notificationManager.isRunningValue(false);
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,
           'Einwilligungen konnten nicht erstellt werden');
@@ -71,12 +70,9 @@ class ApiAuthorizationService {
       throw ApiException('Failed to post authorization', response.statusCode);
     }
 
-    final List<PupilData> responsePupils =
-        (response.data as List).map((e) => PupilData.fromJson(e)).toList();
+    final authorization = Authorization.fromJson(response.data);
 
-    notificationManager.isRunningValue(false);
-
-    return responsePupils;
+    return authorization;
   }
 
   //-PUPIL AUTHORIZATIONS -------------------------------------------
@@ -87,28 +83,26 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$pupilId/$authorizationId/new';
   }
 
-  Future<PupilData> postPupilAuthorization(int pupilId, String authId) async {
+  Future<Authorization> postPupilAuthorization(
+      int pupilId, String authId) async {
     notificationManager.isRunningValue(true);
 
-    final data =
-        jsonEncode({"comment": null, "file_url": null, "status": null});
+    final data = jsonEncode({"comment": null, "file_id": null, "status": null});
 
     final response = await _client
         .post(_postPupilAuthorizationUrl(pupilId, authId), data: data);
+
+    notificationManager.isRunningValue(false);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Error: ${response.data}');
 
-      notificationManager.isRunningValue(false);
-
       throw ApiException(
           'Failed to post pupil authorization', response.statusCode);
     }
 
-    notificationManager.isRunningValue(false);
-
-    return PupilData.fromJson(response.data);
+    return Authorization.fromJson(response.data);
   }
 
   //- post pupil authorizations for a list of pupils as members of an authorization
@@ -117,7 +111,7 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$authorizationId/list';
   }
 
-  Future<List<PupilData>> postPupilAuthorizations(
+  Future<Authorization> postPupilAuthorizations(
       List<int> pupilIds, String authId) async {
     notificationManager.isRunningValue(true);
 
@@ -125,7 +119,7 @@ class ApiAuthorizationService {
 
     final response =
         await _client.post(_postPupilAuthorizationsUrl(authId), data: data);
-
+    notificationManager.isRunningValue(false);
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,
           'Es konnten keine Einwilligungen erstellt werden');
@@ -135,13 +129,9 @@ class ApiAuthorizationService {
       throw ApiException(
           'Failed to post pupil authorizations', response.statusCode);
     }
+    final Authorization authorization = Authorization.fromJson(response.data);
 
-    final List<PupilData> responsePupils = (List<PupilData>.from(
-        (response.data as List).map((e) => PupilData.fromJson(e))));
-
-    notificationManager.isRunningValue(false);
-
-    return responsePupils;
+    return authorization;
   }
 
   //- delete pupil authorization
@@ -150,11 +140,13 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$pupilId/$authorizationId';
   }
 
-  Future<PupilData> deletePupilAuthorization(int pupilId, String authId) async {
+  Future<Authorization> deletePupilAuthorization(
+      int pupilId, String authId) async {
     notificationManager.isRunningValue(true);
 
     final response =
         await _client.delete(_deletePupilAuthorizationUrl(pupilId, authId));
+    notificationManager.isRunningValue(false);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(NotificationType.error,
@@ -166,11 +158,9 @@ class ApiAuthorizationService {
           'Failed to delete pupil authorization', response.statusCode);
     }
 
-    final pupil = PupilData.fromJson(response.data);
+    final authorization = Authorization.fromJson(response.data);
 
-    notificationManager.isRunningValue(false);
-
-    return pupil;
+    return authorization;
   }
 
   //- patch pupil authorization
@@ -179,7 +169,7 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$pupilId/$authorizationId';
   }
 
-  Future<PupilData> updatePupilAuthorizationProperty(
+  Future<Authorization> updatePupilAuthorizationProperty(
       int pupilId, String listId, bool? value, String? comment) async {
     notificationManager.isRunningValue(true);
 
@@ -195,6 +185,8 @@ class ApiAuthorizationService {
     final response = await _client
         .patch(_patchPupilAuthorizationUrl(pupilId, listId), data: data);
 
+    notificationManager.isRunningValue(false);
+
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Einwilligung konnte nicht geändert werden');
@@ -205,11 +197,9 @@ class ApiAuthorizationService {
           'Failed to patch pupil authorization', response.statusCode);
     }
 
-    final pupil = PupilData.fromJson(response.data);
+    final authorization = Authorization.fromJson(response.data);
 
-    notificationManager.isRunningValue(false);
-
-    return pupil;
+    return authorization;
   }
 
   // - patch pupil authorization with file
@@ -218,7 +208,7 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$pupilId/$authorizationId/file';
   }
 
-  Future<PupilData> postAuthorizationFile(
+  Future<Authorization> postAuthorizationFile(
     File file,
     int pupilId,
     String authId,
@@ -237,7 +227,7 @@ class ApiAuthorizationService {
         },
       ),
     );
-
+    notificationManager.isRunningValue(false);
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Error: ${response.data}');
@@ -248,11 +238,7 @@ class ApiAuthorizationService {
           'Failed to post pupil authorization file', response.statusCode);
     }
 
-    final PupilData responsePupil = PupilData.fromJson(response.data);
-
-    notificationManager.isRunningValue(false);
-
-    return responsePupil;
+    return Authorization.fromJson(response.data);
   }
 
 //- delete pupil authorization file
@@ -261,13 +247,13 @@ class ApiAuthorizationService {
     return '/pupil_authorizations/$pupilId/$authorizationId/file';
   }
 
-  Future<PupilData> deleteAuthorizationFile(
+  Future<Authorization> deleteAuthorizationFile(
       int pupilId, String authId, String cacheKey) async {
     notificationManager.isRunningValue(true);
 
     final Response response =
         await _client.delete(_deletePupilAuthorizationFileUrl(pupilId, authId));
-
+    notificationManager.isRunningValue(false);
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
           NotificationType.error, 'Error: ${response.data}');
@@ -282,12 +268,7 @@ class ApiAuthorizationService {
     final cacheManager = DefaultCacheManager();
     await cacheManager.removeFile(cacheKey);
 
-    // Then we patch the pupil with the data
-    final PupilData pupil = PupilData.fromJson(response.data);
-
-    notificationManager.isRunningValue(false);
-
-    return pupil;
+    return Authorization.fromJson(response.data);
   }
 
   //-dieser Endpoint wird in widgets benutzt

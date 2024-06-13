@@ -2,7 +2,6 @@
 import 'package:json_annotation/json_annotation.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/attendance/models/missed_class.dart';
-import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
 import 'package:schuldaten_hub/features/books/models/pupil_book.dart';
 import 'package:schuldaten_hub/features/competence/models/competence_check.dart';
 import 'package:schuldaten_hub/features/competence/models/competence_goal.dart';
@@ -16,8 +15,8 @@ part 'pupil_data.g.dart';
 
 @JsonSerializable()
 class PupilData {
-  @JsonKey(name: 'avatar_url')
-  final String? avatarUrl;
+  @JsonKey(name: 'avatar_id')
+  final String? avatarId;
   @JsonKey(name: 'communication_pupil')
   final String? communicationPupil;
   @JsonKey(name: 'communication_tutor1')
@@ -46,6 +45,8 @@ class PupilData {
   int? preschoolRevision;
   @JsonKey(name: 'special_information')
   final String? specialInformation;
+  @JsonKey(name: 'emergency_care')
+  bool? emergencyCare;
   @JsonKey(name: 'competence_checks')
   List<CompetenceCheck> competenceChecks;
   @JsonKey(name: 'pupil_category_statuses')
@@ -54,15 +55,14 @@ class PupilData {
   final List<SchooldayEvent> schooldayEvents;
   @JsonKey(name: 'pupil_books')
   final List<PupilBook> pupilBooks;
-  @JsonKey(name: 'pupil_lists')
-  final List<PupilList> pupilLists;
+
   @JsonKey(name: 'pupil_goals')
   final List<PupilGoal> pupilGoals;
   @JsonKey(name: 'pupil_missed_classes')
   final List<MissedClass> pupilMissedClasses;
   @JsonKey(name: 'pupil_workbooks')
   final List<PupilWorkbook> pupilWorkbooks;
-  final List<PupilAuthorization> authorizations;
+
   @JsonKey(name: "credit_history_logs")
   final List<CreditHistoryLog> creditHistoryLogs;
   @JsonKey(name: "competence_goals")
@@ -74,7 +74,7 @@ class PupilData {
   Map<String, dynamic> toJson() => _$PupilDataToJson(this);
 
   PupilData({
-    required this.avatarUrl,
+    required this.avatarId,
     required this.communicationPupil,
     required this.communicationTutor1,
     required this.communicationTutor2,
@@ -89,14 +89,14 @@ class PupilData {
     required this.ogsInfo,
     required this.pickUpTime,
     required this.specialInformation,
+    required this.preschoolRevision,
+    required this.emergencyCare,
     required this.pupilCategoryStatuses,
     required this.schooldayEvents,
     required this.pupilBooks,
-    required this.pupilLists,
     required this.pupilGoals,
     required this.pupilMissedClasses,
     required this.pupilWorkbooks,
-    required this.authorizations,
     required this.creditHistoryLogs,
     required this.competenceGoals,
     required this.competenceChecks,

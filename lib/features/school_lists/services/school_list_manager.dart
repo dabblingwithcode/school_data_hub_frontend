@@ -1,29 +1,35 @@
+import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/api/api.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
+import 'package:schuldaten_hub/common/utils/logger.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/common/models/session_models/session.dart';
-import 'package:schuldaten_hub/api/services/api_manager.dart';
+
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
-import 'package:schuldaten_hub/common/services/session_manager.dart';
+import 'package:schuldaten_hub/features/school_lists/services/school_list_filter_manager.dart';
 
 class SchoolListManager {
   ValueListenable<List<SchoolList>> get schoolLists => _schoolLists;
 
-  ValueListenable<List<PupilList>> get pupilListsInSchoolList =>
-      _pupilListsInSchoolList;
+  ValueListenable<List<PupilList>> get pupilSchoolLists => _pupilSchoolLists;
+  ValueListenable<Map<int, List<PupilList>>> get pupilListMap => _pupilListMap;
 
-  final _pupilListsInSchoolList = ValueNotifier<List<PupilList>>([]);
+  final _pupilSchoolLists = ValueNotifier<List<PupilList>>([]);
+
   final _schoolLists = ValueNotifier<List<SchoolList>>([]);
+  final _pupilListMap = ValueNotifier<Map<int, List<PupilList>>>({});
 
-  final client = locator.get<ApiManager>().dioClient.value;
+  // Let's define maps to make lookups faster
+  // with the key being the listId
+  Map<String, SchoolList> _schoolListMap = {};
 
-  SchoolListManager();
+  SchoolListManager() {
+    logger.i('SchoolListManager constructor called');
+  }
 
   Future<SchoolListManager> init() async {
     await fetchSchoolLists();
@@ -32,9 +38,72 @@ class SchoolListManager {
 
   final notificationManager = locator<NotificationManager>();
   final ApiSchoolListService apiSchoolListService = ApiSchoolListService();
+  final SchoolListFilterManager schoolListFilterManager =
+      locator<SchoolListFilterManager>();
+  //- Helper functions
 
   SchoolList getSchoolListById(String listId) {
-    return _schoolLists.value.firstWhere((element) => element.listId == listId);
+    return _schoolListMap[listId]!;
+  }
+
+  // SchoolList getSchoolList(String listId) {
+  //   final SchoolList schoolList =
+  //       _schoolLists.value.where((element) => element.listId == listId).first;
+  //   return schoolList;
+  // }
+
+  //- Helper functions
+
+  List<PupilList> getPupilListsFromPupilByPupilId(int pupilId) {
+    return _pupilListMap.value[pupilId]!;
+  }
+
+  PupilList? getPupilSchoolListEntry(
+      {required int pupilId, required String listId}) {
+    return _pupilListMap.value[pupilId]!
+        .where((element) => element.originList == listId)
+        .first;
+  }
+
+  List<PupilProxy> getPupilsinSchoolList(String listId) {
+    final List<PupilProxy> pupils = locator<PupilManager>().allPupils;
+    List<PupilProxy> listedPupils = [];
+    for (PupilList pupilList in _schoolListMap[listId]!.pupilLists) {
+      final PupilProxy? pupil = pupils.firstWhereOrNull(
+          (element) => element.internalId == pupilList.listedPupilId);
+      if (pupil != null) {
+        listedPupils.add(pupil);
+      }
+    }
+
+    return listedPupils;
+  }
+
+  List<PupilProxy> pupilsInSchoolList(String listId, List<PupilProxy> pupils) {
+    List<PupilProxy> pupilsInList = getPupilsinSchoolList(listId);
+    return pupils
+        .where((pupil) => pupilsInList
+            .any((element) => element.internalId == pupil.internalId))
+        .toList();
+  }
+
+  //- Repository functions
+
+  void _updatePupilListsFromSchoolList(SchoolList schoolList) {
+    final List<PupilList> pupilLists = schoolList.pupilLists;
+    for (final pupilList in pupilLists) {
+      if (!_pupilListMap.value.containsKey(pupilList.listedPupilId)) {
+        _pupilListMap.value[pupilList.listedPupilId] = [];
+      }
+      Set<PupilList> pupilListEntries =
+          _pupilListMap.value[pupilList.listedPupilId]!.toSet();
+      pupilListEntries.add(pupilList);
+      _pupilListMap.value[pupilList.listedPupilId] = pupilListEntries.toList();
+    }
+    _pupilSchoolLists.value =
+        _pupilListMap.value.values.expand((list) => list).toList();
+
+    return;
   }
 
   Future<void> fetchSchoolLists() async {
@@ -44,7 +113,13 @@ class SchoolListManager {
     notificationManager.showSnackBar(NotificationType.success,
         '${responseSchoolLists.length} Schullisten geladen!');
 
-    _schoolLists.value = responseSchoolLists;
+    for (final schoolList in responseSchoolLists) {
+      _schoolListMap[schoolList.listId] = schoolList;
+      // go through the pupil lists and add them to the map
+      // with the key being the pupilId
+      _updatePupilListsFromSchoolList(schoolList);
+    }
+    _updateRepositories();
 
     return;
   }
@@ -59,11 +134,10 @@ class SchoolListManager {
             description: description,
             visibility: visibility);
 
-    List<SchoolList> updatedSchoolLists = List.from(_schoolLists.value);
-    int index =
-        updatedSchoolLists.indexWhere((element) => element.listId == listId);
-    updatedSchoolLists[index] = updatedSchoolList;
-    _schoolLists.value = updatedSchoolLists;
+    _schoolListMap[updatedSchoolList.listId] = updatedSchoolList;
+    _updateRepositories();
+
+    _updatePupilListsFromSchoolList(updatedSchoolList);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Schulliste erfolgreich aktualisiert');
@@ -74,29 +148,28 @@ class SchoolListManager {
   Future<void> deleteSchoolList(String listId) async {
     final List<SchoolList> updatedSchoolLists =
         await apiSchoolListService.deleteSchoolList(listId);
-    _schoolLists.value = updatedSchoolLists;
+
+    // first delete the pupil lists from the map
+    for (final pupilList in _schoolListMap[listId]!.pupilLists) {
+      _pupilListMap.value[pupilList.listedPupilId]!.remove(pupilList);
+      _pupilSchoolLists.value =
+          _pupilListMap.value.values.expand((list) => list).toList();
+    }
+    _schoolListMap.clear();
+    for (final schoolList in updatedSchoolLists) {
+      _schoolListMap[schoolList.listId] = schoolList;
+      _schoolLists.value = _schoolListMap.values.toList();
+      // go through the pupil lists and add them to the map
+      // with the key being the pupilId
+      _updatePupilListsFromSchoolList(schoolList);
+    }
+
+    _updateRepositories();
+
     notificationManager.showSnackBar(
         NotificationType.success, 'Schulliste erfolgreich gelöscht');
 
     return;
-  }
-
-  //- this one does not use the api
-  SchoolList getSchoolList(String listId) {
-    final SchoolList schoolList =
-        _schoolLists.value.where((element) => element.listId == listId).first;
-    return schoolList;
-  }
-
-  //- this one does not use the api
-  List<PupilList> getVisibleSchoolLists(PupilProxy pupil) {
-    final Session session = locator<SessionManager>().credentials.value;
-    List<PupilList> visiblePupilLists = pupil.pupilLists!
-        .where((pupilList) =>
-            getSchoolList(pupilList.originList).visibility == 'public' ||
-            getSchoolList(pupilList.originList).createdBy == session.username)
-        .toList();
-    return visiblePupilLists;
   }
 
   Future<void> postSchoolListWithGroup(
@@ -111,22 +184,22 @@ class SchoolListManager {
             pupilIds: pupilIds,
             visibility: visibility);
 
-    List<SchoolList> updatedSchoolLists = List.from(_schoolLists.value);
-    updatedSchoolLists.add(newList);
-    _schoolLists.value = updatedSchoolLists;
+    _schoolListMap[newList.listId] = newList;
+    _updateRepositories();
 
-    await locator<PupilManager>().fetchPupilsByInternalId(pupilIds);
+    notificationManager.showSnackBar(
+        NotificationType.success, 'Schulliste erfolgreich erstellt');
 
     return;
   }
 
   Future<void> addPupilsToSchoolList(String listId, List<int> pupilIds) async {
-    final List<PupilData> responsePupils =
-        await apiSchoolListService.addPupilsToSchoolList(listId, pupilIds);
+    final SchoolList updatedSchoolList = await apiSchoolListService
+        .addPupilsToSchoolList(listId: listId, pupilIds: pupilIds);
 
-    for (PupilData pupil in responsePupils) {
-      locator<PupilManager>().updatePupilProxyWithPupilData(pupil);
-    }
+    _schoolListMap[updatedSchoolList.listId] = updatedSchoolList;
+    _updateRepositories();
+    _updatePupilListsFromSchoolList(updatedSchoolList);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Schüler erfolgreich hinzugefügt');
@@ -140,28 +213,29 @@ class SchoolListManager {
   ) async {
     // The response are the updated pupils whose pupil list was deleted
 
-    final List<PupilData> responsePupils =
+    final SchoolList updatedSchoolList =
         await apiSchoolListService.deletePupilsFromSchoolList(
       pupilIds: pupilIds,
       listId: listId,
     );
+    _schoolListMap[updatedSchoolList.listId] = updatedSchoolList;
+    _updateRepositories();
+    _updatePupilListsFromSchoolList(updatedSchoolList);
 
-    for (PupilData pupil in responsePupils) {
-      locator<PupilManager>().updatePupilProxyWithPupilData(pupil);
-    }
     notificationManager.showSnackBar(
         NotificationType.success, 'Schülereinträge erfolgreich gelöscht');
 
     return;
   }
 
-  Future<void> patchSchoolListPupil(
+  Future<void> patchPupilList(
       int pupilId, String listId, bool? value, String? comment) async {
-    final PupilData responsePupil =
+    final SchoolList updatedSchoolList =
         await apiSchoolListService.patchSchoolListPupil(
             pupilId: pupilId, listId: listId, value: value, comment: comment);
-
-    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
+    _schoolListMap[updatedSchoolList.listId] = updatedSchoolList;
+    _updateRepositories();
+    _updatePupilListsFromSchoolList(updatedSchoolList);
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Eintrag erfolgreich aktualisiert');
@@ -169,34 +243,8 @@ class SchoolListManager {
     return;
   }
 
-  //- this functions are not calling the Api
-
-  PupilList getPupilSchoolListEntry(int pupilId, String listId) {
-    final PupilProxy pupil = locator<PupilManager>()
-        .allPupils
-        .where((element) => element.internalId == pupilId)
-        .first;
-
-    final PupilList pupilSchoolListEntry = pupil.pupilLists!
-        .where((element) => element.originList == listId)
-        .first;
-    return pupilSchoolListEntry;
-  }
-
-  List<PupilProxy> getPupilsinSchoolList(String listId) {
-    final List<PupilProxy> pupils = locator<PupilManager>().allPupils;
-    final List<PupilProxy> listedPupils = pupils
-        .where((pupil) => pupil.pupilLists!
-            .any((pupilList) => pupilList.originList == listId))
-        .toList();
-    return listedPupils;
-  }
-
-  List<PupilProxy> pupilsInSchoolList(String listId, List<PupilProxy> pupils) {
-    List<PupilProxy> pupilsInList = getPupilsinSchoolList(listId);
-    return pupils
-        .where((pupil) => pupilsInList
-            .any((element) => element.internalId == pupil.internalId))
-        .toList();
+  void _updateRepositories() {
+    _schoolLists.value = _schoolListMap.values.toList();
+    schoolListFilterManager.updateFilteredSchoolLists(_schoolLists.value);
   }
 }

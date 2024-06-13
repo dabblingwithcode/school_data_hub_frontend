@@ -41,21 +41,18 @@ Map<String, int> schoolListStats(
   int countNull = 0;
   int countComment = 0;
   for (PupilProxy pupil in pupilsInList) {
-    // if the pupil has a list with the same id as the current list
-    if (pupil.pupilLists != null) {
-      PupilList? listMatch = pupil.pupilLists
-          ?.firstWhere((element) => element.originList == schoolList.listId);
-      if (listMatch != null) {
-        listMatch.pupilListStatus == true
+    for (PupilList pupilList in schoolList.pupilLists) {
+      if (pupilList.listedPupilId == pupil.internalId) {
+        pupilList.pupilListStatus == true
             ? countYes++
-            : listMatch.pupilListStatus == false
+            : pupilList.pupilListStatus == false
                 ? countNo++
                 : countNull++;
+        pupilList.pupilListComment != null &&
+                pupilList.pupilListComment!.isNotEmpty
+            ? countComment++
+            : countComment;
       }
-      listMatch!.pupilListComment != null &&
-              listMatch.pupilListComment!.isNotEmpty
-          ? countComment++
-          : countComment;
     }
   }
   return {

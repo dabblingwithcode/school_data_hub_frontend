@@ -17,8 +17,8 @@ SchooldayEvent _$SchooldayEventFromJson(Map<String, dynamic> json) =>
       processedAt: json['processed_at'] == null
           ? null
           : DateTime.parse(json['processed_at'] as String),
-      fileUrl: json['file_url'] as String?,
-      processedFileUrl: json['processed_file_url'] as String?,
+      fileId: json['file_id'] as String?,
+      processedFileId: json['processed_file_id'] as String?,
       schooldayEventDate: DateTime.parse(json['admonished_day'] as String),
       admonishedPupilId: (json['admonished_pupil_id'] as num).toInt(),
     );
@@ -32,8 +32,8 @@ Map<String, dynamic> _$SchooldayEventToJson(SchooldayEvent instance) =>
       'processed': instance.processed,
       'processed_by': instance.processedBy,
       'processed_at': instance.processedAt?.toIso8601String(),
-      'file_url': instance.fileUrl,
-      'processed_file_url': instance.processedFileUrl,
+      'file_id': instance.fileId,
+      'processed_file_id': instance.processedFileId,
       'admonished_day': instance.schooldayEventDate.toIso8601String(),
       'admonished_pupil_id': instance.admonishedPupilId,
     };

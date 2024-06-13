@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupils_filter.dart';
 
 import 'package:watch_it/watch_it.dart';
 
@@ -58,9 +59,18 @@ class CommonPupilFiltersWidget extends WatchingWidget {
           children: [
             for (final schoolGradeFilter in schoolGradeFilters)
               FilterChip(
+                autofocus: true,
+                elevation: 0,
+                pressElevation: 0,
                 padding: filterChipPadding,
                 labelPadding: filterChipLabelPadding,
                 shape: filterChipShape,
+                avatar: const CircleAvatar(
+                  backgroundColor: Colors.transparent,
+                  child: SizedBox(
+                    width: 10,
+                  ),
+                ),
                 selectedColor: filterChipSelectedColor,
                 checkmarkColor: filterChipSelectedCheckColor,
                 backgroundColor: filterChipUnselectedColor,
@@ -102,6 +112,9 @@ class CommonPupilFiltersWidget extends WatchingWidget {
                 padding: filterChipPadding,
                 labelPadding: filterChipLabelPadding,
                 shape: filterChipShape,
+                avatar: const SizedBox(
+                  width: 10,
+                ),
                 selectedColor: filterChipSelectedColor,
                 checkmarkColor: filterChipSelectedCheckColor,
                 backgroundColor: filterChipUnselectedColor,

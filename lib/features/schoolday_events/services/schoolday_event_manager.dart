@@ -73,7 +73,8 @@ class SchooldayEventManager {
       String? reason,
       bool? processed,
       String? processedBy,
-      DateTime? processedAt}) async {
+      DateTime? processedAt,
+      DateTime? admonishedDay}) async {
     final PupilData responsePupil =
         await apiSchooldayEventService.patchSchooldayEvent(
             schooldayEventId: schooldayEventId,
@@ -81,7 +82,8 @@ class SchooldayEventManager {
             reason: reason,
             processed: processed,
             processedBy: processedBy,
-            processedAt: processedAt);
+            processedAt: processedAt,
+            admonishedDay: admonishedDay);
 
     pupilManager.updatePupilProxyWithPupilData(responsePupil);
 

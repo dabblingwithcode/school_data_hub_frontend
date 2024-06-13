@@ -4,10 +4,11 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
+import 'package:schuldaten_hub/common/widgets/filter_button.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/ogs_filter_bottom_sheet.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupils_filter.dart';
 
 class OgsListPageBottomNavBar extends StatelessWidget {
   final bool filtersOn;
@@ -48,22 +49,10 @@ class OgsListPageBottomNavBar extends StatelessWidget {
                 },
               ),
               const Gap(30),
-              InkWell(
-                onTap: () => showOgsFilterBottomSheet(context),
-                onLongPress: () {
-                  locator<PupilsFilter>().resetFilters();
-
-                  locator<PupilFilterManager>()
-                      .setFilter(PupilFilter.ogs, true);
-                  locator<PupilFilterManager>().filtersOnSwitch(false);
-                },
-                child: Icon(
-                  Icons.filter_list,
-                  color: filtersOn ? Colors.deepOrange : Colors.white,
-                  size: 30,
-                ),
-              ),
-              const Gap(10)
+              const FilterButton(
+                  isSearchBar: true,
+                  showBottomSheetFunction: showOgsFilterBottomSheet),
+              const Gap(15)
             ],
           ),
         ),

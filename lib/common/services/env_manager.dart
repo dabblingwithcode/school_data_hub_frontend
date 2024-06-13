@@ -7,7 +7,7 @@ import 'package:schuldaten_hub/common/models/session_models/env.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/utils/logger.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
-import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
+import 'package:schuldaten_hub/features/main_menu_pages/widgets/landing_bottom_nav_bar.dart';
 
 class EnvManager {
   ValueListenable<Env> get env => _env;
@@ -108,7 +108,7 @@ class EnvManager {
   deleteTestEnv() async {
     _testEnv.value = Env();
     await secureStorageDelete('testEnv');
-    //await secureStorageDelete('pupilBase');
+    //await secureStorageDelete('pupilIdentities');
     locator.get<BottomNavManager>().setBottomNavPage(0);
   }
 
@@ -116,7 +116,7 @@ class EnvManager {
     _env.value = Env();
     _envReady.value = false;
     await secureStorageDelete('env');
-    //await secureStorageDelete('pupilBase');
+    //await secureStorageDelete('pupilIdentities');
     locator.get<BottomNavManager>().setBottomNavPage(0);
   }
 }

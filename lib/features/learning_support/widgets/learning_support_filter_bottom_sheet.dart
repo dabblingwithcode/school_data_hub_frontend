@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/common_pupil_filters.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupil_filter_manager.dart';
 import 'package:watch_it/watch_it.dart';
 
 class LearningSupportFilterBottomSheet extends WatchingWidget {
@@ -58,6 +58,9 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
                       labelPadding: filterChipLabelPadding,
                       shape: filterChipShape,
                       selectedColor: filterChipSelectedColor,
+                      avatar: const SizedBox(
+                        width: 10,
+                      ),
                       checkmarkColor: filterChipSelectedCheckColor,
                       backgroundColor: filterChipUnselectedColor,
                       label: const Text(
@@ -78,6 +81,9 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
                       labelPadding: filterChipLabelPadding,
                       shape: filterChipShape,
                       selectedColor: filterChipSelectedColor,
+                      avatar: const SizedBox(
+                        width: 10,
+                      ),
                       checkmarkColor: filterChipSelectedCheckColor,
                       backgroundColor: filterChipUnselectedColor,
                       label: const Text(
@@ -98,6 +104,9 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
                       labelPadding: filterChipLabelPadding,
                       shape: filterChipShape,
                       selectedColor: filterChipSelectedColor,
+                      avatar: const SizedBox(
+                        width: 10,
+                      ),
                       checkmarkColor: filterChipSelectedCheckColor,
                       backgroundColor: filterChipUnselectedColor,
                       label: const Text(
@@ -118,6 +127,9 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
                       labelPadding: filterChipLabelPadding,
                       shape: filterChipShape,
                       selectedColor: filterChipSelectedColor,
+                      avatar: const SizedBox(
+                        width: 10,
+                      ),
                       checkmarkColor: filterChipSelectedCheckColor,
                       backgroundColor: filterChipUnselectedColor,
                       label: const Text(
@@ -152,6 +164,9 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
                       labelPadding: filterChipLabelPadding,
                       shape: filterChipShape,
                       selectedColor: filterChipSelectedColor,
+                      avatar: const SizedBox(
+                        width: 10,
+                      ),
                       checkmarkColor: filterChipSelectedCheckColor,
                       backgroundColor: filterChipUnselectedColor,
                       label: const Text(
@@ -172,6 +187,9 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
                       labelPadding: filterChipLabelPadding,
                       shape: filterChipShape,
                       selectedColor: filterChipSelectedColor,
+                      avatar: const SizedBox(
+                        width: 10,
+                      ),
                       checkmarkColor: filterChipSelectedCheckColor,
                       backgroundColor: filterChipUnselectedColor,
                       label: const Text(
@@ -192,6 +210,9 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
                       labelPadding: filterChipLabelPadding,
                       shape: filterChipShape,
                       selectedColor: filterChipSelectedColor,
+                      avatar: const SizedBox(
+                        width: 10,
+                      ),
                       checkmarkColor: filterChipSelectedCheckColor,
                       backgroundColor: filterChipUnselectedColor,
                       label: const Text(
@@ -212,6 +233,9 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
                       labelPadding: filterChipLabelPadding,
                       shape: filterChipShape,
                       selectedColor: filterChipSelectedColor,
+                      avatar: const SizedBox(
+                        width: 10,
+                      ),
                       checkmarkColor: filterChipSelectedCheckColor,
                       backgroundColor: filterChipUnselectedColor,
                       label: const Text(
@@ -232,6 +256,9 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
                       labelPadding: filterChipLabelPadding,
                       shape: filterChipShape,
                       selectedColor: filterChipSelectedColor,
+                      avatar: const SizedBox(
+                        width: 10,
+                      ),
                       checkmarkColor: filterChipSelectedCheckColor,
                       backgroundColor: filterChipUnselectedColor,
                       label: const Text(
@@ -252,6 +279,9 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
                       labelPadding: filterChipLabelPadding,
                       shape: filterChipShape,
                       selectedColor: filterChipSelectedColor,
+                      avatar: const SizedBox(
+                        width: 10,
+                      ),
                       checkmarkColor: filterChipSelectedCheckColor,
                       backgroundColor: filterChipUnselectedColor,
                       label: const Text(
@@ -272,6 +302,9 @@ class LearningSupportFilterBottomSheet extends WatchingWidget {
                       labelPadding: filterChipLabelPadding,
                       shape: filterChipShape,
                       selectedColor: filterChipSelectedColor,
+                      avatar: const SizedBox(
+                        width: 10,
+                      ),
                       checkmarkColor: filterChipSelectedCheckColor,
                       backgroundColor: filterChipUnselectedColor,
                       label: const Text(

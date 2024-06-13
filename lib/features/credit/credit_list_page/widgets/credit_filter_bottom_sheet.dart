@@ -5,7 +5,7 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/constants/styles.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/common_pupil_filters.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupils_filter.dart';
 import 'package:watch_it/watch_it.dart';
 
 class CreditFilterBottomSheet extends WatchingWidget {
@@ -22,98 +22,119 @@ class CreditFilterBottomSheet extends WatchingWidget {
           child: Column(
             children: [
               const FilterHeading(),
-              const CommonPupilFiltersWidget(),
-              const Row(
-                children: [
-                  Text(
-                    'Sortieren',
-                    style: subtitle,
-                  )
-                ],
-              ),
-              const Gap(5),
-              Wrap(
-                spacing: 5,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  FilterChip(
-                    padding: filterChipPadding,
-                    labelPadding: filterChipLabelPadding,
-                    shape: filterChipShape,
-                    selectedColor: filterChipSelectedColor,
-                    checkmarkColor: filterChipSelectedCheckColor,
-                    backgroundColor: filterChipUnselectedColor,
-                    label: const Text(
-                      'A-Z',
-                      style: filterItemsTextStyle,
-                    ),
-                    selected: sortModeValue == PupilSortMode.sortByName
-                        ? true
-                        : false,
-                    onSelected: (val) {
-                      // if the filter is already selected, do nothing
-                      if (locator<PupilsFilter>().sortMode.value ==
-                          PupilSortMode.sortByName) {
-                        return;
-                      }
-                      // set the filter
-                      locator<PupilsFilter>()
-                          .setSortMode(PupilSortMode.sortByName);
-                    },
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      const CommonPupilFiltersWidget(),
+                      const Row(
+                        children: [
+                          Text(
+                            'Sortieren',
+                            style: subtitle,
+                          )
+                        ],
+                      ),
+                      const Gap(5),
+                      Wrap(
+                        spacing: 5,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          FilterChip(
+                            padding: filterChipPadding,
+                            labelPadding: filterChipLabelPadding,
+                            shape: filterChipShape,
+                            selectedColor: filterChipSelectedColor,
+                            avatar: const SizedBox(
+                              width: 10,
+                            ),
+                            checkmarkColor: filterChipSelectedCheckColor,
+                            backgroundColor: filterChipUnselectedColor,
+                            label: const Text(
+                              'A-Z',
+                              style: filterItemsTextStyle,
+                            ),
+                            selected: sortModeValue == PupilSortMode.sortByName
+                                ? true
+                                : false,
+                            onSelected: (val) {
+                              // if the filter is already selected, do nothing
+                              if (locator<PupilsFilter>().sortMode.value ==
+                                  PupilSortMode.sortByName) {
+                                return;
+                              }
+                              // set the filter
+                              locator<PupilsFilter>()
+                                  .setSortMode(PupilSortMode.sortByName);
+                            },
+                          ),
+                          FilterChip(
+                            padding: filterChipPadding,
+                            labelPadding: filterChipLabelPadding,
+                            shape: filterChipShape,
+                            selectedColor: filterChipSelectedColor,
+                            avatar: const SizedBox(
+                              width: 10,
+                            ),
+                            checkmarkColor: filterChipSelectedCheckColor,
+                            backgroundColor: filterChipUnselectedColor,
+                            label: const Text(
+                              'nach Guthaben',
+                              style: filterItemsTextStyle,
+                            ),
+                            selected:
+                                sortModeValue == PupilSortMode.sortByCredit
+                                    ? true
+                                    : false,
+                            onSelected: (val) {
+                              // if the filter is already selected, do nothing
+                              if (locator<PupilsFilter>().sortMode.value ==
+                                  PupilSortMode.sortByCredit) {
+                                return;
+                              }
+                              // set the filter
+                              locator<PupilsFilter>().setSortMode(
+                                PupilSortMode.sortByCredit,
+                              );
+                            },
+                          ),
+                          FilterChip(
+                            padding: filterChipPadding,
+                            labelPadding: filterChipLabelPadding,
+                            shape: filterChipShape,
+                            selectedColor: filterChipSelectedColor,
+                            avatar: const SizedBox(
+                              width: 10,
+                            ),
+                            checkmarkColor: filterChipSelectedCheckColor,
+                            backgroundColor: filterChipUnselectedColor,
+                            label: const Text(
+                              'nach Verdienst',
+                              style: filterItemsTextStyle,
+                            ),
+                            selected: sortModeValue ==
+                                    PupilSortMode.sortByCreditEarned
+                                ? true
+                                : false,
+                            onSelected: (val) {
+                              // if the filter is already selected, do nothing
+                              if (locator<PupilsFilter>().sortMode.value ==
+                                  PupilSortMode.sortByCreditEarned) {
+                                return;
+                              }
+                              // set the filter
+                              locator<PupilsFilter>().setSortMode(
+                                PupilSortMode.sortByCreditEarned,
+                              );
+                            },
+                          ),
+                        ],
+                      ),
+                      const Gap(20),
+                    ],
                   ),
-                  FilterChip(
-                    padding: filterChipPadding,
-                    labelPadding: filterChipLabelPadding,
-                    shape: filterChipShape,
-                    selectedColor: filterChipSelectedColor,
-                    checkmarkColor: filterChipSelectedCheckColor,
-                    backgroundColor: filterChipUnselectedColor,
-                    label: const Text(
-                      'nach Guthaben',
-                      style: filterItemsTextStyle,
-                    ),
-                    selected: sortModeValue == PupilSortMode.sortByCredit
-                        ? true
-                        : false,
-                    onSelected: (val) {
-                      // if the filter is already selected, do nothing
-                      if (locator<PupilsFilter>().sortMode.value ==
-                          PupilSortMode.sortByCredit) {
-                        return;
-                      }
-                      // set the filter
-                      locator<PupilsFilter>().setSortMode(
-                        PupilSortMode.sortByCredit,
-                      );
-                    },
-                  ),
-                  FilterChip(
-                    padding: filterChipPadding,
-                    labelPadding: filterChipLabelPadding,
-                    shape: filterChipShape,
-                    selectedColor: filterChipSelectedColor,
-                    checkmarkColor: filterChipSelectedCheckColor,
-                    backgroundColor: filterChipUnselectedColor,
-                    label: const Text(
-                      'nach Verdienst',
-                      style: filterItemsTextStyle,
-                    ),
-                    selected: sortModeValue == PupilSortMode.sortByCreditEarned
-                        ? true
-                        : false,
-                    onSelected: (val) {
-                      // if the filter is already selected, do nothing
-                      if (locator<PupilsFilter>().sortMode.value ==
-                          PupilSortMode.sortByCreditEarned) {
-                        return;
-                      }
-                      // set the filter
-                      locator<PupilsFilter>().setSortMode(
-                        PupilSortMode.sortByCreditEarned,
-                      );
-                    },
-                  ),
-                ],
+                ),
               ),
             ],
           ),

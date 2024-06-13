@@ -69,8 +69,12 @@ class GoalManager {
     String state,
     String comment,
   ) async {
-    final PupilData responsePupil = await apiLearningSupportService
-        .postCategoryStatus(pupil.internalId, goalCategoryId, state, comment);
+    final PupilData responsePupil =
+        await apiLearningSupportService.postCategoryStatus(
+            pupilInternalId: pupil.internalId,
+            goalCategoryId: goalCategoryId,
+            state: state,
+            comment: comment);
 
     locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
 
@@ -80,14 +84,14 @@ class GoalManager {
     return;
   }
 
-  Future<void> updateCategoryStatusProperty(
-    PupilProxy pupil,
-    String statusId,
+  Future<void> updateCategoryStatusProperty({
+    required PupilProxy pupil,
+    required String statusId,
     String? state,
     String? comment,
     String? createdBy,
     String? createdAt,
-  ) async {
+  }) async {
     final PupilData responsePupil =
         await apiLearningSupportService.updateCategoryStatusProperty(
             pupil, statusId, state, comment, createdBy, createdAt);

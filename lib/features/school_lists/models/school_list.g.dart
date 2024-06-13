@@ -13,6 +13,9 @@ SchoolList _$SchoolListFromJson(Map<String, dynamic> json) => SchoolList(
       listName: json['list_name'] as String,
       authorizedUsers: json['authorized_users'] as String?,
       visibility: json['visibility'] as String,
+      pupilLists: (json['pupils_in_list'] as List<dynamic>)
+          .map((e) => PupilList.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$SchoolListToJson(SchoolList instance) =>
@@ -23,4 +26,5 @@ Map<String, dynamic> _$SchoolListToJson(SchoolList instance) =>
       'list_name': instance.listName,
       'authorized_users': instance.authorizedUsers,
       'visibility': instance.visibility,
+      'pupils_in_list': instance.pupilLists,
     };

@@ -16,7 +16,7 @@ class ApiSchoolListService {
 
   //- get school lists
 
-  static const _getSchoolListsUrl = '/school_lists/all/flat';
+  static const _getSchoolListsUrl = '/school_lists/all';
 
   Future<List<SchoolList>> fetchSchoolLists() async {
     notificationManager.isRunningValue(true);
@@ -40,8 +40,9 @@ class ApiSchoolListService {
     return schoolLists;
   }
 
-  //- POST
-  static const _postSchoolListWithGroupUrl = '/school_lists/list';
+  //- post school list
+
+  static const _postSchoolListWithGroupUrl = '/school_lists/new';
 
   Future<SchoolList> postSchoolListWithGroup(
       {required String name,
@@ -71,14 +72,13 @@ class ApiSchoolListService {
 
     final newList = SchoolList.fromJson(response.data);
 
-    //- TODO: hier kommt nur schoollist zurück, es fehlen die pupil lists der SuS,
-    //- die jetzt dirty sind
     return newList;
   }
 
   static const postSchoolList = '/school_lists/all';
 
   //- patch school list
+
   String _patchSchoolListUrl(String listId) {
     return '/school_lists/$listId/patch';
   }
@@ -107,7 +107,6 @@ class ApiSchoolListService {
     final Response response = await _client
         .patch(_patchSchoolListUrl(schoolListToUpdate.listId), data: data);
 
-    //- isRunning direkt nach dem Response überall setzen, zweiten braucht man nicht
     notificationManager.isRunningValue(false);
 
     if (response.statusCode != 200) {
@@ -140,8 +139,6 @@ class ApiSchoolListService {
     final List<SchoolList> schoolLists =
         (response.data as List).map((e) => SchoolList.fromJson(e)).toList();
 
-    notificationManager.isRunningValue(false);
-
     return schoolLists;
   }
 
@@ -153,11 +150,11 @@ class ApiSchoolListService {
     return '/school_lists/$listId/pupils';
   }
 
-  Future<List<PupilData>> addPupilsToSchoolList(
-      String listId, List<int> pupilIds) async {
-    notificationManager.isRunningValue(true);
-
+  Future<SchoolList> addPupilsToSchoolList(
+      {required String listId, required List<int> pupilIds}) async {
     final data = jsonEncode({"pupils": pupilIds});
+
+    notificationManager.isRunningValue(true);
 
     final response =
         await _client.post(_addPupilsToSchoolList(listId), data: data);
@@ -170,11 +167,9 @@ class ApiSchoolListService {
 
       throw ApiException('Failed to delete school list', response.statusCode);
     }
+    final SchoolList updatedSchoolList = SchoolList.fromJson(response.data);
 
-    final List<PupilData> responsePupils =
-        (response.data as List).map((e) => PupilData.fromJson(e)).toList();
-
-    return responsePupils;
+    return updatedSchoolList;
   }
 
   //- update pupil list property
@@ -183,14 +178,12 @@ class ApiSchoolListService {
     return '/pupil_lists/$pupilId/$listId';
   }
 
-  Future<PupilData> patchSchoolListPupil({
+  Future<SchoolList> patchSchoolListPupil({
     required int pupilId,
     required String listId,
     bool? value,
     String? comment,
   }) async {
-    notificationManager.isRunningValue(true);
-
     String data;
 
     if (value != null) {
@@ -206,7 +199,7 @@ class ApiSchoolListService {
             locator<SessionManager>().credentials.value.username
       });
     }
-
+    notificationManager.isRunningValue(true);
     final response =
         await _client.patch(_patchPupilSchoolList(pupilId, listId), data: data);
 
@@ -219,9 +212,9 @@ class ApiSchoolListService {
       throw ApiException('Failed to patch school list', response.statusCode);
     }
 
-    final PupilData responsePupil = PupilData.fromJson(response.data);
+    final SchoolList updatedSchoolList = SchoolList.fromJson(response.data);
 
-    return responsePupil;
+    return updatedSchoolList;
   }
 
   //-DELETE
@@ -229,16 +222,18 @@ class ApiSchoolListService {
     return '/pupil_lists/$listId/delete_pupils';
   }
 
-  Future deletePupilsFromSchoolList({
+  Future<SchoolList> deletePupilsFromSchoolList({
     required List<int> pupilIds,
     required String listId,
   }) async {
-    notificationManager.isRunningValue(true);
-
     final data = jsonEncode({"pupils": pupilIds});
+
+    notificationManager.isRunningValue(true);
 
     final response =
         await _client.post(_deletePupilsFromSchoolList(listId), data: data);
+
+    notificationManager.isRunningValue(false);
 
     if (response.statusCode != 200) {
       notificationManager.showSnackBar(
@@ -247,12 +242,10 @@ class ApiSchoolListService {
       throw ApiException(
           'Failed to delete pupils from school list', response.statusCode);
     }
-    // The response are the updated pupils whose pupil list was deleted
 
-    final List<PupilData> responsePupils =
-        (response.data as List).map((e) => PupilData.fromJson(e)).toList();
+    final SchoolList updatedSchoolList = SchoolList.fromJson(response.data);
 
-    return responsePupils;
+    return updatedSchoolList;
   }
 
   //- this endpoint is not used in the app

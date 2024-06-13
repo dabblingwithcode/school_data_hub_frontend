@@ -3,10 +3,10 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/widgets/bottom_nav_bar_layouts.dart';
+import 'package:schuldaten_hub/common/widgets/filter_button.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_manager.dart';
 import 'package:schuldaten_hub/features/credit/credit_list_page/widgets/credit_filter_bottom_sheet.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
-
+import 'package:schuldaten_hub/features/pupil/filters/pupils_filter.dart';
 
 class CreditListPageBottomNavBar extends StatelessWidget {
   final bool filtersOn;
@@ -54,16 +54,10 @@ Widget creditListViewBottomNavBar(BuildContext context, bool filtersOn) {
                 },
               ),
               const Gap(30),
-              InkWell(
-                onTap: () => showCreditFilterBottomSheet(context),
-                onLongPress: () => locator<PupilsFilter>().resetFilters(),
-                child: Icon(
-                  Icons.filter_list,
-                  color: filtersOn ? Colors.deepOrange : Colors.white,
-                  size: 30,
-                ),
-              ),
-              const Gap(10)
+              const FilterButton(
+                  isSearchBar: false,
+                  showBottomSheetFunction: showCreditFilterBottomSheet),
+              const Gap(15)
             ],
           ),
         ),

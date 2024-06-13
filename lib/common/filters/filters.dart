@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupils_filter.dart';
 
 abstract class Filter<T extends Object> with ChangeNotifier {
   Filter({

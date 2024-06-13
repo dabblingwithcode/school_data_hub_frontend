@@ -73,7 +73,7 @@ class AttendanceManager {
     final List<MissedClass> missedClasses =
         await apiAttendanceService.fetchMissedClassesOnASchoolday(schoolday);
 
-    pupilManager.updatePupilsFromMissedClasses(missedClasses);
+    pupilManager.updatePupilsFromMissedClassesOnASchoolday(missedClasses);
 
     // notificationManager.showSnackBar(
     //     NotificationType.success, 'Fehlzeiten erfolgreich geladen!');

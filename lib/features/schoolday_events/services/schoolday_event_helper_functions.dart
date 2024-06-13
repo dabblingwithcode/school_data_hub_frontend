@@ -1,10 +1,50 @@
+import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/session_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/schoolday_events/filters/schoolday_event_filter_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_manager.dart';
 
-class SchoolEventHelper {
+class SchooldayEventsCount {
+  final int totalSchooldayEvents;
+  final int totalLessonSchooldayEvents;
+  final int totalOgsSchooldayEvents;
+  final int totalSentHomeSchooldayEvents;
+  final int totalParentsMeetingSchooldayEvents;
+
+  SchooldayEventsCount(
+      {required this.totalSchooldayEvents,
+      required this.totalLessonSchooldayEvents,
+      required this.totalOgsSchooldayEvents,
+      required this.totalSentHomeSchooldayEvents,
+      required this.totalParentsMeetingSchooldayEvents});
+}
+
+class SchoolDayEventHelper {
   static int schooldayEventSum(PupilProxy pupil) {
-    return pupil.schooldayEvents?.length ?? 0;
+    return locator<SchooldayEventFilterManager>()
+        .filteredSchooldayEvents(pupil)
+        .length;
+  }
+
+  static bool isAuthorizedToChangeStatus(SchooldayEvent schooldayEvent) {
+    if (locator<SessionManager>().isAdmin.value == true ||
+        schooldayEvent.admonishingUser ==
+            locator<SessionManager>().credentials.value.username) {
+      return true;
+    }
+    return false;
+  }
+
+  static DateTime getPupilLastSchooldayEventDate(PupilProxy pupil) {
+    final List<SchooldayEvent> schooldayEvents =
+        locator<SchooldayEventFilterManager>().filteredSchooldayEvents(pupil);
+    if (schooldayEvents.isEmpty) {
+      // if schoolday events is empty, we return a mock date
+      return DateTime(2017, 9, 7, 17);
+    }
+    return getLastSchoolEventDate(schooldayEvents);
   }
 
   static int? findSchooldayEventIndex(PupilProxy pupil, DateTime date) {
@@ -18,35 +58,68 @@ class SchoolEventHelper {
 
   static bool pupilIsAdmonishedToday(PupilProxy pupil) {
     if (pupil.schooldayEvents!.isEmpty) return false;
-    if (pupil.schooldayEvents!.any(
-        (element) => element.schooldayEventDate.isSameDate(DateTime.now()))) {
+    if (pupil.schooldayEvents!.any((element) =>
+        element.schooldayEventDate.isSameDate(DateTime.now()) &&
+        (element.schooldayEventType == SchooldayEventType.admonition.value ||
+            element.schooldayEventType ==
+                SchooldayEventType.afternoonCareAdmonition.value ||
+            element.schooldayEventType ==
+                SchooldayEventType.admonitionAndBanned.value))) {
       return true;
     }
     return false;
   }
 
-  static int getSchooldayEventCount(List<PupilProxy> pupils) {
-    int schooldayEvents = 0;
+  static SchooldayEventsCount getSchooldayEventsCount(List<PupilProxy> pupils) {
+    int totalSchooldayEvents = 0;
+    int teachingSchooldayEvents = 0;
+    int ogsSchooldayEvents = 0;
+    int sentHomeSchooldayEvents = 0;
+    int parentsMeetingSchooldayEvents = 0;
+
     for (PupilProxy pupil in pupils) {
-      if (pupil.schooldayEvents != null) {
-        schooldayEvents = schooldayEvents + pupil.schooldayEvents!.length;
-      }
+      final pupilSchooldayEvents =
+          locator<SchooldayEventFilterManager>().filteredSchooldayEvents(pupil);
+
+      totalSchooldayEvents = totalSchooldayEvents + pupilSchooldayEvents.length;
+      teachingSchooldayEvents = teachingSchooldayEvents +
+          pupilSchooldayEvents
+              .where((element) =>
+                  element.schooldayEventType ==
+                  SchooldayEventType.admonition.value)
+              .length;
+      ogsSchooldayEvents = ogsSchooldayEvents +
+          pupilSchooldayEvents
+              .where((element) =>
+                  element.schooldayEventType ==
+                  SchooldayEventType.afternoonCareAdmonition.value)
+              .length;
+      sentHomeSchooldayEvents = sentHomeSchooldayEvents +
+          pupilSchooldayEvents
+              .where((element) =>
+                  element.schooldayEventType ==
+                  SchooldayEventType.admonitionAndBanned.value)
+              .length;
+      parentsMeetingSchooldayEvents = parentsMeetingSchooldayEvents +
+          pupilSchooldayEvents
+              .where((element) =>
+                  element.schooldayEventType ==
+                  SchooldayEventType.parentsMeeting.value)
+              .length;
     }
-    return schooldayEvents;
+
+    return SchooldayEventsCount(
+        totalSchooldayEvents: totalSchooldayEvents,
+        totalLessonSchooldayEvents: teachingSchooldayEvents,
+        totalOgsSchooldayEvents: ogsSchooldayEvents,
+        totalSentHomeSchooldayEvents: sentHomeSchooldayEvents,
+        totalParentsMeetingSchooldayEvents: parentsMeetingSchooldayEvents);
   }
 
-  static int getSchoolSchooldayEventCount(List<PupilProxy> pupils) {
-    int schooldayEvents = 0;
-    for (PupilProxy pupil in pupils) {
-      if (pupil.schooldayEvents != null) {
-        for (SchooldayEvent schooldayEvent in pupil.schooldayEvents!) {
-          if (schooldayEvent.schooldayEventType == 'rk') {
-            schooldayEvents++;
-          }
-        }
-      }
-    }
-    return schooldayEvents;
+  static DateTime getLastSchoolEventDate(List<SchooldayEvent> schooldayEvents) {
+    schooldayEvents
+        .sort((a, b) => b.schooldayEventDate.compareTo(a.schooldayEventDate));
+    return schooldayEvents.first.schooldayEventDate;
   }
 
   static int getOgsSchooldayEventCount(List<PupilProxy> pupils) {

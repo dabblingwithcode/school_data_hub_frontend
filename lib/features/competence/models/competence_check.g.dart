@@ -48,5 +48,5 @@ Map<String, dynamic> _$CompetenceCheckFileToJson(
     <String, dynamic>{
       'check_id': instance.checkId,
       'file_id': instance.fileId,
-      'file_url': instance.fileUrl,
+      'file_url': instance.fileId,
     };

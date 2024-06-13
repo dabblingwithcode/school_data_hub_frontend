@@ -9,7 +9,6 @@ import 'package:schuldaten_hub/features/attendance/services/attendance_manager.d
 import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
-
 //- lookup functions
 
 int? findMissedClassIndex(PupilProxy pupil, DateTime date) {
@@ -22,6 +21,79 @@ int? findMissedClassIndex(PupilProxy pupil, DateTime date) {
 }
 
 //- overview numbers functions
+
+//- of all pupils
+
+int missedGlobalSum() {
+  int missedGlobalSum = 0;
+  final List<PupilProxy> allPupils = locator<PupilManager>().allPupils;
+  for (PupilProxy pupil in allPupils) {
+    if (pupil.pupilMissedClasses!.isNotEmpty) {
+      missedGlobalSum += pupil.pupilMissedClasses!
+          .where((element) =>
+              element.missedType == 'missed' ||
+              element.missedType == 'home' ||
+              element.backHome == true)
+          .length;
+    }
+  }
+  return missedGlobalSum;
+}
+
+int unexcusedGlobalSum() {
+  int unexcusedGlobalSum = 0;
+  final List<PupilProxy> allPupils = locator<PupilManager>().allPupils;
+  for (PupilProxy pupil in allPupils) {
+    if (pupil.pupilMissedClasses!.isNotEmpty) {
+      unexcusedGlobalSum += pupil.pupilMissedClasses!
+          .where((element) =>
+              element.missedType == 'missed' && element.excused == true)
+          .length;
+    }
+  }
+  return unexcusedGlobalSum;
+}
+
+int lateGlobalSum() {
+  int lateGlobalSum = 0;
+  final List<PupilProxy> allPupils = locator<PupilManager>().allPupils;
+  for (PupilProxy pupil in allPupils) {
+    if (pupil.pupilMissedClasses!.isNotEmpty) {
+      lateGlobalSum += pupil.pupilMissedClasses!
+          .where((element) => element.missedType == 'late')
+          .length;
+    }
+  }
+  return lateGlobalSum;
+}
+
+int contactedGlobalSum() {
+  int contactedGlobalSum = 0;
+  final List<PupilProxy> allPupils = locator<PupilManager>().allPupils;
+  for (PupilProxy pupil in allPupils) {
+    if (pupil.pupilMissedClasses!.isNotEmpty) {
+      contactedGlobalSum += pupil.pupilMissedClasses!
+          .where((element) => element.contacted != '0')
+          .length;
+    }
+  }
+  return contactedGlobalSum;
+}
+
+int pickedUpGlobalSum() {
+  int pickedUpGlobalSum = 0;
+  final List<PupilProxy> allPupils = locator<PupilManager>().allPupils;
+  for (PupilProxy pupil in allPupils) {
+    if (pupil.pupilMissedClasses!.isNotEmpty) {
+      pickedUpGlobalSum += pupil.pupilMissedClasses!
+          .where((element) => element.backHome == true)
+          .length;
+    }
+  }
+  return pickedUpGlobalSum;
+}
+
+//- of a list of pupils in a schoolday
 
 int missedPupilsSum(List<PupilProxy> filteredPupils, DateTime thisDate) {
   List<PupilProxy> missedPupils = [];
@@ -53,6 +125,49 @@ int unexcusedPupilsSum(List<PupilProxy> filteredPupils, DateTime thisDate) {
   return unexcusedPupils.length;
 }
 
+//- of a list of pupils
+
+int pupilListMissedclassSum(List<PupilProxy> filteredPupils) {
+  int pupilsListmissedclassSum = 0;
+  for (PupilProxy pupil in filteredPupils) {
+    pupilsListmissedclassSum += missedclassSum(pupil);
+  }
+  return pupilsListmissedclassSum;
+}
+
+int pupilListUnexcusedSum(List<PupilProxy> filteredPupils) {
+  int pupilsListUnexcusedSum = 0;
+  for (PupilProxy pupil in filteredPupils) {
+    pupilsListUnexcusedSum += missedclassUnexcusedSum(pupil);
+  }
+  return pupilsListUnexcusedSum;
+}
+
+int pupilListLateSum(List<PupilProxy> filteredPupils) {
+  int pupilsListLateSum = 0;
+  for (PupilProxy pupil in filteredPupils) {
+    pupilsListLateSum += lateSum(pupil);
+  }
+  return pupilsListLateSum;
+}
+
+int pupilListContactedSum(List<PupilProxy> filteredPupils) {
+  int pupilsListContactedSum = 0;
+  for (PupilProxy pupil in filteredPupils) {
+    pupilsListContactedSum += contactedSum(pupil);
+  }
+  return pupilsListContactedSum;
+}
+
+int pupilListPickedUpSum(List<PupilProxy> filteredPupils) {
+  int pupilsListPickedUpSum = 0;
+  for (PupilProxy pupil in filteredPupils) {
+    pupilsListPickedUpSum += pickedUpSum(pupil);
+  }
+  return pupilsListPickedUpSum;
+}
+//- of a single pupil
+
 int missedclassSum(PupilProxy pupil) {
   // count the number of missed classes - avoid null when missedClasses is empty
   int missedclassCount = 0;
@@ -77,6 +192,16 @@ int missedclassUnexcusedSum(PupilProxy pupil) {
   return missedclassCount;
 }
 
+int lateSum(PupilProxy pupil) {
+  int lateCount = 0;
+  if (pupil.pupilMissedClasses != null) {
+    lateCount = pupil.pupilMissedClasses!
+        .where((element) => element.missedType == 'late')
+        .length;
+  }
+  return lateCount;
+}
+
 lateUnexcusedSum(PupilProxy pupil) {
   int missedClassUnexcusedCount = 0;
   if (pupil.pupilMissedClasses != null) {
@@ -94,6 +219,14 @@ int contactedSum(PupilProxy pupil) {
       .length;
 
   return contactedCount;
+}
+
+int pickedUpSum(PupilProxy pupil) {
+  int pickedUpCount = pupil.pupilMissedClasses!
+      .where((element) => element.backHome == true)
+      .length;
+
+  return pickedUpCount;
 }
 
 //- check condition functions

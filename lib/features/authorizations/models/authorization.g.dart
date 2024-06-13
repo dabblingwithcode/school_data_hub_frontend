@@ -12,6 +12,9 @@ Authorization _$AuthorizationFromJson(Map<String, dynamic> json) =>
       authorizationId: json['authorization_id'] as String,
       authorizationName: json['authorization_name'] as String,
       createdBy: json['created_by'] as String?,
+      authorizedPupils: (json['authorized_pupils'] as List<dynamic>)
+          .map((e) => PupilAuthorization.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$AuthorizationToJson(Authorization instance) =>
@@ -20,4 +23,5 @@ Map<String, dynamic> _$AuthorizationToJson(Authorization instance) =>
       'authorization_id': instance.authorizationId,
       'authorization_name': instance.authorizationName,
       'created_by': instance.createdBy,
+      'authorized_pupils': instance.authorizedPupils,
     };

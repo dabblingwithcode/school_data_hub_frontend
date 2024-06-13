@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/widgets/download_or_cached_and_decrypt_image.dart';
 import 'package:widget_zoom/widget_zoom.dart';
 
-class DocumentImage extends StatelessWidget {
+class DocumentImageData {
   final String? documentUrl;
   final String documentTag;
   final double size;
-  const DocumentImage(
+
+  DocumentImageData(
       {required this.documentUrl,
       required this.documentTag,
-      required this.size,
-      super.key});
+      required this.size});
+}
+
+class DocumentImage extends StatelessWidget {
+  const DocumentImage({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final documentUrl = Provider.of<DocumentImageData>(context).documentUrl;
+    final documentTag = Provider.of<DocumentImageData>(context).documentTag;
+    final size = Provider.of<DocumentImageData>(context).size;
+
     return SizedBox(
       height: size,
       width: (21 / 30) * size,

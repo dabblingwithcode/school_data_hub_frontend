@@ -35,7 +35,7 @@ class ApiSchooldayEventService {
       "admonished_pupil_id": pupilId,
       "admonition_reason": reason,
       "admonition_type": type,
-      "file_url": null,
+      "file_id": null,
       "processed": false,
       "processed_at": null,
       "processed_by": null
@@ -87,7 +87,8 @@ class ApiSchooldayEventService {
       bool? processed,
       //String? file,
       String? processedBy,
-      DateTime? processedAt}) async {
+      DateTime? processedAt,
+      DateTime? admonishedDay}) async {
     notificationManager.isRunningValue(true);
 
     // if the schooldayEvent is patched as processed,
@@ -114,6 +115,8 @@ class ApiSchooldayEventService {
       if (processed == false) "processed_by": null,
       if (processedAt != null) "processed_at": processedAt.formatForJson(),
       if (processed == false) "processed_at": null,
+      if (admonishedDay != null)
+        "admonished_day": admonishedDay.formatForJson(),
     });
 
     final Response response = await _client

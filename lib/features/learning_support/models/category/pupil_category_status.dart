@@ -6,8 +6,8 @@ part 'pupil_category_status.g.dart';
 @JsonSerializable()
 class PupilCategoryStatus {
   final String comment;
-  @JsonKey(name: 'file_url')
-  final String? fileUrl;
+  @JsonKey(name: 'file_id')
+  final String? fileId;
   @JsonKey(name: 'goal_category_id')
   final int goalCategoryId;
   @JsonKey(name: 'status_id')
@@ -19,7 +19,7 @@ class PupilCategoryStatus {
   final String state;
   PupilCategoryStatus(
       {required this.comment,
-      required this.fileUrl,
+      required this.fileId,
       required this.goalCategoryId,
       required this.statusId,
       required this.createdAt,

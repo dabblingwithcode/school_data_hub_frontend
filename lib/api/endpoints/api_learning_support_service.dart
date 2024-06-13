@@ -55,16 +55,15 @@ class ApiLearningSupportService {
   }
 
   Future<PupilData> postCategoryStatus(
-    int pupilInternalId,
-    int goalCategoryId,
-    String state,
-    String comment,
-  ) async {
+      {required int pupilInternalId,
+      required int goalCategoryId,
+      required String state,
+      required String comment}) async {
     notificationManager.isRunningValue(true);
 
     final data = jsonEncode({
       "state": state,
-      "file_url": null,
+      // "file_id": null,
       "comment": comment,
     });
 

@@ -1,6 +1,5 @@
 class MatrixEndpoints {
   //- PUT POLICY
-// curl -XPUT --data @h:/Hermannschule/corporal-policy.json -H "Authorization: Bearer rsAqf0baGCzMLRVMgTEXW60kxlnWkvu1A0FGiVJdPTUtuePP23WxkCFoADZx0xky5qTIeCvIGv3LpoZU5PeWqczgoJPZd2CUDfVloggVYkmWJE2pHnINSYRfH71ENIu9" https://post.hermannschule.de/_matrix/corporal/policy
 
 //**- USER
 
@@ -60,7 +59,6 @@ class MatrixEndpoints {
 // - {"m.room.name":50,"m.room.power_levels":100,"m.room.history_visibility":100,"m.room.canonical_alias":50,"m.room.avatar":50,"m.room.tombstone":100,"m.room.server_acl":100,"m.room.encryption":100,"m.space.child":50,"m.room.topic":50,"m.room.pinned_events":50,"m.reaction":50,"m.room.redaction":0,"org.matrix.msc3401.call":50,"org.matrix.msc3401.call.member":50,"im.vector.modular.widgets":50,"io.element.voice_broadcast_info":50},"events_default": 50,"invite": 50,"kick": 50,"notifications": {"room": 20},"redact": 50,"state_default": 50,"users": {"@mxcorporal:hermannschule.de": 100},"users_default": 0}'
 // - "https://post.hermannschule.de/_matrix/client/v3/rooms/%21hcFshNfUbzzoRDXmKe%3Ahermannschule.de/state/m.room.power_levels/"
 
-// curl -H "Authorization: Bearer rsAqf0baGCzMLRVMgTEXW60kxlnWkvu1A0FGiVJdPTUtuePP23WxkCFoADZx0xky5qTIeCvIGv3LpoZU5PeWqczgoJPZd2CUDfVloggVYkmWJE2pHnINSYRfH71ENIu9" https://post.hermannschule.de/_matrix/corporal/policy
   String getCorporal(String id) {
     return '/corporals/$id';
   }

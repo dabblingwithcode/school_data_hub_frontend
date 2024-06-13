@@ -17,7 +17,7 @@ import 'package:schuldaten_hub/common/models/session_models/session.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 
-import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
+import 'package:schuldaten_hub/features/main_menu_pages/widgets/landing_bottom_nav_bar.dart';
 
 class SessionManager {
   ValueListenable<bool> get matrixPolicyManagerRegistrationStatus =>
@@ -195,7 +195,7 @@ class SessionManager {
   logout() async {
     locator<NotificationManager>().isRunningValue(true);
     await secureStorageDelete('session');
-    //await secureStorageDelete('pupilBase');
+    //await secureStorageDelete('pupilIdentities');
     locator.get<BottomNavManager>().setBottomNavPage(0);
     _isAuthenticated.value = false;
     locator<NotificationManager>().showSnackBar(

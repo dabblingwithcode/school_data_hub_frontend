@@ -1,10 +1,8 @@
-import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/search_textfield_manager.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupil_filter_manager.dart';
 import 'package:schuldaten_hub/features/school_lists/models/pupil_list.dart';
 import 'package:schuldaten_hub/features/school_lists/models/school_list.dart';
 import 'package:schuldaten_hub/features/school_lists/services/school_list_manager.dart';
@@ -14,10 +12,19 @@ class SchoolListFilterManager {
   ValueListenable<List<SchoolList>> get filteredSchoolLists =>
       _filteredSchoolLists;
   final _filterState = ValueNotifier<bool>(false);
-  final _filteredSchoolLists = ValueNotifier<List<SchoolList>>(
-      locator<SchoolListManager>().schoolLists.value);
+  final _filteredSchoolLists = ValueNotifier<List<SchoolList>>([]);
 
   SchoolListFilterManager();
+
+  void updateFilteredSchoolLists(List<SchoolList> schoolLists) {
+    _filteredSchoolLists.value = schoolLists;
+  }
+
+  void resetFilters() {
+    locator<SearchManager>().cancelSearch();
+    _filterState.value = false;
+    _filteredSchoolLists.value = locator<SchoolListManager>().schoolLists.value;
+  }
 
   void onSearchEnter(String text) {
     if (text.isEmpty) {
@@ -33,43 +40,46 @@ class SchoolListFilterManager {
         .toList();
   }
 
-  void resetFilters() {
-    locator<SearchManager>().cancelSearch();
-    _filterState.value = false;
-    _filteredSchoolLists.value = locator<SchoolListManager>().schoolLists.value;
-  }
+  final oldFilterManager = locator<PupilFilterManager>();
 
-  final filterLocator = locator<PupilFilterManager>();
-  List<PupilProxy> addPupilListFiltersToFilteredPupils(
-      List<PupilProxy> pupils, String schoolListId) {
-    List<PupilProxy> filteredPupils = [];
-    for (PupilProxy pupil in pupils) {
-      final PupilList? pupilList = pupil.pupilLists!.firstWhereOrNull(
-          (pupilList) => pupilList.originList == schoolListId);
-      if (pupilList == null) {
-        continue;
-      }
-      if (filterLocator.filterState.value[PupilFilter.schoolListYesResponse]! &&
+  List<PupilList> addPupilListFiltersToFilteredPupils(
+      List<PupilList> pupilLists) {
+    List<PupilList> filteredPupilLists = [];
+    bool filterIsOn = false;
+    for (PupilList pupilList in pupilLists) {
+      if (oldFilterManager
+              .filterState.value[PupilFilter.schoolListYesResponse]! &&
           pupilList.pupilListStatus != true) {
+        filterIsOn = true;
         continue;
       }
-      if (filterLocator.filterState.value[PupilFilter.schoolListNoResponse]! &&
+      if (oldFilterManager
+              .filterState.value[PupilFilter.schoolListNoResponse]! &&
           pupilList.pupilListStatus != false) {
+        filterIsOn = true;
         continue;
       }
-      if (filterLocator
+      if (oldFilterManager
               .filterState.value[PupilFilter.schoolListNullResponse]! &&
           pupilList.pupilListStatus != null) {
+        filterIsOn = true;
         continue;
       }
-      if (filterLocator
+      if (oldFilterManager
               .filterState.value[PupilFilter.schoolListCommentResponse]! &&
           pupilList.pupilListComment == null) {
+        filterIsOn = true;
         continue;
       }
-
-      filteredPupils.add(pupil);
+      filteredPupilLists.add(pupilList);
     }
-    return filteredPupils;
+    //- TODO: Implement filterState, FlutterError (setState() or markNeedsBuild() called during build.
+    // if (filterIsOn) {
+    //   _filterState.value = true;
+    // } else {
+    //   _filterState.value = false;
+    // }
+
+    return filteredPupilLists;
   }
 }

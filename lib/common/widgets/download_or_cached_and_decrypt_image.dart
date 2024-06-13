@@ -3,7 +3,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:schuldaten_hub/api/services/api_manager.dart';
+import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/custom_encrypter.dart';
 
 class DownloadOrCachedAndDecryptImage extends StatelessWidget {
@@ -45,15 +47,16 @@ Future<Widget> downloadOrCachedAndDecryptImage(
   final Response response = await client.get(imageUrl,
       options: Options(responseType: ResponseType.bytes));
 
-  if (response.statusCode == 200) {
-    final encryptedBytes = Uint8List.fromList(response.data!);
-    // Cache the encrypted bytes
-    await cacheManager.putFile(cacheKey, encryptedBytes);
-    // Decrypt the bytes before returning
-    final decryptedBytes =
-        await compute(customEncrypter.decryptTheseBytes, encryptedBytes);
-    return Image.memory(decryptedBytes);
-  } else {
-    throw Exception('Failed to download image');
+  if (response.statusCode != 200) {
+    locator<NotificationManager>()
+        .showSnackBar(NotificationType.error, 'Fehler beim Laden des Bildes');
+    return const Icon(Icons.error_outline);
   }
+  final encryptedBytes = Uint8List.fromList(response.data!);
+  // Cache the encrypted bytes
+  await cacheManager.putFile(cacheKey, encryptedBytes);
+  // Decrypt the bytes before returning
+  final decryptedBytes =
+      await compute(customEncrypter.decryptTheseBytes, encryptedBytes);
+  return Image.memory(decryptedBytes);
 }

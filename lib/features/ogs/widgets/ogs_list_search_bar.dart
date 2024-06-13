@@ -3,11 +3,12 @@ import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
+import 'package:schuldaten_hub/common/widgets/filter_button.dart';
 import 'package:schuldaten_hub/common/widgets/search_text_field.dart';
 import 'package:schuldaten_hub/features/ogs/widgets/ogs_filter_bottom_sheet.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupils_filter.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupils_filter.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_filter_manager.dart';
+import 'package:schuldaten_hub/features/pupil/filters/pupil_filter_manager.dart';
 
 class OgsListSearchBar extends StatelessWidget {
   final List<PupilProxy> pupils;
@@ -55,25 +56,9 @@ class OgsListSearchBar extends StatelessWidget {
                         searchType: SearchType.pupil,
                         hintText: 'Schüler/in suchen',
                         refreshFunction: locator<PupilsFilter>().refreshs)),
-                InkWell(
-                  onTap: () => showOgsFilterBottomSheet(context),
-                  onLongPress: () {
-                    locator<PupilsFilter>().resetFilters();
-
-                    locator<PupilFilterManager>()
-                        .setFilter(PupilFilter.ogs, true);
-                    locator<PupilFilterManager>().filtersOnSwitch(false);
-                  },
-                  // onPressed: () => showBottomSheetFilters(context),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Icon(
-                      Icons.filter_list,
-                      color: filtersOn ? Colors.deepOrange : Colors.grey,
-                      size: 30,
-                    ),
-                  ),
-                ),
+                const FilterButton(
+                    isSearchBar: true,
+                    showBottomSheetFunction: showOgsFilterBottomSheet),
               ],
             ),
           ),

@@ -6,6 +6,8 @@ part 'pupil_list.g.dart';
 
 @JsonSerializable()
 class PupilList {
+  @JsonKey(name: 'listed_pupil_id')
+  final int listedPupilId;
   @JsonKey(name: 'origin_list')
   final String originList;
   @JsonKey(name: 'pupil_list_comment')
@@ -21,7 +23,8 @@ class PupilList {
   Map<String, dynamic> toJson() => _$PupilListToJson(this);
 
   PupilList(
-      {required this.originList,
+      {required this.listedPupilId,
+      required this.originList,
       required this.pupilListComment,
       required this.pupilListEntryBy,
       required this.pupilListStatus});

@@ -6,18 +6,16 @@ import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/services/notification_manager.dart';
 import 'package:schuldaten_hub/common/utils/logger.dart';
 import 'package:schuldaten_hub/features/authorizations/models/authorization.dart';
-import 'package:schuldaten_hub/features/authorizations/models/pupil_authorization.dart';
-import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 
 import 'package:schuldaten_hub/common/services/locator.dart';
-import 'package:schuldaten_hub/features/pupil/manager/pupil_manager.dart';
 
 class AuthorizationManager {
   ValueListenable<List<Authorization>> get authorizations => _authorizations;
 
   final _authorizations = ValueNotifier<List<Authorization>>([]);
+  Map<String, Authorization> _authorizationsMap = {};
 
   AuthorizationManager() {
     logger.i('AuthorizationManager constructor called');
@@ -40,6 +38,10 @@ class AuthorizationManager {
         '${authorizations.length} Einwilligungen geladen');
 
     _authorizations.value = authorizations;
+    _authorizationsMap = {
+      for (var authorization in authorizations)
+        authorization.authorizationId: authorization
+    };
     return;
   }
 
@@ -48,14 +50,11 @@ class AuthorizationManager {
     String description,
     List<int> pupilIds,
   ) async {
-    final List<PupilData> responsePupils = await apiAuthorizationService
+    final Authorization authorization = await apiAuthorizationService
         .postAuthorizationWithPupils(name, description, pupilIds);
 
-    for (PupilData pupil in responsePupils) {
-      locator<PupilManager>().updatePupilProxyWithPupilData(pupil);
-    }
-
-    fetchAuthorizations();
+    _authorizationsMap[authorization.authorizationId] = authorization;
+    _authorizations.value = _authorizationsMap.values.toList();
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Einwilligung erstellt');
@@ -64,11 +63,10 @@ class AuthorizationManager {
   }
 
   Future<void> postPupilAuthorization(int pupilId, String authId) async {
-    final PupilData updatedPupilWithPupilAuthorization =
+    final Authorization authorization =
         await apiAuthorizationService.postPupilAuthorization(pupilId, authId);
-
-    locator<PupilManager>()
-        .updatePupilProxyWithPupilData(updatedPupilWithPupilAuthorization);
+    _authorizationsMap[authorization.authorizationId] = authorization;
+    _authorizations.value = _authorizationsMap.values.toList();
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Einwilligung erstellt');
@@ -80,16 +78,14 @@ class AuthorizationManager {
     List<int> pupilIds,
     String authId,
   ) async {
-    final List<PupilData> responsePupils =
+    final Authorization authorization =
         await apiAuthorizationService.postPupilAuthorizations(pupilIds, authId);
 
-    for (PupilData pupil in responsePupils) {
-      locator<PupilManager>().updatePupilProxyWithPupilData(pupil);
-    }
+    _authorizationsMap[authorization.authorizationId] = authorization;
+    _authorizations.value = _authorizationsMap.values.toList();
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Einwilligungen erstellt');
-
     return;
   }
 
@@ -97,10 +93,11 @@ class AuthorizationManager {
     int pupilId,
     String authId,
   ) async {
-    final PupilData responsePupil =
+    final Authorization authorization =
         await apiAuthorizationService.deletePupilAuthorization(pupilId, authId);
 
-    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
+    _authorizationsMap[authorization.authorizationId] = authorization;
+    _authorizations.value = _authorizationsMap.values.toList();
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Einwilligung gelöscht');
@@ -109,10 +106,11 @@ class AuthorizationManager {
 
   Future<void> updatePupilAuthorizationProperty(
       int pupilId, String listId, bool? value, String? comment) async {
-    final PupilData responsePupil = await apiAuthorizationService
+    final Authorization authorization = await apiAuthorizationService
         .updatePupilAuthorizationProperty(pupilId, listId, value, comment);
 
-    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
+    _authorizationsMap[authorization.authorizationId] = authorization;
+    _authorizations.value = _authorizationsMap.values.toList();
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Einwilligung geändert');
@@ -125,10 +123,11 @@ class AuthorizationManager {
     int pupilId,
     String authId,
   ) async {
-    final PupilData responsePupil = await apiAuthorizationService
+    final Authorization authorization = await apiAuthorizationService
         .postAuthorizationFile(file, pupilId, authId);
 
-    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
+    _authorizationsMap[authorization.authorizationId] = authorization;
+    _authorizations.value = _authorizationsMap.values.toList();
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Datei hochgeladen');
@@ -141,10 +140,11 @@ class AuthorizationManager {
     String authId,
     String cacheKey,
   ) async {
-    final PupilData responsePupil = await apiAuthorizationService
+    final Authorization responsePupil = await apiAuthorizationService
         .deleteAuthorizationFile(pupilId, authId, cacheKey);
 
-    locator<PupilManager>().updatePupilProxyWithPupilData(responsePupil);
+    _authorizationsMap[responsePupil.authorizationId] = responsePupil;
+    _authorizations.value = _authorizationsMap.values.toList();
 
     notificationManager.showSnackBar(
         NotificationType.success, 'Einwilligungsdatei gelöscht');
@@ -164,42 +164,39 @@ class AuthorizationManager {
   }
 
   //- diese Funktion hat keinen API-Call
-  PupilAuthorization getPupilAuthorization(
-    int pupilId,
-    String authId,
-  ) {
-    final PupilProxy pupil = locator<PupilManager>()
-        .allPupils
-        .where((element) => element.internalId == pupilId)
-        .first;
+  // PupilAuthorization getPupilAuthorization(
+  //   int pupilId,
+  //   String authId,
+  // ) {
 
-    final PupilAuthorization pupilAuthorization = pupil.authorizations!
-        .where((element) => element.originAuthorization == authId)
-        .first;
+  //   final PupilAuthorization pupilAuthorization = locator<AuthorizationManager>().
+  //       .where((element) => element.originAuthorization == authId)
+  //       .first;
 
-    return pupilAuthorization;
-  }
+  //   return pupilAuthorization;
+  // }
 
   //- diese Funktion hat keinen API-Call
-  List<PupilProxy> getPupilsInAuthorization(
-    String authorizationId,
-  ) {
-    final List<PupilProxy> listedPupils = locator<PupilManager>()
-        .allPupils
-        .where((pupil) => pupil.authorizations!.any((authorization) =>
-            authorization.originAuthorization == authorizationId))
-        .toList();
+  // List<PupilProxy> getPupilsInAuthorization(
+  //   String authorizationId,
+  // ) {
+  //   final List<PupilProxy> listedPupils = locator<PupilManager>()
+  //       .allPupils
+  //       .where((pupil) => pupil.authorizations!.any((authorization) =>
+  //           authorization.originAuthorization == authorizationId))
+  //       .toList();
 
-    return listedPupils;
-  }
+  //   return listedPupils;
+  // }
 
   //- diese Funktion hat keinen API-Call
   List<PupilProxy> getListedPupilsInAuthorization(
     String authorizationId,
     List<PupilProxy> filteredPupils,
   ) {
+    final Authorization authorization = _authorizationsMap[authorizationId]!;
     final List<PupilProxy> listedPupils = filteredPupils
-        .where((pupil) => pupil.authorizations!.any((authorization) =>
+        .where((pupil) => authorization.authorizedPupils.any((authorization) =>
             authorization.originAuthorization == authorizationId))
         .toList();
 

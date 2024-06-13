@@ -14,7 +14,7 @@ import 'package:schuldaten_hub/common/utils/logger.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/utils/scanner.dart';
 import 'package:schuldaten_hub/common/utils/secure_storage.dart';
-import 'package:schuldaten_hub/features/landing_views/bottom_nav_bar.dart';
+import 'package:schuldaten_hub/features/main_menu_pages/widgets/landing_bottom_nav_bar.dart';
 import 'package:schuldaten_hub/features/pupil/manager/pupil_identity_helper_functions.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_data.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_identity.dart';
@@ -37,14 +37,14 @@ class PupilIdentityManager {
   }
 
   Future<void> deleteAllPupilIdentities() async {
-    await secureStorageDelete('pupilBase');
+    await secureStorageDelete('pupilIdentities');
     _pupilIdentities.clear();
     locator<PupilManager>().clearData();
   }
 
   Future<void> getStoredPupilIdentities() async {
     bool storedPupilIdentitiesExist =
-        await secureStorage.containsKey(key: 'pupilBase');
+        await secureStorage.containsKey(key: 'pupilIdentities');
 
     if (storedPupilIdentitiesExist == false) {
       return;
@@ -52,7 +52,8 @@ class PupilIdentityManager {
 
     List<PupilIdentity> storedPupilIdentities = [];
 
-    String? storedPupilIdentitiesJson = await secureStorageRead('pupilBase');
+    String? storedPupilIdentitiesJson =
+        await secureStorageRead('pupilIdentities');
 
     storedPupilIdentities = (json.decode(storedPupilIdentitiesJson!) as List)
         .map((element) => PupilIdentity.fromJson(element))
@@ -69,7 +70,7 @@ class PupilIdentityManager {
     final String? scanResult =
         await scanner(context, 'Personenbezogene Informationen scannen');
     if (scanResult != null) {
-      addNewPupilIdentities(encryptedIdentitiesAsString: scanResult);
+      addNewPupilIdentities(identitiesFromStringLines: scanResult);
     } else {
       locator<NotificationManager>()
           .showSnackBar(NotificationType.warning, 'Scan abgebrochen');
@@ -83,19 +84,20 @@ class PupilIdentityManager {
     for (PupilIdentity pupilIdentity in personalIdentitiesList) {
       _pupilIdentities[pupilIdentity.id] = pupilIdentity;
     }
-    await secureStorageWrite('pupilBase', jsonEncode(personalIdentitiesList));
+    await secureStorageWrite(
+        'pupilIdentities', jsonEncode(personalIdentitiesList));
   }
 
   Future<void> addNewPupilIdentities(
-      {required String encryptedIdentitiesAsString}) async {
+      {required String identitiesFromStringLines}) async {
     late final String? decryptedIdentitiesAsString;
 
     if (!Platform.isWindows) {
       decryptedIdentitiesAsString =
-          customEncrypter.decrypt(encryptedIdentitiesAsString);
+          customEncrypter.decrypt(identitiesFromStringLines);
     } else {
       // If the string is imported in windows, it comes from a .txt file and it's not encrypted
-      decryptedIdentitiesAsString = encryptedIdentitiesAsString;
+      decryptedIdentitiesAsString = identitiesFromStringLines;
     }
     // The pupils in the string are separated by a '\n' - let's split them apart
     List<String> splittedPupilIdentities =
@@ -111,11 +113,12 @@ class PupilIdentityManager {
 
     final List<PupilIdentity> newPupilIdentitiesList =
         _pupilIdentities.values.toList();
-    await secureStorageWrite('pupilBase', jsonEncode(newPupilIdentitiesList));
+    await secureStorageWrite(
+        'pupilIdentities', jsonEncode(newPupilIdentitiesList));
 
-    // await locator<PupilManager>().fetchAllPupils();
+    await locator<PupilManager>().fetchAllPupils();
 
-    // locator<BottomNavManager>().setBottomNavPage(0);
+    locator<BottomNavManager>().setBottomNavPage(0);
   }
 
   Future<void> updateBackendPupilsFromSchoolPupilIdentitySource(
@@ -177,7 +180,7 @@ class PupilIdentityManager {
     }
 
     await secureStorageWrite(
-        'pupilBase', jsonEncode(_pupilIdentities.values.toList()));
+        'pupilIdentities', jsonEncode(_pupilIdentities.values.toList()));
 
     await locator<PupilManager>().fetchAllPupils();
 
@@ -270,7 +273,7 @@ class PupilIdentityManager {
     }
 
     await secureStorageWrite(
-        'pupilBase', jsonEncode(_pupilIdentities.values.toList()));
+        'pupilIdentities', jsonEncode(_pupilIdentities.values.toList()));
     locator<NotificationManager>().isRunningValue(false);
     logger.i(
         ' ${toBeDeletedPupilIds.length} SuS sind nicht mehr in der Datenbank und wurden gelöscht!');
