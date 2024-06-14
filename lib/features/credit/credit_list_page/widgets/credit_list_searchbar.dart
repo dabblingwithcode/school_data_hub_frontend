@@ -96,6 +96,7 @@ class CreditListSearchBar extends StatelessWidget {
                       hintText: 'Schüler/in suchen',
                       refreshFunction: locator<PupilsFilter>().refreshs),
                 ),
+                const Gap(5),
                 const FilterButton(
                     isSearchBar: true,
                     showBottomSheetFunction: showCreditFilterBottomSheet),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event_enums.dart';
 
 class SchooldayEventReasonChip extends StatelessWidget {
   final String reason;
@@ -23,32 +24,41 @@ class SchooldayEventReasonChip extends StatelessWidget {
 const double emojiSize = 20;
 List<Widget> schooldayEventReasonChips(String reason) {
   List<Widget> chips = [];
-  if (reason.contains('gm')) {
+  if (reason.contains(SchooldayEventReason.violenceAgainstPupils.value)) {
     chips.add(const SchooldayEventReasonChip(reason: '🤜🤕'));
   }
-  if (reason.contains('gl')) {
+  if (reason.contains(SchooldayEventReason.violenceAgainstTeachers.value)) {
     chips.add(const SchooldayEventReasonChip(reason: '🤜🎓️'));
   }
-  if (reason.contains('gs')) {
+  if (reason.contains(SchooldayEventReason.violenceAgainstThings.value)) {
     chips.add(const SchooldayEventReasonChip(reason: '🤜🏫'));
   }
-  if (reason.contains('ab')) {
+  if (reason.contains(SchooldayEventReason.insultOthers.value)) {
     chips.add(const SchooldayEventReasonChip(reason: '🤬💔'));
   }
-  if (reason.contains('gv')) {
+  if (reason.contains(SchooldayEventReason.dangerousBehaviour.value)) {
     chips.add(const SchooldayEventReasonChip(reason: '🚨😱'));
   }
-  if (reason.contains('äa')) {
+  if (reason.contains(SchooldayEventReason.annoyOthers.value)) {
     chips.add(const SchooldayEventReasonChip(reason: '😈😖'));
   }
-  if (reason.contains('il')) {
+  if (reason.contains(SchooldayEventReason.ignoreInstructions.value)) {
     chips.add(const SchooldayEventReasonChip(reason: '🎓️🙉'));
   }
-  if (reason.contains('us')) {
+  if (reason.contains(SchooldayEventReason.disturbLesson.value)) {
     chips.add(const SchooldayEventReasonChip(reason: '🛑🎓️'));
   }
-  if (reason.contains('ss')) {
+  if (reason.contains(SchooldayEventReason.other.value)) {
     chips.add(const SchooldayEventReasonChip(reason: '📝'));
+  }
+  if (reason.contains(SchooldayEventReason.learningDevelopmentInfo.value)) {
+    chips.add(const SchooldayEventReasonChip(reason: '💡🧠'));
+  }
+  if (reason.contains(SchooldayEventReason.learningSupportInfo.value)) {
+    chips.add(const SchooldayEventReasonChip(reason: '🛟🧠'));
+  }
+  if (reason.contains(SchooldayEventReason.admonitionInfo.value)) {
+    chips.add(const SchooldayEventReasonChip(reason: '⚠️ℹ️'));
   }
   return chips;
 }

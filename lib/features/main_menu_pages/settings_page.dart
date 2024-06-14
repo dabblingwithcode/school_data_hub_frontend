@@ -60,10 +60,12 @@ class SettingsPage extends WatchingWidget {
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 tiles: <SettingsTile>[
-                  SettingsTile(
+                  SettingsTile.navigation(
                     leading: const Icon(Icons.home),
                     title: const Text('Instanz:'),
-                    value: Text(locator<EnvManager>().env.value.serverUrl!),
+                    value: Text(
+                      locator<EnvManager>().env.value.serverUrl!,
+                    ),
                     trailing: null,
                   ),
                   SettingsTile.navigation(
@@ -397,7 +399,7 @@ class SettingsPage extends WatchingWidget {
                       leading: const Icon(Icons.qr_code_rounded),
                       title: const Text('Kinder QR-Ids zeigen'),
                       onPressed: (context) async {
-                        final List<int> pupilIds =
+                        final List<int>? pupilIds =
                             await Navigator.of(context).push(MaterialPageRoute(
                           builder: (ctx) => SelectPupilsListPage(
                               selectablePupils: locator<PupilManager>()
@@ -405,7 +407,7 @@ class SettingsPage extends WatchingWidget {
                                       locator<PupilIdentityManager>()
                                           .availablePupilIds)),
                         ));
-                        if (pupilIds.isEmpty) {
+                        if (pupilIds == null || pupilIds.isEmpty) {
                           return;
                         }
                         final String qr = await locator<PupilIdentityManager>()

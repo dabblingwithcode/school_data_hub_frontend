@@ -91,7 +91,7 @@ Future<void> createMissedClassList(
                       child: InkWell(
                           onTap: () async {
                             final DateTime? date =
-                                await selectDate(context, thisDate);
+                                await selectSchooldayDate(context, thisDate);
                             if (date != null) {
                               setState(() {
                                 startDate = date;
@@ -112,7 +112,7 @@ Future<void> createMissedClassList(
                       child: InkWell(
                           onTap: () async {
                             final DateTime? date =
-                                await selectDate(context, thisDate);
+                                await selectSchooldayDate(context, thisDate);
                             if (date != null) {
                               setState(() {
                                 endDate = date;

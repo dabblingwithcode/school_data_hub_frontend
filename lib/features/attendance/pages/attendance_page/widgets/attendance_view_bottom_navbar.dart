@@ -62,7 +62,8 @@ class AttendanceListPageBottomNavBar extends WatchingWidget {
               const Gap(30),
               InkWell(
                 onTap: () async {
-                  final DateTime? newDate = await selectDate(context, thisDate);
+                  final DateTime? newDate =
+                      await selectSchooldayDate(context, thisDate);
                   if (newDate != null) {
                     locator<SchooldayManager>().setThisDate(newDate);
                   }

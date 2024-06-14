@@ -3,10 +3,11 @@ import 'package:schuldaten_hub/common/constants/colors.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 
-Future<DateTime?> selectDate(BuildContext context, DateTime thisDate) async {
+Future<DateTime?> selectSchooldayDate(
+    BuildContext context, DateTime thisDate) async {
   List<DateTime> availableDates =
       locator<SchooldayManager>().availableDates.value;
-  bool selectableDates(DateTime day) {
+  bool selectableSchooldayDates(DateTime day) {
     dynamic validDate = availableDates.contains(day);
     return validDate;
   }
@@ -14,7 +15,7 @@ Future<DateTime?> selectDate(BuildContext context, DateTime thisDate) async {
   final DateTime? pickedDate = await showDatePicker(
     context: context,
     initialDate: thisDate,
-    selectableDayPredicate: selectableDates,
+    selectableDayPredicate: selectableSchooldayDates,
     firstDate: DateTime(2020),
     lastDate: DateTime(2025),
     builder: (context, child) {

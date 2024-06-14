@@ -105,6 +105,7 @@ class _LearningSupportCardState extends State<LearningSupportCard> {
                               : _tileController.expand();
                         },
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             ...learningSupportCategoryStatusBatches(pupil),

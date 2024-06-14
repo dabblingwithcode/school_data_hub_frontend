@@ -31,10 +31,7 @@ class _SelectPupilsListPageState extends State<SelectPupilsListPage> {
   List<PupilProxy>? pupils;
   List<PupilProxy>? filteredPupils;
   Map<PupilFilter, bool>? inheritedFilters;
-  TextEditingController searchController = TextEditingController();
-  bool isSearchMode = false;
-  bool isSearching = false;
-  FocusNode focusNode = FocusNode();
+
   List<int> selectedPupilIds = [];
   bool isSelectAllMode = false;
   bool isSelectMode = false;
@@ -43,7 +40,6 @@ class _SelectPupilsListPageState extends State<SelectPupilsListPage> {
   void initState() {
     setState(() {
       inheritedFilters = locator<PupilFilterManager>().filterState.value;
-      pupils = locator<PupilManager>().allPupils;
     });
     super.initState();
   }
@@ -83,7 +79,7 @@ class _SelectPupilsListPageState extends State<SelectPupilsListPage> {
       isSelectAllMode = !isSelectAllMode;
       if (isSelectAllMode) {
         final List<PupilProxy> shownPupils =
-            locator<PupilFilterManager>().filteredPupils.value;
+            locator<PupilsFilter>().filteredPupils.value;
         isSelectMode = true;
         selectedPupilIds =
             shownPupils.map((pupil) => pupil.internalId).toList();

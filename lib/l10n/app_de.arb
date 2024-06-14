@@ -38,7 +38,9 @@
     "selected": "Ausgewählt:",
     "checkLists":"Eintragelisten",
     "lists":"listen",
-    "authorizations":"Einwilligungen"
+    "authorizations":"Einwilligungen",
+    "noResults":"keine Ergebnisse"
+    
 
 
 }

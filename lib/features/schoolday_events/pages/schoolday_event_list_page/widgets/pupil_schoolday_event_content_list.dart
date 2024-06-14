@@ -130,11 +130,12 @@ class SchooldayEventsContentList extends WatchingWidget {
                                                         index])
                                             ? InkWell(
                                                 onTap: () async {
-                                                  DateTime? date = await selectDate(
-                                                      context,
-                                                      locator<SchooldayManager>()
-                                                          .thisDate
-                                                          .value);
+                                                  DateTime? date =
+                                                      await selectSchooldayDate(
+                                                          context,
+                                                          locator<SchooldayManager>()
+                                                              .thisDate
+                                                              .value);
                                                   if (date == null) return;
                                                   await locator<
                                                           SchooldayEventManager>()
@@ -481,7 +482,7 @@ class SchooldayEventsContentList extends WatchingWidget {
                                   ? InkWell(
                                       onTap: () async {
                                         final DateTime? newDate =
-                                            await selectDate(
+                                            await selectSchooldayDate(
                                                 context, DateTime.now());
 
                                         if (newDate != null) {

@@ -91,6 +91,7 @@ class SchoolListPupilsPageSearchBar extends WatchingWidget {
                         searchType: SearchType.pupil,
                         hintText: 'Schüler/in suchen',
                         refreshFunction: locator<PupilsFilter>().refreshs)),
+                const Gap(5),
                 const FilterButton(
                   isSearchBar: true,
                   showBottomSheetFunction: showPupilListFilterBottomSheet,

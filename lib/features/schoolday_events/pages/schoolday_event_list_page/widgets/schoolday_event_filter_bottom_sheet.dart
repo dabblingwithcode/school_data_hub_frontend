@@ -23,13 +23,13 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
     bool valueProcessed =
         activeSchooldayEventFilters[SchooldayEventFilter.processed]!;
     bool valueRedCard =
-        activeSchooldayEventFilters[SchooldayEventFilter.redCard]!;
-    bool valueRedCardOgs =
-        activeSchooldayEventFilters[SchooldayEventFilter.redCardOgs]!;
+        activeSchooldayEventFilters[SchooldayEventFilter.admonition]!;
+    bool valueRedCardOgs = activeSchooldayEventFilters[
+        SchooldayEventFilter.afternoonCareAdmonition]!;
     bool valueRedCardSentHome =
-        activeSchooldayEventFilters[SchooldayEventFilter.redCardsentHome]!;
+        activeSchooldayEventFilters[SchooldayEventFilter.admonitionAndBanned]!;
     bool valueViolenceAgainstPersons = activeSchooldayEventFilters[
-        SchooldayEventFilter.violenceAgainstPersons]!;
+        SchooldayEventFilter.violenceAgainstPupils]!;
     bool valueInsultOthers =
         activeSchooldayEventFilters[SchooldayEventFilter.insultOthers]!;
     bool valueParentsMeeting =
@@ -128,10 +128,10 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
                           selected: valueRedCard,
                           onSelected: (val) {
                             schooldayEventFilterLocator.setFilter(
-                                SchooldayEventFilter.redCard, val);
+                                SchooldayEventFilter.admonition, val);
                             valueRedCard = schooldayEventFilterLocator
                                 .schooldayEventsFilterState
-                                .value[SchooldayEventFilter.redCard]!;
+                                .value[SchooldayEventFilter.admonition]!;
                           },
                         ),
                         FilterChip(
@@ -155,10 +155,11 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
                           selected: valueRedCardOgs,
                           onSelected: (val) {
                             schooldayEventFilterLocator.setFilter(
-                                SchooldayEventFilter.redCardOgs, val);
+                                SchooldayEventFilter.afternoonCareAdmonition,
+                                val);
                             valueRedCardOgs = schooldayEventFilterLocator
-                                .schooldayEventsFilterState
-                                .value[SchooldayEventFilter.redCardOgs]!;
+                                    .schooldayEventsFilterState.value[
+                                SchooldayEventFilter.afternoonCareAdmonition]!;
                           },
                         ),
                         FilterChip(
@@ -182,10 +183,10 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
                           selected: valueRedCardSentHome,
                           onSelected: (val) {
                             schooldayEventFilterLocator.setFilter(
-                                SchooldayEventFilter.redCardsentHome, val);
+                                SchooldayEventFilter.admonitionAndBanned, val);
                             valueRedCardOgs = schooldayEventFilterLocator
-                                .schooldayEventsFilterState
-                                .value[SchooldayEventFilter.redCardsentHome]!;
+                                    .schooldayEventsFilterState.value[
+                                SchooldayEventFilter.admonitionAndBanned]!;
                           },
                         ),
                         FilterChip(
@@ -207,7 +208,7 @@ class SchooldayEventFilterBottomSheet extends WatchingWidget {
                           selected: valueViolenceAgainstPersons,
                           onSelected: (val) {
                             schooldayEventFilterLocator.setFilter(
-                                SchooldayEventFilter.violenceAgainstPersons,
+                                SchooldayEventFilter.violenceAgainstPupils,
                                 val);
                           },
                         ),

@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:schuldaten_hub/common/constants/enums.dart';
 import 'package:schuldaten_hub/common/utils/logger.dart';
-//import 'package:schuldaten_hub/features/pupil/filters/pupils_filter.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event_enums.dart';
 
 class SchooldayEventFilterManager {
   ValueListenable<Map<SchooldayEventFilter, bool>>
@@ -94,39 +94,46 @@ class SchooldayEventFilterManager {
           continue;
         }
 
-        if (activeFilters[SchooldayEventFilter.redCard]! &&
-            schooldayEvent.schooldayEventType != 'rk') {
+        if (activeFilters[SchooldayEventFilter.admonition]! &&
+            schooldayEvent.schooldayEventType !=
+                SchooldayEventType.admonition.value) {
           _schooldayEventsFiltersOn.value = true;
           continue;
         }
 
-        if (activeFilters[SchooldayEventFilter.redCardOgs]! &&
-            schooldayEvent.schooldayEventType != 'rkogs') {
+        if (activeFilters[SchooldayEventFilter.afternoonCareAdmonition]! &&
+            schooldayEvent.schooldayEventType !=
+                SchooldayEventType.afternoonCareAdmonition.value) {
           _schooldayEventsFiltersOn.value = true;
           continue;
         }
-        if (activeFilters[SchooldayEventFilter.redCardsentHome]! &&
-            schooldayEvent.schooldayEventType != 'rkabh') {
+        if (activeFilters[SchooldayEventFilter.admonitionAndBanned]! &&
+            schooldayEvent.schooldayEventType !=
+                SchooldayEventType.admonitionAndBanned.value) {
           _schooldayEventsFiltersOn.value = true;
           continue;
         }
         if (activeFilters[SchooldayEventFilter.otherEvent]! &&
-            schooldayEvent.schooldayEventType != 'other') {
+            schooldayEvent.schooldayEventType !=
+                SchooldayEventType.otherEvent.value) {
           _schooldayEventsFiltersOn.value = true;
           continue;
         }
         if (activeFilters[SchooldayEventFilter.parentsMeeting]! &&
-            schooldayEvent.schooldayEventType != 'Eg') {
+            schooldayEvent.schooldayEventType !=
+                SchooldayEventType.parentsMeeting.value) {
           _schooldayEventsFiltersOn.value = true;
           continue;
         }
-        if (activeFilters[SchooldayEventFilter.violenceAgainstPersons]! &&
-            !schooldayEvent.schooldayEventReason.contains('gm')) {
+        if (activeFilters[SchooldayEventFilter.violenceAgainstPupils]! &&
+            !schooldayEvent.schooldayEventReason
+                .contains(SchooldayEventReason.violenceAgainstPupils.value)) {
           _schooldayEventsFiltersOn.value = true;
           continue;
         }
         if (activeFilters[SchooldayEventFilter.insultOthers]! &&
-            !schooldayEvent.schooldayEventReason.contains('ab')) {
+            !schooldayEvent.schooldayEventReason
+                .contains(SchooldayEventReason.insultOthers.value)) {
           _schooldayEventsFiltersOn.value = true;
           continue;
         }

@@ -4,7 +4,7 @@ import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
 import 'package:schuldaten_hub/features/pupil/models/pupil_proxy.dart';
 import 'package:schuldaten_hub/features/schoolday_events/filters/schoolday_event_filter_manager.dart';
-import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_manager.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event_enums.dart';
 
 class SchooldayEventsCount {
   final int totalSchooldayEvents;

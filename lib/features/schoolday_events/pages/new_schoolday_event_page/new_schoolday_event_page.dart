@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:schuldaten_hub/common/constants/colors.dart';
@@ -6,6 +8,9 @@ import 'package:schuldaten_hub/common/services/schoolday_manager.dart';
 import 'package:schuldaten_hub/common/utils/extensions.dart';
 import 'package:schuldaten_hub/common/widgets/date_picker.dart';
 import 'package:schuldaten_hub/common/widgets/dialogues/information_dialog.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event.dart';
+import 'package:schuldaten_hub/features/schoolday_events/models/schoolday_event_enums.dart';
+import 'package:schuldaten_hub/features/schoolday_events/pages/new_schoolday_event_page/widgets/schoolday_event_filter_chip.dart';
 import 'package:schuldaten_hub/features/schoolday_events/services/schoolday_event_manager.dart';
 import 'package:schuldaten_hub/common/services/locator.dart';
 
@@ -22,7 +27,7 @@ class NewSchooldayEventPage extends StatefulWidget {
 }
 
 class NewSchooldayEventPageState extends State<NewSchooldayEventPage> {
-  String schooldayEventTypeDropdown = 'choose';
+  SchooldayEventType schooldayEventTypeDropdown = SchooldayEventType.notSet;
   bool violenceAgainstPupils = false;
   bool violenceAgainstTeacher = false;
   bool violenceAgainstThings = false;
@@ -31,68 +36,80 @@ class NewSchooldayEventPageState extends State<NewSchooldayEventPage> {
   bool imminentDanger = false;
   bool ignoreTeacherInstructions = false;
   bool disturbLesson = false;
-  bool parentTalk = false;
   bool other = false;
+  bool learningDevelopmentInfo = false;
+  bool learningSupportInfo = false;
+  bool admonitionInfo = false;
 
   DateTime thisDate = locator<SchooldayManager>().thisDate.value;
-  String _getDropdownItemText(String value) {
-    switch (value) {
-      case 'choose':
+  String _getDropdownItemText(SchooldayEventType reason) {
+    switch (reason) {
+      case SchooldayEventType.notSet:
         return 'bitte wählen';
-      case 'rk':
+      case SchooldayEventType.admonition:
         return 'rote Karte';
-      case 'rkogs':
+      case SchooldayEventType.afternoonCareAdmonition:
         return 'rote Karte - OGS';
-      case 'rkabh':
+      case SchooldayEventType.admonitionAndBanned:
         return 'rote Karte + abholen';
-      case 'Eg':
+      case SchooldayEventType.parentsMeeting:
         return 'Elterngespräch';
-      case 'other':
+      case SchooldayEventType.otherEvent:
         return 'sonstiges';
       default:
         return '';
     }
   }
 
-  void postSchooldayEvent(BuildContext context) async {
+  Future<void> postSchooldayEvent() async {
     Set<String> schooldayEventReason = {};
     String schooldayEventReasons = '';
     if (violenceAgainstPupils == true) {
-      schooldayEventReason.add(AdmonitionReason.violenceAgainstPupils.value);
+      schooldayEventReason
+          .add(SchooldayEventReason.violenceAgainstPupils.value);
     }
     if (violenceAgainstTeacher == true) {
-      schooldayEventReason.add(AdmonitionReason.violenceAgainstTeachers.value);
+      schooldayEventReason
+          .add(SchooldayEventReason.violenceAgainstTeachers.value);
     }
     if (violenceAgainstThings == true) {
-      schooldayEventReason.add(AdmonitionReason.violenceAgainstThings.value);
+      schooldayEventReason
+          .add(SchooldayEventReason.violenceAgainstThings.value);
     }
     if (imminentDanger == true) {
-      schooldayEventReason.add(AdmonitionReason.dangerousBehaviour.value);
+      schooldayEventReason.add(SchooldayEventReason.dangerousBehaviour.value);
     }
     if (insultOthers == true) {
-      schooldayEventReason.add(AdmonitionReason.insultOthers.value);
+      schooldayEventReason.add(SchooldayEventReason.insultOthers.value);
     }
     if (annoyOthers == true) {
-      schooldayEventReason.add(AdmonitionReason.annoyOthers.value);
+      schooldayEventReason.add(SchooldayEventReason.annoyOthers.value);
     }
     if (ignoreTeacherInstructions == true) {
-      schooldayEventReason.add(AdmonitionReason.ignoreInstructions.value);
+      schooldayEventReason.add(SchooldayEventReason.ignoreInstructions.value);
     }
     if (disturbLesson == true) {
-      schooldayEventReason.add(AdmonitionReason.disturbLesson.value);
+      schooldayEventReason.add(SchooldayEventReason.disturbLesson.value);
     }
-    if (parentTalk == true) {
-      schooldayEventReasons = '${schooldayEventReason}Eg*';
+    if (learningDevelopmentInfo == true) {
+      schooldayEventReason
+          .add(SchooldayEventReason.learningDevelopmentInfo.value);
+    }
+    if (learningSupportInfo == true) {
+      schooldayEventReason.add(SchooldayEventReason.learningSupportInfo.value);
+    }
+    if (admonitionInfo == true) {
+      schooldayEventReason.add(SchooldayEventReason.admonitionInfo.value);
     }
     if (other == true) {
-      schooldayEventReason.add(AdmonitionReason.other.value);
+      schooldayEventReason.add(SchooldayEventReason.other.value);
     }
 
     for (final reason in schooldayEventReason) {
       schooldayEventReasons = '$schooldayEventReasons$reason*';
     }
     await locator<SchooldayEventManager>().postSchooldayEvent(widget.pupilId,
-        thisDate, schooldayEventTypeDropdown, schooldayEventReasons);
+        thisDate, schooldayEventTypeDropdown.value, schooldayEventReasons);
   }
 
   @override
@@ -126,30 +143,25 @@ class NewSchooldayEventPageState extends State<NewSchooldayEventPage> {
                   ],
                 ),
                 const Gap(10),
-                DropdownButton<String>(
+                DropdownButton<SchooldayEventType>(
                   isDense: true,
                   underline: Container(),
                   style: subtitle,
                   value: schooldayEventTypeDropdown,
-                  onChanged: (String? newValue) {
+                  onChanged: (SchooldayEventType? newValue) {
                     setState(() {
                       schooldayEventTypeDropdown = newValue!;
                     });
                   },
-                  items: <String>[
-                    'choose',
-                    'rk',
-                    'rkogs',
-                    'rkabh',
-                    'Eg',
-                    'other'
-                  ].map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
+                  items: SchooldayEventType.values
+                      .map<DropdownMenuItem<SchooldayEventType>>(
+                          (SchooldayEventType value) {
+                    return DropdownMenuItem<SchooldayEventType>(
                       value: value,
                       child: Text(
                         _getDropdownItemText(value),
                         style: TextStyle(
-                            color: value == 'choose'
+                            color: value == SchooldayEventType.notSet
                                 ? Colors.red
                                 : backgroundColor,
                             fontSize: 20),
@@ -165,7 +177,7 @@ class NewSchooldayEventPageState extends State<NewSchooldayEventPage> {
                     IconButton(
                       onPressed: () async {
                         final DateTime? newDate =
-                            await selectDate(context, thisDate);
+                            await selectSchooldayDate(context, thisDate);
                         if (newDate != null) {
                           setState(() {
                             thisDate = newDate;
@@ -178,7 +190,7 @@ class NewSchooldayEventPageState extends State<NewSchooldayEventPage> {
                     InkWell(
                       onTap: () async {
                         final DateTime? newDate =
-                            await selectDate(context, thisDate);
+                            await selectSchooldayDate(context, thisDate);
                         if (newDate != null) {
                           setState(() {
                             thisDate = newDate;
@@ -202,372 +214,184 @@ class NewSchooldayEventPageState extends State<NewSchooldayEventPage> {
                 ),
                 const Gap(5),
                 Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              FilterChip(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                labelPadding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 5),
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
-                                selectedColor:
-                                    schooldayEventReasonChipSelectedColor,
-                                checkmarkColor:
-                                    schooldayEventReasonChipSelectedCheckColor,
-                                backgroundColor:
-                                    schooldayEventReasonChipUnselectedColor,
-                                label: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      '🤜🤕',
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                      ),
-                                    ),
-                                    Gap(5),
-                                    Text(
-                                      'Gewalt gegen Menschen',
-                                      style: filterItemsTextStyle,
-                                    ),
-                                  ],
-                                ),
-                                selected: violenceAgainstPupils,
-                                onSelected: (value) {
-                                  setState(() {
-                                    violenceAgainstPupils = value;
-                                  });
-                                },
-                              ),
-                              const Gap(5),
-                              FilterChip(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 0, vertical: 0),
-                                  labelPadding: const EdgeInsets.symmetric(
-                                      horizontal: 7, vertical: 2),
-                                  shape: const RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(30))),
-                                  selectedColor:
-                                      schooldayEventReasonChipSelectedColor,
-                                  checkmarkColor:
-                                      schooldayEventReasonChipSelectedCheckColor,
-                                  backgroundColor:
-                                      schooldayEventReasonChipUnselectedColor,
-                                  label: const Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      Text(
-                                        '🤜🎓️',
-                                        style: TextStyle(
-                                          fontSize: 25,
-                                        ),
-                                      ),
-                                      Gap(5),
-                                      Text(
-                                        'Gewalt gegen Erwachsene',
-                                        style: filterItemsTextStyle,
-                                      ),
-                                    ],
+                  child: schooldayEventTypeDropdown == SchooldayEventType.notSet
+                      ? const Center(
+                          child: Text(
+                          'Bitte eine Ereignis-Art auswählen!',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                          textAlign: TextAlign.center,
+                        ))
+                      : schooldayEventTypeDropdown ==
+                              SchooldayEventType.parentsMeeting
+                          ? SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: learningDevelopmentInfo,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        learningDevelopmentInfo = value;
+                                      });
+                                    },
+                                    emojis: '💡🧠',
+                                    text: 'Lernentwicklungsgespräch',
                                   ),
-                                  selected: violenceAgainstTeacher,
-                                  onSelected: (value) {
-                                    setState(() {
-                                      violenceAgainstTeacher = value;
-                                    });
-                                  }),
-                              const Gap(5),
-                              FilterChip(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                labelPadding: const EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 2),
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
-                                selectedColor:
-                                    schooldayEventReasonChipSelectedColor,
-                                checkmarkColor:
-                                    schooldayEventReasonChipSelectedCheckColor,
-                                backgroundColor:
-                                    schooldayEventReasonChipUnselectedColor,
-                                label: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Text(
-                                      '🤜🏫',
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                      ),
-                                    ),
-                                    Gap(5),
-                                    Text(
-                                      'Gewalt gegen Sachen',
-                                      style: filterItemsTextStyle,
-                                    ),
-                                  ],
-                                ),
-                                selected: violenceAgainstThings,
-                                onSelected: (value) {
-                                  setState(() {
-                                    violenceAgainstThings = value;
-                                  });
-                                },
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: learningSupportInfo,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        learningSupportInfo = value;
+                                      });
+                                    },
+                                    emojis: '🛟🧠',
+                                    text: 'Fördergespräch',
+                                  ),
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: admonitionInfo,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        admonitionInfo = value;
+                                      });
+                                    },
+                                    emojis: '⚠️ℹ️',
+                                    text: 'Regelverstoß',
+                                  ),
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: other,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        other = value;
+                                      });
+                                    },
+                                    emojis: '📝',
+                                    text: 'Sonstiges',
+                                  ),
+                                  const Gap(5),
+                                ],
                               ),
-                              const Gap(5),
-                              FilterChip(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                labelPadding: const EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 2),
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
-                                selectedColor:
-                                    schooldayEventReasonChipSelectedColor,
-                                checkmarkColor:
-                                    schooldayEventReasonChipSelectedCheckColor,
-                                backgroundColor:
-                                    schooldayEventReasonChipUnselectedColor,
-                                label: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Gap(5),
-                                    Text(
-                                      '🤬💔',
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                      ),
-                                    ),
-                                    Gap(5),
-                                    Text(
-                                      'Beleidigen',
-                                      style: filterItemsTextStyle,
-                                    ),
-                                  ],
-                                ),
-                                selected: insultOthers,
-                                onSelected: (value) {
-                                  setState(() {
-                                    insultOthers = value;
-                                  });
-                                },
+                            )
+                          : SingleChildScrollView(
+                              scrollDirection: Axis.vertical,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: violenceAgainstPupils,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        violenceAgainstPupils = value;
+                                      });
+                                    },
+                                    emojis: '🤜🤕',
+                                    text: 'Gewalt gegen Kinder',
+                                  ),
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: violenceAgainstTeacher,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        violenceAgainstTeacher = value;
+                                      });
+                                    },
+                                    emojis: '🤜🎓️',
+                                    text: 'Gewalt gegen Erwachsene',
+                                  ),
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: violenceAgainstThings,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        violenceAgainstThings = value;
+                                      });
+                                    },
+                                    emojis: '🤜🏫',
+                                    text: 'Gewalt gegen Sachen',
+                                  ),
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: insultOthers,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        insultOthers = value;
+                                      });
+                                    },
+                                    emojis: '🤬💔',
+                                    text: 'Beleidigen',
+                                  ),
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: annoyOthers,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        annoyOthers = value;
+                                      });
+                                    },
+                                    emojis: '😈😖',
+                                    text: 'Ärgern',
+                                  ),
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: imminentDanger,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        imminentDanger = value;
+                                      });
+                                    },
+                                    emojis: '🚨😱',
+                                    text: 'Gefahr für sich/andere',
+                                  ),
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: ignoreTeacherInstructions,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        ignoreTeacherInstructions = value;
+                                      });
+                                    },
+                                    emojis: '🎓️🙉',
+                                    text: 'Anweisungen ignorieren',
+                                  ),
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: disturbLesson,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        disturbLesson = value;
+                                      });
+                                    },
+                                    emojis: '🛑🎓️',
+                                    text: 'Unterricht stören',
+                                  ),
+                                  const Gap(5),
+                                  SchooldayEventReasonFilterChip(
+                                    isReason: other,
+                                    onSelected: (value) {
+                                      setState(() {
+                                        other = value;
+                                      });
+                                    },
+                                    emojis: '📝',
+                                    text: 'Sonstiges',
+                                  ),
+                                  const Gap(5),
+                                ],
                               ),
-                              const Gap(5),
-                              FilterChip(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                labelPadding: const EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 2),
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
-                                selectedColor:
-                                    schooldayEventReasonChipSelectedColor,
-                                checkmarkColor:
-                                    schooldayEventReasonChipSelectedCheckColor,
-                                backgroundColor:
-                                    schooldayEventReasonChipUnselectedColor,
-                                label: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Gap(5),
-                                    Text(
-                                      '😈😖',
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                      ),
-                                    ),
-                                    Gap(5),
-                                    Text(
-                                      'Ärgern',
-                                      style: filterItemsTextStyle,
-                                    ),
-                                  ],
-                                ),
-                                selected: annoyOthers,
-                                onSelected: (value) {
-                                  setState(() {
-                                    annoyOthers = value;
-                                  });
-                                },
-                              ),
-                              const Gap(5),
-                              FilterChip(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                labelPadding: const EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 2),
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
-                                selectedColor:
-                                    schooldayEventReasonChipSelectedColor,
-                                checkmarkColor:
-                                    schooldayEventReasonChipSelectedCheckColor,
-                                backgroundColor:
-                                    schooldayEventReasonChipUnselectedColor,
-                                label: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Gap(5),
-                                    Text(
-                                      '🚨😱',
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                      ),
-                                    ),
-                                    Gap(5),
-                                    Text(
-                                      'Gefahr für sich/andere',
-                                      style: filterItemsTextStyle,
-                                    ),
-                                  ],
-                                ),
-                                selected: imminentDanger,
-                                onSelected: (value) {
-                                  setState(() {
-                                    imminentDanger = value;
-                                  });
-                                },
-                              ),
-                              const Gap(5),
-                              FilterChip(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                labelPadding: const EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 2),
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
-                                selectedColor:
-                                    schooldayEventReasonChipSelectedColor,
-                                checkmarkColor:
-                                    schooldayEventReasonChipSelectedCheckColor,
-                                backgroundColor:
-                                    schooldayEventReasonChipUnselectedColor,
-                                label: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Gap(5),
-                                    Text(
-                                      '🎓️🙉',
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                      ),
-                                    ),
-                                    Gap(5),
-                                    Text(
-                                      'Anweisungen ignoriert',
-                                      style: filterItemsTextStyle,
-                                    ),
-                                  ],
-                                ),
-                                selected: ignoreTeacherInstructions,
-                                onSelected: (value) {
-                                  setState(() {
-                                    ignoreTeacherInstructions = value;
-                                  });
-                                },
-                              ),
-                              const Gap(5),
-                              FilterChip(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                labelPadding: const EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 2),
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
-                                selectedColor:
-                                    schooldayEventReasonChipSelectedColor,
-                                checkmarkColor:
-                                    schooldayEventReasonChipSelectedCheckColor,
-                                backgroundColor:
-                                    schooldayEventReasonChipUnselectedColor,
-                                label: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Gap(5),
-                                    Text(
-                                      '🛑🎓️',
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                      ),
-                                    ),
-                                    Gap(5),
-                                    Text(
-                                      'Stören von Unterricht',
-                                      style: filterItemsTextStyle,
-                                    ),
-                                  ],
-                                ),
-                                selected: disturbLesson,
-                                onSelected: (value) {
-                                  setState(() {
-                                    disturbLesson = value;
-                                  });
-                                },
-                              ),
-                              const Gap(5),
-                              FilterChip(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                labelPadding: const EdgeInsets.symmetric(
-                                    horizontal: 7, vertical: 2),
-                                shape: const RoundedRectangleBorder(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(30))),
-                                selectedColor:
-                                    schooldayEventReasonChipSelectedColor,
-                                checkmarkColor:
-                                    schooldayEventReasonChipSelectedCheckColor,
-                                backgroundColor:
-                                    schooldayEventReasonChipUnselectedColor,
-                                label: const Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Gap(5),
-                                    Text(
-                                      '📝 ',
-                                      style: TextStyle(
-                                        fontSize: 25,
-                                      ),
-                                    ),
-                                    Gap(5),
-                                    Text(
-                                      'Sonstiges',
-                                      style: filterItemsTextStyle,
-                                    ),
-                                  ],
-                                ),
-                                selected: other,
-                                onSelected: (value) {
-                                  setState(() {
-                                    other = value;
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                            ),
                 ),
                 const Gap(10),
                 ElevatedButton(
                   style: successButtonStyle,
-                  onPressed: () {
-                    if (schooldayEventTypeDropdown == 'choose') {
+                  onPressed: () async {
+                    if (schooldayEventTypeDropdown ==
+                        SchooldayEventType.notSet) {
                       informationDialog(context, 'Kein Ereignis ausgewählt',
                           'Bitte eine Ereignis-Art auswählen!');
                       return;
@@ -580,12 +404,15 @@ class NewSchooldayEventPageState extends State<NewSchooldayEventPage> {
                         imminentDanger == false &&
                         ignoreTeacherInstructions == false &&
                         disturbLesson == false &&
+                        learningDevelopmentInfo == false &&
+                        learningSupportInfo == false &&
+                        admonitionInfo == false &&
                         other == false) {
                       informationDialog(context, 'Kein Grund ausgewählt',
                           'Bitte mindestens einen Grund auswählen!');
                       return;
                     }
-                    postSchooldayEvent(context);
+                    unawaited(postSchooldayEvent());
                     Navigator.pop(context);
                   },
                   child: const Text('SENDEN', style: buttonTextStyle),

@@ -324,7 +324,7 @@ String? setReturnedTime(int pupilId, DateTime date) {
 //- Date functions
 
 Future<void> setThisDate(BuildContext context, DateTime thisDate) async {
-  final DateTime? newDate = await selectDate(context, thisDate);
+  final DateTime? newDate = await selectSchooldayDate(context, thisDate);
   if (newDate != null) {
     locator<SchooldayManager>().setThisDate(newDate);
   }

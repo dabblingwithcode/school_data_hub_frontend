@@ -259,27 +259,28 @@ Future<void> showQrCode(String qr, BuildContext context) async {
             Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('fertig'),
-                ),
                 const SizedBox(width: 10),
                 TextButton(
                   onPressed: () {
                     saveQrCode(qr, context, qrImageKey);
                   },
-                  child: const Text('code speichern'),
+                  child: const Text('speichern'),
                 ),
                 const SizedBox(width: 20),
                 TextButton(
                   onPressed: () {
                     copyQrCodeToClipboard(qr, context, qrImageKey);
                   },
-                  child: const Text('In der Zwischenablage kopieren'),
+                  child: const Text('kopieren'),
                 ),
                 const SizedBox(width: 20),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('fertig'),
+                ),
+                const Gap(10)
               ],
             ),
           ],
